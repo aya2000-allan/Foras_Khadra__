@@ -1,0 +1,10 @@
+﻿@model Foras_Khadra.Models.TeamMember
+
+<h2>إضافة عضو جديد</h2>
+
+<form asp-action="Create" method="post">
+    @Html.Partial("_Form", Model)
+
+    <button type="submit" class="btn btn-success mt-3">حفظ</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">رجوع</a>
+</form>

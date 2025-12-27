@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Foras_Khadra</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/layout_style.css">
+</head>
+<body>
+    <header>
+
+
+        <div class="top-banner">
+            <!-- الشعار ثابت في الأعلى -->
+            <div class="logo">
+                <img src="~/Images/logo.png" alt="شعار المنصة" asp-append-version="true" />
+            </div>
+            <!-- Hamburger Icon for Small Screens -->
+            <button class="hamburger " onclick="toggleMenu()">
+                <iconify-icon icon="tabler:list" style="    font-size: 2.5rem;" />
+            </button>
+
+            <!-- القائمة التي تظهر وتختفي -->
+            <div class="nav-content" id="navContent">
+                <div class="menu-items">
+                    <a href="#">الرئيسية</a>
+                    <a href="#">الفرص ▾</a>
+                    <a href="#">المقالات</a>
+                    <a href="#">الأخبار</a>
+                    <a href="@Url.Action("AboutUs", "Home")">من نحن</a>
+                    <a href="@Url.Action("Index", "contact")">اتصل بنا</a>
+                </div>
+
+                <div class="auth-section">
+                    <button class="login-btn">تسجيل الدخول</button>
+                    <button class="signup-btn">إنشاء حساب</button>
+                    <div class="language-dropdown">
+                        <button class="language-toggle" onclick="toggleLangMenu()">
+                            <img src="~/Images/sa.png" alt="العربية">
+                            <span class="dropdown-arrow">▾</span>
+                        </button>
+
+                        <div class="language-menu" id="languageMenu">
+                            <div class="lang-option active">
+
+                                <img src="~/Images/sa.png" alt="العربية">
+                                <span>العربية</span>
+                            </div>
+                            <div class="lang-option">
+                                <img src="~/Images/us.png" alt="English">
+                                <span>English</span>
+                            </div>
+                            <div class="lang-option">
+                                <img src="~/Images/fr.png" alt="French">
+                                <span>French</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </header>
+    <script>
+        function toggleLangMenu() {
+          document.getElementById("languageMenu").classList.toggle("show");
+        }
+
+        document.addEventListener("click", function (event) {
+          const langMenu = document.getElementById("languageMenu");
+          const toggleBtn = document.querySelector(".language-toggle");
+          if (!langMenu.contains(event.target) && !toggleBtn.contains(event.target)) {
+            langMenu.classList.remove("show");
+          }
+        });
+
+        function toggleMenu() {
+        const nav = document.getElementById("navContent");
+        nav.classList.toggle("show");
+        }
+
+        
+    </script>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - Foras_Khadra - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

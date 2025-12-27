@@ -1,0 +1,39 @@
+﻿@model Foras_Khadra.Models.TeamMember
+
+<div class="form-group">
+    <label>الاسم الكامل</label>
+    <input asp-for="FullName" class="form-control" />
+</div>
+
+<div class="form-group">
+    <label>المنصب</label>
+    <input asp-for="JobTitle" class="form-control" />
+</div>
+
+<div class="form-group">
+    <label>الدور</label>
+    <select asp-for="Role" class="form-control">
+        <option value="1">الهيئة الإدارية</option>
+        <option value="2">مدير قسم</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>القسم</label>
+    <input asp-for="Department" class="form-control" />
+</div>
+
+<div class="form-group">
+    <label>نبذة</label>
+    <textarea asp-for="Bio" class="form-control"></textarea>
+</div>
+
+<div class="form-group">
+    <label>مسار الصورة</label>
+    <input asp-for="ImagePath" class="form-control" />
+</div>
+
+<div class="form-check mt-2">
+    <input asp-for="IsFounder" class="form-check-input" />
+    <label class="form-check-label">مؤسس فرص خضراء</label>
+</div>

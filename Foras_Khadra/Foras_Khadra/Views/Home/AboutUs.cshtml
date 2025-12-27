@@ -1,0 +1,17 @@
+﻿@model List<Foras_Khadra.Models.TeamMember>
+@using Foras_Khadra.Models
+
+<h2 class="mb-4">فريق فرص خضراء</h2>
+
+@foreach (var group in Model
+    .Where(x => !string.IsNullOrEmpty(x.Department))
+    .GroupBy(x => x.Department))
+{
+    <h4 class="mt-5">@group.Key</h4>
+    <div class="row">
+        @foreach (var member in group)
+        {
+            @Html.Partial("_TeamCardPublic", member)
+        }
+    </div>
+}

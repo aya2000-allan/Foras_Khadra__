@@ -1,0 +1,11 @@
+﻿@model Foras_Khadra.Models.TeamMember
+
+<h3>@Model.FullName</h3>
+
+<img src="@Model.ImagePath" width="200" class="mb-3" />
+
+<p><strong>المنصب:</strong> @Model.JobTitle</p>
+<p><strong>القسم:</strong> @Model.Department</p>
+<p><strong>الوصف:</strong> @Model.Bio</p>
+
+<a asp-action="Index" class="btn btn-secondary">رجوع</a>

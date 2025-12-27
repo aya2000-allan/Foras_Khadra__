@@ -1,0 +1,51 @@
+﻿@model List<Foras_Khadra.Models.TeamMember>
+@using Foras_Khadra.Models
+
+<h2>إدارة أعضاء الفريق</h2>
+
+<a asp-action="Create" class="btn btn-success mb-4">إضافة عضو</a>
+
+@foreach (var group in Model
+    .Where(x => !string.IsNullOrEmpty(x.Department))
+    .GroupBy(x => x.Department))
+{
+    <h4 class="mt-4">@group.Key</h4>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>الصورة</th>
+                <th>الاسم</th>
+                <th>المنصب</th>
+                <th>الدور</th>
+                <th>إجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var member in group)
+            {
+                <tr>
+                    <td><img src="@member.ImagePath" width="60" /></td>
+                    <td>@member.FullName</td>
+                    <td>@member.JobTitle</td>
+                    <td>@member.Role</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@member.Id"
+                           class="btn btn-info btn-sm">عرض</a>
+
+                        <a asp-action="Edit" asp-route-id="@member.Id"
+                           class="btn btn-warning btn-sm">تعديل</a>
+
+                        <form asp-action="Delete"
+                              asp-route-id="@member.Id"
+                              method="post"
+                              onsubmit="return confirm('هل تريد حذف هذا العضو؟');"
+                              style="display:inline;">
+                            <button class="btn btn-danger btn-sm">حذف</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
