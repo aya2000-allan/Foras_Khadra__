@@ -17,8 +17,8 @@
         var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
 
         // نخفي الـ Navbar فقط لصفحات Create, Edit, Index في TeamMembersController
-        var hideNav = currentController == "TeamMembers"
-        && new[] { "Create", "Edit", "Index" }.Contains(currentAction);
+        var hideNav = currentController == "Team"
+        && new[] { "Create", "Edit", "Index", "Details" }.Contains(currentAction);
     }
 
     @if (!hideNav)
