@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.9.34902.65
+VisualStudioVersion = 17.14.36811.4 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foras_Khadra", "Foras_Khadra\Foras_Khadra.csproj", "{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foras_Khadra", "Foras_Khadra\Foras_Khadra.csproj", "{FEA47680-DCF8-4044-92C1-454933BB63D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEA47680-DCF8-4044-92C1-454933BB63D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEA47680-DCF8-4044-92C1-454933BB63D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEA47680-DCF8-4044-92C1-454933BB63D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEA47680-DCF8-4044-92C1-454933BB63D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E6CFE8F2-11A7-4723-B044-9855965B27F3}
+		SolutionGuid = {B622279F-1B3A-4B7B-88D1-42075A256F86}
 	EndGlobalSection
 EndGlobal

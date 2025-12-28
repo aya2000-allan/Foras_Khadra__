@@ -1,4 +1,13 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿// دالة لتحميل الملفات الجزئية (Header, Navbar, Footer)
+function loadPartial(id, file) {
+    fetch(file)
+        .then(response => response.text())
+        .then(data => document.getElementById(id).innerHTML = data);
+}
 
-// Write your JavaScript code.
+// تحميل الملفات الجزئية تلقائيًا
+document.addEventListener("DOMContentLoaded", function () {
+    loadPartial('header', 'partials/header.html');
+    loadPartial('navbar', 'partials/navbar.html');
+    loadPartial('footer', 'partials/footer.html');
+});

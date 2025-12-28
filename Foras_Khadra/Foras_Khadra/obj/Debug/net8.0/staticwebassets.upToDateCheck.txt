@@ -1,0 +1,8 @@
+wwwroot\partials\footer.html
+wwwroot\partials\header.html
+wwwroot\index.html
+wwwroot\about.html
+wwwroot\partials\navbar.html
+wwwroot\js\site.js
+wwwroot\css\site.css
+wwwroot\error.html
