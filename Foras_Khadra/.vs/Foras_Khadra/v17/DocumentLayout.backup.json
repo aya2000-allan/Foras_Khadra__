@@ -5,22 +5,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|c:\\users\\lenovo\\desktop\\foras_khadra\\foras_khadra\\views\\home\\aboutus.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|solutionrelative:foras_khadra\\views\\home\\aboutus.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|c:\\users\\lenovo\\desktop\\foras_khadra\\foras_khadra\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|solutionrelative:foras_khadra\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|c:\\users\\lenovo\\desktop\\foras_khadra\\foras_khadra\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|solutionrelative:foras_khadra\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|c:\\users\\lenovo\\desktop\\foras_khadra\\foras_khadra\\controllers\\teamcontrollercs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|solutionrelative:foras_khadra\\controllers\\teamcontrollercs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|c:\\users\\lenovo\\desktop\\foras_khadra\\foras_khadra\\models\\teammember.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|solutionrelative:foras_khadra\\models\\teammember.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,62 +14,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "TeamMember.cs",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra\\Foras_Khadra\\Models\\TeamMember.cs",
-              "RelativeDocumentMoniker": "Foras_Khadra\\Models\\TeamMember.cs",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra\\Foras_Khadra\\Models\\TeamMember.cs",
-              "RelativeToolTip": "Foras_Khadra\\Models\\TeamMember.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAABsAAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-28T14:29:58.682Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "TeamControllercs.cs",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra\\Foras_Khadra\\Controllers\\TeamControllercs.cs",
-              "RelativeDocumentMoniker": "Foras_Khadra\\Controllers\\TeamControllercs.cs",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra\\Foras_Khadra\\Controllers\\TeamControllercs.cs",
-              "RelativeToolTip": "Foras_Khadra\\Controllers\\TeamControllercs.cs",
-              "ViewState": "AgIAAFAAAAAAAAAAAAAAAF4AAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-28T14:33:47.438Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra\\Foras_Khadra\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "Foras_Khadra\\Views\\Home\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra\\Foras_Khadra\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "Foras_Khadra\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-28T17:39:30.154Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra\\Foras_Khadra\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "Foras_Khadra\\Controllers\\HomeController.cs",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra\\Foras_Khadra\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "Foras_Khadra\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAACUAAAAAAAAAAAAAACsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-28T17:34:23.609Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -94,9 +24,9 @@
               "RelativeDocumentMoniker": "Foras_Khadra\\Views\\Home\\AboutUs.cshtml",
               "ToolTip": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra\\Foras_Khadra\\Views\\Home\\AboutUs.cshtml",
               "RelativeToolTip": "Foras_Khadra\\Views\\Home\\AboutUs.cshtml",
-              "ViewState": "AgIAADIAAAAAAAAAAAAuwEQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAACoAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-28T17:29:59.823Z",
+              "WhenOpened": "2025-12-28T18:13:03.529Z",
               "EditorCaption": ""
             }
           ]
