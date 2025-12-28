@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Foras_Khadra")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f53a7064a69ca98788d13cc6489450ba898bc087")]
 [assembly: System.Reflection.AssemblyProductAttribute("Foras_Khadra")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Foras_Khadra")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

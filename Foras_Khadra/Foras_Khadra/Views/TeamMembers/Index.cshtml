@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Foras_Khadra.Models.TeamMember>
+
+<h2>أعضاء الفريق</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">إضافة عضو جديد</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>الصورة</th>
+            <th>الاسم الكامل</th>
+            <th>الدور</th>
+            <th>القسم</th>
+            <th>الإجراءات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var member in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@member.ImagePath" width="80" />
+                </td>
+                <td>@member.FullName</td>
+                <td>@member.Role</td>
+                <td>@member.Department</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@member.Id" class="btn btn-info btn-sm">عرض</a>
+                    <a asp-action="Edit" asp-route-id="@member.Id" class="btn btn-primary btn-sm">تعديل</a>
+                    <a asp-action="Delete" asp-route-id="@member.Id" class="btn btn-danger btn-sm"
+                       onclick="return confirm('هل تريد حذف هذا العضو؟');">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
