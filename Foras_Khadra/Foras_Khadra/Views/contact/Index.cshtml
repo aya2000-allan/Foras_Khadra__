@@ -7,6 +7,39 @@
 
 <link rel="stylesheet" href="~/css/site.css" />
 
+<style>
+    .contact-form .iti {
+        width: 100%;
+        display: block;
+        direction: ltr;
+    }
+
+        .contact-form .iti input {
+            width: 100% !important;
+            height: calc(3.5rem + 2px);
+            padding-right: 110px !important; 
+            border: 1px solid #ced4da;
+            border-radius: 16px;
+            font-size: 1rem;
+            direction: rtl;
+        }
+
+    .contact-form .iti__flag-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: auto;
+    }
+
+    .contact-form .iti__selected-flag {
+        padding: 0 12px;
+        margin: 0;
+    }
+
+    .contact-form .iti input::placeholder {
+        color: #6c757d;
+        opacity: 1;
+    }
+</style>
 <div class="contact-header">اتصل بنا</div>
 <div class="contact-desc">
     نقدر اهتمامكم وتواصلكم مع فريق فرص خضراء، ونسعى جاهدين لقراءة كافة الرسائل التي نتلقاها للرد عليها في أقرب وقت ممكن.
@@ -28,19 +61,21 @@
                 </div>
             </div>
 
-            <div class="mb-4">
-                <input asp-for="Email" type="email" class="form-control" placeholder="أدخل بريدك الإلكتروني" required />
-                <span asp-validation-for="Email" class="text-danger small" ></span>
-            </div>
+            <div class="row mb-4">
+                <!-- Email input -->
+                <div class="col-md-6">
+                    <input asp-for="Email" type="email" class="form-control uniform-height" placeholder="أدخل بريدك الإلكتروني" required />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
 
-            <!-- Phone input (visible) -->
-            <div class="mb-4">
-                <input type="tel"
-                       id="phoneInput"
-                       class="form-control"
-                       style="text-align:right;"
-                       placeholder="أدخل رقم الهاتف"
-                       required />
+                <!-- Phone input -->
+                <div class="col-md-6">
+                    <input 
+                           id="phoneInput"
+                           class="form-control uniform-height"
+                           placeholder="أدخل رقم الهاتف"
+                           required />
+                </div>
             </div>
 
             <!-- Real phone value -->
@@ -48,9 +83,12 @@
 
             <div class="mb-4">
                 <textarea asp-for="MessageContent"
-                          rows="5"
-                          class="form-control"
-                          placeholder="أدخل نص الرسالة ..." required></textarea>
+                          rows="6"
+                          maxlength="1000"
+                          class="form-control message-textarea"
+                          placeholder="أدخل نص الرسالة ..."
+                          required></textarea>
+
                 <span asp-validation-for="MessageContent" class="text-danger small"></span>
             </div>
 
@@ -182,4 +220,6 @@
 
         });
     </script>
+
+    
 }

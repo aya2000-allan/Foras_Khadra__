@@ -1,7 +1,6 @@
 ﻿using Foras_Khadra.Models;
 using Foras_Khadra.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PhoneNumbers;
 
 namespace Foras_Khadra.Controllers
@@ -21,40 +20,40 @@ namespace Foras_Khadra.Controllers
         }
 
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> Index(Contact contact)
         {
-            // تجاهل ModelState في حالة fetch
             if (!string.IsNullOrEmpty(contact.Honeypot))
-                return BadRequest("Bot detected");
+                return Json(new { success = false, message = "Bot detected" });
 
-            // تحقق reCAPTCHA كما كان
             var recaptchaToken = Request.Form["g-recaptcha-response"].FirstOrDefault();
             if (string.IsNullOrEmpty(recaptchaToken))
-                return BadRequest("reCAPTCHA token is missing.");
+                return Json(new { success = false, message = "reCAPTCHA token is missing." });
 
-            // تحقق رقم الهاتف كما في الكود السابق
             var phoneUtil = PhoneNumberUtil.GetInstance();
             try
             {
                 var phoneNumber = phoneUtil.Parse(contact.Phone, null);
                 if (!phoneUtil.IsValidNumber(phoneNumber))
-                    return BadRequest("رقم الهاتف غير صالح");
+                    return Json(new { success = false, message = "رقم الهاتف غير صالح" });
 
                 contact.Phone = phoneUtil.Format(phoneNumber, PhoneNumberFormat.E164);
             }
-            catch (NumberParseException)
+            catch
             {
-                return BadRequest("كود الدولة أو رقم الهاتف غير صحيح");
+                return Json(new { success = false, message = "كود الدولة أو رقم الهاتف غير صحيح" });
             }
 
             contact.SubmissionDateTime = DateTime.UtcNow;
-            await _mailService.SendEmailAsync(contact);
 
-            // ✅ أرسل رسالة نجاح مباشرة
-            return Ok("تم إرسال الرسالة بنجاح!");
-        }
-           
+            try
+            {
+                await _mailService.SendEmailAsync(contact);
+                return Json(new { success = true, message = "تم إرسال الرسالة بنجاح!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"خطأ في الإرسال: {ex.Message}" });
+            }
         }
     }
-
+}
