@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Foras_Khadra.Models;
 
-namespace Foras_Khadra.Models
+namespace Foras_Khadra.ViewModels
 {
-    public class TeamMember
+    public class TeamMemberCreateViewModel
     {
-        public int Id { get; set; }
-
         [Required]
         [Display(Name = "الاسم")]
         public string Name { get; set; }
@@ -22,20 +21,6 @@ namespace Foras_Khadra.Models
         public string Bio { get; set; }
 
         [Display(Name = "صورة العضو")]
-        public string ImagePath { get; set; }
-    }
-
-    public enum MembershipType
-    {
-        Member,
-        Founder,
-        Manager
-    }
-
-    public enum Department
-    {
-        Technology,
-        HR,
-        SocialMedia
+        public IFormFile ImageFile { get; set; } // لرفع الصورة فقط
     }
 }

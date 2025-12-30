@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using Foras_Khadra.Models;
 
-namespace Foras_Khadra.Models
+namespace Foras_Khadra.ViewModels
 {
-    public class TeamMember
+    public class TeamMemberEditViewModel
     {
         public int Id { get; set; }
 
@@ -21,21 +23,7 @@ namespace Foras_Khadra.Models
         [Display(Name = "السيرة الذاتية")]
         public string Bio { get; set; }
 
-        [Display(Name = "صورة العضو")]
-        public string ImagePath { get; set; }
-    }
-
-    public enum MembershipType
-    {
-        Member,
-        Founder,
-        Manager
-    }
-
-    public enum Department
-    {
-        Technology,
-        HR,
-        SocialMedia
+        [Display(Name = "رفع صورة جديدة (اختياري)")]
+        public IFormFile ImageFile { get; set; }
     }
 }
