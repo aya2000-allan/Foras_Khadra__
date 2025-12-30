@@ -51,7 +51,7 @@ namespace Foras_Khadra.Controllers
             return View(members); // ستبحث عن Views/Home/AboutUs.cshtml
         }
 
-        public IActionResult Articals()
+        public IActionResult Articles()
         {
             var articles = _context.Articles
             .OrderByDescending(a => a.PublishDate)
