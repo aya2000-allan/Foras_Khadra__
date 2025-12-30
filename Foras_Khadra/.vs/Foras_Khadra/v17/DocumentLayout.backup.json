@@ -1,10 +1,14 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra__\\Foras_Khadra\\",
+  "WorkspaceRootPath": "C:\\Users\\manal\\Desktop\\Foras_Khadra__\\Foras_Khadra\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|c:\\users\\lenovo\\desktop\\foras_khadra__\\foras_khadra\\foras_khadra\\views\\contact\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|c:\\users\\manal\\desktop\\foras_khadra__\\foras_khadra\\foras_khadra\\views\\contact\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|solutionrelative:foras_khadra\\views\\contact\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|c:\\users\\manal\\desktop\\foras_khadra__\\foras_khadra\\foras_khadra\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{5BABF81E-FBA7-41B2-8645-E5DF2FB3664B}|Foras_Khadra\\Foras_Khadra.csproj|solutionrelative:foras_khadra\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +18,40 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Views\\contact\\Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\manal\\Desktop\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Views\\contact\\Index.cshtml",
               "RelativeDocumentMoniker": "Foras_Khadra\\Views\\contact\\Index.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Desktop\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Views\\contact\\Index.cshtml",
+              "ToolTip": "C:\\Users\\manal\\Desktop\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Views\\contact\\Index.cshtml",
               "RelativeToolTip": "Foras_Khadra\\Views\\contact\\Index.cshtml",
-              "ViewState": "AgIAAE8AAAAAAAAAAAAAABMAAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAAIIAAAAAAAAAAAAAAI0AAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-29T17:26:29.912Z",
+              "WhenOpened": "2025-12-29T10:56:46.499Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\manal\\Desktop\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "Foras_Khadra\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\manal\\Desktop\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "Foras_Khadra\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKkAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-12-29T10:56:38.904Z",
               "EditorCaption": ""
             }
           ]
