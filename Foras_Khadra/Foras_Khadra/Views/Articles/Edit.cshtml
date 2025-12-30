@@ -1,0 +1,52 @@
+﻿@model Article
+
+<h2>تعديل المقال</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+    <!-- نخفي الـ Id -->
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label class="form-label">عنوان المقالة</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">محتوى المقالة</label>
+        <textarea asp-for="Content" class="form-control" rows="6"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+   
+
+    <div class="mb-3">
+        <label class="form-label">الكاتب</label>
+        <input asp-for="Author" class="form-control" />
+    </div>
+
+    <!-- الصورة الحالية -->
+    @if (!string.IsNullOrEmpty(Model.ImagePath))
+    {
+        <div class="mb-3">
+            <label class="form-label">الصورة الحالية</label><br />
+            <img src="@Model.ImagePath" width="200" class="img-thumbnail" />
+        </div>
+    }
+
+    <!-- رفع صورة جديدة (اختياري) -->
+    <div class="mb-3">
+        <label class="form-label">تغيير الصورة (اختياري)</label>
+        <input type="file" name="Image" class="form-control" />
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">تحديث</button>
+        <a asp-action="Index" class="btn btn-secondary">رجوع</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
