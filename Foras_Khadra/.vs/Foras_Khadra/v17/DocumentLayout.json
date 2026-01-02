@@ -26,12 +26,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
@@ -44,7 +40,7 @@
               "RelativeDocumentMoniker": "Foras_Khadra\\Views\\Shared\\_Layout.cshtml",
               "ToolTip": "C:\\Users\\manal\\Desktop\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Views\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "Foras_Khadra\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAAAAwAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-12-30T11:42:16.955Z",
               "EditorCaption": ""
