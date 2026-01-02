@@ -65,5 +65,121 @@ namespace Foras_Khadra.Controllers
 
             return View(model);
         }
+
+        // ================= الفرص حسب النوع مع فلترة الدولة =================
+
+        // ================= الفرص حسب النوع مع فلترة الدولة =================
+        private IActionResult GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType type, string country, string typeName)
+        {
+            // جلب كل الفرص من قاعدة البيانات حسب النوع
+            var opportunities = _context.Opportunities
+                                        .Where(o => o.Type == type)
+                                        .ToList(); // ⚡ جلب للذاكرة لتسهيل الفلترة النصية
+
+            if (!string.IsNullOrEmpty(country))
+            {
+                // الفلترة في الذاكرة حسب الدولة
+                opportunities = opportunities
+                    .Where(o => !string.IsNullOrEmpty(o.AvailableCountries) &&
+                                o.AvailableCountries
+                                  .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                  .Select(c => c.Trim())
+                                  .Contains(country.Trim(), StringComparer.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            // إنشاء الموديل لعرضه في الفيو
+            var model = new AllOpportunitiesViewModel
+            {
+                Opportunities = opportunities,
+                SelectedCountry = country,
+                SelectedType = type
+            };
+
+            ViewBag.TypeName = typeName;
+            return View("AllOpportunities", model);
+        }
+        // مثال لكل نوع:
+        public IActionResult Trainings(string country = null)
+        {
+            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Internships, country, "فرص التدريب");
+        }
+
+        public IActionResult Jobs(string country = null)
+        {
+            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Jobs, country, "الوظائف");
+        }
+
+        public IActionResult Competitions(string country = null)
+        {
+            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Competitions, country, "المسابقات");
+        }
+
+        public IActionResult Conferences(string country = null)
+        {
+            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Conferences, country, "المؤتمرات");
+        }
+
+        public IActionResult Volunteering(string country = null)
+        {
+            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Volunteering, country, "فرص التطوع");
+        }
+
+        public IActionResult Fellowships(string country = null)
+        {
+            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Fellowships, country, "الزمالات");
+        }
+
+        public IActionResult Scholarships(string country = null)
+        {
+            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Scholarships, country, "المنح الدراسية");
+        }
+
+        // ================= صفحة كل الفرص العامة =================
+        public IActionResult AllOpportunities(string country, string type)
+        {
+            // جلب كل الفرص أولاً
+            var allOpportunities = _context.Opportunities.ToList();
+
+            // فلترة حسب النوع
+            if (!string.IsNullOrEmpty(type) && Enum.TryParse<Foras_Khadra.Models.OpportunityType>(type, out var parsedType))
+            {
+                allOpportunities = allOpportunities
+                    .Where(o => o.Type == parsedType)
+                    .ToList();
+            }
+
+            // فلترة حسب الدولة
+            if (!string.IsNullOrEmpty(country))
+            {
+                allOpportunities = allOpportunities
+                    .Where(o => !string.IsNullOrEmpty(o.AvailableCountries) &&
+                                o.AvailableCountries
+                                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(c => c.Trim())
+                                    .Contains(country.Trim(), StringComparer.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            // توليد قائمة الدول للفلتر
+            var countries = allOpportunities
+                .SelectMany(o => o.AvailableCountries
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(c => c.Trim()))
+                .Distinct()
+                .OrderBy(c => c)
+                .ToList();
+
+            // إنشاء الموديل
+            var model = new AllOpportunitiesViewModel
+            {
+                Opportunities = allOpportunities,
+                SelectedCountry = country,
+                SelectedType = string.IsNullOrEmpty(type) ? null : Enum.Parse<Foras_Khadra.Models.OpportunityType>(type),
+                Countries = countries
+            };
+
+            return View(model);
+        }
     }
 }

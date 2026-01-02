@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ISO3166" Version="1.0.4" />
     <PackageReference Include="libphonenumber-csharp" Version="9.0.21" />
     <PackageReference Include="MailKit" Version="4.13.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
@@ -24,7 +23,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\team\" />
-    <Folder Include="wwwroot\uploads\" />
+    <Folder Include="wwwroot\uploads\opportunities\" />
   </ItemGroup>
 
 </Project>

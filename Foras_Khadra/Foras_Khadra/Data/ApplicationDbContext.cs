@@ -13,6 +13,8 @@ namespace Foras_Khadra.Data
 
         public DbSet<TeamMember> TeamMember { get; set; }
         public DbSet<Article> Articles { get; set; }
+        public DbSet<Opportunity> Opportunities { get; set; }
+
 
     }
 }
