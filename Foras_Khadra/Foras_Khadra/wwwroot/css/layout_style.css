@@ -21,6 +21,7 @@
     position: relative;
 }
 
+  
 /* ====== الشعار ====== */
 .logo {
     width: 80px;
@@ -220,9 +221,10 @@
         border-radius: 0 0 40px 40px;
     }
 
-        .top-banner.show {
-            border-radius: 0;
-        }
+    .expand {
+        border-radius: 0px;
+        border-bottom: solid 1px white;
+    }
 
     .dropdown-menu a:hover {
         background-color: white;
@@ -369,6 +371,9 @@
 .dropdown-button.show {
     border-bottom: none;
 }
+
+
+
 
 
 
