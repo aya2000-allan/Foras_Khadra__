@@ -24,15 +24,23 @@
             direction: rtl;
         }
 
+    .contact-form .iti__flag-container,
+    .contact-form .iti__selected-flag {
+        border-radius: 0 16px 16px 0 !important;
+        overflow: hidden;
+    }
+
     .contact-form .iti__flag-container {
         padding: 0 !important;
         margin: 0 !important;
         width: auto;
+        border-radius: 16px;
     }
 
     .contact-form .iti__selected-flag {
         padding: 0 12px;
         margin: 0;
+
     }
 
     .contact-form .iti input::placeholder {
@@ -63,7 +71,7 @@
 
             <div class="row mb-4">
                 <!-- Email input -->
-                <div class="col-md-6">
+                <div class="col-md-6 mb-3 mb-md-0">
                     <input asp-for="Email" type="email" class="form-control uniform-height" placeholder="أدخل بريدك الإلكتروني" required />
                     <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
@@ -83,8 +91,8 @@
 
             <div class="mb-4">
                 <textarea asp-for="MessageContent"
-                          rows="6"
                           maxlength="1000"
+                          style="resize:none"
                           class="form-control message-textarea"
                           placeholder="أدخل نص الرسالة ..."
                           required></textarea>
