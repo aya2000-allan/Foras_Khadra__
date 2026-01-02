@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Foras_Khadra.Models.TeamMember>
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">فريقنا</h2>
+
+    @foreach (var group in Model.GroupBy(m => m.Department))
+    {
+        <h3 class="mb-3">@group.Key</h3>
+
+        <div class="row">
+            @foreach (var member in group.OrderByDescending(m => m.Membership))
+            {
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100 text-center shadow-sm">
+
+                        @if (!string.IsNullOrEmpty(member.ImagePath))
+                        {
+                            <img src="@member.ImagePath"
+                                 class="card-img-top"
+                                 style="height:200px; object-fit:cover;"
+                                 alt="@member.Name" />
+                        }
+
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="javascript:void(0);"
+                                   onclick="toggleBio(@member.Id)">
+                                    @member.Name
+                                </a>
+                            </h5>
+
+                            <p class="card-text">@member.Membership</p>
+
+                            <!-- BIO (مخفي افتراضيًا) -->
+                            <div id="bio-@member.Id"
+                                 class="mt-3 text-start"
+                                 style="display:none;">
+                                <hr />
+                                <p>@member.Bio</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<script>
+    function toggleBio(id) {
+        const bio = document.getElementById("bio-" + id);
+
+        if (bio.style.display === "none" || bio.style.display === "") {
+            bio.style.display = "block";
+        } else {
+            bio.style.display = "none";
+        }
+    }
+</script>
