@@ -6,7 +6,8 @@
     <title>@ViewData["Title"] - Foras_Khadra</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/layout_style.css">
+    <link rel="stylesheet" href="~/css/layout_style.css">
+    
 </head>
 <body>
     @{
@@ -21,12 +22,14 @@
         && new[] { "Create", "Edit", "Index", "Details" }.Contains(currentAction);
 
         var hideNav2 = currentController == "Articles"
-        && new[] { "Create", "Edit", "Index", "Details" }.Contains(currentAction);
+        && new[] { "Create", "Edit", "Index" }.Contains(currentAction);
     }
 
     @if (!hideNav && !hideNav2)
     {
         <header>
+
+
             <div class="top-banner">
                 <!-- الشعار ثابت في الأعلى -->
                 <div class="logo">
@@ -34,31 +37,45 @@
                 </div>
                 <!-- Hamburger Icon for Small Screens -->
                 <button class="hamburger " onclick="toggleMenu()">
-                    <iconify-icon icon="tabler:list" style="font-size: 2.5rem;" />
+                    <iconify-icon icon="tabler:list" style="    font-size: 2.5rem;" />
                 </button>
 
                 <!-- القائمة التي تظهر وتختفي -->
                 <div class="nav-content" id="navContent">
                     <div class="menu-items">
-                        <a href="#">الرئيسية</a>
-                        <a href="#">الفرص ▾</a>
-                        <a href="#">المقالات</a>
-                        <a href="#">الأخبار</a>
-                        <a href="@Url.Action("AboutUs", "Home")">من نحن</a>
-                        <a href="@Url.Action("Index", "contact")">اتصل بنا</a>
+                        <a asp-controller="Home" asp-action="Index">الرئيسية</a>
+                        <a asp-controller="Home" asp-action="Articles">المقالات</a>
+                        <div class="custom-dropdown">
+                            <button class="dropdown-button" onclick="toggleDropdown()">الفرص ▾</button>
+                            <div class="dropdown-list" id="customDropdown">
+                                <a href="#">كل الفرص</a>
+                                <a href="#">المسابقات</a>
+                                <a href="#">المؤتمرات</a>
+                                <a href="#">فرص التطوع</a>
+                                <a href="#">الوظائف</a>
+                                <a href="#">المنح</a>
+                                <a href="#">الزمالات</a>
+                                <a href="#">فرص التدريب</a>
+                            </div>
+                        </div>
+
+                        <a asp-controller="Home" asp-action="AboutUs"> من نحن</a>
+                        <a asp-controller="contact" asp-action="Index">اتصل بنا</a>
                     </div>
 
                     <div class="auth-section">
-                        <button class="login-btn">تسجيل الدخول</button>
+                        <a class="login-btn" asp-controller="Account" asp-action="Login">تسجيل الدخول</a>
                         <button class="signup-btn">إنشاء حساب</button>
                         <div class="language-dropdown">
                             <button class="language-toggle" onclick="toggleLangMenu()">
-                                <img src="~/Images/sa.png" alt="العربية">
+                                <img src="~/Images/sa.png" alt="العربية" class="lang-flag d-inline d-sm-none d-md-inline" />
+                                <span class="lang-text d-none d-sm-inline d-md-none text-white">اللغة</span>
                                 <span class="dropdown-arrow">▾</span>
                             </button>
 
                             <div class="language-menu" id="languageMenu">
                                 <div class="lang-option active">
+
                                     <img src="~/Images/sa.png" alt="العربية">
                                     <span>العربية</span>
                                 </div>
@@ -75,6 +92,9 @@
                     </div>
                 </div>
             </div>
+
+
+
         </header>
     }
 
@@ -93,7 +113,10 @@
 
         function toggleMenu() {
         const nav = document.getElementById("navContent");
+        const topBanner=document.getElementsByClassName("top-banner")[0];
+        topBanner.classList.toggle("expand");
         nav.classList.toggle("show");
+
         }
 
         
@@ -103,17 +126,105 @@
             @RenderBody()
         </main>
     </div>
+    @if (!hideNav && !hideNav2)
+    {
+    <footer class="custom-footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <!-- العنصر الذي يحتوي النص أو الصورة حسب  اتجاه اللغة عربي/انجليزي-->
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Foras_Khadra - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <h2 class="footer-heading" lang="ar">من و إلى شباب عربي</h2>
+                <img src="/images/footerText.png" alt="footer text" class="footer-heading-img" />
+                <div class="social-icons">
+                    <div class="social-icons">
+                        <a href="#"><iconify-icon icon="ic:round-email" width="34" height="34"></iconify-icon></a>
+                        <a href="https://www.linkedin.com/company/foraskhadra/"><iconify-icon icon="mage:linkedin" width="34" height="34"></iconify-icon></a>
+                        <a href="https://www.facebook.com/profile.php?id=61559156656756"><iconify-icon icon="mage:facebook-square" width="34" height="34"></iconify-icon></a>
+                        <a href="https://www.instagram.com/foras_khadra/"><iconify-icon icon="basil:instagram-solid" width="34" height="34"></iconify-icon></a>
+                    </div>
+
+                </div>
+                <div class="subscribe-box">
+                    <p>اشترك في قائمتنا البريدية</p>
+                    <form>
+                        <input type="email" placeholder="اكتب بريدك الإلكتروني ..." />
+                        <button type="submit">اشتراك</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>تصفح الفرص</h4>
+                    <ul>
+                        <li><a href="#">كل الفرص</a></li>
+                        <li><a href="#">المسابقات</a></li>
+                        <li><a href="#">المؤتمرات</a></li>
+                        <li><a href="#">فرص التطوع</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4></h4>
+                    <ul>
+                        <li><a href="#">الوظائف</a></li>
+                        <li><a href="#">المنح</a></li>
+                        <li><a href="#">الزمالات</a></li>
+                        <li><a href="#">فرص التدريب</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>روابط إضافية</h4>
+                    <ul>
+                        <li><a href="#">المقالات</a></li>
+                        <li><a href="#">من نحن</a></li>
+                        <li>
+                            <a asp-controller="contact" asp-action="Index">اتصل بنا</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>سياساتنا</h4>
+                    <ul>
+                        <li><a href="#">سياسة الخصوصية</a></li>
+                        <li><a href="#">سياسة الاستخدام</a></li>
+                        <li><a href="#">الشروط والأحكام</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-logo">
+                <img src="/images/logo.png" alt="شعار فرص خضراء" />
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>جميع الحقوق محفوظة © 2025</p>
         </div>
     </footer>
+
+    }
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+    <script>
+        function toggleDropdown() {
+          const list = document.getElementById('customDropdown');
+          const button = document.querySelector('.dropdown-button');
+          list.classList.toggle('show');
+           button.classList.toggle('show');
 
+        }
+
+        window.addEventListener('click', function (e) {
+          const button = document.querySelector('.dropdown-button');
+          const dropdown = document.getElementById('customDropdown');
+          if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('show');
+          }
+        });
+    </script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
