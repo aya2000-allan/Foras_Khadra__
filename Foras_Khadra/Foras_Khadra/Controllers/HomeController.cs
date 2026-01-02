@@ -1,4 +1,5 @@
 ﻿using Foras_Khadra.Data;
+using Foras_Khadra.Migrations;
 using Foras_Khadra.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -48,6 +49,21 @@ namespace Foras_Khadra.Controllers
                                   .OrderByDescending(m => m.Membership)
                                   .ToList();
             return View(members); // ستبحث عن Views/Home/AboutUs.cshtml
+        }
+
+        public IActionResult Articles()
+        {
+            var articles = _context.Articles
+            .OrderByDescending(a => a.PublishDate)
+            .ToList();
+
+            var model = new HomeArticlesViewModel
+            {
+                LatestArticles = articles.Take(5).ToList(),
+                OtherArticles = articles.Skip(5).ToList()
+            };
+
+            return View(model);
         }
     }
 }
