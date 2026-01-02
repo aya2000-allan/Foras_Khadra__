@@ -598,7 +598,8 @@
 
 @media (max-width: 1400px) {
     .custom-footer {
-        overflow: scroll;
+        height: fit-content;
+        background-position-x: left;
     }
 
 }
