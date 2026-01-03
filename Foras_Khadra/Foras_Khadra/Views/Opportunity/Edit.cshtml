@@ -1,0 +1,66 @@
+﻿@model Foras_Khadra.Models.OpportunityEditVM
+
+<h2>تعديل الفرصة</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>صورة تعبّر عن الفرصة (اختياري)</label>
+        <input asp-for="Image" type="file" class="form-control" />
+        @if (!string.IsNullOrEmpty(Model.ImagePath))
+        {
+            <img src="@Model.ImagePath" alt="صورة الفرصة" style="width:150px;margin-top:5px;" />
+        }
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PublishedBy"></label>
+        <input asp-for="PublishedBy" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Type"></label>
+        <select asp-for="Type" class="form-control" asp-items="Html.GetEnumSelectList<OpportunityType>()">
+            <option value="">-- اختر النوع --</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Details"></label>
+        <textarea asp-for="Details" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AvailableCountries">الدول (افصل بين الدول بفاصلة)</label>
+        <input asp-for="AvailableCountries" class="form-control" placeholder="مثال: الأردن, الجزائر" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EligibilityCriteria"></label>
+        <textarea asp-for="EligibilityCriteria" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Benefits"></label>
+        <textarea asp-for="Benefits" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ApplyLink"></label>
+        <input asp-for="ApplyLink" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">حفظ التعديلات</button>
+    <a asp-action="Index" class="btn btn-secondary">رجوع</a>
+</form>

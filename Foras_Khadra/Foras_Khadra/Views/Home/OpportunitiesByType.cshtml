@@ -1,0 +1,51 @@
+﻿@model List<Foras_Khadra.Models.Opportunity>
+
+@{
+    ViewBag.Title = "الفرص - " + ViewBag.TypeName;
+}
+
+<h2 class="mb-4">الفرص - @ViewBag.TypeName</h2>
+
+<!-- أزرار للتنقل بين أنواع الفرص -->
+<div class="mb-4">
+    <a asp-action="OpportunitiesByType" asp-route-type="المسابقات" class="btn btn-outline-primary me-2 mb-2">المسابقات</a>
+    <a asp-action="OpportunitiesByType" asp-route-type="المؤتمرات" class="btn btn-outline-primary me-2 mb-2">المؤتمرات</a>
+    <a asp-action="OpportunitiesByType" asp-route-type="فرص_التطوع" class="btn btn-outline-primary me-2 mb-2">فرص التطوع</a>
+    <a asp-action="OpportunitiesByType" asp-route-type="الزمالات" class="btn btn-outline-primary me-2 mb-2">الزمالات</a>
+    <a asp-action="OpportunitiesByType" asp-route-type="فرص_التدريب" class="btn btn-outline-primary me-2 mb-2">فرص التدريب</a>
+    <a asp-action="OpportunitiesByType" asp-route-type="الوظائف" class="btn btn-outline-primary me-2 mb-2">الوظائف</a>
+    <a asp-action="OpportunitiesByType" asp-route-type="المنح_الدراسية" class="btn btn-outline-primary me-2 mb-2">المنح الدراسية</a>
+</div>
+
+@if (!Model.Any())
+{
+    <p>لا توجد فرص متاحة حالياً لهذا النوع.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var opp in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(opp.ImagePath))
+                    {
+                        <img src="@opp.ImagePath" class="card-img-top" alt="صورة الفرصة">
+                    }
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@opp.Title</h5>
+                        <p class="card-text">@opp.Description</p>
+
+                        <p><strong>نشرت بواسطة:</strong> @opp.PublishedBy</p>
+                        <p><strong>تاريخ النشر:</strong> @opp.PublishDate.ToString("dd/MM/yyyy")</p>
+
+                        <div class="mt-auto">
+                            <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn btn-primary btn-sm">عرض التفاصيل</a>
+                            <a href="@opp.ApplyLink" target="_blank" class="btn btn-success btn-sm">رابط التقديم</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
