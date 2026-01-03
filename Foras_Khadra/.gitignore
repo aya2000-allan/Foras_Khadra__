@@ -1,0 +1,23 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Foras_Khadra/Foras_Khadra/obj/Foras_Khadra.csproj.nuget.g.props
+/Foras_Khadra/Foras_Khadra/obj/project.nuget.cache
+/Foras_Khadra/.vs/Foras_Khadra/v17/.suo
+/Foras_Khadra/.vs/Foras_Khadra/v17/DocumentLayout.json
+/Foras_Khadra/Foras_Khadra/obj/Foras_Khadra.csproj.nuget.g.props
+/Foras_Khadra/Foras_Khadra/obj/project.nuget.cache
+
+# Visual Studio
+.vs/
+*.suo
+
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
