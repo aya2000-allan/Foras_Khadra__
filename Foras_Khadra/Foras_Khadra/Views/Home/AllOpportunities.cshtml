@@ -8,7 +8,7 @@
     <!-- فلتر النوع -->
     <div class="col-md-4">
         <select name="type" class="form-select">
-            <option value="">كل الأنواع</option>
+            <option value="">كل الفرص</option>
             @foreach (var item in Model.TypeSelectList)
             {
                 <option value="@item.Value" selected="@(item.Selected ? "selected" : null)">
