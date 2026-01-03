@@ -1,0 +1,65 @@
+﻿@model Foras_Khadra.ViewModels.TeamMemberEditViewModel
+
+<h2>تعديل العضو</h2>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group mb-2">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="Membership"></label>
+        <select asp-for="Membership" class="form-control"
+                asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.MembershipType>()">
+            <option value="">اختر العضوية</option>
+        </select>
+        <span asp-validation-for="Membership" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="Department"></label>
+        <select asp-for="Department" class="form-control"
+                asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.Department>()">
+            <option value="">اختر القسم</option>
+        </select>
+        <span asp-validation-for="Department" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="Bio"></label>
+        <textarea asp-for="Bio" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group mb-2">
+        <label>الصورة الحالية</label><br />
+        @if (!string.IsNullOrEmpty(ViewBag.ExistingImage as string))
+        {
+            <img src="@ViewBag.ExistingImage" width="150" />
+        }
+        else
+        {
+            <p>لا توجد صورة حالية.</p>
+        }
+    </div>
+
+    <div class="form-group mb-2">
+        <label>رفع صورة جديدة (اختياري)</label>
+        <input type="file" name="ImageFile" class="form-control" accept=".jpg,.jpeg,.png" />
+    </div>
+
+    <div class="form-group mt-2 d-flex gap-2">
+        <button type="submit" class="btn btn-success flex-fill">حفظ التعديلات</button>
+        <a asp-action="Index" class="btn btn-secondary flex-fill">العودة للقائمة</a>
+    </div>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

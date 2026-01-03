@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Foras_Khadra",
-    "\\Foras_Khadra\\Helpers"
+    "\\Views",
+    "\\Views\\Home"
   ],
-  "SelectedNode": "\\Foras_Khadra.sln",
+  "SelectedNode": "\\Foras_Khadra.csproj",
   "PreviewInSolutionExplorer": false
 }
