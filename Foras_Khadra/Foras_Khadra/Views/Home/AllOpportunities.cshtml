@@ -57,7 +57,7 @@ else
                         <p class="card-text">@opp.Description</p>
                         <p><strong>الدولة:</strong> @opp.AvailableCountries</p>
                         <p><strong>النوع:</strong> @opp.Type.GetDisplayName()</p>
-                        <a href="@Url.Action("OpportunityDetails", "Home", new { id = opp.Id })"
+                        <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })"
                            class="btn btn-primary btn-sm">عرض التفاصيل</a>
                     </div>
                 </div>
