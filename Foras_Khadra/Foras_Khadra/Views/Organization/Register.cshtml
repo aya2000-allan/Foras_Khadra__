@@ -1,0 +1,89 @@
+﻿@model Foras_Khadra.ViewModels.RegisterOrganizationViewModel
+@{
+    ViewData["Title"] = "تسجيل حساب المنظمة";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Register" method="post">
+    @Html.AntiForgeryToken()
+
+    <!-- Tab 1: Account Type -->
+    <div>
+        <label>نوع الحساب</label>
+        <input asp-for="AccountType" class="form-control" placeholder="فردي / منظمة" />
+        <span asp-validation-for="AccountType" class="text-danger"></span>
+    </div>
+
+    <!-- Tab 2: Organization Info -->
+    <div>
+        <label>اسم المنظمة</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>القطاع</label>
+        <input asp-for="Sector" class="form-control" placeholder="اكتب القطاع الذي تنتمي له المنظمة" />
+        <span asp-validation-for="Sector" class="text-danger"></span>
+    </div>
+
+    <!-- Tab 3: Country & Location -->
+    <div>
+        <label>الدولة</label>
+        <select asp-for="Country" asp-items="@(new SelectList(Model.Countries, "Value", "Text"))" class="form-control">
+            <option value="">اختر الدولة</option>
+        </select>
+        <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>الموقع</label>
+        <input asp-for="Location" class="form-control" placeholder="الموقع / المدينة" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <!-- Tab 4: Personal Info -->
+    <div>
+        <label>اسم جهة الاتصال</label>
+        <input asp-for="ContactName" class="form-control" />
+        <span asp-validation-for="ContactName" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>البريد الإلكتروني الرسمي</label>
+        <input asp-for="ContactEmail" class="form-control" />
+        <span asp-validation-for="ContactEmail" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>الموقع الإلكتروني (اختياري)</label>
+        <input asp-for="Website" class="form-control" placeholder="https://example.com" type="text" />
+        <span asp-validation-for="Website" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>رقم الهاتف</label>
+        <input asp-for="PhoneNumber" class="form-control" placeholder="أدخل رقم الهاتف" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+    <div>
+        <label>كلمة المرور</label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>تأكيد كلمة المرور</label>
+        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">إنشاء حساب المنظمة</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
