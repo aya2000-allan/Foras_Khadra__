@@ -1,7 +1,7 @@
 ﻿using CountryData; // مكتبة CountryData
 using Foras_Khadra.Data;
 using Foras_Khadra.Models;
-using Foras_Khadra.Migrations;
+// using Foras_Khadra.Migrations;
 using Foras_Khadra.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
