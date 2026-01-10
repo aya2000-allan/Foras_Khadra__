@@ -1,0 +1,21 @@
+﻿@model Foras_Khadra.Models.OrganizationLoginViewModel
+
+<form asp-action="Login" method="post">
+    <div>
+        <label>البريد الإلكتروني</label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label>كلمة المرور</label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <button type="submit">تسجيل الدخول</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
