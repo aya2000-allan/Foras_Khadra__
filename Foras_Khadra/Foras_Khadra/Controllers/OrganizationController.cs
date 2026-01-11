@@ -1,5 +1,4 @@
-﻿using CountryData; // مكتبة CountryData
-using Foras_Khadra.Data;
+﻿using Foras_Khadra.Data;
 using Foras_Khadra.Models;
 using Foras_Khadra.Migrations;
 using Foras_Khadra.ViewModels;
@@ -74,7 +73,6 @@ namespace Foras_Khadra.Controllers
                 CreatedAt = DateTime.Now
             };
 
-            _context.Organizations.Add(organization);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("RegisterSuccess");
