@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Article>
+
+<h2>قائمة المقالات</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">إضافة مقال جديد</a>
+</p>
+<table class="table">
+    <tr>
+        <th>صورة للمقال</th>
+        <th>العنوان</th>
+        <th>الكاتب</th>
+        <th>التاريخ</th>
+       
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @if (!string.IsNullOrEmpty(item.ImagePath))
+                {
+                    <img src="@item.ImagePath" alt="صورة المقال" width="100" />
+                }
+                else
+                {
+                    <span>لا توجد صورة</span>
+                }
+            <td>@item.Title</td>
+            <td>@item.Author</td>
+            <td>@item.PublishDate.ToString("dd MMM yyyy")</td>
+
+
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                    عرض المقال
+                </a>                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                    تعديل
+                </a>
+
+                <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:inline"
+                      onsubmit="return confirm('هل تريد الحذف؟');">
+                    <button type="submit" class="btn btn-danger btn-sm">حذف</button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>

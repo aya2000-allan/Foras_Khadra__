@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Foras_Khadra</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/layout_style.css">
+</head>
+<body>
+    @using Microsoft.AspNetCore.Identity
+    @inject UserManager<ApplicationUser> UserManager
+    @inject SignInManager<ApplicationUser> SignInManager
+
+    @{
+        var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+        var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+
+        var hideNav = (currentController == "Team" && new[] { "Create", "Edit", "Index", "Details" }.Contains(currentAction))
+        || (currentController == "Articles" && new[] { "Create", "Edit", "Index", "Details" }.Contains(currentAction))
+        || (currentController == "Opportunity" && new[] { "Create", "Edit", "Index" }.Contains(currentAction))
+        || (currentController == "Admin" && new[] { "Dashboard" }.Contains(currentAction));
+
+        var userIsAuthenticated = User.Identity.IsAuthenticated;
+        var isOrganization = false;
+        var userEmail = "";
+        if (userIsAuthenticated)
+        {
+            userEmail = User.Identity.Name;
+            var appUser = await UserManager.FindByEmailAsync(userEmail);
+            if (appUser != null)
+            {
+                isOrganization = await UserManager.IsInRoleAsync(appUser, "Organization");
+            }
+        }
+    }
+
+    @if (!hideNav)
+    {
+        <header>
+            <div class="top-banner">
+                <div class="logo">
+                    <img src="~/Images/logo.png" alt="شعار المنصة" />
+                </div>
+
+                <div class="nav-content">
+                    <div class="menu-items">
+                        <a asp-controller="Home" asp-action="Index">الرئيسية</a>
+                        <a asp-controller="Home" asp-action="Articles">المقالات</a>
+                        <a asp-controller="Home" asp-action="News">الأخبار</a>
+
+                        <div class="custom-dropdown">
+                            <button class="dropdown-button" onclick="toggleOpportunities()">الفرص</button>
+                            <div class="dropdown-list" id="opportunitiesDropdown">
+                                <a asp-controller="Home" asp-action="AllOpportunities">كل الفرص</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Competitions">المسابقات</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Conferences">المؤتمرات</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Volunteering">فرص التطوع</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Jobs">الوظائف</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Scholarships">المنح</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Fellowships">الزمالات</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Internships">فرص التدريب</a>
+                            </div>
+                        </div>
+
+                        <a asp-controller="Home" asp-action="AboutUs">من نحن</a>
+                        <a asp-controller="Contact" asp-action="Index">اتصل بنا</a>
+                    </div>
+
+                    <div class="auth-section d-flex gap-2 align-items-center">
+                        @if (!userIsAuthenticated)
+                        {
+                            <div class="custom-dropdown">
+                                <button onclick="toggleLoginMenu()">تسجيل الدخول</button>
+                                <div class="dropdown-list" id="loginMenu">
+                                    <a asp-controller="Account" asp-action="Login">للفرد</a>
+                                    <a asp-controller="Organization" asp-action="Login">للمنظمة</a>
+                                </div>
+                            </div>
+
+                            <div class="custom-dropdown">
+                                <button onclick="toggleRegisterMenu()">إنشاء حساب</button>
+                                <div class="dropdown-list" id="registerMenu">
+                                    <a asp-controller="Account" asp-action="RegisterUser">للفرد</a>
+                                    <a asp-controller="Organization" asp-action="Register">للمنظمة</a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- المستخدم مسجل الدخول -->
+                            <div class="custom-dropdown">
+                                <button onclick="toggleUserOrgMenu()">
+                                    @if (isOrganization)
+                                    {
+                                        <iconify-icon icon="mdi:office-building" width="30" height="30"></iconify-icon>
+                                    }
+                                    else
+                                    {
+                                        <iconify-icon icon="mdi:account" width="30" height="30"></iconify-icon>
+                                    }
+                                </button>
+                                <div class="dropdown-list" id="userOrgMenu">
+                                    @if (isOrganization)
+                                    {
+                                        <a asp-controller="Organization" asp-action="ProfileSetting">إعدادات الحساب</a>
+                                        <form asp-controller="Organization" asp-action="Logout" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit">تسجيل الخروج</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Account" asp-action="ProfileSettings">إعدادات الحساب</a>
+                                        <form asp-controller="Account" asp-action="Logout" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit">تسجيل الخروج</button>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <!-- قائمة اللغة -->
+                        <div class="language-dropdown">
+                            <button class="language-toggle" onclick="toggleLangMenu()">
+                                <img src="~/Images/sa.png" alt="العربية" />
+                            </button>
+                            <div class="language-menu" id="languageMenu">
+                                <div class="lang-option active">
+                                    <img src="~/Images/sa.png" alt="العربية"><span>العربية</span>
+                                </div>
+                                <div class="lang-option">
+                                    <img src="~/Images/us.png" alt="English"><span>English</span>
+                                </div>
+                                <div class="lang-option">
+                                    <img src="~/Images/fr.png" alt="French"><span>French</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    }
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Footer كامل -->
+    <footer class="custom-footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <h2 class="footer-heading" lang="ar">من و إلى شباب عربي</h2>
+                <img src="/images/footerText.png" alt="footer text" class="footer-heading-img" />
+                <div class="social-icons">
+                    <a href="#"><iconify-icon icon="ic:round-email" width="34" height="34"></iconify-icon></a>
+                    <a href="https://www.linkedin.com/company/foraskhadra/"><iconify-icon icon="mage:linkedin" width="34" height="34"></iconify-icon></a>
+                    <a href="https://www.facebook.com/profile.php?id=61559156656756"><iconify-icon icon="mage:facebook-square" width="34" height="34"></iconify-icon></a>
+                    <a href="https://www.instagram.com/foras_khadra/"><iconify-icon icon="basil:instagram-solid" width="34" height="34"></iconify-icon></a>
+                </div>
+                <div class="subscribe-box">
+                    <p>اشترك في قائمتنا البريدية</p>
+                    <form>
+                        <input type="email" placeholder="اكتب بريدك الإلكتروني ..." />
+                        <button type="submit">اشتراك</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>تصفح الفرص</h4>
+                    <ul>
+                        <li><a href="#">كل الفرص</a></li>
+                        <li><a href="#">المسابقات</a></li>
+                        <li><a href="#">المؤتمرات</a></li>
+                        <li><a href="#">فرص التطوع</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <ul>
+                        <li><a href="#">الوظائف</a></li>
+                        <li><a href="#">المنح</a></li>
+                        <li><a href="#">الزمالات</a></li>
+                        <li><a href="#">فرص التدريب</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>روابط إضافية</h4>
+                    <ul>
+                        <li><a href="#">المقالات</a></li>
+                        <li><a href="#">من نحن</a></li>
+                        <li><a asp-controller="contact" asp-action="Index">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>سياساتنا</h4>
+                    <ul>
+                        <li><a href="#">سياسة الخصوصية</a></li>
+                        <li><a href="#">سياسة الاستخدام</a></li>
+                        <li><a href="#">الشروط والأحكام</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-logo">
+                <img src="/images/logo.png" alt="شعار فرص خضراء" />
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>جميع الحقوق محفوظة © 2025</p>
+        </div>
+    </footer>
+
+    <!-- سكربتات -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+
+    <script>
+        function toggleOpportunities() { document.getElementById("opportunitiesDropdown").classList.toggle("show"); }
+        function toggleLoginMenu() { document.getElementById("loginMenu").classList.toggle("show"); }
+        function toggleRegisterMenu() { document.getElementById("registerMenu").classList.toggle("show"); }
+        function toggleUserOrgMenu() { document.getElementById("userOrgMenu").classList.toggle("show"); }
+        function toggleLangMenu() { document.getElementById("languageMenu").classList.toggle("show"); }
+
+        document.addEventListener("click", function(e){
+            if(!e.target.closest(".custom-dropdown") && !e.target.closest(".language-dropdown")) {
+                ["loginMenu","registerMenu","userOrgMenu","opportunitiesDropdown"].forEach(id=>{
+                    var el = document.getElementById(id);
+                    if(el) el.classList.remove("show");
+                });
+                var langMenu = document.getElementById("languageMenu");
+                if(langMenu) langMenu.classList.remove("show");
+            }
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
