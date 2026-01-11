@@ -6,9 +6,6 @@ namespace Foras_Khadra.ViewModels
 {
     public class RegisterOrganizationViewModel
     {
-        // Tab 1: Account Type
-        [Required(ErrorMessage = "اختر نوع الحساب")]
-        public string AccountType { get; set; } // "فردي" أو "منظمة"
 
         // Tab 2: Organization Info
         [Required(ErrorMessage = "اسم المنظمة مطلوب")]
@@ -39,6 +36,9 @@ namespace Foras_Khadra.ViewModels
 
         [Required(ErrorMessage = "كلمة المرور مطلوبة")]
         [DataType(DataType.Password)]
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "كلمة المرور يجب أن تكون على الأقل 8 أحرف")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$",
+    ErrorMessage = "كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم ورمز خاص")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "تأكيد كلمة المرور مطلوب")]

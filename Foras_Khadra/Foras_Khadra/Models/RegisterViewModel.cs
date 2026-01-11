@@ -23,6 +23,9 @@ namespace Foras_Khadra.ViewModels
 
         [Required(ErrorMessage = "كلمة المرور مطلوبة")]
         [DataType(DataType.Password)]
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "كلمة المرور يجب أن تكون على الأقل 8 أحرف")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$",
+    ErrorMessage = "كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم ورمز خاص")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "تأكيد كلمة المرور مطلوب")]
@@ -34,11 +37,7 @@ namespace Foras_Khadra.ViewModels
         public List<string> Interests { get; set; } = new List<string>(); // ما يلمس asp-for مباشرة
         public List<string> AvailableInterests { get; set; } = new List<string> // الخيارات
     {
-        "AI",
-        "Web Development",
-        "Cybersecurity",
-        "IoT",
-        "Energy"
+        "المسابقات", "المؤتمرات", "فرص التطوع", "الوظائف", "المنح", "الزمالات", "فرص التدريب"
     };
         public List<string> Countries { get; set; } = new List<string>();
         public List<string> Nationalities { get; set; } = new List<string>();

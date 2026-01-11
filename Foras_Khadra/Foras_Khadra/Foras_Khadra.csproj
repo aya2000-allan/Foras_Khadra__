@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CountryData" Version="6.15.0" />
     <PackageReference Include="libphonenumber-csharp" Version="9.0.21" />
     <PackageReference Include="MailKit" Version="4.13.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
@@ -18,7 +19,9 @@
     </PackageReference>
     <PackageReference Include="MimeKit" Version="4.13.0" />
     <PackageReference Include="Nager.Country" Version="4.3.4" />
+    <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="TanvirArjel.CustomValidation.AspNetCore" Version="1.2.2" />
   </ItemGroup>
 
   <ItemGroup>

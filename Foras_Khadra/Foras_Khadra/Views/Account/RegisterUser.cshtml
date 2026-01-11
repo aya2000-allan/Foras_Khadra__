@@ -1,81 +1,238 @@
 ﻿@model Foras_Khadra.ViewModels.RegisterViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+    /* منع الضغط على التاب الجانبي */
+    #v-pills-tab button {
+        pointer-events: none;
+        cursor: default;
+    }
+
+        /* السماح للتاب النشط أن يظهر مميز */
+        #v-pills-tab button.active {
+            pointer-events: auto;
+            cursor: default;
+        }
+
+    input.pe-5 {
+        padding-right: 2.5rem !important;
+    }
+
+    .position-absolute i {
+        font-size: 1rem;
+    }
+</style>
 
 <div class="container mt-5">
     <h2 class="mb-4 text-center">إنشاء حساب فرد جديد</h2>
 
-    <form asp-action="RegisterUser" method="post">
-        <div class="mb-3">
-            <label>الاسم الأول</label>
-            <input asp-for="FirstName" class="form-control" />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
+    <div class="row">
+        <!-- التاب الجانبي العمودي -->
+        <div class="col-md-3 mb-3">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="tab1-tab">المعلومات الشخصية</button>
+                <button class="nav-link" id="tab2-tab">الدولة والجنسية</button>
+                <button class="nav-link" id="tab3-tab">الاهتمامات</button>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label>الاسم الأخير</label>
-            <input asp-for="LastName" class="form-control" />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
+        <div class="col-md-9">
+            <form asp-action="RegisterUser" method="post" id="registerForm">
+                <div class="tab-content" id="v-pills-tabContent">
 
-        <div class="mb-3">
-            <label>البريد الإلكتروني</label>
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
+                    <!-- التاب 1: المعلومات الشخصية -->
+                    <div class="tab-pane fade show active" id="tab1">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="FirstName">الاسم الاول</label>
+                                <input asp-for="FirstName" id="FirstName" class="form-control" placeholder="أدخل الاسم الأول" required />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="LastName">الاسم الأخير</label>
+                                <input asp-for="LastName" id="LastName" class="form-control" placeholder="أدخل الاسم الأخير" required />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
 
-        <div class="mb-3">
-            <label>الدولة</label>
-            <select asp-for="Country" class="form-select">
-                <option value="">اختر الدولة</option>
-                @foreach (var c in Model.Countries)
-                {
-                    <option value="@c">@c</option>
-                }
-            </select>
-            <span asp-validation-for="Country" class="text-danger"></span>
-        </div>
+                        <div class="mb-3">
+                            <label asp-for="Email">البريد الالكتروني</label>                            <input asp-for="Email" id="Email" class="form-control" placeholder="أدخل البريد الإلكتروني" type="email" required />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
 
-        <div class="mb-3">
-            <label>الجنسية</label>
-            <select asp-for="Nationality" class="form-select">
-                <option value="">اختر الجنسية</option>
-                @foreach (var n in Model.Nationalities)
-                {
-                    <option value="@n">@n</option>
-                }
-            </select>
-            <span asp-validation-for="Nationality" class="text-danger"></span>
-        </div>
+                        <div class="row mb-3">
+                            <div class="col position-relative">
+                                <label asp-for="Password">كلمة المرور</label>                                <input asp-for="Password" type="password" class="form-control pe-5" id="Password" placeholder="أدخل كلمة المرور" required />
+                                <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;" onclick="togglePassword('Password', this)">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="col position-relative">
+                                <label asp-for="ConfirmPassword">تأكيد كلمة المرور</label>                                <input asp-for="ConfirmPassword" type="password" class="form-control pe-5" id="ConfirmPassword" placeholder="أعد كتابة كلمة المرور" required />
+                                <span class="position-absolute top-50 end-0 translate-middle-y me-3" style="cursor:pointer;" onclick="togglePassword('ConfirmPassword', this)">
+                                    <i class="fas fa-eye"></i>
+                                </span>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
 
-        <div class="mb-3">
-            <label>كلمة المرور</label>
-            <input asp-for="Password" type="password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
+                        <div class="d-flex justify-content-center mt-4 gap-3">
+                            <button type="button" class="btn btn-primary w-50" onclick="nextTab(1)">التالي</button>
+                        </div>
+                    </div>
 
-        <div class="mb-3">
-            <label>تأكيد كلمة المرور</label>
-            <input asp-for="ConfirmPassword" type="password" class="form-control" />
-            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-        </div>
+                    <!-- التاب 2: الدولة والجنسية -->
+                    <div class="tab-pane fade" id="tab2">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="Country">الدولة</label>                                <select asp-for="Country" id="Country" class="form-select" required>
+                                    <option value="">اختر الدولة</option>
+                                    @foreach (var c in Model.Countries)
+                                    {
+                                        <option value="@c">@c</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Country" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <label asp-for="Nationality">الجنسية</label>                                <select asp-for="Nationality" id="Nationality" class="form-select" required>
+                                    <option value="">اختر الجنسية</option>
+                                    @foreach (var n in Model.Nationalities)
+                                    {
+                                        <option value="@n">@n</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Nationality" class="text-danger"></span>
+                            </div>
+                        </div>
 
-        <div class="mb-3">
-            <label>الاهتمامات</label><br />
-            @foreach (var interest in Model.AvailableInterests)
-            {
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox"
-                           name="Interests" value="@interest"
-                           @(Model.Interests.Contains(interest) ? "checked" : "") />
-                    <label class="form-check-label">@interest</label>
+                        <div class="d-flex justify-content-center mt-4 gap-3">
+                            <button type="button" class="btn btn-secondary w-50" onclick="prevTab(2)">الرجوع</button>
+                            <button type="button" class="btn btn-primary w-50" onclick="nextTab(2)">التالي</button>
+                        </div>
+                    </div>
+
+                    <!-- التاب 3: الاهتمامات -->
+                    <div class="tab-pane fade" id="tab3">
+                        <div class="mb-3">
+                            <label asp-for="Interests">الاهتمامات</label>                            <small class="text-muted mb-2 d-block">يرجى اختيار على الأقل اهتمام واحد</small>
+                            <div class="d-flex flex-wrap gap-3">
+                                @foreach (var interest in Model.AvailableInterests)
+                                {
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox"
+                                               name="Interests" value="@interest"
+                                               @(Model.Interests.Contains(interest) ? "checked" : "") required />
+                                        <label class="form-check-label">@interest</label>
+                                    </div>
+                                }
+                            </div>
+                            <span asp-validation-for="Interests" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-center mt-4 gap-3">
+                            <button type="button" class="btn btn-secondary w-50" onclick="prevTab(3)">الرجوع</button>
+                            <button type="submit" class="btn btn-success w-50">إنشاء حسابي</button>
+                        </div>
+                    </div>
+
                 </div>
-            }
-            <span asp-validation-for="Interests" class="text-danger"></span>
-        </div>
 
-        <button type="submit" class="btn btn-success">إنشاء حساب الفرد</button>
-    </form>
+                <!-- Progress Bar -->
+                <div class="progress mt-3">
+                    <div id="progressBar" class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">33%</div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // إظهار/إخفاء الباسورد
+        function togglePassword(fieldId, span) {
+            var input = document.getElementById(fieldId);
+            var icon = span.querySelector('i');
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // التالي
+        function nextTab(current) {
+            if (!validateTab(current)) return;
+
+            var next = current + 1;
+            document.getElementById(`tab${current}`).classList.remove('show', 'active');
+            document.getElementById(`tab${next}`).classList.add('show', 'active');
+            updateProgress(next);
+        }
+
+        // الرجوع
+        function prevTab(current) {
+            var prev = current - 1;
+            document.getElementById(`tab${current}`).classList.remove('show', 'active');
+            document.getElementById(`tab${prev}`).classList.add('show', 'active');
+            updateProgress(prev);
+        }
+
+        // تحديث Progress Bar
+        function updateProgress(tabIndex) {
+            var percent = Math.round((tabIndex / 3) * 100);
+            var bar = document.getElementById('progressBar');
+            bar.style.width = percent + '%';
+            bar.innerText = percent + '%';
+        }
+
+        // التحقق من الحقول الإلزامية
+        function validateTab(tabIndex) {
+            let valid = true;
+
+            if(tabIndex === 1){
+                const firstName = document.getElementById('FirstName');
+                const lastName = document.getElementById('LastName');
+                const email = document.getElementById('Email');
+                const password = document.getElementById('Password');
+                const confirm = document.getElementById('ConfirmPassword');
+
+                if (!firstName.value.trim() || !lastName.value.trim() || !email.value.trim() || !password.value || !confirm.value) {
+                    alert('يرجى ملء جميع الحقول الإلزامية قبل الانتقال.');
+                    valid = false;
+                } else if(password.value !== confirm.value){
+                    alert('كلمة المرور وتأكيدها غير متطابقين.');
+                    valid = false;
+                }
+            }
+
+            if(tabIndex === 2){
+                const country = document.getElementById('Country');
+                const nationality = document.getElementById('Nationality');
+                if(!country.value || !nationality.value){
+                    alert('يرجى اختيار الدولة والجنسية قبل الانتقال.');
+                    valid = false;
+                }
+            }
+
+            if(tabIndex === 3){
+                const checked = document.querySelectorAll('#tab3 input[type="checkbox"]:checked');
+                if(checked.length === 0){
+                    valid = false;
+                }
+            }
+
+            return valid;
+        }
+    </script>
 }
