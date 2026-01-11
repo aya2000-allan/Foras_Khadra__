@@ -1,40 +1,136 @@
 ﻿@model Article
+@using System
+@using System.Linq
 
-<div class="container mt-4">
+@{
+    ViewData["Title"] = Model.Title;
 
-    <h1 class="mb-3">@Model.Title</h1>
+    var readAlso = ViewBag.ReadAlso as IEnumerable<Article> ?? Enumerable.Empty<Article>();
+    var latest = ViewBag.LatestArticles as IEnumerable<Article> ?? Enumerable.Empty<Article>();
 
-    <div class="text-muted mb-3">
-        <span>
-            @Model.PublishDate.ToString("dd MMMM yyyy")
-        </span>
-        |
-        <span>
-          @Model.Author
-        </span>
+    var req = Context.Request;
+    var currentUrl = $"{req.Scheme}://{req.Host}{req.Path}{req.QueryString}";
+    var encodedUrl = Uri.EscapeDataString(currentUrl);
+    var encodedTitle = Uri.EscapeDataString(Model.Title ?? "");
+
+    var shareX = $"https://twitter.com/intent/tweet?url={encodedUrl}&text={encodedTitle}";
+    var shareFacebook = $"https://www.facebook.com/sharer/sharer.php?u={encodedUrl}";
+    var shareLinkedIn = $"https://www.linkedin.com/sharing/share-offsite/?url={encodedUrl}";
+    var shareWhatsApp = $"https://wa.me/?text={encodedTitle}%20{encodedUrl}";
+}
+
+@section Styles {
+    <link rel="stylesheet" asp-append-version="true" href="~/css/articles-details.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+}
+
+<div class="news-article-page" dir="rtl">
+    <div class="container-fluid px-4">
+
+        <main class="col-12">
+
+            <article class="news-card">
+
+                <!-- ===== Top Bar (Back + Title + Author) ===== -->
+                <div class="news-top-bar">
+
+                    <!-- Back Button -->
+                    <a href="javascript:history.back()" class="news-back-btn" aria-label="رجوع">
+                        <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M26 5.66667L22 0H17.8333L21.3333 5H10.8333C7.96011 5 5.20461 6.14137 3.17297 8.17301C1.14133 10.2047 -4.00543e-05 12.9602 -4.00543e-05 15.8333C-4.00543e-05 18.7065 1.14133 21.462 3.17297 23.4937C5.20461 25.5253 7.96011 26.6667 10.8333 26.6667H18.3333L16.6666 23.3333H10.8333C8.84417 23.3333 6.93652 22.5432 5.52999 21.1366C4.12347 19.7301 3.33329 17.8225 3.33329 15.8333C3.33329 13.8442 4.12347 11.9366 5.52999 10.53C6.93652 9.12351 8.84417 8.33333 10.8333 8.33333H21.3333L17.8333 13.3333H22L26 7.66667L26.6666 6.66667L26 5.66667Z"
+                                fill="#F99D27" />
+                        </svg>
+                    </a>
+
+                    <!-- Title + Author -->
+                    <div class="news-top-meta">
+                        <span class="news-top-title">@Model.Title</span>
+                        <span class="news-top-author">@Model.Author</span>
+                    </div>
+                </div>
+
+                <!-- ===== Hero Image ===== -->
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <div class="news-hero">
+                        <img src="@Model.ImagePath" alt="@Model.Title" />
+                    </div>
+                }
+
+                <!-- ===== Meta Bar (Social + Date) ===== -->
+                <div class="news-meta-bar">
+
+
+
+                    <div class="news-date">
+                        @Model.PublishDate.ToString("dd MMM yyyy")
+                    </div>
+
+
+                </div>
+
+                <!-- ===== Bottom Section: Content + Sidebar ===== -->
+                <div class="news-body-grid">
+
+                    <!-- ===== Main Content ===== -->
+                    <div class="news-main-content">
+                        <div class="news-content">
+                            @Html.Raw(Model.Content)
+                        </div>
+                    </div>
+
+                    <!-- ===== Inline Sidebar ===== -->
+                    <aside class="news-inline-sidebar">
+
+                        <!-- Read Also -->
+                        <section class="sideblock">
+                            <div class="sideblock-head">
+                                <h3 class="sideblock-title">اقرأ أيضًا</h3>
+
+                                <span class="sideblock-icon" aria-hidden="true">
+                                    <!-- Orange dot SVG -->
+                                    <svg width="54" height="54" viewBox="0 0 54 54" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="27" cy="27" r="27" fill="#F99D27" />
+                                        <path
+                                            d="M21.9103 25.2255C22.0085 25.1212 22.1263 25.0373 22.2569 24.9785C22.3876 24.9197 22.5286 24.8872 22.6718 24.8829C22.815 24.8786 22.9577 24.9025 23.0916 24.9534C23.2256 25.0042 23.3482 25.0809 23.4525 25.1792C28.4728 29.9083 33.51 32.7855 39.4378 34.2521C40.2375 32.0703 40.3085 29.6689 39.6178 27.3262C38.7014 24.2178 36.5673 21.5096 33.448 19.4949C30.6635 17.6962 27.8803 17.2278 25.1878 16.7751C21.7909 16.2037 18.5823 15.6637 15.5203 12.4217C15.1794 12.063 14.715 11.9192 14.2712 12.0358C13.7639 12.1721 13.4237 12.573 13.2607 13.2358C12.8789 14.7869 13.1244 19.1342 14.1982 23.7235C15.9225 31.0967 18.6744 34.8276 20.6796 36.6596C23.2705 39.0249 26.6537 40.3346 30.0157 40.3346C30.6494 40.3356 31.2824 40.2891 31.9091 40.1955C34.753 39.7646 37.1203 38.3362 38.4546 36.258C32.353 34.6708 27.1405 31.6524 21.9546 26.7699C21.8501 26.6715 21.766 26.5534 21.7072 26.4225C21.6485 26.2916 21.6161 26.1504 21.6119 26.0069C21.6078 25.8634 21.6321 25.7206 21.6833 25.5865C21.7344 25.4524 21.8116 25.3298 21.9103 25.2255ZM42.7794 34.9203C41.6319 34.7437 40.5205 34.5221 39.4384 34.2542C39.216 34.8615 38.9392 35.4475 38.6114 36.0051C38.5616 36.0903 38.5091 36.1749 38.4553 36.258C39.7713 36.5987 41.104 36.8718 42.448 37.0762C42.591 37.1014 42.7376 37.0977 42.8792 37.0654C43.0207 37.0332 43.1545 36.973 43.2725 36.8884C43.3905 36.8038 43.4904 36.6965 43.5664 36.5727C43.6424 36.449 43.6929 36.3114 43.715 36.1678C43.7371 36.0243 43.7304 35.8779 43.6951 35.737C43.6599 35.5961 43.5969 35.4637 43.5098 35.3475C43.4227 35.2313 43.3133 35.1337 43.188 35.0603C43.0627 34.987 42.924 34.9394 42.78 34.9203H42.7794Z"
+                                            fill="white" />
+                                    </svg>
+
+                                </span>
+
+                            </div>
+
+                            <div class="sideblock-list">
+                                @foreach (var a in readAlso.Take(3))
+                                {
+                                    <a class="mini-card" asp-action="Details" asp-route-id="@a.Id">
+                                        <div class="mini-card-body">
+                                            <div class="mini-card-title">@a.Title</div>
+                                            <div class="mini-card-sub">
+                                                @a.PublishDate.ToString("dd MMM yyyy")
+                                            </div>
+
+                                            <span class="mini-card-dot" aria-hidden="true">
+                                                <i class="fa-solid fa-arrow-left"></i>
+                                            </span>
+                                        </div>
+                                    </a>
+                                }
+                            </div>
+
+                            <a asp-action="Index" class="sideblock-more">عرض المزيد من المقالات</a>
+                        </section>
+
+
+                    </aside>
+
+                </div>
+
+            </article>
+
+        </main>
+
     </div>
-
-    @if (!string.IsNullOrEmpty(Model.ImagePath))
-    {
-        <div class="mb-4">
-            <img src="@Model.ImagePath"
-                 class="img-fluid rounded"
-                 alt="@Model.Title" />
-        </div>
-    }
-
-   
-
-    <hr />
-
-    <div class="article-content">
-        @Html.Raw(Model.Content)
-    </div>
-
-    <div class="mt-4">
-        <a asp-action="Index" class="btn btn-secondary">
-            العودة إلى المقالات
-        </a>
-    </div>
-
 </div>
