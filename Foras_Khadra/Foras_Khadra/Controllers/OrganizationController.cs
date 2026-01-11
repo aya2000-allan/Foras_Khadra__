@@ -131,7 +131,6 @@ namespace Foras_Khadra.Controllers
 
             };
 
-            _context.Organizations.Add(organization);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("RegisterSuccess");
