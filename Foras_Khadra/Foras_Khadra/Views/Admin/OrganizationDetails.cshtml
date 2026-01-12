@@ -1,0 +1,51 @@
+﻿@model Foras_Khadra.Models.Organization
+
+@{
+    ViewData["Title"] = "تفاصيل المنظمة";
+}
+
+<h2>تفاصيل المنظمة: @Model.Name</h2>
+
+<table class="table table-bordered mt-3">
+    <tr>
+        <th>اسم المنظمة</th>
+        <td>@Model.Name</td>
+    </tr>
+    <tr>
+        <th>القطاع</th>
+        <td>@Model.Sector</td>
+    </tr>
+    <tr>
+        <th>الدولة</th>
+        <td>@Model.Country</td>
+    </tr>
+    <tr>
+        <th>جهة الاتصال</th>
+        <td>@Model.ContactName</td>
+    </tr>
+    <tr>
+        <th>البريد الإلكتروني</th>
+        <td>@Model.ContactEmail</td>
+    </tr>
+    <tr>
+        <th>رقم الهاتف</th>
+        <td>@Model.PhoneNumber</td>
+    </tr>
+    <tr>
+        <th>الموقع الإلكتروني</th>
+        <td>
+            @if (!string.IsNullOrEmpty(Model.Website))
+            {
+                <a href="@Model.Website" target="_blank">@Model.Website</a>
+            }
+        </td>
+    </tr>
+    <tr>
+        <th>تاريخ التسجيل</th>
+        <td>@Model.CreatedAt.ToString("yyyy-MM-dd")</td>
+    </tr>
+</table>
+
+<a asp-controller="Admin" asp-action="OrganizationsList" class="btn btn-secondary mt-3">
+    العودة للقائمة
+</a>

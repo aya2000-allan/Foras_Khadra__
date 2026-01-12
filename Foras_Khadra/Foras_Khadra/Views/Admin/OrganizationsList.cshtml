@@ -1,0 +1,36 @@
+﻿@model List<Foras_Khadra.Models.Organization>
+
+@{
+    ViewData["Title"] = "المنظمات المسجّلة";
+}
+
+<h2>المنظمات المسجّلة</h2>
+
+<!-- زر العودة للوحة التحكم -->
+<div class="mb-3">
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-primary">
+        العودة للوحة التحكم
+    </a>
+</div>
+
+<p class="text-muted">اضغط على أي منظمة لعرض تفاصيلها.</p>
+
+<div class="row">
+    @foreach (var org in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <a asp-controller="Admin" asp-action="OrganizationDetails" asp-route-id="@org.Id" style="text-decoration:none; color:inherit;">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@org.Name</h5>
+                        <p class="card-text">
+                            القطاع: @org.Sector <br />
+                            الدولة: @org.Country <br />
+                            جهة الاتصال: @org.ContactName
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
