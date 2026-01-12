@@ -49,6 +49,8 @@ builder.Services.AddSession(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+
+
 var app = builder.Build();
 
 // ===== إنشاء الأدوار وحساب الأدمن وربط المنظمات =====
@@ -118,6 +120,15 @@ using (var scope = app.Services.CreateScope())
         context.SaveChanges();
     }
 }
+// ✅ Seed Articles (Test Data)
+// =========================
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    DbInitializer.SeedArticles(context);
+}
+
+
 
 // ===== Configure the HTTP request pipeline =====
 if (!app.Environment.IsDevelopment())
