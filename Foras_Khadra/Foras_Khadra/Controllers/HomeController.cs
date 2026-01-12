@@ -2,7 +2,6 @@
 using Foras_Khadra.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-// using Foras_Khadra.Migrations;
 
 
 namespace Foras_Khadra.Controllers

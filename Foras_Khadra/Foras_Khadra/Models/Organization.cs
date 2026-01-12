@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Foras_Khadra.Models
 {
     public class Organization
     {
         public int Id { get; set; }
-
 
         [Required(ErrorMessage = "ادخل اسم المنظمة")]
         public string Name { get; set; }
@@ -35,9 +35,17 @@ namespace Foras_Khadra.Models
         [StringLength(100, MinimumLength = 8, ErrorMessage = "كلمة المرور يجب أن تكون على الأقل 8 أحرف")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$",
     ErrorMessage = "كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم ورمز خاص")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string Location { get; internal set; }
+        public string? PasswordResetToken { get; set; }
+        public DateTime? TokenExpiry { get; set; }
+
+        [ForeignKey("UserId")]
+        public string? UserId { get; set; }  // ← خليها nullable مؤقتًا
+        public ApplicationUser? User { get; set; }
+
+
     }
 }

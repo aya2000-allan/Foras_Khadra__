@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using NETCore.MailKit.Core;
 
 namespace Foras_Khadra.Controllers
 {
@@ -154,7 +155,8 @@ namespace Foras_Khadra.Controllers
         private List<string> GetCountries()
         {
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
-                .Select(c => {
+                .Select(c =>
+                {
                     try { return new RegionInfo(c.Name).EnglishName; }
                     catch { return null; }
                 })
@@ -163,5 +165,207 @@ namespace Foras_Khadra.Controllers
                 .OrderBy(r => r)
                 .ToList();
         }
+
+
+        // ==== Forgot Password ====
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return View();
+
+            // 1️⃣ نجيب المستخدم
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return View("ForgotPasswordConfirmation");
+            // مهم: ما نفضح إذا الإيميل موجود أو لا
+
+            // 2️⃣ توليد Token
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            // 3️⃣ توليد رابط إعادة التعيين
+            var resetLink = Url.Action(
+                "ResetPassword",
+                "Account",
+                new { email = user.Email, token = token },
+                Request.Scheme
+            );
+
+            string emailBody = $@"
+<!DOCTYPE html>
+<html lang='ar' dir='rtl'>
+<head>
+    <meta charset='UTF-8'>
+    <title>إعادة تعيين كلمة المرور</title>
+</head>
+<body style='font-family: Tahoma, Arial, sans-serif; background-color: #f4f6f8; padding: 20px;'>
+    <div style='max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 8px;'>
+        
+        <h2 style='text-align: center; color: #2c3e50;'>Foras Khadra</h2>
+
+        <p>مرحبًا،</p>
+
+        <p>
+            لقد تلقّينا طلبًا لإعادة تعيين كلمة المرور الخاصة بحسابك على منصة
+            <strong>Foras Khadra</strong>.
+        </p>
+
+        <p>
+            لإعادة تعيين كلمة المرور، يرجى الضغط على الزر أدناه:
+        </p>
+
+        <div style='text-align: center; margin: 30px 0;'>
+            <a href='{resetLink}'
+               style='background-color: #28a745; color: #ffffff; padding: 12px 30px;
+                      text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: bold;'>
+                إعادة تعيين كلمة المرور
+            </a>
+        </div>
+
+        <p>
+            إذا لم تقم بطلب إعادة تعيين كلمة المرور، يرجى تجاهل هذا البريد الإلكتروني.
+        </p>
+
+        <p>
+            مع تحيات فريق <strong>Foras Khadra</strong>
+        </p>
+
+        <hr style='margin-top: 30px;' />
+
+        <p style='font-size: 12px; color: #777; text-align: center;'>
+            هذا البريد الإلكتروني مرسل تلقائيًا، الرجاء عدم الرد عليه.
+        </p>
+    </div>
+</body>
+</html>
+";
+
+            // 5️⃣ إرسال الإيميل
+            await _emailSender.SendEmailAsync(
+                user.Email,
+                "إعادة تعيين كلمة المرور - Foras Khadra",
+                emailBody
+            );
+
+            // 6️⃣ صفحة تأكيد الإرسال
+            return View("ForgotPasswordConfirmation");
+        }
+
+
+        [HttpGet]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+                return RedirectToAction("ForgotPassword");
+
+            var model = new ResetPasswordViewModel
+            {
+                Email = email,
+                Token = token
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+                return RedirectToAction("ResetPasswordConfirmation"); // لا نكشف إذا الإيميل موجود
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+            if (result.Succeeded)
+            {
+                // كلمة المرور نجحت → Redirect للـ Confirmation
+                return RedirectToAction("ResetPasswordConfirmation");
+            }
+
+            // إذا فشل، اعرض كل الأخطاء (Token منتهي أو PasswordPolicy)
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ProfileSettings()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login");
+
+            var model = new EditProfileViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Country = user.Country,
+                Nationality = user.Nationality,
+                Interests = user.Interests,
+                Countries = GetCountries(),
+                Nationalities = GetCountries()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ProfileSettings(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Countries = GetCountries();
+                model.Nationalities = GetCountries();
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login");
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.FullName = $"{model.FirstName} {model.LastName}";
+            user.Country = model.Country;
+            user.Nationality = model.Nationality;
+            user.Interests = model.Interests;
+
+            //  تعديل الإيميل بدون التأثير على الباسورد
+            if (user.Email != model.Email)
+            {
+                user.Email = model.Email;
+                user.UserName = model.Email;
+
+                user.NormalizedEmail = _userManager.NormalizeEmail(model.Email);
+                user.NormalizedUserName = _userManager.NormalizeName(model.Email);
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            // (اختياري لكن مفضل)
+            await _signInManager.RefreshSignInAsync(user);
+
+            TempData["Success"] = "تم تحديث بياناتك بنجاح";
+            return RedirectToAction("ProfileSettings");
+        }
+
+
     }
 }

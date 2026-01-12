@@ -1,10 +1,16 @@
 ﻿@model IEnumerable<Foras_Khadra.Models.TeamMember>
 
-<h2>أعضاء الفريق</h2>
-
-<p>
-    <a asp-action="Create" class="btn btn-primary">إضافة عضو جديد</a>
-</p>
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h2>أعضاء الفريق</h2>
+    <div>
+        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary me-2">
+            العودة للوحة التحكم
+        </a>
+        <a asp-action="Create" class="btn btn-primary">
+            إضافة عضو جديد
+        </a>
+    </div>
+</div>
 
 @foreach (var group in Model.GroupBy(m => m.Department))
 {

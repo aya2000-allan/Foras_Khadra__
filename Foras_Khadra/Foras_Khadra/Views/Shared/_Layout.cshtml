@@ -11,6 +11,10 @@
 
 </head>
 <body>
+    @using Microsoft.AspNetCore.Identity
+    @inject UserManager<ApplicationUser> UserManager
+    @inject SignInManager<ApplicationUser> SignInManager
+
     @{
         var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
         var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
@@ -21,11 +25,38 @@
         || (currentController == "Admin" && new[] { "Dashboard" }.Contains(currentAction));
 
         var userIsAuthenticated = User.Identity.IsAuthenticated;
-        var isOrganization = ViewContext.HttpContext.Session.GetString("UserType") == "Organization";
+        var isAdmin = false;
+        var isOrganization = false;
+
+        if (userIsAuthenticated)
+        {
+            var userEmail = User.Identity.Name;
+            var appUser = await UserManager.FindByEmailAsync(userEmail);
+            if (appUser != null)
+            {
+                isAdmin = await UserManager.IsInRoleAsync(appUser, "Admin");
+                isOrganization = await UserManager.IsInRoleAsync(appUser, "Organization");
+            }
+        }
+
+        // ===== إخفاء Navbar والفوتر إذا كان Admin =====
+        if (isAdmin)
+        {
+            // جميع صفحات Admin يجب إخفاء Navbar والفوتر
+            hideNavAndFooterForAdmin = true;
+
+            // صفحة عرض المقالة نفسها للمستخدم العادي أو المنظمة يظهر فيها Navbar والفوتر
+            // للـ Admin لا يظهر
+            if (currentController == "Articles" && currentAction == "Details")
+            {
+                hideNavAndFooterForAdmin = true;
+            }
+        }
     }
 
-    @if (!hideNav)
+    @if (!hideNavAndFooterForAdmin)
     {
+        <!-- Navbar -->
         <header>
             <div class="top-banner">
                 <div class="logo">
@@ -53,14 +84,12 @@
                         </div>
 
                         <a asp-controller="Home" asp-action="AboutUs">من نحن</a>
-                        <a asp-controller="contact" asp-action="Index">اتصل بنا</a>
+                        <a asp-controller="Contact" asp-action="Index">اتصل بنا</a>
                     </div>
 
                     <div class="auth-section d-flex gap-2 align-items-center">
-
                         @if (!userIsAuthenticated)
                         {
-                            <!-- المستخدم غير مسجل الدخول -->
                             <div class="custom-dropdown">
                                 <button onclick="toggleLoginMenu()">تسجيل الدخول</button>
                                 <div class="dropdown-list" id="loginMenu">
@@ -79,23 +108,38 @@
                         }
                         else
                         {
-                            <!-- المستخدم مسجل الدخول -->
                             <div class="custom-dropdown">
                                 <button onclick="toggleUserOrgMenu()">
-                                    <iconify-icon icon="@(isOrganization ? "mdi:office-building" : "mdi:account")" width="30" height="30"></iconify-icon>
+                                    @if (isOrganization)
+                                    {
+                                        <iconify-icon icon="mdi:office-building" width="30" height="30"></iconify-icon>
+                                    }
+                                    else
+                                    {
+                                        <iconify-icon icon="mdi:account" width="30" height="30"></iconify-icon>
+                                    }
                                 </button>
                                 <div class="dropdown-list" id="userOrgMenu">
-                                    <a asp-controller="Account" asp-action="Settings">إعدادات الحساب</a>
-                                    <a asp-controller="Account" asp-action="ChangePassword">تغيير كلمة المرور</a>
-                                    <form asp-controller="Account" asp-action="Logout" method="post">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit">تسجيل الخروج</button>
-                                    </form>
+                                    @if (isOrganization)
+                                    {
+                                        <a asp-controller="Organization" asp-action="ProfileSetting">إعدادات الحساب</a>
+                                        <form asp-controller="Organization" asp-action="Logout" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit">تسجيل الخروج</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Account" asp-action="ProfileSettings">إعدادات الحساب</a>
+                                        <form asp-controller="Account" asp-action="Logout" method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit">تسجيل الخروج</button>
+                                        </form>
+                                    }
                                 </div>
                             </div>
                         }
 
-                        <!-- قائمة اللغة -->
                         <div class="language-dropdown">
                             <button class="language-toggle" onclick="toggleLangMenu()">
                                 <img src="~/Images/sa.png" alt="العربية" />
@@ -112,7 +156,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -125,8 +168,11 @@
         </main>
     </div>
 
-    <footer class="custom-footer">
-        <div class="footer-container">
+    @if (!hideNavAndFooterForAdmin)
+    {
+        <!-- Footer كامل -->
+        <footer class="custom-footer">
+            <div class="footer-container">
             <div class="footer-left">
                 <h2 class="footer-heading" lang="ar">من و إلى شباب عربي</h2>
                 <img src="/images/footerText.png" alt="footer text" class="footer-heading-img" />
@@ -187,7 +233,8 @@
             <p>جميع الحقوق محفوظة © 2025</p>
         </div>
     </footer>
-
+    }
+    <!-- سكربتات -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>

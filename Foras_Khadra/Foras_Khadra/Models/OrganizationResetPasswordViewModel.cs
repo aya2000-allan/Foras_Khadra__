@@ -1,14 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Foras_Khadra.ViewModels
+namespace Foras_Khadra.Models
 {
-    public class ResetPasswordViewModel
+    public class OrganizationResetPasswordViewModel
     {
-        [Required(ErrorMessage = "البريد الإلكتروني مطلوب")]
-        [EmailAddress(ErrorMessage = "البريد الإلكتروني غير صالح")]
         public string Email { get; set; }
-
-        [Required]
         public string Token { get; set; }
 
         [Required(ErrorMessage = "كلمة المرور مطلوبة")]
@@ -23,4 +19,5 @@ namespace Foras_Khadra.ViewModels
         [Compare("Password", ErrorMessage = "كلمة المرور غير متطابقة")]
         public string ConfirmPassword { get; set; }
     }
+
 }

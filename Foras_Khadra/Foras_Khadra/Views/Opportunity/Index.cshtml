@@ -1,11 +1,17 @@
 ﻿@model Dictionary<Foras_Khadra.Models.OpportunityType, List<Foras_Khadra.Models.Opportunity>>
 
-<h2>الفرص حسب النوع</h2>
 
-<!-- زر إضافة فرصة أعلى الصفحة -->
-<div class="mb-3 text-end">
-    <a asp-action="Create" class="btn btn-success">إضافة فرصة جديدة</a>
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h2>قائمة الفرص</h2>
+    <div>
+        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary me-2">
+            العودة للوحة التحكم
+        </a>
+        <a asp-action="Create" class="btn btn-success">إضافة فرصة جديدة</a>
+
+    </div>
 </div>
+
 
 <!-- Tabs -->
 <ul class="nav nav-tabs" id="opportunityTab" role="tablist">

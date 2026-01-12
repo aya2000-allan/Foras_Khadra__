@@ -37,11 +37,7 @@ namespace Foras_Khadra.ViewModels
         public List<string> Interests { get; set; } = new List<string>(); // ما يلمس asp-for مباشرة
         public List<string> AvailableInterests { get; set; } = new List<string> // الخيارات
     {
-        "AI",
-        "Web Development",
-        "Cybersecurity",
-        "IoT",
-        "Energy"
+        "المسابقات", "المؤتمرات", "فرص التطوع", "الوظائف", "المنح", "الزمالات", "فرص التدريب"
     };
         public List<string> Countries { get; set; } = new List<string>();
         public List<string> Nationalities { get; set; } = new List<string>();

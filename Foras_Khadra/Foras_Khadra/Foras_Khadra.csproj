@@ -19,6 +19,7 @@
     </PackageReference>
     <PackageReference Include="MimeKit" Version="4.13.0" />
     <PackageReference Include="Nager.Country" Version="4.3.4" />
+    <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="TanvirArjel.CustomValidation.AspNetCore" Version="1.2.2" />
   </ItemGroup>

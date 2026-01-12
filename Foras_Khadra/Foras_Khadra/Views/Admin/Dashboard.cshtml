@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Foras_Khadra.ViewModels.AdminDashboardViewModel
+
+@{
     ViewData["Title"] = "Admin Dashboard";
     Layout = null;
 }
@@ -14,6 +16,7 @@
         body {
             min-height: 100vh;
             display: flex;
+            background-color: #f8f9fa;
         }
 
         .sidebar {
@@ -38,8 +41,20 @@
         .content {
             flex: 1;
             padding: 30px;
-            background-color: #f8f9fa;
         }
+
+        .stats-card {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+            .stats-card:hover {
+                transform: scale(1.05);
+            }
+
+            .stats-card .card-body {
+                text-align: center;
+            }
     </style>
 </head>
 <body>
@@ -81,10 +96,62 @@
 
     <!-- Main Content -->
     <div class="content">
-        <h2>مرحبًا بك في لوحة تحكم الأدمن </h2>
-        <p class="text-muted">
-            من هنا يمكنك إدارة الموقع بالكامل (مقالات – أعضاء – فرص).
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>مرحبًا بك في لوحة تحكم الأدمن</h2>
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-danger">
+                    تسجيل الخروج
+                </button>
+            </form>
+        </div>
+
+        <p class="text-muted mb-4">
+            من هنا يمكنك إدارة الموقع بالكامل (مقالات – أعضاء – فرص – منظمات).
         </p>
+
+        <!-- Stats Cards -->
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card stats-card text-bg-primary"
+                     onclick="location.href='@Url.Action("OrganizationsList", "Admin")'">
+                    <div class="card-body">
+                        <h5 class="card-title">المنظمات</h5>
+                        <p class="card-text display-6">@Model.TotalOrganizations</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card stats-card text-bg-success"
+                     onclick="location.href='@Url.Action("Index", "Team")'">
+                    <div class="card-body">
+                        <h5 class="card-title">الأعضاء</h5>
+                        <p class="card-text display-6">@Model.TotalUsers</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card stats-card text-bg-warning"
+                     onclick="location.href='@Url.Action("Index", "Opportunity")'">
+                    <div class="card-body">
+                        <h5 class="card-title">الفرص</h5>
+                        <p class="card-text display-6">@Model.TotalOpportunities</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card stats-card text-bg-info"
+                     onclick="location.href='@Url.Action("Index", "Articles")'">
+                    <div class="card-body">
+                        <h5 class="card-title">المقالات</h5>
+                        <p class="card-text display-6">@Model.TotalArticles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </body>
