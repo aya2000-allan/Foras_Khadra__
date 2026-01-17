@@ -1,53 +1,104 @@
 ﻿@model Foras_Khadra.ViewModels.TeamMemberCreateViewModel
+@{
+    ViewData["Title"] = "إضافة عضو جديد";
+}
 
-<h2>إنشاء عضو جديد</h2>
+<link rel="stylesheet" href="~/css/team-create.css" />
 
-<div asp-validation-summary="All" class="text-danger"></div>
+<h2 class="page-title">إضافة عضو جديد</h2>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<div class="page-wrapper">
 
-    <div class="form-group mb-2">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+
+    <!-- Form panel -->
+    <div class="form-panel">
+
+
+        <div asp-validation-summary="All" class="validation-summary"></div>
+
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+            <!-- Upload box -->
+            <div class="upload-box">
+                <h3 class="discription">رفع صورة العضو</h3>
+                <label class="upload-area">
+                    <input asp-for="ImageFile" type="file" accept=".jpg,.jpeg,.png,.mp4,.mov" hidden />
+                    <div class="upload-icon"><img src="~/images/upload-icon.svg" alt="Alternate Text" /></div>
+                    <p>
+                        Drag & drop files or <a href="#" class="browse">Browse</a>
+                    </p>
+                    <small>Supported formats: JPEG, PNG, MP4, MOV</small>
+                </label>
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <!-- Name -->
+            <div class="field">
+                <input asp-for="Name" placeholder="اسم العضو" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <!-- Membership -->
+            <div class="field dropdown">
+
+                <select asp-for="Membership"
+                        asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.MembershipType>()" >
+                    <option value="">اختر نوع العضوية</option>
+                </select>
+                <span asp-validation-for="Membership" class="text-danger"></span>               
+                <img src="~/images/lets-icons_arrow-drop-down.svg" alt="Drop-down arrow" class="custom-dropdown-arrow" />
+
+            </div> 
+
+            <!-- Department -->
+            <div class="field dropdown">
+                <select asp-for="Department"
+                        asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.Department>()">
+                    <option value="">اختر القسم</option>
+                </select>
+                <span asp-validation-for="Department" class="text-danger"></span>
+                <img src="~/images/lets-icons_arrow-drop-down.svg" alt="Drop-down arrow" class="custom-dropdown-arrow" />
+
+            </div>
+
+            <!-- Bio -->
+            <div class="field">
+                <h3 class="discription">نبذة عنه</h3>
+
+                <textarea asp-for="Bio" id="Bio"></textarea>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+                <button type="submit" class="btn-primary">حفظ وإضافة</button>
+                <a asp-action="Index" class="btn-outline">إلغاء</a>
+            </div>
+
+        </form>
     </div>
 
-    <div class="form-group mb-2">
-        <label asp-for="Membership"></label>
-        <select asp-for="Membership" class="form-control"
-                asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.MembershipType>()">
-            <option value="">اختر العضوية</option>
-        </select>
-        <span asp-validation-for="Membership" class="text-danger"></span>
+    <!-- Left decorative panel -->
+    <div class="side-panel">
+        <div class="side-bg"></div>
+        <div class="side-illustration">
+            <!-- optional illustration image -->
+            <img src="~/images/contact_illustration.svg" alt="">
+        </div>
     </div>
 
-    <div class="form-group mb-2">
-        <label asp-for="Department"></label>
-        <select asp-for="Department" class="form-control"
-                asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.Department>()">
-            <option value="">اختر القسم</option>
-        </select>
-        <span asp-validation-for="Department" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-2">
-        <label asp-for="Bio"></label>
-        <textarea asp-for="Bio" class="form-control"></textarea>
-    </div>
-
-    <div class="form-group mb-2">
-        <label asp-for="ImageFile"></label>
-        <input asp-for="ImageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png" />
-        <span asp-validation-for="ImageFile" class="text-danger"></span>
-    </div>
-
-
-    <div class="form-group mt-2 d-flex gap-2">
-        <button type="submit" class="btn btn-success flex-fill">حفظ</button>
-        <a asp-action="Index" class="btn btn-secondary flex-fill">العودة للقائمة</a>
-    </div>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<script src="https://cdn.tiny.cloud/1/k3nev6h7ssngildxe8woxosup3usjprj94xwqhdzpccl1a5a/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+  tinymce.init({
+    selector: 'textarea#Bio', // Use the id generated by asp-for
+    plugins: 'lists link image table code',
+    toolbar: 'undo redo | styles | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code',
+    menubar: false,
+    height: 376,
+  });
+</script>
