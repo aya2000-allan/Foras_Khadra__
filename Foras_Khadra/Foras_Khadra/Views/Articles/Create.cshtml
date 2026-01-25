@@ -1,0 +1,28 @@
+﻿@model Article
+
+<h2>إنشاء مقال جديد</h2>
+
+<form asp-action="Create" enctype="multipart/form-data">
+    <div>
+        <label>عنوان المقالة</label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+
+    <div>
+        <label>محتوى المقالة</label>
+        <textarea asp-for="Content" class="form-control"></textarea>
+    </div>
+
+
+    <div>
+        <label>الكاتب</label>
+        <input asp-for="Author" class="form-control" />
+    </div>
+
+    <div>
+        <label>الصورة</label>
+        <input type="file" name="Image" class="form-control" />
+    </div>
+
+    <button type="submit">حفظ</button>
+</form>

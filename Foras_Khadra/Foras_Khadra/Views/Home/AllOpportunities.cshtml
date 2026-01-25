@@ -1,0 +1,63 @@
+﻿@model Foras_Khadra.Models.AllOpportunitiesViewModel
+@using Foras_Khadra.Helpers
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+<h2 class="mb-4">جميع الفرص</h2>
+<form method="get" class="row mb-4 g-2">
+    <!-- فلتر النوع -->
+    <div class="col-md-4">
+        <select name="type" class="form-select">
+            <option value="">كل الفرص</option>
+            @foreach (var item in Model.TypeSelectList)
+            {
+                <option value="@item.Value" selected="@(item.Selected ? "selected" : null)">
+                    @item.Text
+                </option>
+            }
+        </select>
+    </div>
+
+    <!-- فلتر الدولة -->
+    <div class="col-md-4">
+        <input type="text"
+               name="country"
+               class="form-control"
+               placeholder="اكتب اسم الدولة"
+               value="@Model.SelectedCountry" />
+    </div>
+
+
+    <div class="col-md-4 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">فلترة</button>
+        <a href="@Url.Action("AllOpportunities", "Home")" class="btn btn-secondary">إعادة ضبط</a>
+    </div>
+</form>
+
+@if (!Model.Opportunities.Any())
+{
+    <p>لا توجد فرص حالياً.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var opp in Model.Opportunities)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(opp.ImagePath))
+                    {
+                        <img src="@opp.ImagePath" class="card-img-top" alt="@opp.Title">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@opp.Title</h5>
+                        <p class="card-text">@opp.Description</p>
+                        <p><strong>الدولة:</strong> @opp.AvailableCountries</p>
+                        <p><strong>النوع:</strong> @opp.Type.GetDisplayName()</p>
+                        <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })"
+                           class="btn btn-primary btn-sm">عرض التفاصيل</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

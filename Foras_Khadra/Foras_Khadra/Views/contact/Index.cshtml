@@ -1,0 +1,203 @@
+﻿@model Foras_Khadra.Models.Contact
+@using Microsoft.AspNetCore.Localization;
+@using Microsoft.Extensions.Options;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+    ViewData["Title"] = Localizer["ContactHeader"];
+}
+
+<!DOCTYPE html>
+<html lang="@culture" dir="@dir">
+<head>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<style>
+    .contact-form .iti {
+        width: 100%;
+        display: block;
+        direction: ltr;
+    }
+
+        .contact-form .iti input {
+            width: 100% !important;
+            height: calc(3.5rem + 2px);
+            padding-right: 110px !important;
+            border: 1px solid #ced4da;
+            border-radius: 16px;
+            font-size: 1rem;
+            direction: rtl;
+        }
+
+    .contact-form .iti__flag-container,
+    .contact-form .iti__selected-flag {
+        border-radius: 0 16px 16px 0 !important;
+        overflow: hidden;
+    }
+
+    .contact-form .iti__flag-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: auto;
+        border-radius: 16px;
+    }
+
+    .contact-form .iti__selected-flag {
+        padding: 0 12px;
+        margin: 0;
+    }
+
+    .contact-form .iti input::placeholder {
+        color: #6c757d;
+        opacity: 1;
+    }
+</style>
+
+<body>
+
+    <div class="contact-header">@Localizer["ContactHeader"]</div>
+    <div class="contact-desc">@Localizer["ContactDescription"]</div>
+
+    <div class="contact-container">
+        <div class="contact-form-box">
+            <form id="contactForm" class="contact-form" novalidate>
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <input asp-for="FirstName" class="form-control" placeholder="@Localizer["FirstNamePlaceholder"]" required />
+                        <span asp-validation-for="FirstName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <input asp-for="LastName" class="form-control" placeholder="@Localizer["LastNamePlaceholder"]" required />
+                        <span asp-validation-for="LastName" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <input asp-for="Email" type="email" class="form-control uniform-height" placeholder="@Localizer["EmailPlaceholder"]" required />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <input id="phoneInput" class="form-control uniform-height" placeholder="@Localizer["PhonePlaceholder"]" required />
+                    </div>
+                </div>
+
+                <input type="hidden" asp-for="Phone" id="Phone" />
+
+                <div class="mb-4">
+                    <textarea asp-for="MessageContent" maxlength="1000" style="resize:none"
+                              class="form-control message-textarea" placeholder="@Localizer["MessagePlaceholder"]" required></textarea>
+                    <span asp-validation-for="MessageContent" class="text-danger small"></span>
+                </div>
+
+                <input asp-for="Honeypot" type="text" style="display:none !important" autocomplete="off" tabindex="-1" />
+
+                <div class="mb-4 d-flex justify-content-center">
+                    <div class="g-recaptcha" data-sitekey="6LfyK2wrAAAAABkGk-KUioJI_FtA1Kv31qTJ6Le9"></div>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">@Localizer["SubmitButton"]</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="contact-info-box">
+            <h4>@Localizer["OrContactUsVia"]</h4>
+
+            <div class="contact-info-item">
+                <div class="contact-info-label">@Localizer["EmailLabel"]</div>
+                <div class="contact-info-value">info@foraskhadra.com</div>
+            </div>
+
+            <div class="contact-info-item">
+                <div class="contact-info-label">@Localizer["WhatsAppLabel"]</div>
+                <div class="contact-info-value">+97012345678</div>
+            </div>
+
+            <img src="~/images/contact_illustration.svg" alt="Contact Illustration" class="contact-illustration" />
+        </div>
+    </div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css" />
+        <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js"></script>
+
+        <script>
+            const phoneInputField = document.querySelector("#phoneInput");
+            const iti = window.intlTelInput(phoneInputField, {
+                initialCountry: "auto",
+                geoIpLookup: function(callback) {
+                    fetch("https://ipapi.co/json")
+                        .then(res => res.json())
+                        .then(data => callback(data.country_code))
+                        .catch(() => callback("PS"));
+                },
+                separateDialCode: true,
+                nationalMode: false,
+                utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js"
+            });
+
+            const form = document.getElementById('contactForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+                if (!iti.isValidNumber()) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '@Localizer["InvalidPhoneTitle"]',
+                        text: '@Localizer["InvalidPhoneText"]'
+                    });
+                    return;
+                }
+                document.getElementById("Phone").value = iti.getNumber();
+                const formData = new FormData(form);
+                formData.append("g-recaptcha-response", grecaptcha.getResponse());
+
+                fetch('@Url.Action("Index", "Contact")', { method: 'POST', body: formData })
+                    .then(async response => {
+                        const data = await response.text();
+                        if (!response.ok) throw new Error(data || 'Something went wrong');
+                        return data;
+                    })
+                    .then(data => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '@Localizer["SuccessTitle"]',
+                            text: '@Localizer["SuccessText"]',
+                            confirmButtonText: '@Localizer["SuccessButton"]',
+                            confirmButtonColor: '#4CAF50',
+                            background: '#ffffff',
+                            color: '#1F4824'
+                        }).then(() => {
+                            window.location.href = '@Url.Action("Index", "Home")';
+                        });
+                        form.reset();
+                        grecaptcha.reset();
+                    })
+                    .catch(err => {
+                        console.log(err.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: '@Localizer["ErrorTitle"]',
+                            text: '@Localizer["ErrorText"]'
+                        });
+                    });
+            });
+        </script>
+    }
+</body>
+</html>

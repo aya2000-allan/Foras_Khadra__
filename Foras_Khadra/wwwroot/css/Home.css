@@ -1,0 +1,165 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
+
+* {
+    font-family: 'Cairo', sans-serif;
+}
+:root {
+    --orange: #F99D27;
+    --green: #25652C;
+    --bg: #F2FBF3;
+    --textColor: #25652C;
+}
+
+body {
+    background: var(--bg);
+}
+
+.main-header {
+    color: var(--textColor);
+    font-weight: 800;
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+    font-size:48px;
+}
+.custom-bg-green {
+    background: #3FA84A;
+    color: #fff;
+}
+
+.custom-bg-orange {
+    background: var(--orange);
+    color: #fff;
+}
+
+.rounded-20 {
+    border-radius: 20px;
+}
+
+
+.search-btn {
+    background: var(--orange);
+    color: #fff;
+    border-radius: 24px;
+    padding: 0.5rem 2rem;
+    border: none;
+    font-size: 1.1rem;
+}
+
+.search-btn:hover {
+background: var(--orange);
+}
+
+
+.search-container {
+    width:443px;
+    background-color: white;
+    border: solid #6D6D6D 0.4px;
+}
+
+.rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+
+
+.box-border-fix {
+    box-sizing: content-box;
+}
+
+.outer-border {
+    border-radius: 24px;
+    border: 10px solid var(--bg);
+    padding: 0;
+}
+
+.leaf {
+    
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    background: var(--orange);
+    width: 99px;
+    height: 99px;
+}
+
+/* Floating Shapes Container */
+.floating-shapes {
+    position: absolute;
+    top: -46px;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 96px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+
+
+/* Circle Style */
+.shape.circle {
+    position: absolute;
+    border-radius: 50%;
+    background-color: #F99D27;
+    opacity: 0.5;
+    animation: floatAround 5s ease-in-out infinite;
+}
+
+.shape.small {
+    width: 12px;
+    height: 12px;
+    background-color: #25652C;
+}
+
+
+
+/* Animation */
+@keyframes floatAround {
+    0% {
+        transform: translate(0px, 0px) rotate(0deg);
+    }
+
+    25% {
+        transform: translate(10px, -15px) rotate(10deg);
+    }
+
+    50% {
+        transform: translate(-10px, 10px) rotate(-10deg);
+    }
+
+    75% {
+        transform: translate(15px, 5px) rotate(5deg);
+    }
+
+    100% {
+        transform: translate(0px, 0px) rotate(0deg);
+    }
+}
+
+
+
+
+@media (max-width: 1224px) {
+    .flex-lg-nowrap {
+        flex-wrap:wrap !important;
+    }
+    .custom-col-full {
+        width: 100% !important;
+        max-width: 100% !important;
+        text-align:center;
+
+    }
+    .responsive-text{
+                margin: 5px auto;
+
+    }
+    .search-container {
+        margin-top: 5px !important;
+        margin: 5px auto;
+        width: 80%
+    }
+}
+
+
+
+

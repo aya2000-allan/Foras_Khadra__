@@ -1,0 +1,35 @@
+﻿@model Foras_Khadra.Models.OrganizationLoginViewModel
+
+<form asp-action="Login" method="post">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+    <div>
+        <label>البريد الإلكتروني</label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+
+    <div>
+        <label>كلمة المرور</label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <!--  نسيت كلمة المرور -->
+    <div style="margin-top:10px;">
+        <a asp-controller="Organization"
+           asp-action="ForgotPassword">
+            نسيت كلمة المرور؟
+        </a>
+    </div>
+
+    <button type="submit" style="margin-top:15px;">
+        تسجيل الدخول
+    </button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

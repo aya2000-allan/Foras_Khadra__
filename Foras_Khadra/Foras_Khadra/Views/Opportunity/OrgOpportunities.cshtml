@@ -1,0 +1,349 @@
+﻿@model Foras_Khadra.Models.OrgOpportunityPageVM
+@using Foras_Khadra.Helpers
+@using Foras_Khadra.Models
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<div class="row mt-4">
+    <!-- المحتوى الرئيسي -->
+    <div class="col-md-9">
+        <div class="tab-content" id="v-pills-tabContent">
+
+            <!-- تاب عرض الفرص -->
+            <div class="tab-pane fade show active" id="v-pills-list" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">فرص منظمتك</h2>
+                </div>
+
+                @if (!Model.Opportunities.Any())
+                {
+                    <p>لا توجد فرص حالياً.</p>
+                }
+                else
+                {
+                    <table class="table table-bordered table-striped align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>الصورة</th>
+                                <th>العنوان</th>
+                                <th>الوصف</th>
+                                <th>الدولة</th>
+                                <th>النوع</th>
+                                <th>تاريخ النشر</th>
+                                <th>إنشاء ريلز</th>
+                                <th>حالة الطلب</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var opp in Model.Opportunities)
+                            {
+                                var minutesSinceCreation = (DateTime.Now - opp.PublishDate).TotalMinutes;
+                                var canEdit = minutesSinceCreation <= 1;  // تجربة 5 دقائق
+                                var canDelete = minutesSinceCreation <= 1; // أو ضع قيمة أكبر إذا تريد
+
+
+                                <tr>
+                                    <td style="width:80px;">
+                                        @if (!string.IsNullOrEmpty(opp.ImagePath))
+                                        {
+                                            <img src="@opp.ImagePath"
+                                                 alt="صورة الفرصة"
+                                                 style="width:70px; height:70px; object-fit:cover; border-radius:5px;" />
+                                        }
+                                        else
+                                        {
+                                            <span>لا توجد صورة</span>
+                                        }
+                                    </td>
+                                    <td>@opp.Title</td>
+                                    <td>@opp.Description</td>
+                                    <td>@opp.AvailableCountries</td>
+                                    <td>@opp.Type.ToString()</td>
+                                    <td>@opp.PublishDate.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td>
+                                        <input type="checkbox"
+                                               @(opp.HasRequestedReels ? "checked" : "")
+                                               @(opp.IsReelsCompleted || opp.IsReelsRejected ? "disabled" : "")
+                                               onchange="confirmReels(@opp.Id, this, '@opp.PublishDate.ToString("yyyy-MM-ddTHH:mm:ss")')"
+                                               @(opp.IsReelsCompleted ? "onclick='showCompletedAlert()'" : "") />
+
+                                    </td>
+                                    <td class="reels-status">
+                                        @if (opp.HasRequestedReels)
+                                        {
+                                            if (opp.IsReelsRejected)
+                                            {
+                                                <span class="badge bg-danger">مرفوض</span>
+                                                <br />
+                                                <small class="text-muted">السبب: @opp.RejectionReason</small>
+                                            }
+                                            else if (opp.IsReelsCompleted)
+                                            {
+                                                <span class="badge bg-success">تم الانتهاء</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">قيد الانتظار</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">لم يتم الطلب</span>
+                                        }
+                                    </td>
+
+
+                                    <td>
+                                        <a class="btn btn-primary btn-sm"
+                                           href="@Url.Action("Details", "Opportunity", new { id = opp.Id })">
+                                            عرض
+                                        </a>
+                                        <button class="btn btn-warning btn-sm"
+                                                onclick="handleEdit(@opp.Id, '@canEdit'.toLowerCase())">
+                                            تعديل
+                                        </button>
+                                        <button class="btn btn-danger btn-sm"
+                                                onclick="handleDelete(@opp.Id, '@canDelete'.toLowerCase())">
+                                            حذف
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+
+            <!-- تاب إنشاء فرصة -->
+            <div class="tab-pane fade" id="v-pills-create" role="tabpanel">
+                <h2>إنشاء فرصة جديدة</h2>
+                <form asp-controller="Opportunity" asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label>اسم المنظمة</label>
+                        <input type="text" name="PublishedBy" class="form-control" value="@Model.OrganizationName" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label>العنوان</label>
+                        <input type="text" name="Title" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>الوصف</label>
+                        <textarea name="Description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>التفاصيل</label>
+                        <textarea name="Details" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>الدولة/البلدان المتاحة</label>
+                        <textarea name="AvailableCountries" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>معايير الأهلية</label>
+                        <textarea name="EligibilityCriteria" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>الفوائد</label>
+                        <textarea name="Benefits" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>الصورة (اختياري)</label>
+                        <input type="file" name="Image" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label>رابط التقديم</label>
+                        <input type="url" name="ApplyLink" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label>النوع</label>
+                        <select name="Type" class="form-control" required>
+                            <option value="">-- اختر النوع --</option>
+                            @foreach (OpportunityType type in Enum.GetValues(typeof(OpportunityType)))
+                            {
+                                <option value="@type">@type.ToString()</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">إنشاء الفرصة</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- التاب الجانبي -->
+    <div class="col-md-3">
+        <div class="nav flex-column nav-pills ms-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <button class="nav-link active" id="v-pills-list-tab" data-bs-toggle="pill" data-bs-target="#v-pills-list" type="button" role="tab">عرض الفرص</button>
+            <button class="nav-link" id="v-pills-create-tab" data-bs-toggle="pill" data-bs-target="#v-pills-create" type="button" role="tab">إنشاء فرصة</button>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="RequestVerificationToken" value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestToken" />
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function handleEdit(id, canEdit) {
+        if (canEdit !== 'true') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'غير مسموح بالتعديل',
+                text: 'لقد مر أكثر من 24 ساعة منذ إنشاء هذه الفرصة.'
+            });
+            return;
+        }
+        window.location.href = '/Opportunity/Edit/' + id;
+    }
+
+    function handleDelete(id, canDelete) {
+        if (canDelete !== 'true') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'غير مسموح بالحذف',
+                text: 'لقد مر أكثر من 48 ساعة منذ إنشاء هذه الفرصة.'
+            });
+            return;
+        }
+
+            Swal.fire({
+        title: 'هل أنت متأكد من الحذف؟',
+        text: "لن تتمكن من التراجع عن هذا الإجراء!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'نعم، احذفها!',
+        cancelButtonText: 'إلغاء'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const token = document.getElementById('RequestVerificationToken').value;
+            fetch('/Opportunity/Delete/' + id, {
+                method: 'POST',
+                headers: { 'RequestVerificationToken': token }
+            })
+            .then(() => {
+                Swal.fire('تم الحذف!', 'تم حذف الفرصة بنجاح.', 'success')
+                    .then(() => location.reload());
+            });
+        }
+    });
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // دالة التأكيد عند تغيير الجيك بوكس
+                async function confirmReels(opportunityId, checkbox, publishDate) {
+        const checked = checkbox.checked;
+
+        // تحقق من الوقت
+        const now = new Date();
+        const created = new Date(publishDate);
+        const hoursSinceCreation = (now - created) / (1000 * 60 * 60); // الساعات منذ الإنشاء
+
+        // منع أي تغيير بعد مرور 24 ساعة
+        if (hoursSinceCreation > 24) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'غير مسموح بتغيير الطلب',
+                text: 'لقد مر أكثر من 24 ساعة على إنشاء الفرصة، لا يمكنك تعديل حالة الرييلز الآن.'
+            });
+            checkbox.checked = !checked; // إعادة الحالة السابقة
+            return;
+        }
+
+        // لا تسمح بتغيير الجيك بوكس إذا مرفوض أو مكتمل
+        if (checkbox.disabled) return;
+
+        const result = await Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: checked
+                ? "هل تريد إرسال طلب الرييلز لهذه الفرصة؟"
+                : "هل تريد إلغاء طلب الرييلز لهذه الفرصة؟",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'نعم',
+            cancelButtonText: 'لا'
+        });
+
+        if (result.isConfirmed) {
+            // أعد التحقق من الوقت قبل الإرسال، لضمان منع أي تجاوز
+            const nowFinal = new Date();
+            const hoursSinceCreationFinal = (nowFinal - created) / (1000 * 60 * 60);
+            if (hoursSinceCreationFinal > 24) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'غير مسموح بتغيير الطلب',
+                    text: 'لقد مر أكثر من 24 ساعة على إنشاء الفرصة، لا يمكن تعديل حالة الرييلز الآن.'
+                });
+                checkbox.checked = !checked;
+                return;
+            }
+
+            toggleReels(opportunityId, checked, checkbox);
+        } else {
+            checkbox.checked = !checked;
+        }
+    }
+
+
+
+    // دالة إرسال الطلب للسيرفر
+        async function toggleReels(opportunityId, requestReels, checkbox) {
+        try {
+            const token = document.getElementById('RequestVerificationToken').value;
+
+            const response = await fetch('/Opportunity/ToggleReelsRequest/' + opportunityId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': token
+                },
+                body: JSON.stringify({ RequestReels: requestReels })
+            });
+
+            if (!response.ok) {
+                throw new Error('حدث خطأ أثناء إرسال الطلب.');
+            }
+
+            // التحديث مباشرة على الصف
+            const row = checkbox.closest('tr');
+            const statusCell = row.querySelector('.reels-status');
+
+            if (requestReels) {
+                statusCell.innerHTML = '<span class="badge bg-warning">قيد الانتظار</span>';
+            } else {
+                checkbox.checked = false;
+                statusCell.innerHTML = '<span class="text-muted">لم يتم الطلب</span>';
+            }
+
+            Swal.fire({
+                icon: 'success',
+                title: requestReels ? 'تم إرسال الطلب!' : 'تم إلغاء الطلب!',
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'خطأ',
+                text: error.message
+            });
+            // رجع الجيك بوكس للحالة السابقة إذا فشل
+            checkbox.checked = !requestReels;
+        }
+    }
+
+</script>
+
+<script>
+    function showCompletedAlert() {
+        Swal.fire({
+            icon: 'info',
+            title: 'تم اكتمال طلبك',
+            text: 'بإمكانك مشاهدة طلبك على صفحات التواصل الاجتماعي الخاصة بنا',
+            confirmButtonText: 'حسناً'
+        });
+    }
+</script>

@@ -1,0 +1,74 @@
+﻿@model Article
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    var userIsAuthenticated = User.Identity.IsAuthenticated;
+    var isAdmin = false;
+    var isOrganization = false;
+
+    if (userIsAuthenticated)
+    {
+        var userEmail = User.Identity.Name;
+        var appUser = await UserManager.FindByEmailAsync(userEmail);
+        if (appUser != null)
+        {
+            isAdmin = await UserManager.IsInRoleAsync(appUser, "Admin");
+            isOrganization = await UserManager.IsInRoleAsync(appUser, "Organization");
+        }
+    }
+}
+
+<div class="container mt-4">
+
+    @* زر العودة أعلى الصفحة للـ Admin فقط *@
+    @if (isAdmin)
+    {
+        <div class="mb-3">
+            <a href="https://localhost:44381/Articles/Index" class="btn btn-secondary">
+                العودة إلى قائمة المقالات
+            </a>
+        </div>
+    }
+
+    <h1 class="mb-3">@Model.Title</h1>
+
+    <div class="text-muted mb-3">
+        <span>@Model.PublishDate.ToString("dd MMMM yyyy")</span> |
+        <span>@Model.Author</span>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ImagePath))
+    {
+        <div class="mb-4">
+            <img src="@Model.ImagePath" class="img-fluid rounded" alt="@Model.Title" />
+        </div>
+    }
+
+    <hr />
+
+    <div class="article-content">
+        @Html.Raw(Model.Content)
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        @* الزر السفلي للـ Admin فقط *@
+        @if (isAdmin)
+        {
+            <a asp-action="Index" asp-controller="Articles" class="btn btn-secondary">
+                العودة إلى المقالات
+            </a>
+        }
+
+        @* الزر السفلي للفرد والمنظمة فقط *@
+        @if (!isAdmin && userIsAuthenticated)
+        {
+            <a class="btn btn-primary"
+               asp-controller="Home"
+               asp-action="Articles">
+                العودة لصفحة المقالات
+            </a>
+        }
+    </div>
+
+</div>

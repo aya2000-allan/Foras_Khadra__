@@ -1,0 +1,123 @@
+﻿@model Dictionary<Foras_Khadra.Models.OpportunityType, List<Foras_Khadra.Models.Opportunity>>
+@inject Foras_Khadra.Data.ApplicationDbContext _context
+
+@{
+    var organizations = _context.Organizations.Select(o => o.Name).ToList();
+    var selectedOrg = Context.Request.Query["organization"].ToString();
+
+    // ترتيب الأنواع أبجدياً حسب اسم النوع
+    var sortedModel = Model.OrderBy(m => m.Key.ToString()).ToList();
+}
+
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h2>قائمة الفرص</h2>
+    <div>
+        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary me-2">
+            العودة للوحة التحكم
+        </a>
+        <a asp-action="Create" class="btn btn-success">إضافة فرصة جديدة</a>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label>فلتر حسب المنظمة:</label>
+    <select class="form-select w-auto" onchange="filterByOrganization(this.value)">
+        <option value="">كل المنظمات</option>
+        @foreach (var org in organizations)
+        {
+            <option value="@org" selected="@(org == selectedOrg ? "selected" : null)">@org</option>
+        }
+    </select>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <!-- Vertical Tabs -->
+        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            @foreach (var group in sortedModel)
+            {
+                var type = group.Key;
+                var tabId = "tab" + type.ToString();
+                var filteredOpportunities = string.IsNullOrEmpty(selectedOrg)
+                ? group.Value
+                : group.Value.Where(o => o.PublishedBy == selectedOrg).ToList();
+                var btnClass = filteredOpportunities.Any() ? "bg-success text-white" : "bg-danger text-white";
+                var activeClass = group.Equals(sortedModel.First()) ? "active" : "";
+
+                <button class="nav-link @btnClass @activeClass" id="@tabId-tab" data-bs-toggle="pill"
+                        data-bs-target="#@tabId" type="button" role="tab" aria-controls="@tabId"
+                        aria-selected="@(activeClass == "active")">
+                    @type
+                </button>
+            }
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <!-- Tab Content -->
+        <div class="tab-content" id="v-pills-tabContent">
+            @foreach (var group in sortedModel)
+            {
+                var type = group.Key;
+                var tabId = "tab" + type.ToString();
+                var activeClass = group.Equals(sortedModel.First()) ? "show active" : "";
+                var filteredOpportunities = string.IsNullOrEmpty(selectedOrg)
+                ? group.Value
+                : group.Value.Where(o => o.PublishedBy == selectedOrg).ToList();
+
+                <div class="tab-pane fade @activeClass" id="@tabId" role="tabpanel" aria-labelledby="@tabId-tab">
+                    @if (!filteredOpportunities.Any())
+                    {
+                        <p>لا توجد فرص حالياً لهذه المنظمة.</p>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            @foreach (var opp in filteredOpportunities)
+                            {
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        @if (!string.IsNullOrEmpty(opp.ImagePath))
+                                        {
+                                            <img src="@opp.ImagePath" class="card-img-top" alt="صورة الفرصة">
+                                        }
+                                        <div class="card-body">
+                                            <h5 class="card-title">@opp.Title</h5>
+                                            <p class="card-text">@opp.Description</p>
+
+                                            <div class="d-flex flex-wrap gap-1">
+                                                <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })"
+                                                   class="btn btn-primary btn-sm">عرض التفاصيل</a>
+                                                <a href="@Url.Action("Edit", "Opportunity", new { id = opp.Id })"
+                                                   class="btn btn-warning btn-sm">تعديل</a>
+                                                <form asp-action="Delete" asp-controller="Opportunity" asp-route-id="@opp.Id"
+                                                      method="post" onsubmit="return confirm('هل أنت متأكد من حذف هذه الفرصة؟');"
+                                                      style="display:inline;">
+                                                    <button type="submit" class="btn btn-danger btn-sm">حذف</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterByOrganization(org) {
+        const url = new URL(window.location.href);
+        if (org) {
+            url.searchParams.set('organization', org);
+        } else {
+            url.searchParams.delete('organization');
+        }
+        window.location.href = url.toString();
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
