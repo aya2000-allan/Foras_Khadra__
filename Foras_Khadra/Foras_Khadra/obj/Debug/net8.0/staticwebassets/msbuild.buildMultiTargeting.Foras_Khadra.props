@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Foras_Khadra.props" />
-</Project>
