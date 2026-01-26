@@ -8,6 +8,8 @@
 <html lang="@culture" dir="@dir">
 
 <head>
+    @RenderSection("Styles", required: false)
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Foras_Khadra</title>
@@ -101,7 +103,7 @@
     if (currentController == "Admin" && currentAction == "ReelsRequestsDashboard")
         hideNavAndFooter = true;
 
-    if (isAdmin && currentController == "Articles")
+    if (isAdmin && currentController == "Home" && currentAction == "Articles")
         hideNavAndFooter = true;
 }
 
