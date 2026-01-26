@@ -254,6 +254,12 @@
     order: -1;
 }
 
+.verified-icon {
+    color: #f99d27;
+    margin-right: 6px;
+    font-size: 25px;
+    vertical-align: middle;
+}
 
 
 /* List */

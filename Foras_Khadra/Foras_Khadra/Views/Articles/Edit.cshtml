@@ -59,12 +59,7 @@
                                 </div>
                             </div>
 
-                            <!-- زر الحذف -->
-                            <div class="file-left">
-                                <button type="button" class="delete-file-btn" title="حذف الصورة">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
+                            
 
                         </div>
 
@@ -94,11 +89,14 @@
                     </div>
 
                     <!-- الحقول فوق بعض -->
-                    <div>
+                    <div class="readonly-field">
                         <label class="form-label">اسم الكاتب</label>
-                        <input asp-for="Author" class="custom-input" placeholder="مثال: أحمد محمد" />
+                        <input asp-for="Author"
+                               class="custom-input readonly-input"
+                               readonly />
                         <span asp-validation-for="Author" class="text-danger small"></span>
                     </div>
+
 
                     <div>
                         <label class="form-label">عنوان المقال</label>

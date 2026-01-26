@@ -13,9 +13,24 @@
 
     <div class="create-wrapper">
 
-        <!-- العنوان فوق العمودين -->
-        <div class="create-page-header">
+        <div class="create-page-header header-inline">
+
+            <!-- العنوان (يمين) -->
             <h1 class="page-title">إضافة مقالة</h1>
+
+            <!-- الأزرار (يسار) -->
+            <div class="header-actions">
+                <a asp-action="Index" class="header-btn">
+                    <i class="fa-solid fa-newspaper"></i>
+                    عرض المقالات
+                </a>
+
+                <a asp-controller="Admin" asp-action="Dashboard" class="header-btn secondary">
+                    <i class="fa-solid fa-gauge"></i>
+                    لوحة التحكم
+                </a>
+            </div>
+
         </div>
 
         <!-- الكارد -->
@@ -56,8 +71,16 @@
 
                     <div class="row">
                         <div class="col-12">
-                            <input asp-for="Author" class="custom-input" placeholder="اسم الكاتب" />
-                            <span asp-validation-for="Author" class="text-danger small"></span>
+                            @if (ViewBag.IsAdmin)
+                            {
+                                <input type="hidden" asp-for="Author" value="فرص خضراء" />
+                            }
+                            else
+                            {
+                                <input asp-for="Author" class="custom-input" placeholder="اسم الكاتب" />
+                            }
+
+
                         </div>
 
                         <div class="col-12">
@@ -68,7 +91,10 @@
 
                     <div class="editor-container">
                         <label class="form-label">نص المقالة</label>
-                        <textarea asp-for="Content" id="articleEditor"></textarea>
+<textarea asp-for="Content"
+          class="custom-textarea"
+          rows="8"
+          placeholder="اكتب نص المقالة هنا..."></textarea>
                         <span asp-validation-for="Content" class="text-danger small"></span>
 
                         <div class="hint-text">
@@ -95,22 +121,6 @@
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
     <script>
-        tinymce.init({
-            selector: '#articleEditor',
-            directionality: 'rtl',
-            language: 'ar',
-            height: 300,
-            menubar: false,
-            plugins: 'lists link table code help wordcount',
-            toolbar: 'undo redo | blocks | bold italic underline | alignright aligncenter alignleft | bullist numlist | link table | removeformat',
-            content_style: "body { font-family: 'Cairo', sans-serif; font-size: 14px; color: #0C2710; }",
-            setup: function (editor) {
-                editor.on('init', function () {
-                    editor.getContainer().style.borderRadius = "12px";
-                    editor.getContainer().style.border = "1.5px solid #E6EFE7";
-                });
-            }
-        });
 
         const dropzone = document.getElementById('dropzone');
         const fileInput = document.getElementById('fileInput');

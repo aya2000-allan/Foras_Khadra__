@@ -77,35 +77,56 @@
 
 
     @{
-    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
-    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+        var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
 
-    var userIsAuthenticated = User.Identity.IsAuthenticated;
-    var isAdmin = false;
-    var isOrganization = false;
+        bool hideNavAndFooter = false;
 
-    // متغير واحد نتحكم فيه بإخفاء الناف + الفوتر
-    var hideNavAndFooter = false;
+        var userIsAuthenticated = User.Identity.IsAuthenticated;
+        var isAdmin = false;
+        var isOrganization = false;
 
-    if (userIsAuthenticated)
-    {
-        var userEmail = User.Identity.Name;
-        var appUser = await UserManager.FindByEmailAsync(userEmail);
-
-        if (appUser != null)
+        if (userIsAuthenticated)
         {
-            isAdmin = await UserManager.IsInRoleAsync(appUser, "Admin");
-            isOrganization = await UserManager.IsInRoleAsync(appUser, "Organization");
+            var userEmail = User.Identity.Name;
+            var appUser = await UserManager.FindByEmailAsync(userEmail);
+            if (appUser != null)
+            {
+                isAdmin = await UserManager.IsInRoleAsync(appUser, "Admin");
+                isOrganization = await UserManager.IsInRoleAsync(appUser, "Organization");
+            }
         }
+
+        if (currentController == "Admin" && currentAction == "ReelsRequestsDashboard")
+        {
+            hideNavAndFooter = true;
+        }
+        else
+        {
+            // باقي الشروط القديمة للـ Admin
+            if (isAdmin)
+            {
+                // الشروط القديمة بدون أي تغيير
+                if ((currentController == "Opportunity" && (currentAction == "Index" || currentAction == "Create" || currentAction == "Edit"))
+                || (currentController == "AdminController")) // مثال: أي Controller إداري آخر
+                {
+                    hideNavAndFooter = true;
+                }
+                else
+                {
+                    hideNavAndFooter = false;
+                }
+            }
+        }
+
+        // إذا المستخدم Admin والصفحة من Articles، نخفي Navbar و Footer
+        if (isAdmin && currentController == "Articles")
+        {
+            hideNavAndFooter = true;
+        }
+
+
     }
-
-    // أمثلة لشروط الإخفاء (عدّل اللي بدك اياه)
-    if (currentController == "Admin" && currentAction == "ReelsRequestsDashboard")
-        hideNavAndFooter = true;
-
-    if (isAdmin && currentController == "Home" && currentAction == "Articles")
-        hideNavAndFooter = true;
-}
 
     
 

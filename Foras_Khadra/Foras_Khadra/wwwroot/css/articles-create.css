@@ -348,6 +348,38 @@ body {
     display: block;
 }
 
+.create-page-header.header-inline {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap; 
+}
+
+/* العنوان */
+.create-page-header .page-title {
+    margin: 0;
+    white-space: nowrap; 
+    width: auto !important; 
+}
+
+/* الأزرار */
+.header-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0; 
+}
+
+.readonly-input {
+    background-color: #f1f3f5; /* رمادي فاتح */
+    color: #6c757d; /* لون نص هادئ */
+    border: 1.5px dashed #ced4da; /* حدود مختلفة */
+    cursor: not-allowed;
+}
+
+    .readonly-input:focus {
+        outline: none;
+        box-shadow: none;
+    }
 
 /* ============================= */
 /*           Responsive          */
@@ -368,4 +400,6 @@ body {
         padding: 30px;
         border-radius: 24px;
     }
+
+
 }
