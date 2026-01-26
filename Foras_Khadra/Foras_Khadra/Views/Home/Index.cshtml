@@ -5,7 +5,53 @@
 <!-- External styles and icon library -->
 <link href="/css/Home.css" rel="stylesheet" />
 <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
+<style>
+    .custom-arrow {
+        position: static;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #E9F7ED;
+        color: var(--green);
+    }
+
+        .custom-arrow::after {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+    .article-img {
+        width: 353px;
+        height: 269px;
+        overflow: hidden;
+        border-radius: 20px 20px 0 0;
+    }
+
+        .article-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* مهم جداً */
+            display: block;
+        }
+
+    .swiper {
+        width: 100%;
+    }
+
+    .swiper-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+    }
+
+    .swiper-slide {
+        height: auto;
+        display: flex;
+        justify-content: center;
+    }
+</style>
 <!-- Main Container -->
 <div class="container-fluid py-5 rtl " style="position:relative;margin:7% 0;">
 
@@ -23,11 +69,7 @@
             <p class="mb-4 responsive-text" style="font-size:20px;font-weight:350; text-align:justify;max-width:443px">
                 هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة. لقد تم توليد هذا النص من مولد النص العربي، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.
             </p>
-            <!-- Search Form -->
-            <form class="d-flex align-items-center search-container  " style="margin-top: 25%;border-radius:40px ">
-                <input type="text" class="form-control rounded-pill " style="border:none ;height:56px" placeholder="ابحث عن فرصة، مؤتمر، تطوع ...">
-                <button type="submit" class="search-btn" style="width:118px;height:56px;border-radius:40px">بحث</button>
-            </form>
+           
         </div>
 
         <!-- Left: Images and colored blocks -->
@@ -74,6 +116,76 @@
 </div>
 
 
+<section class="latest-articles rtl py-5" style="background:#F6FBF7;">
+    <div class="container">
+
+        <!-- العنوان + زر عرض الكل -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold" style="color:var(--green);">
+                أحدث المقالات
+            </h3>
+
+            <a href="~/Home/Articles" class="view-all-btn">
+                <iconify-icon icon="mdi:clock-outline"></iconify-icon>
+                عرض الكل
+            </a>
+        </div>
+
+        <!-- السلايدر (الكروت فقط) -->
+
+        <div class="swiper articlesSwiper mb-4">
+            <div class="swiper-wrapper">
+
+                @foreach (var article in Model.LatestArticles)
+                {
+                    <div class="swiper-slide">
+                        <div class="article-card">
+
+                            <div class="article-img">
+                                <img src="@(!string.IsNullOrEmpty(article.ImagePath)
+                                                                 ? article.ImagePath
+                                                                 : "/images/default-article.jpg")"
+                                                                                                 alt="@article.Title" />
+                                                                                        </div>
+
+                            <div class="article-body">
+                                <span class="article-date">
+                                    @article.PublishDate.ToString("dd MMM yyyy")
+                                </span>
+
+                                <h5 class="article-title">
+                                    @article.Title
+                                </h5>
+
+                                <p class="article-desc">
+                                    @(article.Content.Length > 120
+                                                                    ? article.Content.Substring(0, 120) + "..."
+                                                                    : article.Content)
+                            </p>
+
+                                <a asp-controller="Articles"
+                                   asp-action="Details"
+                                   asp-route-id="@article.Id"
+                                   class="read-more">
+                                    اقرأ المزيد
+                                    <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                                }
+
+            </div>
+        </div>
+        <!-- الأسهم تحت الكروت -->
+        <div class="d-flex justify-content-center gap-3">
+            <div class="swiper-button-prev custom-arrow"></div>
+            <div class="swiper-button-next custom-arrow"></div>
+        </div>
+
+    </div>
+</section>
 
 <script>
     const container = document.getElementById("floatingShapes");
@@ -147,4 +259,24 @@
 
       container.appendChild(shape);
     }
+</script>
+<script>
+    new Swiper(".articlesSwiper", {
+        slidesPerView: 3,
+        spaceBetween: 25,
+        loop: true,
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+            0: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1200: { slidesPerView: 3 }
+        }
+    });
 </script>
