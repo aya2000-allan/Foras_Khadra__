@@ -6,7 +6,7 @@
     <p><strong>الاسم:</strong> @Model.Name</p>
     <p><strong>نوع العضوية:</strong> @Model.Membership</p>
     <p><strong>القسم:</strong> @Model.Department</p>
-    <p><strong>البيو:</strong> @Model.Bio</p>
+    <p><strong>البيو:</strong> @Html.Raw(Model.Bio)</p>
     @if (!string.IsNullOrEmpty(Model.ImagePath))
     {
         <p><strong>صورة العضو:</strong><br /><img src="@Model.ImagePath" width="200" /></p>
