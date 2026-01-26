@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foras_Khadra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260126084047_InitialCreate")]
+    [Migration("20260126190804_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
