@@ -1,63 +1,112 @@
 ﻿@model IEnumerable<Foras_Khadra.Models.TeamMember>
-
 @{
     Layout = "_Layout";
+    var isFirstGroup = true;
 }
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">فريقنا</h2>
+<link href="~/css/Home.css" rel="stylesheet" />
+<!-- ===== HERO ===== -->
+<section class="about-hero">
+    <div class="about-overlay">
+        <h1>من نحن؟</h1>
+        <p>
+            نحن مجموعة من الشباب من الوطن العربي الذين آمنوا بالمؤتمرات العالمية،
+            وقررنا أن نبدأ مشروعنا لدعم الشباب في وطننا العربي على إيجاد الفرص
+            والمشاركة على الصعيد الدولي.
+        </p>
+    </div>
+</section>
+
+<!-- ===== VISION & GOALS ===== -->
+<section class="vision-goals">
+    <div class="vg-box">
+        <div class="vg-title">
+            <img src="~/images/about_us_leaf.svg" />
+            <h3> رؤيتنا</h3>
+        </div>
+
+        <p>
+            إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص، حيث يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية لتصميم الموقع.
+            إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص، حيث يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية.
+
+        </p>
+    </div>
+
+    <div class="vg-box">
+        <div class="vg-title">
+            <img src="~/images/about_us_leaf.svg" />
+            <h3>أهدافنا</h3>
+        </div>
+        <p>
+            إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص، حيث يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية لتصميم الموقع.
+            إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص، حيث يحتاج العميل فى كثير من الأحيان أن يطلع على صورة حقيقية.
+
+        </p>
+    </div>
+</section>
+
+<!-- ===== TEAMS ===== -->
+<section class="teams-section">
 
     @foreach (var group in Model.GroupBy(m => m.Department))
     {
-        <h3 class="mb-3">@group.Key</h3>
+        <div class="team-block">
 
-        <div class="row">
-            @foreach (var member in group.OrderByDescending(m => m.Membership))
-            {
-                <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                    <div class="card h-100 text-center shadow-sm">
+            <div class="team-grid">
+
+                <div class="group-card">
+
+                    <h2 class="team-title">@group.Key</h2>
+
+
+                    <div class="group-bio">
+                        <p>إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد </p>
+                    </div>
+                </div>
+                @foreach (var member in group.OrderByDescending(m => m.Membership))
+                {
+                    <div class="team-card">
 
                         @if (!string.IsNullOrEmpty(member.ImagePath))
                         {
-                            <img src="@member.ImagePath"
-                                 class="card-img-top"
-                                 style="height:200px; object-fit:cover;"
-                                 alt="@member.Name" />
+                            <img src="@member.ImagePath" alt="@member.Name" class="member-img" />
                         }
 
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <a href="javascript:void(0);"
-                                   onclick="toggleBio(@member.Id)">
+                        <div class="team-card-footer" onclick="toggleBio(@member.Id)">
+                            <div class="footer-title">
+                                <img src="~/images/team_leaf.svg" alt="Alternate Text" class="footer-leaf" />
+                                <h4>
                                     @member.Name
-                                </a>
-                            </h5>
+                                </h4>
+                            </div>
 
-                            <p class="card-text">@member.Membership</p>
+                            <span class="role">@member.Membership</span>
 
-                            <!-- BIO (مخفي افتراضيًا) -->
-                            <div id="bio-@member.Id"
-                                 class="mt-3 text-start"
-                                 style="display:none;">
-                                <hr />
+                        </div>
+
+                        <div id="bio-@member.Id" class="bio" style="background-image:url(@member.ImagePath)">
+                            <div class="bio-overlay">
+
                                 <p>@member.Bio</p>
                             </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
+                @if (isFirstGroup)
+                {
+                    <div class="group-card">
+                        <img src="~/images/مـــــــن وإلــــى شـبـــاب عـــربـي.svg" alt="Alternate Text" style="margin:auto 1px" />
+                    </div>
+                    isFirstGroup = false;
+                }
+            </div>
         </div>
     }
-</div>
+</section>
 
 <script>
     function toggleBio(id) {
-        const bio = document.getElementById("bio-" + id);
-
-        if (bio.style.display === "none" || bio.style.display === "") {
-            bio.style.display = "block";
-        } else {
-            bio.style.display = "none";
-        }
+        document.getElementById("bio-" + id)
+            .classList.toggle("open");
     }
 </script>
