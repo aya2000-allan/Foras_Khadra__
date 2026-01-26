@@ -135,6 +135,7 @@
     height: 65px;
 }
 
+
 .btn-primary {
     flex: 4;
     background: #F99D27;
@@ -142,10 +143,16 @@
     border-radius: 16px;
     padding: 12px;
     color: #fff;
-    font-weight:600;
+    font-weight: 600;
     font-size: 24px;
     cursor: pointer;
 }
+
+    .btn-primary:hover {
+        color: #F99D27;
+        background: #fff;
+        border: 2px solid #F99D27;
+    }
 
 .btn-outline {
     flex: 1;
@@ -158,6 +165,11 @@
     font-weight: 600;
     font-size: 24px;
 }
+
+    .btn-outline:hover {
+        background: #F99D27;
+        color: #fff;
+    }
 
 /* Responsive */
 @media (max-width: 900px) {
