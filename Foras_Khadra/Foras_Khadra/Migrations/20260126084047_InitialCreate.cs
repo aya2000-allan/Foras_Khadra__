@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Foras_Khadra.Migrations
 {
     /// <inheritdoc />
-    public partial class lastupdate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -275,6 +275,9 @@ namespace Foras_Khadra.Migrations
                     OrganizationId = table.Column<int>(type: "int", nullable: false),
                     RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsRejected = table.Column<bool>(type: "bit", nullable: false),
+                    RejectionReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsInProgress = table.Column<bool>(type: "bit", nullable: false),
                     OpportunityId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

@@ -140,7 +140,13 @@ using (var scope = app.Services.CreateScope())
         context.SaveChanges();
     }
 }
-
+// ✅ Seed Articles (Test Data)
+// =========================
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    DbInitializer.SeedArticles(context);
+}
 // ===== Configure the HTTP request pipeline =====
 if (!app.Environment.IsDevelopment())
 {
