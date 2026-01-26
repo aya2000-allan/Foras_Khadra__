@@ -1,152 +1,28 @@
 ﻿@model Article
-@{
-    ViewData["Title"] = "إضافة مقالة";
-    Layout = "_Layout";
-}
 
-@section Styles {
-    <link rel="stylesheet" asp-append-version="true" href="~/css/articles-create.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-}
+<h2>إنشاء مقال جديد</h2>
 
-<div class="main-container">
-
-    <div class="create-wrapper">
-
-        <!-- العنوان فوق العمودين -->
-        <div class="create-page-header">
-            <h1 class="page-title">إضافة مقالة</h1>
-        </div>
-
-        <!-- الكارد -->
-        <div class="create-article-card">
-
-            <!-- العمود الأيسر -->
-            <div class="side-illustration">
-                <img class="left-illustration" src="~/images/Writer-illustration.svg" alt="Writer Illustration" />
-            </div>
-
-            <!-- العمود الأيمن -->
-            <div class="form-section">
-
-                <form asp-action="Create" method="post" enctype="multipart/form-data">
-                    @Html.AntiForgeryToken()
-
-                    <!-- منطقة رفع الصورة -->
-                    <label class="form-label">رفع صورة / فيديو المقالة</label>
-                    <div class="upload-area" id="dropzone">
-                        <input type="file" id="fileInput" name="Image" hidden accept="image/*" />
-
-                        <div class="upload-icon-wrapper">
-                            <i class="fa-solid fa-cloud-arrow-up"></i>
-                        </div>
-
-                        <div class="upload-text-main">
-                            اسحب الملف هنا أو <span>تصفح من جهازك</span>
-                        </div>
-
-                        <div class="upload-hint">
-                            صيغ الملفات المدعومة: JPEG, PNG (بحد أقصى 5 ميجابايت)
-                        </div>
-
-                        <div id="previewContainer" class="mt-3 d-none">
-                            <span class="badge bg-success" id="fileNameDisplay">تم اختيار ملف</span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12">
-                            <input asp-for="Author" class="custom-input" placeholder="اسم الكاتب" />
-                            <span asp-validation-for="Author" class="text-danger small"></span>
-                        </div>
-
-                        <div class="col-12">
-                            <input asp-for="Title" class="custom-input" placeholder="عنوان المقالة" />
-                            <span asp-validation-for="Title" class="text-danger small"></span>
-                        </div>
-                    </div>
-
-                    <div class="editor-container">
-                        <label class="form-label">نص المقالة</label>
-                        <textarea asp-for="Content" id="articleEditor"></textarea>
-                        <span asp-validation-for="Content" class="text-danger small"></span>
-
-                        <div class="hint-text">
-                            <span class="hint-dot"></span>
-                            <span>سيتم نشر المقالة بكل من العربية ، الإنجليزية، الفرنسية</span>
-                        </div>
-                    </div>
-
-                    <div class="actions-group">
-                                                <button type="submit" class="btn-publish">حفظ ونشر المقالة</button>
-
-                        <a asp-action="Index" class="btn-cancel">إلغاء</a>
-                    </div>
-                </form>
-
-            </div>
-        </div>
+<form asp-action="Create" enctype="multipart/form-data">
+    <div>
+        <label>عنوان المقالة</label>
+        <input asp-for="Title" class="form-control" />
     </div>
-</div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <div>
+        <label>محتوى المقالة</label>
+        <textarea asp-for="Content" class="form-control"></textarea>
+    </div>
 
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
-    <script>
-        tinymce.init({
-            selector: '#articleEditor',
-            directionality: 'rtl',
-            language: 'ar',
-            height: 300,
-            menubar: false,
-            plugins: 'lists link table code help wordcount',
-            toolbar: 'undo redo | blocks | bold italic underline | alignright aligncenter alignleft | bullist numlist | link table | removeformat',
-            content_style: "body { font-family: 'Cairo', sans-serif; font-size: 14px; color: #0C2710; }",
-            setup: function (editor) {
-                editor.on('init', function () {
-                    editor.getContainer().style.borderRadius = "12px";
-                    editor.getContainer().style.border = "1.5px solid #E6EFE7";
-                });
-            }
-        });
+    <div>
+        <label>الكاتب</label>
+        <input asp-for="Author" class="form-control" />
+    </div>
 
-        const dropzone = document.getElementById('dropzone');
-        const fileInput = document.getElementById('fileInput');
-        const fileNameDisplay = document.getElementById('fileNameDisplay');
-        const previewContainer = document.getElementById('previewContainer');
+    <div>
+        <label>الصورة</label>
+        <input type="file" name="Image" class="form-control" />
+    </div>
 
-        dropzone.addEventListener('click', () => fileInput.click());
-
-        dropzone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropzone.classList.add('dragover');
-        });
-
-        dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-
-        dropzone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropzone.classList.remove('dragover');
-            if (e.dataTransfer.files.length > 0) {
-                handleFiles(e.dataTransfer.files[0]);
-            }
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFiles(e.target.files[0]);
-            }
-        });
-
-        function handleFiles(file) {
-            if (file && file.type.startsWith('image/')) {
-                fileNameDisplay.textContent = `تم اختيار: ${file.name}`;
-                previewContainer.classList.remove('d-none');
-            } else {
-                alert('يرجى اختيار ملف صورة صحيح (PNG, JPG)');
-            }
-        }
-    </script>
-}
+    <button type="submit">حفظ</button>
+</form>

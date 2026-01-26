@@ -15,7 +15,7 @@ namespace Foras_Khadra.Data
         public DbSet<Article> Articles { get; set; }
         public DbSet<Opportunity> Opportunities { get; set; }
         public DbSet<Organization> Organizations { get; set; }
-
+        public DbSet<ReelsRequest> ReelsRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +26,18 @@ namespace Foras_Khadra.Data
                 .WithMany()
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ReelsRequest>()
+                .HasOne(r => r.Opportunity)
+                .WithMany()
+                .HasForeignKey(r => r.OpportunityId)
+                .OnDelete(DeleteBehavior.Cascade); // OK
+
+            modelBuilder.Entity<ReelsRequest>()
+                .HasOne(r => r.Organization)
+                .WithMany()
+                .HasForeignKey(r => r.OrganizationId)
+                .OnDelete(DeleteBehavior.Restrict); // ← منع الـ cascade هنا
         }
 
 

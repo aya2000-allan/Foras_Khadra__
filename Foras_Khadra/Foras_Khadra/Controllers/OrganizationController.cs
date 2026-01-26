@@ -151,14 +151,43 @@ namespace Foras_Khadra.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "البريد الإلكتروني أو كلمة المرور غير صحيحة");
+                return View(model);
+            }
+
+            // التحقق من الدور
+            var isOrganization = await _userManager.IsInRoleAsync(user, "Organization");
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            var isNormalUser = await _userManager.IsInRoleAsync(user, "User"); // المستخدم العادي
+
+            if (isNormalUser)
+            {
+                ModelState.AddModelError("", "المستخدم العادي لا يمكنه تسجيل الدخول هنا");
+                return View(model);
+            }
+
+            // تحقق كلمة المرور
+            var result = await _signInManager.PasswordSignInAsync(
+                user,
+                model.Password,
+                isPersistent: false,
+                lockoutOnFailure: false
+            );
+
             if (!result.Succeeded)
             {
                 ModelState.AddModelError("", "البريد الإلكتروني أو كلمة المرور غير صحيحة");
                 return View(model);
             }
 
-            return RedirectToAction("Dashboard");
+            // توجيه الادمن للوحة الإدارة والمنظمة للوحة التحكم الخاصة بها
+            if (isAdmin)
+                return RedirectToAction("Dashboard", "Admin");
+            else
+                return RedirectToAction("Dashboard", "Organization");
         }
 
         public IActionResult Dashboard() => View();
@@ -334,8 +363,12 @@ namespace Foras_Khadra.Controllers
 
             // احصل على المستخدم من Identity وليس من Organization
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-                return BadRequest("الرابط غير صالح أو منتهي الصلاحية.");
+            if (!await _userManager.IsInRoleAsync(user, "Organization"))
+            {
+                await _signInManager.SignOutAsync();
+                ModelState.AddModelError("", "يجب تسجيل الدخول كمنظمة للوصول لهذه الصفحة.");
+                return View(model);
+            }
 
             var org = await _context.Organizations.FirstOrDefaultAsync(o => o.ContactEmail == model.Email);
             if (org == null || org.PasswordResetToken != model.Token || org.TokenExpiry < DateTime.Now)

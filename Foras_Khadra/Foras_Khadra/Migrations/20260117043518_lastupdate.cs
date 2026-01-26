@@ -82,29 +82,6 @@ namespace Foras_Khadra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Opportunities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PublishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PublishedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Details = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AvailableCountries = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EligibilityCriteria = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Benefits = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApplyLink = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Opportunities", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TeamMember",
                 columns: table => new
                 {
@@ -228,6 +205,36 @@ namespace Foras_Khadra.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Opportunities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PublishedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Details = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AvailableCountries = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EligibilityCriteria = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Benefits = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApplyLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Opportunities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Opportunities_AspNetUsers_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Organizations",
                 columns: table => new
                 {
@@ -256,6 +263,40 @@ namespace Foras_Khadra.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReelsRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OpportunityId = table.Column<int>(type: "int", nullable: false),
+                    OrganizationId = table.Column<int>(type: "int", nullable: false),
+                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    OpportunityId1 = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReelsRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReelsRequests_Opportunities_OpportunityId",
+                        column: x => x.OpportunityId,
+                        principalTable: "Opportunities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReelsRequests_Opportunities_OpportunityId1",
+                        column: x => x.OpportunityId1,
+                        principalTable: "Opportunities",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ReelsRequests_Organizations_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organizations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -298,9 +339,29 @@ namespace Foras_Khadra.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Opportunities_CreatedByUserId",
+                table: "Opportunities",
+                column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Organizations_UserId",
                 table: "Organizations",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReelsRequests_OpportunityId",
+                table: "ReelsRequests",
+                column: "OpportunityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReelsRequests_OpportunityId1",
+                table: "ReelsRequests",
+                column: "OpportunityId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReelsRequests_OrganizationId",
+                table: "ReelsRequests",
+                column: "OrganizationId");
         }
 
         /// <inheritdoc />
@@ -325,16 +386,19 @@ namespace Foras_Khadra.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Opportunities");
-
-            migrationBuilder.DropTable(
-                name: "Organizations");
+                name: "ReelsRequests");
 
             migrationBuilder.DropTable(
                 name: "TeamMember");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Opportunities");
+
+            migrationBuilder.DropTable(
+                name: "Organizations");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

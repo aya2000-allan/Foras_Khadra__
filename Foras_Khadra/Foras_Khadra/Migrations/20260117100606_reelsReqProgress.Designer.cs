@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foras_Khadra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260117043518_lastupdate")]
-    partial class lastupdate
+    [Migration("20260117100606_reelsReqProgress")]
+    partial class reelsReqProgress
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -188,6 +188,10 @@ namespace Foras_Khadra.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -219,6 +223,8 @@ namespace Foras_Khadra.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
 
                     b.ToTable("Opportunities");
                 });
@@ -284,6 +290,49 @@ namespace Foras_Khadra.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Organizations");
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.ReelsRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsInProgress")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRejected")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("OpportunityId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OpportunityId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OpportunityId");
+
+                    b.HasIndex("OpportunityId1");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("ReelsRequests");
                 });
 
             modelBuilder.Entity("Foras_Khadra.Models.TeamMember", b =>
@@ -450,6 +499,17 @@ namespace Foras_Khadra.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Foras_Khadra.Models.Opportunity", b =>
+                {
+                    b.HasOne("Foras_Khadra.Models.ApplicationUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+                });
+
             modelBuilder.Entity("Foras_Khadra.Models.Organization", b =>
                 {
                     b.HasOne("Foras_Khadra.Models.ApplicationUser", "User")
@@ -458,6 +518,29 @@ namespace Foras_Khadra.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.ReelsRequest", b =>
+                {
+                    b.HasOne("Foras_Khadra.Models.Opportunity", "Opportunity")
+                        .WithMany()
+                        .HasForeignKey("OpportunityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Foras_Khadra.Models.Opportunity", null)
+                        .WithMany("ReelsRequests")
+                        .HasForeignKey("OpportunityId1");
+
+                    b.HasOne("Foras_Khadra.Models.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Opportunity");
+
+                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -509,6 +592,11 @@ namespace Foras_Khadra.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.Opportunity", b =>
+                {
+                    b.Navigation("ReelsRequests");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,8 +1,11 @@
 ﻿using Foras_Khadra.Data;
 using Foras_Khadra.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 using System.Linq;
@@ -13,11 +16,13 @@ namespace Foras_Khadra.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _env;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OpportunityController(ApplicationDbContext context, IWebHostEnvironment env)
+        public OpportunityController(ApplicationDbContext context, IWebHostEnvironment env, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _env = env;
+            _userManager = userManager; // صح
         }
 
         // ================= INDEX =================
@@ -34,49 +39,69 @@ namespace Foras_Khadra.Controllers
         }
 
         // ================= CREATE =================
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var model = new OpportunityCreateVM();
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (await _userManager.IsInRoleAsync(currentUser, "Organization"))
+            {
+                var org = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == currentUser.Id);
+                if (org != null) model.PublishedBy = org.Name;
+            }
+            else if (await _userManager.IsInRoleAsync(currentUser, "Admin"))
+            {
+                model.PublishedBy = "Admin";
+            }
+
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Create(OpportunityCreateVM model)
+        public async Task<IActionResult> Create(OpportunityCreateVM model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
+            if (!ModelState.IsValid) return View(model);
 
-            // رفع الصورة
             string imagePath = null;
             if (model.Image != null)
             {
                 var fileName = Guid.NewGuid() + Path.GetExtension(model.Image.FileName);
                 var path = Path.Combine(_env.WebRootPath, "uploads/opportunities", fileName);
-
                 using var stream = new FileStream(path, FileMode.Create);
                 model.Image.CopyTo(stream);
-
                 imagePath = "/uploads/opportunities/" + fileName;
             }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            var org = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == currentUser.Id);
 
             var opportunity = new Opportunity
             {
                 Title = model.Title,
                 ImagePath = imagePath,
-                PublishedBy = model.PublishedBy,
+                PublishedBy = org != null ? org.Name : "Admin",
                 Type = model.Type.Value,
                 Description = model.Description,
                 Details = model.Details,
                 AvailableCountries = model.AvailableCountries,
                 EligibilityCriteria = model.EligibilityCriteria,
                 Benefits = model.Benefits,
-                ApplyLink = model.ApplyLink
+                ApplyLink = model.ApplyLink,
+                CreatedByUserId = currentUser.Id,
+                // تحديد التوثيق عند الإنشاء فقط
+                IsPublishedByAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin"),
+                IsPublishedByOrganization = false
             };
 
             _context.Opportunities.Add(opportunity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            if (await _userManager.IsInRoleAsync(currentUser, "Admin")) return RedirectToAction("Index");
+            if (await _userManager.IsInRoleAsync(currentUser, "Organization")) return RedirectToAction("OrgOpportunities");
+
+            return RedirectToAction("Index");
         }
+
 
         // ================= EDIT =================
         public IActionResult Edit(int id)
@@ -104,7 +129,7 @@ namespace Foras_Khadra.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(OpportunityEditVM model)
+        public async Task<IActionResult> Edit(OpportunityEditVM model)
         {
             var old = _context.Opportunities.Find(model.Id);
             if (old == null) return NotFound();
@@ -132,9 +157,34 @@ namespace Foras_Khadra.Controllers
             if (!string.IsNullOrEmpty(model.Benefits)) old.Benefits = model.Benefits;
             if (!string.IsNullOrEmpty(model.ApplyLink)) old.ApplyLink = model.ApplyLink;
 
+            // **تحديد الناشر تلقائياً حسب من أنشأ الفرصة**
+            var creator = await _userManager.FindByIdAsync(old.CreatedByUserId);
+            if (await _userManager.IsInRoleAsync(creator, "Organization"))
+            {
+                var org = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == creator.Id);
+                old.PublishedBy = org?.Name;
+            }
+            else if (await _userManager.IsInRoleAsync(creator, "Admin"))
+            {
+                old.PublishedBy = "Admin";
+            }
             _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
-        }
+            // تحديد المستخدم الحالي
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            // إعادة التوجيه حسب الدور
+            if (await _userManager.IsInRoleAsync(currentUser, "Admin"))
+            {
+                return RedirectToAction("Index"); // صفحة الادمن العامة
+            }
+            else if (await _userManager.IsInRoleAsync(currentUser, "Organization"))
+            {
+                return RedirectToAction("OrgOpportunities"); // صفحة الفرص الخاصة بالمنظمة
+            }
+
+            // بشكل افتراضي
+            return RedirectToAction("Index");
+        }       
 
         // ================= DELETE =================
         public IActionResult Delete(int id)
@@ -150,13 +200,41 @@ namespace Foras_Khadra.Controllers
         }
 
         // ================= DETAILS =================
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var opp = _context.Opportunities.Find(id);
+            var opp = await _context.Opportunities
+                .FirstOrDefaultAsync(o => o.Id == id);
+
             if (opp == null) return NotFound();
 
-            return View(opp);
+            var creator = await _userManager.FindByIdAsync(opp.CreatedByUserId);
+            bool isAdminPublisher = false;
+            if (creator != null)
+            {
+                isAdminPublisher = await _userManager.IsInRoleAsync(creator, "Admin");
+            }
+
+            // إنشاء ViewModel
+            var model = new Opportunity
+            {
+                Id = opp.Id,
+                Title = opp.Title,
+                ImagePath = opp.ImagePath,
+                Type = opp.Type,
+                Description = opp.Description,
+                Details = opp.Details,
+                AvailableCountries = opp.AvailableCountries,
+                EligibilityCriteria = opp.EligibilityCriteria,
+                Benefits = opp.Benefits,
+                ApplyLink = opp.ApplyLink,
+                PublishedBy = opp.PublishedBy,
+                PublishDate = opp.PublishDate,
+                IsPublishedByAdmin = isAdminPublisher
+            };
+
+            return View(model);
         }
+
 
         // ================= FILTER BY TYPE =================
         [Route("Opportunities/{type}")]
@@ -169,5 +247,90 @@ namespace Foras_Khadra.Controllers
             ViewBag.Type = type;
             return View(data);
         }
+
+        [Authorize(Roles = "Organization")]
+        public async Task<IActionResult> OrgOpportunities()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var org = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == user.Id);
+
+            var opportunities = await _context.Opportunities
+                .Where(o => o.CreatedByUserId == user.Id)
+                .ToListAsync();
+
+            var model = new OrgOpportunityPageVM
+            {
+                OrganizationName = org?.Name,
+                Opportunities = opportunities.Select(o =>
+                {
+                    // جلب طلب الريلز الخاص بهذه الفرصة وهذه المنظمة
+                    var request = _context.ReelsRequests
+                                          .FirstOrDefault(r => r.OpportunityId == o.Id && r.OrganizationId == org.Id);
+
+                    return new OrgOpportunityVM
+                    {
+                        Id = o.Id,
+                        Title = o.Title,
+                        Description = o.Description,
+                        AvailableCountries = o.AvailableCountries,
+                        Type = o.Type,
+                        PublishDate = o.PublishDate,
+                        ImagePath = o.ImagePath,
+
+                        // حالة الريلز
+                        HasRequestedReels = request != null,
+                        IsReelsCompleted = request != null && request.IsCompleted,
+                        IsReelsRejected = request != null && request.IsRejected,         // ✅ مرفوض
+                        RejectionReason = request != null ? request.RejectionReason : "" // ✅ سبب الرفض
+                    };
+                }).ToList()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Organization")]
+        public async Task<IActionResult> ToggleReelsRequest(int id, [FromBody] ReelsRequestDto dto)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var org = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == user.Id);
+            if (org == null) return BadRequest();
+
+            var request = await _context.ReelsRequests
+                .FirstOrDefaultAsync(r => r.OpportunityId == id && r.OrganizationId == org.Id);
+
+            if (dto.RequestReels)
+            {
+                if (request == null)
+                {
+                    request = new ReelsRequest
+                    {
+                        OpportunityId = id,
+                        OrganizationId = org.Id,
+                        RequestDate = DateTime.Now,
+                        IsCompleted = false
+                    };
+                    _context.ReelsRequests.Add(request);
+                }
+            }
+            else
+            {
+                if (request != null)
+                {
+                    _context.ReelsRequests.Remove(request);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        public class ReelsRequestDto
+        {
+            public bool RequestReels { get; set; }
+        }
+
+
     }
 }

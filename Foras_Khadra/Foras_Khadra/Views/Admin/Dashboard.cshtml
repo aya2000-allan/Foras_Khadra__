@@ -107,7 +107,7 @@
         </div>
 
         <p class="text-muted mb-4">
-            من هنا يمكنك إدارة الموقع بالكامل (مقالات – أعضاء – فرص – منظمات).
+            من هنا يمكنك إدارة الموقع بالكامل (مقالات – أعضاء – فرص – منظمات – طلبات الريلز).
         </p>
 
         <!-- Stats Cards -->
@@ -151,6 +151,54 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ======= كروت طلبات الريلز ======= -->
+            <!-- الكارد الطلبات المستلمة -->
+            <div class="col-md-3">
+                <div class="card stats-card text-bg-secondary"
+                     onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin")'">
+                    <div class="card-body">
+                        <h5 class="card-title">الطلبات المستلمة</h5>
+                        <p class="card-text display-6">@Model.TotalReelsRequests</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الكارد جاري العمل عليها -->
+            <div class="col-md-3">
+                <div class="card stats-card text-bg-warning"
+                     onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "pending" })'">
+                    <div class="card-body">
+                        <h5 class="card-title">جاري العمل عليها</h5>
+                        <p class="card-text display-6">@Model.PendingReelsRequests</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الكارد تم الانتهاء -->
+            <div class="col-md-3">
+                <div class="card stats-card text-bg-success"
+                     onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "completed" })'">
+                    <div class="card-body">
+                        <h5 class="card-title">تم الانتهاء</h5>
+                        <p class="card-text display-6">@Model.CompletedReelsRequests</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الكارد المرفوضة -->
+            <div class="col-md-3">
+                <div class="card stats-card text-bg-danger"
+                     onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "rejected" })'">
+                    <div class="card-body">
+                        <h5 class="card-title">مرفوضة</h5>
+                        <p class="card-text display-6">@Model.RejectReelsRequests</p>
+                    </div>
+                </div>
+            </div>
+
+
+
         </div>
     </div>
 

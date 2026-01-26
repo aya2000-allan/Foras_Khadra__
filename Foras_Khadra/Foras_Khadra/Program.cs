@@ -3,7 +3,10 @@ using Foras_Khadra.Models;
 using Foras_Khadra.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,10 +49,27 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services
+    .AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 builder.Services.AddRazorPages();
+// ===== Localization (اللغات) =====
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+var supportedCultures = new[]
+{
+    new CultureInfo("ar"),
+    new CultureInfo("en"),
+    new CultureInfo("fr")
+};
 
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("ar"); // الافتراضي عربي
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 
 var app = builder.Build();
 
@@ -120,15 +140,6 @@ using (var scope = app.Services.CreateScope())
         context.SaveChanges();
     }
 }
-// ✅ Seed Articles (Test Data)
-// =========================
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    DbInitializer.SeedArticles(context);
-}
-
-
 
 // ===== Configure the HTTP request pipeline =====
 if (!app.Environment.IsDevelopment())
@@ -140,6 +151,12 @@ if (!app.Environment.IsDevelopment())
 app.UseStatusCodePagesWithReExecute("/Home/StatusCode", "?code={0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+// ===== Use Localization =====
+var localizationOptions = app.Services
+    .GetRequiredService<IOptions<RequestLocalizationOptions>>()
+    .Value;
+
+app.UseRequestLocalization(localizationOptions);
 
 app.UseRouting();
 app.UseSession();

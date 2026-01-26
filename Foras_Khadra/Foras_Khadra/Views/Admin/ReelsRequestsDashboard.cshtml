@@ -1,0 +1,281 @@
+﻿@model List<Foras_Khadra.Models.ReelsRequestAdminVM>
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@{
+    var filterStatusFromQuery = ViewContext.HttpContext.Request.Query["status"].ToString().ToLower();
+    var filteredRequests = Model;
+
+    if (filterStatusFromQuery == "pending")
+        filteredRequests = Model.Where(r => !r.IsCompleted && !r.IsRejected).ToList();
+    else if (filterStatusFromQuery == "completed")
+        filteredRequests = Model.Where(r => r.IsCompleted).ToList();
+    else if (filterStatusFromQuery == "rejected")
+        filteredRequests = Model.Where(r => r.IsRejected).ToList();
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>
+        @(filterStatusFromQuery == "pending" ? "الطلبات الجاري العمل عليها" :
+                filterStatusFromQuery == "completed" ? "الطلبات المنتهية" :
+                filterStatusFromQuery == "rejected" ? "الطلبات المرفوضة" :
+                "جميع الطلبات المستلمة")
+    </h2>
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-outline-primary">العودة للوحة التحكم</a>
+</div>
+
+@if (string.IsNullOrEmpty(filterStatusFromQuery))
+{
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <label>فلتر باسم المنظمة:</label>
+            <select id="filterOrg" class="form-control" onchange="applyFilter()">
+                <option value="">-- الكل --</option>
+                @foreach (var org in Model.Select(r => r.OrganizationName).Distinct())
+                {
+                    <option value="@org">@org</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label>فلتر حسب نوع الفرصة:</label>
+            <select id="filterType" class="form-control" onchange="applyFilter()">
+                <option value="">-- الكل --</option>
+                @foreach (var type in Enum.GetValues(typeof(Foras_Khadra.Models.OpportunityType)))
+                {
+                    <option value="@type">@type</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label>فلتر حسب حالة الطلب:</label>
+            <select id="filterStatus" class="form-control" onchange="applyFilter()">
+                <option value="">-- الكل --</option>
+                <option value="pending">جاري العمل عليها</option>
+                <option value="completed">تم الانتهاء</option>
+                <option value="rejected">مرفوض</option>
+            </select>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-secondary w-100" onclick="resetFilters()">إعادة الضبط</button>
+        </div>
+    </div>
+}
+
+@if (!filteredRequests.Any())
+{
+    <div class="alert alert-info">
+        @(filterStatusFromQuery == "pending" ? "لا يوجد طلبات جاري العمل عليها حالياً" :
+            filterStatusFromQuery == "completed" ? "لا يوجد طلبات منتهية حالياً" :
+            filterStatusFromQuery == "rejected" ? "لا يوجد طلبات مرفوضة" :
+            "لا يوجد طلبات مستلمة حالياً")
+</div>
+}
+else
+{
+    <table class="table table-bordered" id="requestsTable">
+        <thead>
+            <tr>
+                <th>الفرصة</th>
+                <th>نوع الفرصة</th>
+                <th>المنظمة</th>
+                <th>تاريخ الطلب</th>
+                <th>التفاصيل</th>
+                <th>الحالة</th>
+                <th>تغيير الحالة</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var req in filteredRequests)
+            {
+                <tr>
+                    <td>@req.OpportunityTitle</td>
+                    <td>@req.OpportunityType</td>
+                    <td>@req.OrganizationName</td>
+                    <td>@req.RequestDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        <a class="btn btn-info btn-sm"
+                           href="@Url.Action("Details", "Opportunity", new { id = req.OpportunityId })">
+                            عرض التفاصيل
+                        </a>
+                    </td>
+
+                    <!-- Label للحالة -->
+                    <td>
+                        <span id="statusLabel-@req.Id"
+                              class="status-label @(req.IsCompleted ? "completed" : req.IsRejected ? "rejected" : req.IsInProgress ? "pending" : "")">
+                            @(req.IsCompleted ? "تم الانتهاء" : req.IsRejected ? "مرفوض" : req.IsInProgress ? "جاري العمل عليها" : "")
+                        </span>
+                    </td>
+
+
+                    <!-- Dropdown + حقل سبب الرفض -->
+                    <td>
+                        <select class="form-select" onchange="handleStatusChange(this, @req.Id)">
+                            @* الخيار الافتراضي للطلبات الجديدة *@
+                            @if (!req.IsInProgress && !req.IsCompleted && !req.IsRejected)
+                            {
+                                <option value="" selected>-----</option>
+                            }
+
+                            @* جاري العمل عليها *@
+                            @if (req.IsInProgress)
+                            {
+                                <text>
+                                <option value="pending" selected>جاري العمل عليها</option></text>
+                            }
+                            else
+                            {
+                                <text>
+                                <option value="pending">جاري العمل عليها</option></text>
+                            }
+
+                            @* تم الانتهاء *@
+                            @if (req.IsCompleted)
+                            {
+                                <text>
+                                <option value="completed" selected>تم الانتهاء</option></text>
+                            }
+                            else
+                            {
+                                <text>
+                                <option value="completed">تم الانتهاء</option></text>
+                            }
+
+                            @* مرفوض *@
+                            @if (req.IsRejected)
+                            {
+                                <text>
+                                <option value="rejected" selected>مرفوض</option></text>
+                            }
+                            else
+                            {
+                                <text>
+                                <option value="rejected">مرفوض</option></text>
+                            }
+                        </select>
+
+
+
+
+
+                        <input type="text"
+                               id="rejectionInput-@req.Id"
+                               class="form-control mt-1 @(req.IsRejected ? "" : "d-none")"
+                               placeholder="سبب الرفض"
+                               value="@req.RejectionReason"
+                               onkeydown="saveRejectionOnEnter(event, @req.Id)"
+                               onchange="saveRejection(@req.Id, this.value)" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>عدد الطلبات الظاهرة: <span id="filteredCount">@filteredRequests.Count</span></p>
+}
+
+<input type="hidden" id="RequestVerificationToken" value="@Antiforgery.GetAndStoreTokens(ViewContext.HttpContext).RequestToken" />
+
+<style>
+    .status-label {
+        display: inline-block;
+        padding: 5px 12px;
+        font-weight: bold;
+        border-radius: 15px;
+        color: white;
+    }
+    .status-label.completed { background-color: red; }
+    .status-label.pending { background-color: #25652c; }
+    .status-label.rejected { background-color: #6c757d; }
+</style>
+
+<script>
+        function handleStatusChange(select, id){
+        const value = select.value;
+        const label = document.getElementById(`statusLabel-${id}`);
+        const input = document.getElementById(`rejectionInput-${id}`);
+        const token = document.getElementById('RequestVerificationToken').value;
+
+        if(value === "rejected"){
+            input.classList.remove("d-none");
+            input.focus();
+            label.textContent = "مرفوض";
+            label.className = "status-label rejected";
+            if(input.value) saveRejection(id, input.value);
+        } else {
+            input.classList.add("d-none");
+            input.value = "";
+
+            //  هنا حدثنا النص والحالة لكل اختيار
+            if(value === "completed") {
+                label.textContent = "تم الانتهاء";
+            } else if(value === "pending") {
+                label.textContent = "جاري العمل عليها";
+            } else {
+                label.textContent = "";
+            }
+
+            //  تحديث الـ class للـ label
+            label.className = "status-label " + (value === "pending" ? "pending" : value === "completed" ? "completed" : "");
+
+            // إرسال التحديث للـ Controller
+            fetch(`/Admin/ToggleReelsRequest?id=${id}&newStatus=${value}`, {
+                method: "POST",
+                headers: { "RequestVerificationToken": token }
+            });
+        }
+    }
+
+    function saveRejectionOnEnter(event, id){
+        if(event.key === "Enter"){
+            saveRejection(id, event.target.value);
+        }
+    }
+
+    function saveRejection(id, reason){
+        if(!reason) return;
+        const token = document.getElementById('RequestVerificationToken').value;
+
+        fetch(`/Admin/ToggleReelsRequest?id=${id}&newStatus=rejected&rejectionReason=${encodeURIComponent(reason)}`, {
+            method: "POST",
+            headers: { "RequestVerificationToken": token }
+        });
+    }
+
+    function applyFilter() {
+        var orgFilter = document.getElementById("filterOrg")?.value.toLowerCase() || "";
+        var typeFilter = document.getElementById("filterType")?.value.toLowerCase() || "";
+        var statusFilter = document.getElementById("filterStatus")?.value.toLowerCase() || "";
+
+        var rows = document.querySelectorAll("#requestsTable tbody tr");
+        var count = 0;
+
+        rows.forEach(function(row){
+            var org = row.cells[2].innerText.toLowerCase();
+            var type = row.cells[1].innerText.toLowerCase();
+            var status = row.cells[5].querySelector("span").classList.contains("completed") ? "completed" :
+                         row.cells[5].querySelector("span").classList.contains("rejected") ? "rejected" :
+                         row.cells[5].querySelector("span").textContent.trim() === "جاري العمل عليها" ? "pending" : "";
+
+            var show = true;
+            if(orgFilter && !org.includes(orgFilter)) show = false;
+            if(typeFilter && type !== typeFilter) show = false;
+            if(statusFilter && statusFilter !== "" && status !== statusFilter) show = false;
+
+            row.style.display = show ? "" : "none";
+            if(show) count++;
+        });
+
+        document.getElementById("filteredCount").innerText = count;
+    }
+
+    function resetFilters(){
+        if(document.getElementById("filterOrg")) document.getElementById("filterOrg").value = "";
+        if(document.getElementById("filterType")) document.getElementById("filterType").value = "";
+        if(document.getElementById("filterStatus")) document.getElementById("filterStatus").value = "";
+        applyFilter();
+    }
+</script>

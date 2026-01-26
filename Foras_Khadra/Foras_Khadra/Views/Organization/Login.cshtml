@@ -1,6 +1,8 @@
 ﻿@model Foras_Khadra.Models.OrganizationLoginViewModel
 
 <form asp-action="Login" method="post">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
     <div>
         <label>البريد الإلكتروني</label>
         <input asp-for="Email" />

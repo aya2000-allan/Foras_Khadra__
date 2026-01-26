@@ -15,41 +15,12 @@ public class ArticlesController : Controller
     }
 
     // INDEX
-   public async Task<IActionResult> Index(int page = 1, int pageSize = 6, string? search = null)
-{
-    if (page < 1) page = 1;
-
-    var query = _context.Articles.AsQueryable();
-
-    // بحث اختياري (حسب العنوان أو الكاتب)
-    if (!string.IsNullOrWhiteSpace(search))
+    public async Task<IActionResult> Index()
     {
-        query = query.Where(a => a.Title.Contains(search) || a.Author.Contains(search));
+        return View(await _context.Articles
+            .OrderByDescending(a => a.PublishDate)
+            .ToListAsync());
     }
-
-    // حساب عدد الصفحات
-    var totalCount = await query.CountAsync();
-    var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-    if (totalPages < 1) totalPages = 1;
-
-    // لو الصفحة أكبر من الموجود
-    if (page > totalPages) page = totalPages;
-
-    // جلب بيانات الصفحة الحالية فقط
-    var articles = await query
-        .OrderByDescending(a => a.PublishDate)
-        .Skip((page - 1) * pageSize)
-        .Take(pageSize)
-        .ToListAsync();
-
-    // إرسال معلومات الباجينيشن للـ View
-    ViewBag.Page = page;
-    ViewBag.TotalPages = totalPages;
-    ViewBag.Search = search;
-
-    return View(articles);
-}
-
 
     // DETAILS
     public async Task<IActionResult> Details(int id)

@@ -3,7 +3,6 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 <h2 class="mb-4">جميع الفرص</h2>
-
 <form method="get" class="row mb-4 g-2">
     <!-- فلتر النوع -->
     <div class="col-md-4">
@@ -20,16 +19,13 @@
 
     <!-- فلتر الدولة -->
     <div class="col-md-4">
-        <select name="country" class="form-select">
-            <option value="">كل الدول</option>
-            @foreach (var c in Model.Countries)
-            {
-                <option value="@c" selected="@(c == Model.SelectedCountry ? "selected" : null)">
-                    @c
-                </option>
-            }
-        </select>
+        <input type="text"
+               name="country"
+               class="form-control"
+               placeholder="اكتب اسم الدولة"
+               value="@Model.SelectedCountry" />
     </div>
+
 
     <div class="col-md-4 d-flex gap-2">
         <button type="submit" class="btn btn-primary">فلترة</button>

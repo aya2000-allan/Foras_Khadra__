@@ -1,5 +1,12 @@
-﻿<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+﻿
+
+<!DOCTYPE html>
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+}
+<html lang="@culture" dir="@dir">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,13 +14,65 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/layout_style.css">
-@RenderSection("Styles", required: false)
-
 </head>
+
+
 <body>
+
+    <style>
+        .language-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .lang-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .lang-list {
+            display: none; /* مخفي افتراضي */
+            position: absolute;
+            top: 100%;
+            left: 0;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+
+            .lang-list li {
+                padding: 5px 10px;
+            }
+
+                .lang-list li a {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    text-decoration: none;
+                    color: black;
+                }
+
+                    .lang-list li a:hover {
+                        background-color: #f0f0f0;
+                    }
+
+    </style>
+
+
     @using Microsoft.AspNetCore.Identity
     @inject UserManager<ApplicationUser> UserManager
     @inject SignInManager<ApplicationUser> SignInManager
+    @using Microsoft.AspNetCore.Localization;
+    @using Microsoft.Extensions.Options;
+    @using System.Globalization;
+    @using Microsoft.AspNetCore.Mvc.Localization
+    @inject IViewLocalizer Localizer
+
 
     @{
         var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
@@ -39,22 +98,40 @@
             }
         }
 
-        // ===== إخفاء Navbar والفوتر إذا كان Admin =====
-        if (isAdmin)
+        if (currentController == "Admin" && currentAction == "ReelsRequestsDashboard")
         {
-            // جميع صفحات Admin يجب إخفاء Navbar والفوتر
-            hideNavAndFooterForAdmin = true;
-
-            // صفحة عرض المقالة نفسها للمستخدم العادي أو المنظمة يظهر فيها Navbar والفوتر
-            // للـ Admin لا يظهر
-            if (currentController == "Articles" && currentAction == "Details")
+            hideNavAndFooter = true;
+        }
+        else
+        {
+            // باقي الشروط القديمة للـ Admin
+            if (isAdmin)
             {
-                hideNavAndFooterForAdmin = true;
+                // الشروط القديمة بدون أي تغيير
+                if ((currentController == "Opportunity" && (currentAction == "Index" || currentAction == "Create" || currentAction == "Edit"))
+                || (currentController == "AdminController")) // مثال: أي Controller إداري آخر
+                {
+                    hideNavAndFooter = true;
+                }
+                else
+                {
+                    hideNavAndFooter = false;
+                }
             }
         }
-    }
 
-    @if (!hideNavAndFooterForAdmin)
+        // إذا المستخدم Admin والصفحة من Articles، نخفي Navbar و Footer
+        if (isAdmin && currentController == "Articles")
+        {
+            hideNavAndFooter = true;
+        }
+   
+
+    }
+    
+    
+
+    @if (!hideNavAndFooter)
     {
         <!-- Navbar -->
         <header>
@@ -65,44 +142,44 @@
 
                 <div class="nav-content">
                     <div class="menu-items">
-                        <a asp-controller="Home" asp-action="Index">الرئيسية</a>
-                        <a asp-controller="Home" asp-action="Articles">المقالات</a>
-                        <a asp-controller="Home" asp-action="News">الأخبار</a>
+                        <a asp-controller="Home" asp-action="Index">@Localizer["Home"]</a>
+                        <a asp-controller="Home" asp-action="Articles">@Localizer["Articles"]</a>
+                        <a asp-controller="Home" asp-action="News">@Localizer["News"]</a>
 
                         <div class="custom-dropdown">
-                            <button class="dropdown-button" onclick="toggleOpportunities()">الفرص</button>
+                            <button class="dropdown-button" onclick="toggleOpportunities()">@Localizer["Opportunities"]</button>
                             <div class="dropdown-list" id="opportunitiesDropdown">
-                                <a asp-controller="Home" asp-action="AllOpportunities">كل الفرص</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Competitions">المسابقات</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Conferences">المؤتمرات</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Volunteering">فرص التطوع</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Jobs">الوظائف</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Scholarships">المنح</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Fellowships">الزمالات</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Internships">فرص التدريب</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities"> @Localizer["AllOpportunities"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Competitions">@Localizer["Competitions"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Conferences">@Localizer["Conferences"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Volunteering">@Localizer["VolunteeringOpportunities"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Jobs">@Localizer["Jobs"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Scholarships">@Localizer["Scholarships"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Fellowships">@Localizer["Fellowships"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Internships">@Localizer["Internships"]</a>
                             </div>
                         </div>
 
-                        <a asp-controller="Home" asp-action="AboutUs">من نحن</a>
-                        <a asp-controller="Contact" asp-action="Index">اتصل بنا</a>
+                        <a asp-controller="Home" asp-action="AboutUs">@Localizer["AboutUs"]</a>
+                        <a asp-controller="Contact" asp-action="Index">@Localizer["ContactUs"]</a>
                     </div>
 
                     <div class="auth-section d-flex gap-2 align-items-center">
                         @if (!userIsAuthenticated)
                         {
                             <div class="custom-dropdown">
-                                <button onclick="toggleLoginMenu()">تسجيل الدخول</button>
+                                <button onclick="toggleLoginMenu()">@Localizer["Login"]</button>
                                 <div class="dropdown-list" id="loginMenu">
-                                    <a asp-controller="Account" asp-action="Login">للفرد</a>
-                                    <a asp-controller="Organization" asp-action="Login">للمنظمة</a>
+                                    <a asp-controller="Account" asp-action="Login">@Localizer["Individual"]</a>
+                                    <a asp-controller="Organization" asp-action="Login">@Localizer["Organization"]</a>
                                 </div>
                             </div>
 
                             <div class="custom-dropdown">
-                                <button onclick="toggleRegisterMenu()">إنشاء حساب</button>
+                                <button onclick="toggleRegisterMenu()">@Localizer["Register"]</button>
                                 <div class="dropdown-list" id="registerMenu">
-                                    <a asp-controller="Account" asp-action="RegisterUser">للفرد</a>
-                                    <a asp-controller="Organization" asp-action="Register">للمنظمة</a>
+                                    <a asp-controller="Account" asp-action="RegisterUser">@Localizer["Individual"]</a>
+                                    <a asp-controller="Organization" asp-action="Register">@Localizer["Organization"]</a>
                                 </div>
                             </div>
                         }
@@ -122,40 +199,63 @@
                                 <div class="dropdown-list" id="userOrgMenu">
                                     @if (isOrganization)
                                     {
-                                        <a asp-controller="Organization" asp-action="ProfileSetting">إعدادات الحساب</a>
+                                        <a asp-controller="Opportunity" asp-action="OrgOpportunities">@Localizer["AddOpportunity"] </a>
+                                        <a asp-controller="Organization" asp-action="ProfileSetting">@Localizer["AccountSettings"]</a>
                                         <form asp-controller="Organization" asp-action="Logout" method="post">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit">تسجيل الخروج</button>
+                                            <button type="submit">@Localizer["Logout"]</button>
                                         </form>
                                     }
                                     else
                                     {
-                                        <a asp-controller="Account" asp-action="ProfileSettings">إعدادات الحساب</a>
+                                        <a asp-controller="Account" asp-action="ProfileSettings">@Localizer["AccountSettings"]</a>
                                         <form asp-controller="Account" asp-action="Logout" method="post">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit">تسجيل الخروج</button>
+                                            <button type="submit"> @Localizer["Logout"]</button>
                                         </form>
                                     }
                                 </div>
                             </div>
                         }
 
+
+
                         <div class="language-dropdown">
-                            <button class="language-toggle" onclick="toggleLangMenu()">
-                                <img src="~/Images/sa.png" alt="العربية" />
-                            </button>
-                            <div class="language-menu" id="languageMenu">
-                                <div class="lang-option active">
-                                    <img src="~/Images/sa.png" alt="العربية"><span>العربية</span>
-                                </div>
-                                <div class="lang-option">
-                                    <img src="~/Images/us.png" alt="English"><span>English</span>
-                                </div>
-                                <div class="lang-option">
-                                    <img src="~/Images/fr.png" alt="French"><span>French</span>
-                                </div>
-                            </div>
+                            <button class="lang-toggle">اللغات</button>
+
+                            <ul class="lang-list">
+                                <li class="lang-option">
+                                    <a asp-controller="Language"
+                                       asp-action="Change"
+                                       asp-route-culture="ar"
+                                       asp-route-returnUrl="@Context.Request.Path">
+                                        <img src="~/Images/sa.png" alt="Arabic">
+                                        <span>@Localizer["Arabic"]</span>
+                                    </a>
+                                </li>
+
+                                <li class="lang-option">
+                                    <a asp-controller="Language"
+                                       asp-action="Change"
+                                       asp-route-culture="en"
+                                       asp-route-returnUrl="@Context.Request.Path">
+                                        <img src="~/Images/us.png" alt="English">
+                                        <span>@Localizer["English"]</span>
+                                    </a>
+                                </li>
+
+                                <li class="lang-option">
+                                    <a asp-controller="Language"
+                                       asp-action="Change"
+                                       asp-route-culture="fr"
+                                       asp-route-returnUrl="@Context.Request.Path">
+                                        <img src="~/Images/fr.png" alt="French">
+                                        <span>@Localizer["French"]</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -168,60 +268,48 @@
         </main>
     </div>
 
-    @if (!hideNavAndFooterForAdmin)
+    @if (!hideNavAndFooter)
     {
         <!-- Footer كامل -->
         <footer class="custom-footer">
             <div class="footer-container">
             <div class="footer-left">
-                <h2 class="footer-heading" lang="ar">من و إلى شباب عربي</h2>
+                <h2 class="footer-heading" lang="ar">من وإلى شباب الوطن العربي</h2>
                 <img src="/images/footerText.png" alt="footer text" class="footer-heading-img" />
                 <div class="social-icons">
-                    <a href="#"><iconify-icon icon="ic:round-email" width="34" height="34"></iconify-icon></a>
-                    <a href="https://www.linkedin.com/company/foraskhadra/"><iconify-icon icon="mage:linkedin" width="34" height="34"></iconify-icon></a>
+                        <a href="mailto:suppforaskhadra@gmail.com">
+                            <iconify-icon icon="ic:round-email" width="34" height="34"></iconify-icon>
+                        </a>
+                        <a href="https://www.linkedin.com/company/foraskhadra/"><iconify-icon icon="mage:linkedin" width="34" height="34"></iconify-icon></a>
                     <a href="https://www.facebook.com/profile.php?id=61559156656756"><iconify-icon icon="mage:facebook-square" width="34" height="34"></iconify-icon></a>
                     <a href="https://www.instagram.com/foras_khadra/"><iconify-icon icon="basil:instagram-solid" width="34" height="34"></iconify-icon></a>
                 </div>
-                <div class="subscribe-box">
-                    <p>اشترك في قائمتنا البريدية</p>
-                    <form>
-                        <input type="email" placeholder="اكتب بريدك الإلكتروني ..." />
-                        <button type="submit">اشتراك</button>
-                    </form>
-                </div>
+                
             </div>
             <div class="footer-links">
                 <div class="footer-column">
                     <h4>تصفح الفرص</h4>
                     <ul>
-                        <li><a href="#">كل الفرص</a></li>
-                        <li><a href="#">المسابقات</a></li>
-                        <li><a href="#">المؤتمرات</a></li>
-                        <li><a href="#">فرص التطوع</a></li>
+                            <li><a href="~/Home/AllOpportunities">@Localizer["AllOpportunities"]</a></li>
+                            <li><a href="~/Home/AllOpportunities?type=Competitions">@Localizer["Competitions"]</a></li>
+                            <li><a href="~/Home/AllOpportunities?type=Conferences">@Localizer["Conferences"]</a></li>
+                            <li><a href="~/Home/AllOpportunities?type=Volunteering">@Localizer["VolunteeringOpportunities"]</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <ul>
-                        <li><a href="#">الوظائف</a></li>
-                        <li><a href="#">المنح</a></li>
-                        <li><a href="#">الزمالات</a></li>
-                        <li><a href="#">فرص التدريب</a></li>
+                            <li><a href="~/Home/AllOpportunities?type=Jobs">@Localizer["Jobs"]</a></li>
+                            <li><a href="~/Home/AllOpportunities?type=Scholarships">@Localizer["Scholarships"]</a></li>
+                            <li><a href="~/Home/AllOpportunities?type=Fellowships">@Localizer["Fellowships"]</a></li>
+                            <li><a href="~/Home/AllOpportunities?type=Internships">@Localizer["Internships"]</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>روابط إضافية</h4>
                     <ul>
-                        <li><a href="#">المقالات</a></li>
-                        <li><a href="#">من نحن</a></li>
-                        <li><a asp-controller="contact" asp-action="Index">اتصل بنا</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>سياساتنا</h4>
-                    <ul>
-                        <li><a href="#">سياسة الخصوصية</a></li>
-                        <li><a href="#">سياسة الاستخدام</a></li>
-                        <li><a href="#">الشروط والأحكام</a></li>
+                            <li><a href="~/Home/Articles">@Localizer["Articles"]</a></li>
+                            <li><a href="~/Home/AboutUs">@Localizer["AboutUs"]</a></li>
+                            <li><a href="~/contact/Index">@Localizer["ContactUs"]</a></li>
                     </ul>
                 </div>
             </div>
@@ -230,7 +318,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>جميع الحقوق محفوظة © 2025</p>
+                <p>@Localizer["All rights reserved © 2025"]</p>
         </div>
     </footer>
     }
@@ -257,6 +345,23 @@
             }
         });
     </script>
+
+    <script>
+    const toggle = document.querySelector('.lang-toggle');
+    const langList = document.querySelector('.lang-list');
+
+    toggle.addEventListener('click', () => {
+        langList.style.display = langList.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // إخفاء القائمة لو ضغط المستخدم برة
+    document.addEventListener('click', (e) => {
+        if (!toggle.contains(e.target) && !langList.contains(e.target)) {
+            langList.style.display = 'none';
+        }
+    });
+</script>
+
 
     @RenderSection("Scripts", required: false)
 </body>

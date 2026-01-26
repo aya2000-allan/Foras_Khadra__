@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Foras_Khadra.Models
 {
@@ -32,5 +33,20 @@ namespace Foras_Khadra.Models
 
         [Required]
         public string ApplyLink { get; set; }
+
+        public string CreatedByUserId { get; set; }
+
+        [ForeignKey("CreatedByUserId")]
+        public ApplicationUser CreatedByUser { get; set; }
+
+        [NotMapped]
+        public bool IsPublishedByOrganization { get; set; }
+
+        [NotMapped]
+        public bool IsPublishedByAdmin { get; set; }
+
+        public virtual ICollection<ReelsRequest> ReelsRequests { get; set; }
+
+
     }
 }

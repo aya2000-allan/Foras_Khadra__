@@ -117,6 +117,13 @@ namespace Foras_Khadra.Controllers
                 return View(model);
             }
 
+            // **تأكد أن المستخدم ليس منظمة**
+            if (await _userManager.IsInRoleAsync(user, "Organization"))
+            {
+                ModelState.AddModelError("", "لا يمكن للمنظمات تسجيل الدخول من هنا");
+                return View(model);
+            }
+
             // تحقق كلمة المرور باستخدام SignInManager
             var result = await _signInManager.PasswordSignInAsync(
                 user,
@@ -141,6 +148,7 @@ namespace Foras_Khadra.Controllers
                 return RedirectToAction("Dashboard", "User");
             }
         }
+
 
         // ===== Logout =====
         [HttpPost]

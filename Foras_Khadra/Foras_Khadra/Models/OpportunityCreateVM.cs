@@ -29,5 +29,7 @@ namespace Foras_Khadra.Models
 
         [Required]
         public string ApplyLink { get; set; }
+
+
     }
 }

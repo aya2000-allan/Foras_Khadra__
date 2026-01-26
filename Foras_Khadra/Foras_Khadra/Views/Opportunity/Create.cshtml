@@ -20,9 +20,17 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="PublishedBy"></label>
+    <div class="mb-3">
+    <label asp-for="PublishedBy"></label>
+    @if (!string.IsNullOrEmpty(Model.PublishedBy))
+    {
+        <input asp-for="PublishedBy" class="form-control" readonly />
+    }
+    else
+    {
         <input asp-for="PublishedBy" class="form-control" />
-    </div>
+    }
+</div>
 
     <div class="mb-3">
         <label asp-for="Type"></label>

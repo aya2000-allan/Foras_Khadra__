@@ -2,19 +2,122 @@
 
 <h2>@Model.Title</h2>
 
+<style>
+    .apply-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #25652c;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        margin-right: 10px;
+    }
+
+    .apply-button:hover {
+        background-color: #f99d27;
+        color: white;
+    }
+
+    .btn-back {
+        display: inline-block;
+        padding: 8px 15px;
+        background-color: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+
+    .btn-back:hover {
+        background-color: #5a6268;
+    }
+</style>
+
 @if (!string.IsNullOrEmpty(Model.ImagePath))
 {
     <img src="@Model.ImagePath" width="250" />
 }
 
 <p><strong>النوع:</strong> @Model.Type</p>
-<p><strong>نشرت بواسطة:</strong> @Model.PublishedBy</p>
+
+<p>
+    <strong>
+        نشر بواسطة: @(Model.IsPublishedByAdmin ? "الأدمن" : Model.PublishedBy)
+    </strong>
+
+    @if (Model.IsPublishedByAdmin)
+    {
+        <!-- أيقونة توثيق دائرية -->
+        <span style="
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: #25652c;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 18px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+            vertical-align: middle;
+        " title="موثق إداري">
+            ✔
+        </span>
+    }
+</p>
+<p>
+
+
+
+
 <p><strong>تاريخ النشر:</strong> @Model.PublishDate.ToShortDateString()</p>
 <p><strong>الوصف:</strong> @Model.Description</p>
 <p><strong>التفاصيل:</strong> @Model.Details</p>
 <p><strong>الدول المتاحة:</strong> @Model.AvailableCountries</p>
 <p><strong>معايير القبول:</strong> @Model.EligibilityCriteria</p>
 <p><strong>مميزات الفرصة:</strong> @Model.Benefits</p>
-<p><strong>رابط التقديم:</strong> <a href="@Model.ApplyLink" target="_blank">@Model.ApplyLink</a></p>
 
-<a asp-action="Index" class="btn btn-secondary">رجوع</a>
+<!-- زر التقديم -->
+@if (!string.IsNullOrEmpty(Model.ApplyLink))
+{
+    if (User.IsInRole("Admin") || User.IsInRole("User") || User.IsInRole("Organization"))
+    {
+        <a href="@Model.ApplyLink" target="_blank" class="apply-button">قدم الآن</a>
+    }
+    else if (!User.Identity.IsAuthenticated)
+    {
+        <a href="javascript:void(0);" class="apply-button" id="guestApply">قدم الآن</a>
+    }
+}
+
+<!-- زر الرجوع حسب الدور -->
+@if (User.IsInRole("Admin"))
+{
+    <a asp-controller="Opportunity" asp-action="Index" class="btn-back">رجوع</a>
+}
+@if (User.IsInRole("Organization"))
+{
+    <a asp-controller="Opportunity" asp-action="OrgOpportunities" class="btn-back">رجوع</a>
+}
+@if (User.IsInRole("User"))
+{
+    <a asp-controller="Home" asp-action="AllOpportunities" class="btn-back">رجوع</a>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById("guestApply")?.addEventListener("click", function () {
+            Swal.fire({
+                icon: 'info',
+                title: 'تسجيل الدخول مطلوب',
+                html: 'سجل أو أنشئ حساب لتتمكن من التقديم.<br>إذا كنت قد أنشأت حساب سابقاً، قم بتسجيل الدخول.',
+                confirmButtonText: 'حسناً'
+            });
+        });
+    </script>
+}
