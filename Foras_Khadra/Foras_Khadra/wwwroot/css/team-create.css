@@ -171,6 +171,22 @@
         color: #fff;
     }
 
+/*Quil Text editor style*/
+.ql-toolbar.ql-snow, .ql-container.ql-snow {
+    border: 1px solid #A8A8A8 !important;
+    
+}
+
+.ql-toolbar.ql-snow {
+    border-radius: 16px 16px 0 0;
+}
+
+.ql-container.ql-snow {
+    border-radius: 0 0 16px 16px ;
+}
+
+
+
 /* Responsive */
 @media (max-width: 900px) {
     .page-wrapper {
