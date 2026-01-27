@@ -3,7 +3,7 @@ using Foras_Khadra.Models;
 using Foras_Khadra.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using System.Text.RegularExpressions;
 namespace Foras_Khadra.Controllers
 {
     public class TeamController : Controller
@@ -42,7 +42,7 @@ namespace Foras_Khadra.Controllers
                 Name = model.Name,
                 Membership = model.Membership,
                 Department = model.Department,
-                Bio = model.Bio
+                Bio = Regex.Replace(model.Bio ?? "", "<.*?>", "")
             };
 
             if (model.ImageFile != null && model.ImageFile.Length > 0)
@@ -107,7 +107,7 @@ namespace Foras_Khadra.Controllers
             member.Name = model.Name;
             member.Membership = model.Membership;
             member.Department = model.Department;
-            member.Bio = model.Bio;
+            member.Bio = Regex.Replace(model.Bio ?? "", "<.*?>", "");
 
             // رفع صورة جديدة إذا تم اختيارها
             if (model.ImageFile != null && model.ImageFile.Length > 0)

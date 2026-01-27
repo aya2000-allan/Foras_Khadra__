@@ -1,6 +1,7 @@
 ﻿using Foras_Khadra.Data;
 using Foras_Khadra.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 
@@ -19,7 +20,18 @@ namespace Foras_Khadra.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var latestArticles = _context.Articles
+                .OrderByDescending(a => a.PublishDate)
+                .Take(9)
+                .AsNoTracking()
+                .ToList();
+
+            var model = new HomeViewModel
+            {
+                LatestArticles = latestArticles
+            };
+
+            return View(model);
         }
 
         public IActionResult News()

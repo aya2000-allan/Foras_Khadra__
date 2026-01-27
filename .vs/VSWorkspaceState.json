@@ -1,8 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Foras_Khadra"
+    "\\Foras_Khadra",
+    "\\Foras_Khadra\\Foras_Khadra",
+    "\\Foras_Khadra\\Foras_Khadra\\Resources",
+    "\\Foras_Khadra\\Foras_Khadra\\Resources\\Views",
+    "\\Foras_Khadra\\Foras_Khadra\\Resources\\Views\\Home"
   ],
-  "SelectedNode": "\\Foras_Khadra\\Foras_Khadra.sln",
+  "SelectedNode": "\\Foras_Khadra\\Foras_Khadra\\Resources\\Views\\Home\\Articles.fr.resx",
   "PreviewInSolutionExplorer": false
 }
