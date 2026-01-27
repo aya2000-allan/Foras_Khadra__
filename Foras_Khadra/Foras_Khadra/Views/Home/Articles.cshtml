@@ -1,4 +1,5 @@
 ﻿@model Foras_Khadra.Models.HomeArticlesViewModel
+@using Foras_Khadra.Models
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -15,83 +16,185 @@
             isAdmin = await UserManager.IsInRoleAsync(appUser, "Admin");
         }
     }
+
+    bool canRead = isLoggedIn || isAdmin;
+
+    string DefaultCover = Url.Content("~/images/default-cover.jpg");
+    var latestList = Model.LatestArticles?.ToList() ?? new List<Article>();
+
+    string CoverFor(Article a) =>
+        !string.IsNullOrWhiteSpace(a.ImagePath) ? Url.Content(a.ImagePath) : DefaultCover;
+
+    Func<Article, string> ArticleLink = (a) => Url.Action("Details", "Articles", new { id = a.Id }) ?? "#";
 }
 
-<section>
-    <h2>آخر المقالات</h2>
+<link rel="stylesheet" asp-append-version="true" href="~/css/home-articles.css" />
 
-    <div class="latest-articles">
-        @foreach (var article in Model.LatestArticles)
+<section class="home-articles">
+
+    <!-- ===== Header: آخر المقالات ===== -->
+  <div class="section-head pt-4">
+    <span class="section-icon" aria-hidden="true">
+        <!-- SVG -->
+        <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="27" cy="27" r="27" fill="#F99D27"/>
+            <path d="M21.9104 25.2275C22.0086 25.1232 22.1264 25.0392 22.257 24.9804C22.3877 24.9216 22.5287 24.8891 22.6719 24.8848C22.8151 24.8805 22.9578 24.9045 23.0917 24.9553C23.2257 25.0062 23.3483 25.0829 23.4526 25.1811C28.4729 29.9102 33.5101 32.7875 39.4379 34.2541C40.2376 32.0723 40.3085 29.6709 39.6179 27.3282C38.7015 24.2198 36.5674 21.5116 33.4481 19.4968C30.6635 17.6982 27.8804 17.2298 25.1879 16.777C21.791 16.2057 18.5824 15.6657 15.5204 12.4236C15.1794 12.065 14.7151 11.9211 14.2713 12.0377C13.764 12.1741 13.4238 12.575 13.2608 13.2377C12.879 14.7889 13.1244 19.1361 14.1983 23.7254C15.9226 31.0986 18.6744 34.8295 20.6797 36.6616C23.2706 39.0268 26.6538 40.3366 30.0158 40.3366C30.6495 40.3376 31.2824 40.2911 31.9092 40.1975C34.7531 39.7666 37.1204 38.3382 38.4547 36.26C32.3531 34.6727 27.1406 31.6543 21.9547 26.7718C21.8502 26.6734 21.7661 26.5554 21.7073 26.4245C21.6485 26.2935 21.6162 26.1523 21.612 26.0088C21.6079 25.8654 21.6322 25.7225 21.6833 25.5884C21.7345 25.4544 21.8117 25.3317 21.9104 25.2275ZM42.7795 34.9223C41.632 34.7457 40.5206 34.5241 39.4385 34.2561C39.2161 34.8635 38.9393 35.4495 38.6115 36.007C38.5617 36.0923 38.5092 36.1768 38.4554 36.26C39.7714 36.6007 41.1041 36.8738 42.4481 37.0782C42.5911 37.1033 42.7377 37.0996 42.8793 37.0674C43.0208 37.0351 43.1546 36.9749 43.2726 36.8903C43.3906 36.8057 43.4905 36.6984 43.5665 36.5747C43.6425 36.451 43.693 36.3133 43.7151 36.1698C43.7372 36.0263 43.7305 35.8798 43.6952 35.7389C43.66 35.5981 43.597 35.4657 43.5099 35.3495C43.4228 35.2333 43.3134 35.1357 43.1881 35.0623C43.0628 34.9889 42.9241 34.9413 42.7801 34.9223H42.7795Z" fill="white"/>
+        </svg>
+    </span>
+
+    <h2 class="section-title">آخر المقالات</h2>
+</div>
+
+
+    <!-- ===== Latest Layout: 4 small left + 1 big right ===== -->
+    <div class="latest-grid-wrap">
+        <!-- left: 4 small -->
+        <div class="latest-mini-grid latest-mini-area">
+            @foreach (var a in latestList.Skip(1).Take(4))
+            {
+                var cover = CoverFor(a);
+                var href = canRead ? ArticleLink(a) : "javascript:void(0);";
+
+                <a class="latest-card small"
+   href="@ArticleLink(a)"
+   onclick="return swalNotLoggedIn(event, @(canRead.ToString().ToLower()));"
+   style="background-image:url('@cover')">
+
+
+
+                    <span class="latest-overlay"></span>
+
+                    <span class="latest-arrow" aria-hidden="true">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </span>
+
+                    <div class="latest-info">
+                        <div class="latest-title">@a.Title</div>
+                        <div class="latest-date">@a.PublishDate.ToString("d MMM yyyy")</div>
+                    </div>
+                </a>
+            }
+        </div>
+
+        <!-- right: big -->
+        @if (latestList.Any())
         {
-            <div class="article-card featured">
-                <img src="@article.ImagePath" alt="@article.Title" />
-                <h3>@article.Title</h3>
-                <p>@article.Author</p>
+            var f = latestList.First();
+            var fcover = CoverFor(f);
+            var fhref = canRead ? ArticleLink(f) : "javascript:void(0);";
 
-                @if (isLoggedIn || isAdmin)
-                {
-                    <!-- Admin أو مستخدم مسجل -->
-                    <a asp-controller="Articles"
-                       asp-action="Details"
-                       asp-route-id="@article.Id">
-                        اقرأ المزيد
-                    </a>
-                }
-                else
-                {
-                    <!-- غير مسجل -->
-                    <a href="javascript:void(0);" onclick="swalNotLoggedIn();">
-                        اقرأ المزيد
-                    </a>
-                }
-            </div>
+            <a class="latest-card big latest-big-area"
+   href="@ArticleLink(f)"
+   onclick="return swalNotLoggedIn(event, @(canRead.ToString().ToLower()));"
+   style="background-image:url('@fcover')">
+
+    <span class="latest-overlay"></span>
+
+    <span class="latest-arrow">
+        <i class="fa-solid fa-arrow-left"></i>
+    </span>
+
+    <div class="latest-info">
+        <div class="latest-title">@f.Title</div>
+        <div class="latest-date">@f.PublishDate.ToString("d MMM yyyy")</div>
+    </div>
+
+    <span class="latest-more">اقرأ المزيد</span>
+</a>
+
         }
     </div>
-</section>
 
-<hr />
+    <!-- ===== Header: اقرأ أيضًا ===== -->
+ <div class="section-head mt-5">
+    <span class="section-icon" aria-hidden="true">
+        <!-- SVG -->
+        <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="27" cy="27" r="27" fill="#F99D27"/>
+            <path d="M21.9104 25.2275C22.0086 25.1232 22.1264 25.0392 22.257 24.9804C22.3877 24.9216 22.5287 24.8891 22.6719 24.8848C22.8151 24.8805 22.9578 24.9045 23.0917 24.9553C23.2257 25.0062 23.3483 25.0829 23.4526 25.1811C28.4729 29.9102 33.5101 32.7875 39.4379 34.2541C40.2376 32.0723 40.3085 29.6709 39.6179 27.3282C38.7015 24.2198 36.5674 21.5116 33.4481 19.4968C30.6635 17.6982 27.8804 17.2298 25.1879 16.777C21.791 16.2057 18.5824 15.6657 15.5204 12.4236C15.1794 12.065 14.7151 11.9211 14.2713 12.0377C13.764 12.1741 13.4238 12.575 13.2608 13.2377C12.879 14.7889 13.1244 19.1361 14.1983 23.7254C15.9226 31.0986 18.6744 34.8295 20.6797 36.6616C23.2706 39.0268 26.6538 40.3366 30.0158 40.3366C30.6495 40.3376 31.2824 40.2911 31.9092 40.1975C34.7531 39.7666 37.1204 38.3382 38.4547 36.26C32.3531 34.6727 27.1406 31.6543 21.9547 26.7718C21.8502 26.6734 21.7661 26.5554 21.7073 26.4245C21.6485 26.2935 21.6162 26.1523 21.612 26.0088C21.6079 25.8654 21.6322 25.7225 21.6833 25.5884C21.7345 25.4544 21.8117 25.3317 21.9104 25.2275ZM42.7795 34.9223C41.632 34.7457 40.5206 34.5241 39.4385 34.2561C39.2161 34.8635 38.9393 35.4495 38.6115 36.007C38.5617 36.0923 38.5092 36.1768 38.4554 36.26C39.7714 36.6007 41.1041 36.8738 42.4481 37.0782C42.5911 37.1033 42.7377 37.0996 42.8793 37.0674C43.0208 37.0351 43.1546 36.9749 43.2726 36.8903C43.3906 36.8057 43.4905 36.6984 43.5665 36.5747C43.6425 36.451 43.693 36.3133 43.7151 36.1698C43.7372 36.0263 43.7305 35.8798 43.6952 35.7389C43.66 35.5981 43.597 35.4657 43.5099 35.3495C43.4228 35.2333 43.3134 35.1357 43.1881 35.0623C43.0628 34.9889 42.9241 34.9413 42.7801 34.9223H42.7795Z" fill="white"/>
+        </svg>
+    </span>
 
-<section>
-    <h2>باقي المقالات</h2>
+<h2 class="section-title">اقرأ أيضًا</h2>
+</div>
 
-    @foreach (var article in Model.OtherArticles)
-    {
-        <div class="article-row">
-            <img src="@article.ImagePath" width="200" />
-            <div>
-                <h4>@article.Title</h4>
-                <p>@article.Author</p>
 
-                @if (isLoggedIn || isAdmin)
-                {
-                    <a asp-controller="Articles"
-                       asp-action="Details"
-                       asp-route-id="@article.Id">
-                        اقرأ المزيد
+    <div class="readalso-list">
+        @foreach (var article in Model.OtherArticles)
+        {
+            var cover = !string.IsNullOrWhiteSpace(article.ImagePath)
+            ? Url.Content(article.ImagePath)
+            : Url.Content("~/images/default-cover.jpg");
+
+            // نص مختصر بدون HTML
+            var plain = (article.Content ?? "");
+            plain = System.Text.RegularExpressions.Regex.Replace(plain, "<.*?>", string.Empty);
+            if (plain.Length > 220) plain = plain.Substring(0, 220) + "...";
+
+            var href = canRead
+            ? Url.Action("Details", "Articles", new { id = article.Id })
+            : "javascript:void(0);";
+
+            <div class="readalso-item">
+
+                <!-- أقصى اليمين: التاريخ -->
+                <div class="ra-date">
+                    <div class="d">@article.PublishDate.ToString("dd")</div>
+                    <div class="m">@article.PublishDate.ToString("MMMM")</div>
+                    <div class="y">@article.PublishDate.ToString("yyyy")</div>
+                </div>
+
+
+                <!-- يمين: الصورة -->
+                <div class="ra-thumb">
+                    <img src="@cover" alt="@article.Title" loading="lazy" />
+                </div>
+
+                <!-- يسار: العنوان + النص + اقرأ المزيد -->
+                <div class="ra-body">
+
+                    <h3 class="ra-title">@article.Title</h3>
+
+                    <p class="ra-excerpt">@plain</p>
+
+                    <a class="ra-more" href="@(canRead? href : "#")"
+                        onclick="return swalNotLoggedIn(event, @(canRead.ToString().ToLower()));">
+                                               <span class="ra-more-text">اقرأ المزيد</span>
+
+                        <span class="ra-more-icon" aria-hidden="true">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </span>
                     </a>
-                }
-                else
-                {
-                    <a href="javascript:void(0);" onclick="swalNotLoggedIn();">
-                        اقرأ المزيد
-                    </a>
-                }
+
+                </div>
+
             </div>
-        </div>
-        <hr />
-    }
+
+            <div class="ra-divider"></div>
+        }
+    </div>
+   
+
+
+
 </section>
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function swalNotLoggedIn() {
-            Swal.fire({
-                icon: 'warning',
-                title: 'غير مسموح بالقراءة',
-                html: 'لا يمكنك قراءة المقالة قبل إنشاء حساب على الموقع أو تسجيل الدخول إذا كان لديك حساب.',
-                confirmButtonText: 'حسنًا'
-            });
-        }
-    </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function swalNotLoggedIn(e, canRead) {
+      if (canRead) return true;      // مسموح
+      if (e) e.preventDefault();     // امنعي الرابط
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'غير مسموح بالقراءة',
+        html: 'لا يمكنك قراءة المقالة قبل إنشاء حساب على الموقع أو تسجيل الدخول إذا كان لديك حساب.',
+        confirmButtonText: 'حسنًا'
+      });
+
+      return false;
+    }
+  </script>
 }
+
