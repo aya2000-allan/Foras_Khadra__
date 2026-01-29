@@ -90,6 +90,8 @@ else
                         </div>
                     </div>
 
+                    @if (!User.IsInRole("Admin"))
+{
                     <!-- ===== Inline Sidebar ===== -->
                     <aside class="news-inline-sidebar">
 
@@ -145,11 +147,11 @@ else
 </div>
 
 
-                            <a asp-action="Index" class="sideblock-more">عرض المزيد من المقالات</a>
+                            <a asp-controller="Home" asp-action="Articles" class="sideblock-more">عرض المزيد من المقالات</a>
                         </section>
 
                     </aside>
-
+                    }
                 </div>
 
             </article>
