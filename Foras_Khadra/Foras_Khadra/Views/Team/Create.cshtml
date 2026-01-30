@@ -34,8 +34,30 @@
 
             <!-- Name -->
             <div class="field">
-                <input asp-for="Name" placeholder="اسم العضو" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input asp-for="NameAr" placeholder="اسم العضو بالعربي" />
+                <span asp-validation-for="NameAr" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <input asp-for="NameEn" placeholder="اسم العضو بالانجليزي" />
+                <span asp-validation-for="NameEn" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <input asp-for="NameFr" placeholder="اسم العضو بالفرنسي" />
+                <span asp-validation-for="NameFr" class="text-danger"></span>
+            </div>
+
+            <!-- Gender -->
+            <div class="field dropdown">
+
+                <select asp-for="Gender"
+                        asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.GenderType>()">
+                    <option value="">اختر جنس العضو</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+                <img src="~/images/lets-icons_arrow-drop-down.svg" alt="Drop-down arrow" class="custom-dropdown-arrow" />
+
             </div>
 
             <!-- Membership -->
@@ -62,17 +84,41 @@
             </div>
 
             <!-- Bio -->
-            <!-- Bio -->
             <div class="field">
-                <h3 class="discription">نبذة عنه</h3>
+                <h3 class="discription">البيو بالعربي</h3>
 
                 <!-- Quill editor -->
                 <div id="editor" style="height: 376px;"></div>
 
                 <!-- Hidden input bound to Model -->
-                <input type="hidden" asp-for="Bio" id="Bio" />
+                <input type="hidden" asp-for="BioAr" id="Bio" />
 
-                <span asp-validation-for="Bio" class="text-danger"></span>
+                <span asp-validation-for="BioAr" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <h3 class="discription">البيو بالانجليزي</h3>
+
+                <!-- Quill editor -->
+                <div id="editor" style="height: 376px;"></div>
+
+                <!-- Hidden input bound to Model -->
+                <input type="hidden" asp-for="BioEn" id="Bio" />
+
+                <span asp-validation-for="BioEn" class="text-danger"></span>
+            </div>
+
+
+            <div class="field">
+                <h3 class="discription">البيو بالفرنسي</h3>
+
+                <!-- Quill editor -->
+                <div id="editor" style="height: 376px;"></div>
+
+                <!-- Hidden input bound to Model -->
+                <input type="hidden" asp-for="BioFr" id="Bio" />
+
+                <span asp-validation-for="BioFr" class="text-danger"></span>
             </div>
 
 

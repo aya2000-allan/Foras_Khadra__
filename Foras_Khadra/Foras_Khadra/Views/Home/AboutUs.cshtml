@@ -1,18 +1,29 @@
 ﻿@model IEnumerable<Foras_Khadra.Models.TeamMember>
+@using Foras_Khadra.Helpers
+@using Microsoft.AspNetCore.Localization;
+@using Microsoft.Extensions.Options;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     Layout = "_Layout";
     var isFirstGroup = true;
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+    ViewData["Title"] = Localizer["ContactHeader"];
+
 }
 
+
 <link href="~/css/Home.css" rel="stylesheet" />
+
 <!-- ===== HERO ===== -->
 <section class="about-hero">
     <div class="about-overlay">
-        <h1>من نحن؟</h1>
+        <h1>@Localizer["AboutUsTitle"]</h1>
+
         <p>
-            نحن مجموعة من الشباب من الوطن العربي الذين آمنوا بالمؤتمرات العالمية،
-            وقررنا أن نبدأ مشروعنا لدعم الشباب في وطننا العربي على إيجاد الفرص
-            والمشاركة على الصعيد الدولي.
+            @Localizer["AboutUsDesc"]
         </p>
     </div>
 </section>
@@ -24,7 +35,7 @@
         <div class="vg-box vision">
             <div class="vg-title">
                 <img src="~/images/about_us_leaf.svg" />
-                <h3>رؤيتنا</h3>
+            <h3>@Localizer["VisionTitle"]</h3>
             </div>
 
             <p>
@@ -41,7 +52,7 @@
     <div class="vg-box goals">
         <div class="vg-title">
                 <img src="~/images/about_us_leaf.svg" />
-                <h3>أهدافنا</h3>
+            <h3>@Localizer["GoalsTitle"]</h3>
             </div>
 
             <p>
@@ -80,25 +91,32 @@
 
                         @if (!string.IsNullOrEmpty(member.ImagePath))
                         {
-                            <img src="@member.ImagePath" alt="@member.Name" class="member-img" />
+                            <img src="@member.ImagePath" alt="@member.NameAr" class="member-img" />
                         }
 
                         <div class="team-card-footer" onclick="toggleBio(@member.Id)">
                             <div class="footer-title">
                                 <img src="~/images/team_leaf.svg" alt="Alternate Text" class="footer-leaf" />
-                                <h4>
-                                    @member.Name
-                                </h4>
+                            <h4>
+                                @(culture == "ar" ? member.NameAr :
+                                                            culture == "fr" ? member.NameFr :
+                                                            member.NameEn)
+                        </h4>
                             </div>
 
-                            <span class="role">@member.Membership</span>
-
+                            <span class="role">
+                                @MembershipTranslator.Translate(member.Membership, member.Gender, System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)
+                            </span>
                         </div>
 
                         <div id="bio-@member.Id" class="bio" style="background-image:url(@member.ImagePath)">
                             <div class="bio-overlay">
-                                @Html.Raw(member.Bio)
-                            </div>
+                                @Html.Raw(
+                                                culture == "ar" ? member.BioAr :
+                                                culture == "fr" ? member.BioFr :
+                                                member.BioEn
+                                                )
+                    </div>
 
                         </div>
                     </div>
@@ -115,3 +133,4 @@
             .classList.toggle("open");
     }
 </script>
+</html>

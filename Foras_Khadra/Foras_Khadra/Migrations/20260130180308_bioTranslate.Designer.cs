@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foras_Khadra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260126193349_LatestArticles")]
-    partial class LatestArticles
+    [Migration("20260130180308_bioTranslate")]
+    partial class bioTranslate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -343,11 +343,22 @@ namespace Foras_Khadra.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Bio")
+                    b.Property<string>("BioAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BioEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BioFr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Department")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Gender")
                         .HasColumnType("int");
 
                     b.Property<string>("ImagePath")
@@ -357,7 +368,15 @@ namespace Foras_Khadra.Migrations
                     b.Property<int>("Membership")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameFr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -39,10 +39,16 @@ namespace Foras_Khadra.Controllers
 
             var member = new TeamMember
             {
-                Name = model.Name,
+                NameAr = model.NameAr,
+                NameEn = model.NameEn,
+                NameFr = model.NameFr,
+
+                BioAr = Regex.Replace(model.BioAr ?? "", "<.*?>", ""),
+                BioEn = Regex.Replace(model.BioEn ?? "", "<.*?>", ""),
+                BioFr = Regex.Replace(model.BioFr ?? "", "<.*?>", ""),
                 Membership = model.Membership,
                 Department = model.Department,
-                Bio = Regex.Replace(model.Bio ?? "", "<.*?>", "")
+                Gender = model.Gender,
             };
 
             if (model.ImageFile != null && model.ImageFile.Length > 0)
@@ -77,10 +83,16 @@ namespace Foras_Khadra.Controllers
             var model = new TeamMemberEditViewModel
             {
                 Id = member.Id,
-                Name = member.Name,
+                NameAr = member.NameAr,
+                NameEn = member.NameEn,
+                NameFr = member.NameFr,
+
+                BioAr = Regex.Replace(member.BioAr ?? "", "<.*?>", ""),
+                BioEn = Regex.Replace(member.BioEn ?? "", "<.*?>", ""),
+                BioFr = Regex.Replace(member.BioFr ?? "", "<.*?>", ""),
                 Membership = member.Membership,
                 Department = member.Department,
-                Bio = member.Bio
+                Gender = member.Gender,
             };
 
             ViewBag.ExistingImage = member.ImagePath;
@@ -104,10 +116,16 @@ namespace Foras_Khadra.Controllers
                 return View(model);
             }
 
-            member.Name = model.Name;
+            member.NameAr = model.NameAr;
+            member.NameEn = model.NameEn;
+            member.NameFr = model.NameFr;
+
+            member.BioAr = Regex.Replace(model.BioAr ?? "", "<.*?>", "");
+            member.BioEn = Regex.Replace(model.BioEn ?? "", "<.*?>", "");
+            member.BioFr = Regex.Replace(model.BioFr ?? "", "<.*?>", "");
             member.Membership = model.Membership;
             member.Department = model.Department;
-            member.Bio = Regex.Replace(model.Bio ?? "", "<.*?>", "");
+            member.Gender = model.Gender;
 
             // رفع صورة جديدة إذا تم اختيارها
             if (model.ImageFile != null && model.ImageFile.Length > 0)
