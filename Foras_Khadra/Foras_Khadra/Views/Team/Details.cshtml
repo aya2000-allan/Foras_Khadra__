@@ -1,19 +1,105 @@
 ﻿@model Foras_Khadra.Models.TeamMember
 
-<h2>تفاصيل العضو</h2>
+@{
+    ViewData["Title"] = "Details";
+    Layout = "_Layout";
+}
 
-<div>
-    <p><strong>الاسم:</strong> @Model.Name</p>
-    <p><strong>نوع العضوية:</strong> @Model.Membership</p>
-    <p><strong>القسم:</strong> @Model.Department</p>
-    <p><strong>البيو:</strong> @Model.Bio</p>
-    @if (!string.IsNullOrEmpty(Model.ImagePath))
-    {
-        <p><strong>صورة العضو:</strong><br /><img src="@Model.ImagePath" width="200" /></p>
-    }
+@section Styles {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+}
+
+
+<div class="container py-5" dir="rtl">
+
+    <!-- Header -->
+    <div class="d-flex  align-items-center mb-4 row ">
+        <div class="col-md-10 d-flex align-items-center gap-2 ">
+          <a asp-action="Index" class="text-decoration-none fw-bold" >
+                <i class="fa-solid fa-rotate-left ms-1" style="color:#F99D27;"></i>
+          </a>
+          <h3 class="fw-bold text-success mb-0">
+            عرض تفاصيل العضو
+          </h3>
+        </div>
+        <div class ="col-md-2">
+        
+            <a asp-action="Edit" asp-route-id="@Model.Id"
+               class="btn  fw-bold w-100 " style="border-radius:16px;background-color:#F99D27;">
+                تعديل البيانات
+            </a>
+        </div>
+        
+        
+    </div>
+   
+
+    <!-- Card -->
+    <div class="row g-4">
+
+        <!-- Right Card (Details) -->
+        <div class="col-md-9">
+            <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="border-radius:24px;">
+
+                <h4 class="fw-bold text-success ">
+                    @Model.Name
+                </h4>
+
+                <div >
+                    <div class="text-muted mb-4">فلسطين</div>
+                </div>
+
+                <!-- Info Row -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <small class="text-muted">اسم القسم</small>
+                        
+                    </div>
+                   <div class="col-md-8 mb-3">
+                        <div class="fw-bold">@Model.Department</div>
+                   </div>
+
+
+
+                   
+                </div>
+
+                <!-- Bio -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                      <small class="text-muted d-block mb-2">نبذة عنه</small>
+                    </div>
+                    <div class="col-md-8 mb-3 text-dark lh-lg">
+                      @Html.Raw(string.IsNullOrWhiteSpace(Model.Bio)? "لا يوجد نبذة مضافة لهذا العضو.": Model.Bio)
+                    </div>
+
+                </div>
+
+               
+               
+
+            </div>
+        </div>
+
+        <!-- Left Card (Image) -->
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 text-center p-4 " style="border-radius:24px;">
+
+                <div class="mb-3">
+                    <img src="@(string.IsNullOrEmpty(Model.ImagePath)? "https://via.placeholder.com/300x300?text=Member": Model.ImagePath)"
+                         class="rounded-4"
+                         style="width:100%;height:260px;object-fit:cover; border-radius:16px;"
+                         alt="عضو" />
+                </div>
+
+                <h5 class="fw-bold mb-1 text-lg-end">
+                    @Model.Name
+                    <i class="fa-solid fa-badge-check text-warning ms-1"></i>
+                </h5>
+
+                <p class="text-muted mb-0 text-lg-end">@Model.Membership</p>
+            </div>
+        </div>
+
+    </div>
 </div>
-
-<p>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">تعديل</a>
-    <a asp-action="Index" class="btn btn-secondary">العودة للقائمة</a>
-</p>
