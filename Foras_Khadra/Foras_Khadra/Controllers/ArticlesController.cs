@@ -25,7 +25,7 @@ public class ArticlesController : Controller
         if (!string.IsNullOrWhiteSpace(search))
         {
             query = query.Where(a =>
-                a.Title.Contains(search));
+                a.TitleAr.Contains(search));
         }
 
         int totalItems = await query.CountAsync();
@@ -124,8 +124,12 @@ public class ArticlesController : Controller
             existing.ImagePath = "/uploads/" + fileName;
         }
 
-        existing.Title = article.Title;
-        existing.Content = article.Content;
+        existing.TitleAr = article.TitleAr;
+        existing.TitleEn = article.TitleEn;
+        existing.TitleFr = article.TitleFr;
+        existing.ContentAr = article.ContentAr;
+        existing.ContentEn = article.ContentEn;
+        existing.ContentFr = article.ContentFr;
         existing.Author = article.Author;
 
         await _context.SaveChangesAsync();

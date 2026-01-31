@@ -8,10 +8,22 @@ namespace Foras_Khadra.Models
         public int Id { get; set; }
 
         [Required]
-        public string Title { get; set; }
+        public string TitleAr { get; set; }
 
         [Required]
-        public string Content { get; set; }
+        public string TitleEn { get; set; }
+
+        [Required]
+        public string TitleFr { get; set; }
+
+        [Required]
+        public string ContentAr { get; set; }
+
+        [Required]
+        public string ContentEn { get; set; }
+
+        [Required]
+        public string ContentFr { get; set; }
 
         public string ImagePath { get; set; }
 

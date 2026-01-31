@@ -285,7 +285,7 @@
                                 <img src="@(!string.IsNullOrEmpty(article.ImagePath)
                                                                  ? article.ImagePath
                                                                  : "/images/default-article.jpg")"
-                                                                                                 alt="@article.Title" />
+                                                                                                 alt="@article.TitleAr" />
                                                                                         </div>
 
                          <div class="article-body">
@@ -296,13 +296,13 @@
     </div>
 
     <h5 class="article-title">
-        @article.Title
+        @article.TitleAr
     </h5>
 
     <p class="article-desc">
-        @(article.Content.Length > 120
-            ? article.Content.Substring(0, 120) + "..."
-            : article.Content)
+        @(article.ContentAr.Length > 120
+            ? article.ContentAr.Substring(0, 120) + "..."
+            : article.ContentAr)
     </p>
 
     <a asp-controller="Articles"

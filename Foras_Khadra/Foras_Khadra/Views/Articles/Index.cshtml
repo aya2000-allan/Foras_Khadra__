@@ -74,7 +74,7 @@
                                      alt="مقالة" />
                             </td>
 
-                            <td class="fw-bold text-dark">@item.Title</td>
+                            <td class="fw-bold text-dark">@item.TitleAr</td>
                             <td class="text-muted">@item.Author</td>
                             <td class="text-muted">@item.PublishDate.ToString("dd, MMM yyyy")</td>
 
@@ -90,7 +90,7 @@
 
                                     <button type="button"
                                             class="action-icon icon-delete"
-                                            onclick="confirmDelete(@item.Id, '@item.Title')"
+                                            onclick="confirmDelete(@item.Id, '@item.TitleAr')"
                                             title="حذف">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>

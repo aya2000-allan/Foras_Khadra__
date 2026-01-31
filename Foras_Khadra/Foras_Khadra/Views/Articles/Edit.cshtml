@@ -118,26 +118,64 @@
                     </div>
 
                     <div>
-                        <label class="form-label">عنوان المقال</label>
-                        <input asp-for="Title" class="custom-input" placeholder="أدخل عنواناً جذاباً" />
-                        <span asp-validation-for="Title" class="text-danger small"></span>
+                        <label class="form-label">عنوان المقال بالعربي</label>
+                        <input asp-for="TitleAr" class="custom-input" placeholder="أدخل عنواناً جذاباً" />
+                        <span asp-validation-for="TitleAr" class="text-danger small"></span>
+                    </div>
+
+                    <div>
+                        <label class="form-label">عنوان المقال بالانجليزي</label>
+                        <input asp-for="TitleEn" class="custom-input" placeholder="أدخل عنواناً جذاباً" />
+                        <span asp-validation-for="TitleEn" class="text-danger small"></span>
+                    </div>
+
+                    <div>
+                        <label class="form-label">عنوان المقال بالفرنسي</label>
+                        <input asp-for="TitleFr" class="custom-input" placeholder="أدخل عنواناً جذاباً" />
+                        <span asp-validation-for="TitleFr" class="text-danger small"></span>
                     </div>
 
                     <!-- Editor -->
                     <div class="editor-container">
-                        <label class="form-label">نص المقالة</label>
+                        <label class="form-label">نص المقالة بالعربي</label>
 
-                        <div id="editor" style="height:260px;background:#fff"></div>
+                        <div id="editorAr" style="height:260px;background:#fff"></div>
 
                         <!-- هذا هو اللي بينرسل للـ Controller -->
-                        <input type="hidden" asp-for="Content" id="Content" />
+                        <input type="hidden" asp-for="ContentAr" id="ContentAr" />
 
-                        <span asp-validation-for="Content" class="text-danger small"></span>
+                        <span asp-validation-for="ContentAr" class="text-danger small"></span>
 
-                        <div class="hint-text">
-                            <span class="hint-dot"></span>
-                            <span>سيتم نشر المقالة بكل من العربية، الإنجليزية، الفرنسية</span>
-                        </div>
+                    </div>
+
+                    <div class="editor-container">
+                        <label class="form-label">نص المقالة بالانجليزي</label>
+
+                        <div id="editorEn" style="height:260px;background:#fff"></div>
+
+                        <!-- هذا هو اللي بينرسل للـ Controller -->
+                        <input type="hidden" asp-for="ContentEn" id="ContentEn" />
+
+                        <span asp-validation-for="ContentEn" class="text-danger small"></span>
+
+                    </div>
+
+
+                    <div class="editor-container">
+                        <label class="form-label">نص المقالة بالفرنسي</label>
+
+                        <div id="editorFr" style="height:260px;background:#fff"></div>
+
+                        <!-- هذا هو اللي بينرسل للـ Controller -->
+                        <input type="hidden" asp-for="ContentFr" id="ContentFr" />
+
+                        <span asp-validation-for="ContentFr" class="text-danger small"></span>
+
+                    </div>
+
+                    <div class="hint-text">
+                        <span class="hint-dot"></span>
+                        <span>سيتم نشر المقالة بكل من العربية، الإنجليزية، الفرنسية</span>
                     </div>
 
                     <div class="actions-group">
@@ -158,30 +196,45 @@
 
     <script>
         // ✅ Quill init
-        const quill = new Quill('#editor', {
+            const toolbarOptions = [
+            [{ header: [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ align: [] }],
+            ['link'],
+            ['clean']
+        ];
+
+        const quillAr = new Quill('#editorAr', {
             theme: 'snow',
-            placeholder: 'اكتب نص المقالة هنا...',
-            modules: {
-                toolbar: [
-                    [{ header: [1, 2, 3, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ list: 'ordered' }, { list: 'bullet' }],
-                    [{ align: [] }],
-                    ['link'],
-                    ['clean']
-                ]
-            }
+            modules: { toolbar: toolbarOptions }
         });
 
-        // ✅ حط المحتوى القديم داخل المحرر
-        const existingContent = `@Html.Raw((Model.Content ?? "").Replace("`", "\\`"))`;
-        if (existingContent && existingContent.trim() !== "") {
-            quill.root.innerHTML = existingContent;
-        }
+        const quillEn = new Quill('#editorEn', {
+            theme: 'snow',
+            modules: { toolbar: toolbarOptions }
+        });
 
-        // ✅ قبل الإرسال: خزّن HTML في input hidden
+        const quillFr = new Quill('#editorFr', {
+            theme: 'snow',
+            modules: { toolbar: toolbarOptions }
+        });
+
+        // اتجاه النص
+        quillAr.root.setAttribute('dir', 'rtl');
+        quillEn.root.setAttribute('dir', 'ltr');
+        quillFr.root.setAttribute('dir', 'ltr');
+
+        // تحميل المحتوى القديم
+        quillAr.root.innerHTML = `@Html.Raw((Model.ContentAr ?? "").Replace("`", "\\`"))`;
+        quillEn.root.innerHTML = `@Html.Raw((Model.ContentEn ?? "").Replace("`", "\\`"))`;
+        quillFr.root.innerHTML = `@Html.Raw((Model.ContentFr ?? "").Replace("`", "\\`"))`;
+
+        // قبل الإرسال
         document.querySelector('form').addEventListener('submit', function () {
-            document.getElementById('Content').value = quill.root.innerHTML;
+            document.getElementById('ContentAr').value = quillAr.root.innerHTML;
+            document.getElementById('ContentEn').value = quillEn.root.innerHTML;
+            document.getElementById('ContentFr').value = quillFr.root.innerHTML;
         });
 
         // ✅ Upload preview

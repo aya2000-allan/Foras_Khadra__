@@ -12,30 +12,7 @@ namespace Foras_Khadra.Data
 
             var articles = new List<Article>
             {
-                new Article
-                {
-                    Title = "كيفية تعلم البرمجة من الصفر",
-                    Author = "أحمد محمد",
-                    Content = "هذا محتوى تجريبي للمقالة الأولى. يمكنك استبداله لاحقاً.",
-                    PublishDate = DateTime.Now.AddDays(-5),
-                    ImagePath = "~/images/logo.png "
-                },
-                new Article
-                {
-                    Title = "أهمية الذكاء الاصطناعي في الطب",
-                    Author = "سارة خالد",
-                    Content = "هذا محتوى تجريبي للمقالة الثانية. يمكنك استبداله لاحقاً.",
-                    PublishDate = DateTime.Now.AddDays(-3),
-                    ImagePath = "~/images/logo.png "
-                },
-                new Article
-                {
-                    Title = "مستقبل العمل الحر في الوطن العربي",
-                    Author = "ياسر علي",
-                    Content = "هذا محتوى تجريبي للمقالة الثالثة. يمكنك استبداله لاحقاً.",
-                    PublishDate = DateTime.Now.AddDays(-1),
-                    ImagePath = "~/images/logo.png "
-                }
+                
             };
 
             context.Articles.AddRange(articles);

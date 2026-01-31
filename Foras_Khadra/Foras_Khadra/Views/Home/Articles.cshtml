@@ -1,9 +1,19 @@
-﻿@model Foras_Khadra.Models.HomeArticlesViewModel
+﻿<!DOCTYPE html>
+@{
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+}
+<html lang="@culture" dir="@dir">
+
+@model Foras_Khadra.Models.HomeArticlesViewModel
 @using Foras_Khadra.Models
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@using Microsoft.Extensions.Options;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     bool isLoggedIn = SignInManager.IsSignedIn(User);
     bool isAdmin = false;
@@ -42,7 +52,7 @@
         </svg>
     </span>
 
-    <h2 class="section-title">آخر المقالات</h2>
+        <h2 class="section-title">@Localizer["LatestArticles"]</h2>
 </div>
 
 
@@ -69,7 +79,11 @@
                     </span>
 
                     <div class="latest-info">
-                        <div class="latest-title">@a.Title</div>
+                        <div class="latest-title">
+                            @(culture == "ar" ? a.TitleAr :
+                                                    culture == "en" ? a.TitleEn :
+                                                    a.TitleFr)
+                    </div>
                         <div class="latest-date">@a.PublishDate.ToString("d MMM yyyy")</div>
                     </div>
                 </a>
@@ -95,11 +109,15 @@
     </span>
 
     <div class="latest-info">
-        <div class="latest-title">@f.Title</div>
+                    <div class="latest-title">
+                        @(culture == "ar" ? f.TitleAr :
+                                            culture == "en" ? f.TitleEn :
+                                            f.TitleFr)
+                </div>
         <div class="latest-date">@f.PublishDate.ToString("d MMM yyyy")</div>
     </div>
 
-    <span class="latest-more">اقرأ المزيد</span>
+                <span class="latest-more">@Localizer["ReadMore"]</span>
 </a>
 
         }
@@ -115,7 +133,7 @@
         </svg>
     </span>
 
-<h2 class="section-title">اقرأ أيضًا</h2>
+        <h2 class="section-title">@Localizer["ReadAlso"]</h2>
 </div>
 
 
@@ -127,7 +145,14 @@
             : Url.Content("~/images/default-cover.jpg");
 
             // نص مختصر بدون HTML
-            var plain = (article.Content ?? "");
+            var plain =
+            culture == "ar" ? article.ContentAr :
+            culture == "en" ? article.ContentEn :
+            article.ContentFr;
+
+            plain ??= "";
+            plain = System.Text.RegularExpressions.Regex.Replace(plain, "<.*?>", string.Empty);
+            if (plain.Length > 220) plain = plain.Substring(0, 220) + "...";
             plain = System.Text.RegularExpressions.Regex.Replace(plain, "<.*?>", string.Empty);
             if (plain.Length > 220) plain = plain.Substring(0, 220) + "...";
 
@@ -147,14 +172,21 @@
 
                 <!-- يمين: الصورة -->
                 <div class="ra-thumb">
-                    <img src="@cover" alt="@article.Title" loading="lazy" />
-                </div>
+                    <img src="@cover"
+                         alt="@(culture == "ar" ? article.TitleAr :
+                                    culture == "en" ? article.TitleEn :
+                                    article.TitleFr)"
+                     loading="lazy" />
+            </div>
 
                 <!-- يسار: العنوان + النص + اقرأ المزيد -->
                 <div class="ra-body">
 
-                    <h3 class="ra-title">@article.Title</h3>
-
+                    <h3 class="ra-title">
+                        @(culture == "ar" ? article.TitleAr :
+                                            culture == "en" ? article.TitleEn :
+                                            article.TitleFr)
+                </h3>
                     <p class="ra-excerpt">@plain</p>
 
                     <a class="ra-more" href="@(canRead? href : "#")"
@@ -197,4 +229,4 @@
     }
   </script>
 }
-
+</html>

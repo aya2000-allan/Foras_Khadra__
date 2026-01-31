@@ -3,7 +3,7 @@
 @using System.Linq
 
 @{
-    ViewData["Title"] = Model.Title;
+    ViewData["Title"] = Model.TitleAr;
 
     // قديم (اختياري)
     var readAlso = ViewBag.ReadAlso as IEnumerable<Article> ?? Enumerable.Empty<Article>();
@@ -14,7 +14,7 @@
     var req = Context.Request;
     var currentUrl = $"{req.Scheme}://{req.Host}{req.Path}{req.QueryString}";
     var encodedUrl = Uri.EscapeDataString(currentUrl);
-    var encodedTitle = Uri.EscapeDataString(Model.Title ?? "");
+    var encodedTitle = Uri.EscapeDataString(Model.TitleAr ?? "");
 
     var shareX = $"https://twitter.com/intent/tweet?url={encodedUrl}&text={encodedTitle}";
     var shareFacebook = $"https://www.facebook.com/sharer/sharer.php?u={encodedUrl}";
@@ -48,7 +48,7 @@
 
                     <!-- Title + Author -->
                    <div class="news-top-meta">
-    <span class="news-top-title">@Model.Title</span>
+    <span class="news-top-title">@Model.TitleAr</span>
 @if (!string.IsNullOrWhiteSpace(Model.Author) && Model.Author.Trim() == "فرص خضراء")
 {
     <span class="news-top-author author-green">
@@ -69,7 +69,7 @@ else
                 @if (!string.IsNullOrEmpty(Model.ImagePath))
                 {
                     <div class="news-hero">
-                        <img src="@Model.ImagePath" alt="@Model.Title" />
+                        <img src="@Model.ImagePath" alt="@Model.TitleAr" />
                   </div>
                 }  
 
@@ -86,7 +86,7 @@ else
                     <!-- ===== Main Content ===== -->
                     <div class="news-main-content">
                         <div class="news-content">
-                            @Html.Raw(Model.Content)
+                            @Html.Raw(Model.ContentAr)
                         </div>
                     </div>
 
@@ -135,7 +135,7 @@ else
 
             <!-- المحتوى -->
             <div class="readalso-content">
-                <div class="readalso-title">@a.Title</div>
+                <div class="readalso-title">@a.TitleAr</div>
                 <div class="readalso-date">
                     @a.PublishDate.ToString("dd MMM yyyy")
                 </div>

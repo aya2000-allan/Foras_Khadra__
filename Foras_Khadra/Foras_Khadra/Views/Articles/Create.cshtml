@@ -98,23 +98,60 @@
                         </div>
 
                         <div class="col-12">
-                            <input asp-for="Title" class="custom-input" placeholder="عنوان المقالة" />
-                            <span asp-validation-for="Title" class="text-danger small"></span>
+                            <input asp-for="TitleAr" class="custom-input" placeholder="عنوان المقالة بالعربي" />
+                            <span asp-validation-for="TitleAr" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <input asp-for="TitleEn" class="custom-input" placeholder="عنوام المقالة بالانجليزي" />
+                            <span asp-validation-for="TitleAr" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <input asp-for="TitleFr" class="custom-input" placeholder="عنوان المقالة بالفرنسي" />
+                            <span asp-validation-for="TitleFr" class="text-danger small"></span>
                         </div>
                     </div>
 
                     <div class="editor-container">
-                        <label class="form-label">نص المقالة</label>
+                        <label class="form-label">نص المقالة بالعربي</label>
 
-                        <div id="editor" style="height:220px;background:#fff"></div>
-                        <input type="hidden" asp-for="Content" id="Content" />
+                        <div id="editorAr" style="height:220px;background:#fff"></div>
+                        <input type="hidden" asp-for="ContentAr" id="ContentAr" />
 
-                        <span asp-validation-for="Content" class="text-danger small"></span>
+                        
 
-                        <div class="hint-text">
-                            <span class="hint-dot"></span>
-                            <span>سيتم نشر المقالة بكل من العربية، الإنجليزية، الفرنسية</span>
-                        </div>
+                        <span asp-validation-for="ContentAr" class="text-danger small"></span>
+                     
+                    </div>
+
+                    <div class="editor-container">
+                        <label class="form-label">نص المقالة بالانجليزي</label>
+
+                        <div id="editorEn" style="height:220px;background:#fff"></div>
+                        <input type="hidden" asp-for="ContentEn" id="ContentEn" />
+
+
+
+                        <span asp-validation-for="ContentEn" class="text-danger small"></span>
+
+                    </div>
+
+                    <div class="editor-container">
+                        <label class="form-label">نص المقالة بالفرنسي</label>
+
+                        <div id="editorFr" style="height:220px;background:#fff"></div>
+                        <input type="hidden" asp-for="ContentFr" id="ContentFr" />
+
+
+
+                        <span asp-validation-for="ContentFr" class="text-danger small"></span>
+
+                    </div>
+
+                    <div class="hint-text">
+                        <span class="hint-dot"></span>
+                        <span>سيتم نشر المقالة بكل من العربية، الإنجليزية، الفرنسية</span>
                     </div>
 
                     <div class="actions-group">
@@ -134,24 +171,39 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 
     <script>
-        const quill = new Quill('#editor', {
+                const toolbarOptions = [
+            [{ header: [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ align: [] }],
+            ['link'],
+            ['clean']
+        ];
+
+        const quillAr = new Quill('#editorAr', {
             theme: 'snow',
-            placeholder: 'اكتب نص المقالة هنا...',
-            modules: {
-                toolbar: [
-                    [{ header: [1, 2, 3, false] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ list: 'ordered' }, { list: 'bullet' }],
-                    [{ align: [] }],
-                    ['link'],
-                    ['clean']
-                ]
-            }
+            placeholder: 'اكتب نص المقالة بالعربي...',
+            modules: { toolbar: toolbarOptions }
         });
 
-        document.querySelector('form').addEventListener('submit', function () {
-            document.getElementById('Content').value = quill.root.innerHTML;
+        const quillEn = new Quill('#editorEn', {
+            theme: 'snow',
+            placeholder: 'Write the article content in English...',
+            modules: { toolbar: toolbarOptions }
         });
+
+        const quillFr = new Quill('#editorFr', {
+            theme: 'snow',
+            placeholder: 'Écrivez le contenu de l’article en français...',
+            modules: { toolbar: toolbarOptions }
+        });
+
+            document.querySelector('form').addEventListener('submit', function () {
+            document.getElementById('ContentAr').value = quillAr.root.innerHTML;
+            document.getElementById('ContentEn').value = quillEn.root.innerHTML;
+            document.getElementById('ContentFr').value = quillFr.root.innerHTML;
+        });
+
 
         const dropzone = document.getElementById('dropzone');
         const fileInput = document.getElementById('fileInput');

@@ -17,8 +17,12 @@ namespace Foras_Khadra.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TitleAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TitleEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TitleFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContentAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContentEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContentFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PublishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Author = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -87,10 +91,14 @@ namespace Foras_Khadra.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NameFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Membership = table.Column<int>(type: "int", nullable: false),
                     Department = table.Column<int>(type: "int", nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BioAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BioEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BioFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false)
                 },
