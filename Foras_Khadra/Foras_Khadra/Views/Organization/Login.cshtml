@@ -1,35 +1,289 @@
 ﻿@model Foras_Khadra.Models.OrganizationLoginViewModel
+@{
+    ViewData["Title"] = "تسجيل دخول المنظمة";
+}
 
-<form asp-action="Login" method="post">
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
-    <div>
-        <label>البريد الإلكتروني</label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+<div class="auth-page" dir="rtl">
+    <div class="auth-bg-circle"></div>
+
+    <div class="auth-card">
+        <h1 class="auth-title">تسجيل الدخول</h1>
+        <p class="auth-subtitle">أهلاً وسهلاً ، قم بإدخال بياناتك لتتمكن من التحكم بحساب المنظمة</p>
+
+        <form asp-action="Login" method="post" class="mt-4">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label auth-label">البريد الإلكتروني</label>
+                <div class="auth-input">
+                    <input asp-for="Email" class="form-control auth-control" placeholder="اكتب ايميل المنظمة" />
+                </div>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-2">
+                <label asp-for="Password" class="form-label auth-label">كلمة المرور</label>
+
+                <div class="auth-input has-icon">
+                    <input asp-for="Password" id="OrgPassword" class="form-control auth-control" type="password" placeholder="اكتب كلمة السر الخاصة بك" />
+                    <button type="button" class="auth-eye" onclick="togglePassword('OrgPassword')"
+                            aria-label="إظهار/إخفاء كلمة المرور">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <!-- Remember + Forgot -->
+            <div class="d-flex align-items-center justify-content-between mt-2 mb-3 auth-row">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMeOrg" />
+                    <label class="form-check-label" for="rememberMeOrg">تذكرني</label>
+                </div>
+
+                <a asp-controller="Organization" asp-action="ForgotPassword" class="auth-link">
+                    هل نسيت كلمة السر ؟
+                </a>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn auth-btn w-100">تسجيل الدخول</button>
+
+            <!-- إذا ما بدك سوشال للمنظمة احذف كل اللي تحت -->
+            <div class="auth-divider">
+                <span>أو التسجيل بواسطة</span>
+            </div>
+
+            <div class="auth-social">
+                <a href="#" class="auth-social-btn">
+                    <!-- Facebook -->
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.5 2.91699C10.5605 2.91699 7.74139 4.0847 5.66286 6.16323C3.58433 8.24175 2.41663 11.0608 2.41663 14.0003C2.41663 16.9398 3.58433 19.7589 5.66286 21.8374C7.74139 23.916 10.5605 25.0837 13.5 25.0837C16.4394 25.0837 19.2585 23.916 21.3371 21.8374C23.4156 19.7589 24.5833 16.9398 24.5833 14.0003C24.5833 11.0608 23.4156 8.24175 21.3371 6.16323C19.2585 4.0847 16.4394 2.91699 13.5 2.91699Z" fill="#039BE5" />
+                        <path d="M15.0004 16.9372H17.8686L18.319 14.0235H14.9998V12.431C14.9998 11.2205 15.3953 10.1472 16.5276 10.1472H18.347V7.60446C18.0273 7.5613 17.3512 7.4668 16.0737 7.4668C13.4061 7.4668 11.8422 8.87555 11.8422 12.085V14.0235H9.09998V16.9372H11.8422V24.9458C12.3853 25.0275 12.9354 25.0829 13.5001 25.0829C14.0105 25.0829 14.5086 25.0362 15.0004 24.9697V16.9372Z" fill="white" />
+                    </svg>
+                    <span>Facebook</span>
+                </a>
+
+                <a href="#" class="auth-social-btn">
+                    <!-- Google -->
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23.7141 12.4596H22.875V12.4163H13.5V16.583H19.387C18.5282 19.0085 16.2204 20.7497 13.5 20.7497C10.0485 20.7497 7.25004 17.9512 7.25004 14.4997C7.25004 11.0481 10.0485 8.24967 13.5 8.24967C15.0933 8.24967 16.5428 8.85072 17.6464 9.83249L20.5928 6.88613C18.7323 5.15228 16.2438 4.08301 13.5 4.08301C7.74744 4.08301 3.08337 8.74707 3.08337 14.4997C3.08337 20.2523 7.74744 24.9163 13.5 24.9163C19.2526 24.9163 23.9167 20.2523 23.9167 14.4997C23.9167 13.8012 23.8448 13.1195 23.7141 12.4596Z" fill="#FFC107" />
+                        <path d="M4.28442 9.65124L7.70682 12.1611C8.63286 9.86843 10.8756 8.24968 13.5 8.24968C15.0933 8.24968 16.5428 8.85072 17.6464 9.83249L20.5928 6.88613C18.7323 5.15228 16.2438 4.08301 13.5 4.08301C9.49901 4.08301 6.02922 6.34186 4.28442 9.65124Z" fill="#FF3D00" />
+                        <path d="M13.5 24.9165C16.1906 24.9165 18.6354 23.8868 20.4839 22.2124L17.2599 19.4842C16.2141 20.2764 14.9141 20.7499 13.5 20.7499C10.7906 20.7499 8.49011 19.0223 7.62344 16.6113L4.22656 19.2285C5.95052 22.6019 9.45156 24.9165 13.5 24.9165Z" fill="#4CAF50" />
+                        <path d="M23.7141 12.4602H22.875V12.417H13.5V16.5837H19.387C18.9745 17.7488 18.225 18.7534 17.2583 19.4852L17.2599 19.4842L20.4839 22.2123C20.2557 22.4196 23.9167 19.7087 23.9167 14.5003C23.9167 13.8019 23.8448 13.1201 23.7141 12.4602Z" fill="#1976D2" />
+                    </svg>
+                    <span>Google</span>
+                </a>
+
+                <a href="#" class="auth-social-btn">
+                    <!-- LinkedIn -->
+                    <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 0C5.82021 0 0 5.3725 0 12C0 18.6275 5.82021 24 13 24C20.1798 24 26 18.6275 26 12C26 5.3725 20.1798 0 13 0ZM9.81771 16.9737H7.18521V9.15375H9.81771V16.9737ZM8.48521 8.19375C7.65375 8.19375 7.11615 7.65 7.11615 6.9775C7.11615 6.29125 7.67 5.76375 8.51906 5.76375C9.36812 5.76375 9.88813 6.29125 9.90438 6.9775C9.90438 7.65 9.36812 8.19375 8.48521 8.19375ZM19.4323 16.9737H16.7998V12.64C16.7998 11.6312 16.4179 10.9462 15.4659 10.9462C14.7388 10.9462 14.3068 11.41 14.1158 11.8562C14.0454 12.015 14.0278 12.24 14.0278 12.4637V16.9725H11.394V11.6475C11.394 10.6713 11.3601 9.855 11.3249 9.1525H13.6121L13.7326 10.2387H13.7854C14.1321 9.72875 14.9811 8.97625 16.4017 8.97625C18.1336 8.97625 19.4323 10.0475 19.4323 12.35V16.9737Z" fill="#0A66C2" />
+                    </svg>
+                    <span>Linkedin</span>
+                </a>
+            </div>
+
+            <div class="auth-footer">
+                <span>ليس لديك حساب ؟</span>
+                <a asp-action="Register" asp-controller="Organization" class="auth-link ms-1">إنشاء حساب منظمة</a>
+            </div>
+        </form>
     </div>
-
-    <div>
-        <label>كلمة المرور</label>
-        <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-
-    <!--  نسيت كلمة المرور -->
-    <div style="margin-top:10px;">
-        <a asp-controller="Organization"
-           asp-action="ForgotPassword">
-            نسيت كلمة المرور؟
-        </a>
-    </div>
-
-    <button type="submit" style="margin-top:15px;">
-        تسجيل الدخول
-    </button>
-</form>
+</div>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        function togglePassword(id) {
+            const el = document.getElementById(id);
+            el.type = (el.type === 'password') ? 'text' : 'password';
+        }
+    </script>
 }
+
+<style>
+/* Page */
+.auth-page{
+    min-height: calc(100vh - 120px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:40px 16px;
+    background:#F2FBF3;
+    overflow:hidden;
+    font-family:"Tajawal","Cairo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+
+/* Big soft circle */
+.auth-bg-circle{
+    position:absolute;
+    width:763px;
+    height:743px;
+    border-radius:50%;
+    background:#E2F6E4;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    z-index:0;
+}
+
+/* Card */
+.auth-card{
+    width:100%;
+    max-width:523px;
+    background:#fff;
+    border-radius:18px;
+    height: 735px;
+    padding:28px 26px;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    z-index:1;
+}
+
+/* Title */
+.auth-title{
+    margin:0;
+    text-align:center;
+    color:#25652C;
+    font-weight:600;
+    font-size:48px;
+    line-height:1.1;
+}
+
+.auth-subtitle{
+    margin-top:20px;
+    margin-bottom:0;
+    text-align:center;
+    color:#25652C;
+    font-size:20px;
+    font-weight:300;
+}
+
+/* Labels */
+.auth-label{
+    color:#000;
+    font-weight:800;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+/* Inputs */
+.auth-input{ position:relative; }
+
+.auth-control{
+    border-radius:10px;
+    padding:12px 14px;
+    border:1px solid #dfe7e2;
+    background:#fff;
+    box-shadow:none !important;
+}
+.auth-control:focus{
+    border-color:#9ad0a7;
+    box-shadow:0 0 0 .2rem rgba(43,160,82,.15) !important;
+}
+
+/* Eye */
+.has-icon .auth-control{ padding-left:44px; }
+.auth-eye{
+    position:absolute;
+    left:10px;
+    top:50%;
+    transform:translateY(-50%);
+    border:0;
+    background:transparent;
+    color:#8aa496;
+    padding:6px;
+    cursor:pointer;
+}
+
+/* Row */
+.auth-row .form-check-label{
+    color:#2f3a33;
+    font-size:13px;
+    font-weight:600;
+}
+
+.auth-link{
+    color:#2f3a33;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+}
+.auth-link:hover{ text-decoration:underline; }
+
+/* Button */
+.auth-btn{
+    background:#f4a029;
+    border:none;
+    border-radius:10px;
+    padding:12px 14px;
+    font-weight:800;
+    color:#fff;
+    margin-top:6px;
+}
+.auth-btn:hover{ background:#ee9414; color:#fff; }
+
+/* Divider */
+.auth-divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin:18px 0 12px;
+    color:#93a49a;
+    font-size:12px;
+    font-weight:700;
+}
+.auth-divider::before,
+.auth-divider::after{
+    content:"";
+    height:1px;
+    background:#e8efe9;
+    flex:1;
+}
+
+/* Social */
+.auth-social{
+    display:flex;
+    gap:10px;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+.auth-social-btn{
+    flex:1;
+    min-width:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:10px;
+    border:1px solid #dfe7e2;
+    border-radius:10px;
+    background:#fff;
+    text-decoration:none;
+    color:#2f3a33;
+    font-weight:700;
+    font-size:12px;
+}
+
+/* Footer */
+.auth-footer{
+    margin-top:16px;
+    text-align:center;
+    color:#25652C;
+    font-size:16px;
+    font-weight:400;
+    padding-top: 40px;
+}
+</style>
