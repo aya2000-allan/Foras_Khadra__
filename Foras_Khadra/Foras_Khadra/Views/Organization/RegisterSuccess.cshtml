@@ -2,10 +2,114 @@
     ViewData["Title"] = "تم إنشاء الحساب";
 }
 
-<div class="alert alert-success text-center mt-5">
-    <h4> تم إنشاء حساب المنظمة بنجاح</h4>
+<div class="auth-page" dir="rtl">
+    <div class="auth-bg-circle"></div>
 
-    <a asp-controller="Organization" asp-action="Login" class="btn btn-primary mt-3">
-        الذهاب لتسجيل الدخول
-    </a>
+    <div class="auth-card auth-success">
+
+        <!-- Success Icon -->
+        <div class="auth-success-icon">
+            <svg width="86" height="86" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="#2E7D32" stroke-width="2"/>
+                <path d="M7 12.5l3 3 7-7"
+                      stroke="#2E7D32"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"/>
+            </svg>
+        </div>
+
+        <h1 class="auth-title">تم إنشاء حساب المنظمة بنجاح</h1>
+
+        <p class="auth-subtitle">
+            أصبح بإمكانكم الآن تسجيل الدخول والتحكم بحساب منظمتكم والاستفادة من جميع الخدمات المتاحة.
+        </p>
+
+        <a asp-controller="Organization"
+           asp-action="Login"
+           class="btn auth-btn w-100 mt-3">
+            الذهاب إلى تسجيل الدخول
+        </a>
+    </div>
 </div>
+
+<style>
+/* Page */
+.auth-page{
+    min-height: calc(100vh - 120px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:40px 16px;
+    background:#F2FBF3;
+    overflow:hidden;
+    font-family:"Tajawal","Cairo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+
+/* Soft circle background */
+@* .auth-bg-circle{
+    position:absolute;
+    width:650px;
+    height:650px;
+    border-radius:50%;
+    background:#E2F6E4;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    z-index:0;
+} *@
+
+/* Card */
+.auth-card{
+    width:100%;
+    max-width:460px;
+    background:#fff;
+    border-radius:18px;
+    padding:38px 28px 32px;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    z-index:1;
+    text-align:center;
+}
+
+.auth-success-icon{
+    display:flex;
+    justify-content:center;
+    margin-bottom:18px;
+}
+
+/* Text */
+.auth-title{
+    margin:0;
+    color:#25652C;
+    font-weight:800;
+    font-size:28px;
+}
+
+.auth-subtitle{
+    margin:14px 0 10px;
+    color:#5f6f66;
+    font-size:14px;
+    line-height:1.9;
+}
+
+/* Button */
+.auth-btn{
+    background:#F99D27;
+    border:none;
+    border-radius:10px;
+    padding:13px 14px;
+    font-weight:800;
+    color:#fff;
+}
+.auth-btn:hover{
+    background:#ef981d;
+    color:#fff;
+}
+
+/* Responsive */
+@@media (max-width:480px){
+    .auth-card{ padding:28px 18px; }
+    .auth-title{ font-size:24px; }
+}
+</style>
