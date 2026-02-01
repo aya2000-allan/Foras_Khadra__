@@ -1,11 +1,18 @@
-﻿@{
+﻿@using Microsoft.Extensions.Options;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "الصفحة تحت التطوير";
     Layout = "_Layout";
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+
 }
 
 <link rel="stylesheet" href="~/css/_Error.css" />
 
 <div class="container-404">
     <img src="~/images/errors/underDevelopment.svg" alt="under_development" />
-    <p class="text-container">ما زالت هذه الصفحة قيد التطوير</p>
+    <p class="text-container">@Localizer["UnderDevelopment"]</p>
 </div>

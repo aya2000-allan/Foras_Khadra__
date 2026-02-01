@@ -3,10 +3,16 @@
 <h2>تفاصيل العضو</h2>
 
 <div>
-    <p><strong>الاسم:</strong> @Model.NameAr</p>
+    <p><strong>الاسم بالعربي:</strong> @Model.NameAr</p>
+    <p><strong>الاسم بالانجليزي:</strong> @Model.NameEn</p>
+    <p><strong>الاسم بالفرنسي:</strong> @Model.NameFr</p>
+
     <p><strong>نوع العضوية:</strong> @Model.Membership</p>
     <p><strong>القسم:</strong> @Model.Department</p>
-    <p><strong>البيو:</strong> @Html.Raw(Model.BioAr)</p>
+    <p><strong>البيو بالعربي:</strong> @Html.Raw(Model.BioAr)</p>
+    <p><strong>البيو بالانجليزي:</strong> @Html.Raw(Model.BioEn)</p>
+    <p><strong>البيو بالفرنسي:</strong> @Html.Raw(Model.BioFr)</p>
+
     @if (!string.IsNullOrEmpty(Model.ImagePath))
     {
         <p><strong>صورة العضو:</strong><br /><img src="@Model.ImagePath" width="200" /></p>

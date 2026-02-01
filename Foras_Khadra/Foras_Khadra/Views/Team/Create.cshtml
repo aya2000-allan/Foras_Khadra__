@@ -88,10 +88,10 @@
                 <h3 class="discription">البيو بالعربي</h3>
 
                 <!-- Quill editor -->
-                <div id="editor" style="height: 376px;"></div>
+                <div id="editorAr" style="height: 376px;"></div>
 
                 <!-- Hidden input bound to Model -->
-                <input type="hidden" asp-for="BioAr" id="Bio" />
+                <input type="hidden" asp-for="BioAr" id="BioAr" />
 
                 <span asp-validation-for="BioAr" class="text-danger"></span>
             </div>
@@ -100,10 +100,10 @@
                 <h3 class="discription">البيو بالانجليزي</h3>
 
                 <!-- Quill editor -->
-                <div id="editor" style="height: 376px;"></div>
+                <div id="editorEn" style="height: 376px;"></div>
 
                 <!-- Hidden input bound to Model -->
-                <input type="hidden" asp-for="BioEn" id="Bio" />
+                <input type="hidden" asp-for="BioEn" id="BioEn" />
 
                 <span asp-validation-for="BioEn" class="text-danger"></span>
             </div>
@@ -113,10 +113,10 @@
                 <h3 class="discription">البيو بالفرنسي</h3>
 
                 <!-- Quill editor -->
-                <div id="editor" style="height: 376px;"></div>
+                <div id="editorFr" style="height: 376px;"></div>
 
                 <!-- Hidden input bound to Model -->
-                <input type="hidden" asp-for="BioFr" id="Bio" />
+                <input type="hidden" asp-for="BioFr" id="BioFr" />
 
                 <span asp-validation-for="BioFr" class="text-danger"></span>
             </div>
@@ -152,10 +152,10 @@
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 
 <script>
-    // Initialize Quill
-    var quill = new Quill('#editor', {
+    // Arabic Editor (RTL)
+    var quillAr = new Quill('#editorAr', {
         theme: 'snow',
-        placeholder: 'About Team member ',
+        placeholder: 'نبذة عن العضو بالعربي',
         modules: {
             toolbar: [
                 [{ header: [1, 2, false] }],
@@ -164,14 +164,53 @@
                 ['link'],
                 ['clean'],
                 [{ direction: 'rtl' }],
-                [{ align: [] }],
+                [{ align: [] }]
             ]
         }
     });
+    quillAr.root.setAttribute('dir', 'rtl');
 
-    // On form submit, copy plain text to hidden input
+
+    // English Editor (LTR)
+    var quillEn = new Quill('#editorEn', {
+        theme: 'snow',
+        placeholder: 'About the team member',
+        modules: {
+            toolbar: [
+                [{ header: [1, 2, false] }],
+                ['bold', 'italic', 'underline'],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                ['link'],
+                ['clean']
+            ]
+        }
+    });
+    quillEn.root.setAttribute('dir', 'ltr');
+
+
+    // French Editor (LTR)
+    var quillFr = new Quill('#editorFr', {
+        theme: 'snow',
+        placeholder: 'À propos du membre',
+        modules: {
+            toolbar: [
+                [{ header: [1, 2, false] }],
+                ['bold', 'italic', 'underline'],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                ['link'],
+                ['clean']
+            ]
+        }
+    });
+    quillFr.root.setAttribute('dir', 'ltr');
+
+
+    // Copy content on submit
     document.querySelector('form').addEventListener('submit', function () {
-        document.getElementById('Bio').value = quill.getText().trim();
+        document.getElementById('BioAr').value = quillAr.root.innerHTML;
+        document.getElementById('BioEn').value = quillEn.root.innerHTML;
+        document.getElementById('BioFr').value = quillFr.root.innerHTML;
     });
 </script>
+
 
