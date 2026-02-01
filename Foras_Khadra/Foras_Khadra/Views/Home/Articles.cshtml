@@ -40,6 +40,29 @@
 
 <link rel="stylesheet" asp-append-version="true" href="~/css/home-articles.css" />
 
+<style>
+
+    .swal-title-rtl {
+        direction: rtl;
+        text-align: center;
+    }
+
+    .swal-title-ltr {
+        direction: ltr;
+        text-align: center;
+    }
+
+    .swal-text-rtl {
+        direction: rtl;
+        text-align: center;
+    }
+
+    .swal-text-ltr {
+        direction: ltr;
+        text-align: center;
+    }
+</style>
+
 <section class="home-articles">
 
     <!-- ===== Header: آخر المقالات ===== -->
@@ -211,22 +234,37 @@
 
 </section>
 
+
 @section Scripts {
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    function swalNotLoggedIn(e, canRead) {
-      if (canRead) return true;      // مسموح
-      if (e) e.preventDefault();     // امنعي الرابط
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function swalNotLoggedIn(e, canRead) {
+          if (canRead) return true;      // مسموح
+          if (e) e.preventDefault();     // امنعي الرابط
 
-      Swal.fire({
-        icon: 'warning',
-        title: 'غير مسموح بالقراءة',
-        html: 'لا يمكنك قراءة المقالة قبل إنشاء حساب على الموقع أو تسجيل الدخول إذا كان لديك حساب.',
-        confirmButtonText: 'حسنًا'
-      });
+          var culture = '@culture'; // ar / en / fr
+          let title, htmlText;
 
-      return false;
-    }
-  </script>
+          if(culture === "ar") {
+            title = "تنبيه!";
+            htmlText = "لا يمكنك قراءة المقالة قبل إنشاء حساب على الموقع أو تسجيل الدخول إذا كان لديك حساب.";
+          } else if(culture === "fr") {
+            title = "Alerte!";
+            htmlText = "Vous ne pouvez pas lire cet article avant de vous connecter. Si vous avez un compte, connectez-vous ; sinon, créez-en un.";
+          } else {
+            title = "Alert!";
+            htmlText = "You cannot read this article before logging in. If you have an account, log in; otherwise, create a new account.";
+          }
+
+          Swal.fire({
+            icon: 'warning',
+            title: `<div style="direction: ${culture === 'ar' ? 'rtl' : 'ltr'}; text-align: center;">${title}</div>`,
+            html: `<div style="direction: ${culture === 'ar' ? 'rtl' : 'ltr'}; text-align: center;">${htmlText}</div>`,
+        confirmButtonText: culture === "ar" ? "حسنًا" : culture === "fr" ? "D'accord" : "OK"
+              });
+
+          return false;
+        }
+    </script>
 }
 </html>

@@ -187,7 +187,7 @@ namespace Foras_Khadra.Controllers
             if (isAdmin)
                 return RedirectToAction("Dashboard", "Admin");
             else
-                return RedirectToAction("Dashboard", "Organization");
+                return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Dashboard() => View();

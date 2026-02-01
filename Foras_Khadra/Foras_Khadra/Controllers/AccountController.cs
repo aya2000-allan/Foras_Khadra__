@@ -145,7 +145,7 @@ namespace Foras_Khadra.Controllers
             }
             else
             {
-                return RedirectToAction("Dashboard", "User");
+                return RedirectToAction("Index", "Home");
             }
         }
 

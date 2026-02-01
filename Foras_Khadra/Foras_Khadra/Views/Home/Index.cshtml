@@ -1,5 +1,12 @@
-﻿@{
+﻿@using Microsoft.Extensions.Options;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "Home Page";
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+
 }
 
 <!-- External styles and icon library -->
@@ -7,6 +14,7 @@
 <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
 /* ==== Latest Articles Cards (Swiper) ==== */
@@ -168,9 +176,29 @@
     opacity: .8;
 }
 
+    .swal-title-rtl {
+        direction: rtl;
+        text-align: center;
+    }
 
+    .swal-title-ltr {
+        direction: ltr;
+        text-align: center;
+    }
 
+    .swal-text-rtl {
+        direction: rtl;
+        text-align: center;
+    }
 
+    .swal-text-ltr {
+        direction: ltr;
+        text-align: center;
+    }
+
+    .swal-title, .swal-text {
+        text-align: center; /* دائماً وسط */
+    }
 
 
 
@@ -252,7 +280,7 @@
            <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg"> <circle cx="27" cy="27" r="27" fill="#F99D27"/> <path d="M21.9104 25.2275C22.0086 25.1232 22.1264 25.0392 22.257 24.9804C22.3877 24.9216 22.5287 24.8891 22.6719 24.8848C22.8151 24.8805 22.9578 24.9045 23.0917 24.9553C23.2257 25.0062 23.3483 25.0829 23.4526 25.1811C28.4729 29.9102 33.5101 32.7875 39.4379 34.2541C40.2376 32.0723 40.3085 29.6709 39.6179 27.3282C38.7015 24.2198 36.5674 21.5116 33.4481 19.4968C30.6635 17.6982 27.8804 17.2298 25.1879 16.777C21.791 16.2057 18.5824 15.6657 15.5204 12.4236C15.1794 12.065 14.7151 11.9211 14.2713 12.0377C13.764 12.1741 13.4238 12.575 13.2608 13.2377C12.879 14.7889 13.1244 19.1361 14.1983 23.7254C15.9226 31.0986 18.6744 34.8295 20.6797 36.6616C23.2706 39.0268 26.6538 40.3366 30.0158 40.3366C30.6495 40.3376 31.2824 40.2911 31.9092 40.1975C34.7531 39.7666 37.1204 38.3382 38.4547 36.26C32.3531 34.6727 27.1406 31.6543 21.9547 26.7718C21.8502 26.6734 21.7661 26.5554 21.7073 26.4245C21.6485 26.2935 21.6162 26.1523 21.612 26.0088C21.6079 25.8654 21.6322 25.7225 21.6833 25.5884C21.7345 25.4544 21.8117 25.3317 21.9104 25.2275ZM42.7795 34.9223C41.632 34.7457 40.5206 34.5241 39.4385 34.2561C39.2161 34.8635 38.9393 35.4495 38.6115 36.007C38.5617 36.0923 38.5092 36.1768 38.4554 36.26C39.7714 36.6007 41.1041 36.8738 42.4481 37.0782C42.5911 37.1033 42.7377 37.0996 42.8793 37.0674C43.0208 37.0351 43.1546 36.9749 43.2726 36.8903C43.3906 36.8057 43.4905 36.6984 43.5665 36.5747C43.6425 36.451 43.693 36.3133 43.7151 36.1698C43.7372 36.0263 43.7305 35.8798 43.6952 35.7389C43.66 35.5981 43.597 35.4657 43.5099 35.3495C43.4228 35.2333 43.3134 35.1357 43.1881 35.0623C43.0628 34.9889 42.9241 34.9413 42.7801 34.9223H42.7795Z" fill="white"/> </svg>
         </span>
 
-<h2 class="section-title m-0" style="color:#25652C; font-weight: bold;">آخر المقالات</h2>
+                <h2 class="section-title m-0" style="color:#25652C; font-weight: bold;">@Localizer["LatestArticles"]</h2>
     </div>
 
     <!-- يسار: عرض الكل -->
@@ -264,7 +292,7 @@
                   style="color:#25652C; font-size:18px;">
     </iconify-icon>
 
-    عرض الكل
+                @Localizer["ViewAll"]
 </a>
 
 
@@ -278,6 +306,22 @@
 
                 @foreach (var article in Model.LatestArticles)
                 {
+                 
+   
+        var title = culture == "ar" ? article.TitleAr
+                  : culture == "en" ? article.TitleEn
+                  : article.TitleFr;
+
+        var content = culture == "ar" ? article.ContentAr
+                    : culture == "en" ? article.ContentEn
+                    : article.ContentFr;
+
+        var author = culture == "ar"
+                    ? "فرص خضراء"
+                    : "Foras Khadra";
+
+    
+
                     <div class="swiper-slide">
                         <div class="article-card">
 
@@ -285,33 +329,33 @@
                                 <img src="@(!string.IsNullOrEmpty(article.ImagePath)
                                                                  ? article.ImagePath
                                                                  : "/images/default-article.jpg")"
-                                                                                                 alt="@article.TitleAr" />
+                                                                                                                                      alt="@title" />
                                                                                         </div>
 
                          <div class="article-body">
 
     <div class="article-meta">
-        <span class="meta-author">@article.Author</span>
+                                    <span class="meta-author">@author</span>
         <span class="meta-date">@article.PublishDate.ToString("dd MMM yyyy")</span>
     </div>
 
     <h5 class="article-title">
-        @article.TitleAr
+                                    @title
     </h5>
 
     <p class="article-desc">
-        @(article.ContentAr.Length > 120
-            ? article.ContentAr.Substring(0, 120) + "..."
-            : article.ContentAr)
+                                    @(content.Length > 120
+                                                                    ? content.Substring(0, 120) + "..."
+                                                                    : content)
     </p>
 
-    <a asp-controller="Articles"
-       asp-action="Details"
-       asp-route-id="@article.Id"
-       class="read-more">
-        اقرأ المزيد
-        <iconify-icon icon="mdi:arrow-left"></iconify-icon>
-    </a>
+                                <a href="javascript:void(0);"
+                                   class="read-more btn-read-more"
+                                   data-article-id="@article.Id">
+                                    @Localizer["ReadMore"]
+                                    <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                                </a>
+
 
 </div>
 
@@ -332,6 +376,7 @@
 
     </div>
 </section>
+
 
 <script>
     const container = document.getElementById("floatingShapes");
@@ -426,3 +471,51 @@
         }
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.querySelectorAll(".btn-read-more").forEach(btn => {
+        btn.addEventListener("click", function() {
+            var isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+            var culture = '@culture'; // ar / en / fr
+
+            if(!isAuthenticated) {
+                let title, text, titleClass, textClass, confirmText;
+
+                if(culture === "ar") {
+                    title = "تنبيه!";
+                    text = "لا يمكن قراءة هذا المقال قبل تسجيل الدخول. إذا كان لديك حساب، قم بتسجيل الدخول، وإذا لم يكن لديك حساب، أنشئ حسابًا جديدًا.";
+                    titleClass = "swal-title-rtl";
+                    textClass = "swal-text-rtl";
+                    confirmText = "حسنًا";
+                } else if(culture === "fr") {
+                    title = "Alerte!";
+                    text = "Vous ne pouvez pas lire cet article avant de vous connecter. Si vous avez un compte, connectez-vous ; sinon, créez-en un.";
+                    titleClass = "swal-title-ltr";
+                    textClass = "swal-text-ltr";
+                    confirmText = "D'accord";
+                } else {
+                    title = "Alert!";
+                    text = "You cannot read this article before logging in. If you have an account, log in; otherwise, create a new account.";
+                    titleClass = "swal-title-ltr";
+                    textClass = "swal-text-ltr";
+                    confirmText = "OK";
+                }
+
+                Swal.fire({
+                    title: `<div class="${titleClass}">${title}</div>`,
+                    html: `<div class="${textClass}">${text}</div>`,
+                    icon: "info",
+                    confirmButtonText: confirmText,
+                    customClass: {
+                        popup: 'swal-popup'
+                    }
+                });
+            } else {
+                var articleId = btn.dataset.articleId;
+                window.location.href = '/Articles/Details/' + articleId;
+            }
+        });
+    });
+</script>
+

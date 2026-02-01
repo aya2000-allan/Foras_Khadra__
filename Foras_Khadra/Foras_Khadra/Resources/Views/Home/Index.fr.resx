@@ -117,76 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Articles" xml:space="preserve">
-    <value>Articles</value>
+  <data name="LatestArticles" xml:space="preserve">
+    <value>Derniers articles</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Accueil</value>
+  <data name="ReadMore" xml:space="preserve">
+    <value>Lire la suite</value>
   </data>
-  <data name="News" xml:space="preserve">
-    <value>Nouvelles</value>
-  </data>
-  <data name="Opportunities" xml:space="preserve">
-    <value>Opportunités</value>
-  </data>
-  <data name="Competitions" xml:space="preserve">
-    <value>Compétitions</value>
-  </data>
-  <data name="Conferences" xml:space="preserve">
-    <value>Conférences</value>
-  </data>
-  <data name="Jobs" xml:space="preserve">
-    <value>Emplois</value>
-  </data>
-  <data name="Scholarships" xml:space="preserve">
-    <value>Bourses</value>
-  </data>
-  <data name="Fellowships" xml:space="preserve">
-    <value>Bourses de recherche</value>
-  </data>
-  <data name="Internships" xml:space="preserve">
-    <value>Stages</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Déconnexion</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Connexion</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Inscription</value>
-  </data>
-  <data name="Individual" xml:space="preserve">
-    <value>Individuel</value>
-  </data>
-  <data name="Organization" xml:space="preserve">
-    <value>Pour l'organisation</value>
-  </data>
-  <data name="VolunteeringOpportunities" xml:space="preserve">
-    <value>Opportunités de bénévolat</value>
-  </data>
-  <data name="AccountSettings" xml:space="preserve">
-    <value>Paramètres du compte</value>
-  </data>
-  <data name="AddOpportunity" xml:space="preserve">
-    <value>Ajouter une opportunité</value>
-  </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Contact</value>
-  </data>
-  <data name="About" xml:space="preserve">
-    <value>À propos</value>
-  </data>
-  <data name="AllOpportunities" xml:space="preserve">
-    <value>Toutes les opportunités</value>
-  </data>
-  <data name="All rights reserved © 2025" xml:space="preserve">
-    <value>Tous droits réservés © 2025</value>
-  </data>
-  <data name="AboutUs" xml:space="preserve">
-    <value>À propos</value>
-  </data>
-  <data name="ContactUs" xml:space="preserve">
-    <value>Contact</value>
+  <data name="ViewAll" xml:space="preserve">
+    <value>Voir tout</value>
   </data>
 </root>

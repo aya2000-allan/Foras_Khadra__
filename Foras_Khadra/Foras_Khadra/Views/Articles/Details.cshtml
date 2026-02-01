@@ -1,11 +1,15 @@
 ﻿@model Article
 @using System
 @using System.Linq
-
+@using Microsoft.Extensions.Options;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Model.TitleAr;
-
-    // قديم (اختياري)
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+  
     var readAlso = ViewBag.ReadAlso as IEnumerable<Article> ?? Enumerable.Empty<Article>();
 
     // الجديد: آخر 3 مقالات
@@ -48,13 +52,21 @@
 
                     <!-- Title + Author -->
                    <div class="news-top-meta">
-    <span class="news-top-title">@Model.TitleAr</span>
-@if (!string.IsNullOrWhiteSpace(Model.Author) && Model.Author.Trim() == "فرص خضراء")
+                        <span class="news-top-title">
+                            @(culture == "ar" ? Model.TitleAr :
+                                                        culture == "en" ? Model.TitleEn :
+                                                        Model.TitleFr)
+                        </span>@if (!string.IsNullOrWhiteSpace(Model.Author) && Model.Author.Trim() == "فرص خضراء")
 {
-    <span class="news-top-author author-green">
-        فرص خضراء
-        <i class="fa-solid fa-circle-check author-verified" aria-hidden="true"></i>
-    </span>
+                            <span class="news-top-author @(Model.Author.Trim() == "فرص خضراء" ? "author-green" : "")">
+                                @(Model.Author.Trim() == "فرص خضراء"
+                                                            ? (culture == "ar" ? "فرص خضراء" : "Foras Khadra")
+                                                            : Model.Author)
+                            @if (Model.Author.Trim() == "فرص خضراء")
+                                {
+                                    <i class="fa-solid fa-circle-check author-verified" aria-hidden="true"></i>
+                                }
+                            </span>
 }
 else
 {
@@ -86,7 +98,9 @@ else
                     <!-- ===== Main Content ===== -->
                     <div class="news-main-content">
                         <div class="news-content">
-                            @Html.Raw(Model.ContentAr)
+                            @(culture == "ar" ? Html.Raw(Model.ContentAr) :
+                                                        culture == "en" ? Html.Raw(Model.ContentEn) :
+                                                        Html.Raw(Model.ContentFr))
                         </div>
                     </div>
 
@@ -98,7 +112,7 @@ else
                         <!-- Read Also -->
                         <section class="sideblock">
                             <div class="sideblock-head">
-                                <h3 class="sideblock-title">اقرأ أيضًا</h3>
+                                    <h3 class="sideblock-title">@Localizer["ReadAlso"]</h3>
 
                                 <span class="sideblock-icon" aria-hidden="true">
                                     <svg width="54" height="54" viewBox="0 0 54 54" fill="none"
@@ -135,8 +149,11 @@ else
 
             <!-- المحتوى -->
             <div class="readalso-content">
-                <div class="readalso-title">@a.TitleAr</div>
-                <div class="readalso-date">
+                                                <div class="readalso-title">
+                                                    @(culture == "ar" ? a.TitleAr :
+                                                                                                culture == "en" ? a.TitleEn :
+                                                                                                a.TitleFr)
+                                        </div>                <div class="readalso-date">
                     @a.PublishDate.ToString("dd MMM yyyy")
                 </div>
             </div>
@@ -147,7 +164,7 @@ else
 </div>
 
 
-                            <a asp-controller="Home" asp-action="Articles" class="sideblock-more">عرض المزيد من المقالات</a>
+                                <a asp-controller="Home" asp-action="Articles" class="sideblock-more">  @Localizer["ShowMoreArticles"] </a>
                         </section>
 
                     </aside>
