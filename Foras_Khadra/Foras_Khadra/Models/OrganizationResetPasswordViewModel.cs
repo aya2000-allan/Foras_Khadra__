@@ -1,22 +1,38 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Foras_Khadra.Resources.Views.Account;
+using System.ComponentModel.DataAnnotations;
 
 namespace Foras_Khadra.Models
 {
     public class OrganizationResetPasswordViewModel
     {
+        [Required(
+            ErrorMessageResourceType = typeof(ResetPasswordResources),
+            ErrorMessageResourceName = nameof(ResetPasswordResources.EmailRequired))]
+        [EmailAddress(
+            ErrorMessageResourceType = typeof(ResetPasswordResources),
+            ErrorMessageResourceName = nameof(ResetPasswordResources.EmailInvalid))]
         public string Email { get; set; }
         public string Token { get; set; }
 
-        [Required(ErrorMessage = "كلمة المرور مطلوبة")]
+        [Required(
+            ErrorMessageResourceType = typeof(ResetPasswordResources),
+            ErrorMessageResourceName = nameof(ResetPasswordResources.PasswordRequired))]
         [DataType(DataType.Password)]
-        [StringLength(100, MinimumLength = 8, ErrorMessage = "كلمة المرور يجب أن تكون على الأقل 8 أحرف")]
+        [StringLength(100, MinimumLength = 8,
+            ErrorMessageResourceType = typeof(ResetPasswordResources),
+            ErrorMessageResourceName = nameof(ResetPasswordResources.PasswordLength))]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$",
-            ErrorMessage = "كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم ورمز خاص")]
+            ErrorMessageResourceType = typeof(ResetPasswordResources),
+            ErrorMessageResourceName = nameof(ResetPasswordResources.PasswordComplexity))]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "تأكيد كلمة المرور مطلوب")]
+        [Required(
+            ErrorMessageResourceType = typeof(ResetPasswordResources),
+            ErrorMessageResourceName = nameof(ResetPasswordResources.ConfirmPasswordRequired))]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "كلمة المرور غير متطابقة")]
+        [Compare("Password",
+            ErrorMessageResourceType = typeof(ResetPasswordResources),
+            ErrorMessageResourceName = nameof(ResetPasswordResources.PasswordMismatch))]
         public string ConfirmPassword { get; set; }
     }
 
