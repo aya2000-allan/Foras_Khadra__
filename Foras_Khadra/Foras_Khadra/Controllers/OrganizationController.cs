@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Nager.Country;
 using System;
 using System.Collections.Generic;
@@ -21,17 +22,19 @@ namespace Foras_Khadra.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IStringLocalizer<OrganizationController> _localizer;
 
         public OrganizationController(
             ApplicationDbContext context,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IStringLocalizer<OrganizationController> localizer)
         {
             _context = context;
             _signInManager = signInManager;
             _userManager = userManager;
             _emailSender = emailSender;
+            _localizer = localizer;
         }
 
         private List<SelectListItem> GetCountries()
@@ -163,10 +166,13 @@ namespace Foras_Khadra.Controllers
             var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
             var isNormalUser = await _userManager.IsInRoleAsync(user, "User"); // المستخدم العادي
 
-            if (isNormalUser)
+
+            if (await _userManager.IsInRoleAsync(user, "User")) // المستخدم العادي
             {
-                ModelState.AddModelError("", "المستخدم العادي لا يمكنه تسجيل الدخول هنا");
-                return View(model);
+                TempData["UserLoginAlert"] = _localizer["UserLoginAlert"].Value; // النص العربي/الإنجليزي/الفرنسي
+                TempData["UserLoginRedirectText"] = _localizer["UserLoginRedirectText"].Value; // نص الزر
+                TempData["UserLoginRedirect"] = Url.Action("Login", "Account"); // صفحة تسجيل دخول المستخدمين
+                return RedirectToAction("Login");
             }
 
             // تحقق كلمة المرور

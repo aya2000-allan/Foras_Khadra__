@@ -117,77 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Articles" xml:space="preserve">
-    <value>Articles</value>
+  <data name="OrgLoginRedirectText" xml:space="preserve">
+    <value>Aller à la connexion de l'organisation</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
-  </data>
-  <data name="News" xml:space="preserve">
-    <value>News</value>
-  </data>
-  <data name="Opportunities" xml:space="preserve">
-    <value>Opportunities</value>
-  </data>
-  <data name="Competitions" xml:space="preserve">
-    <value>Competitions</value>
-  </data>
-  <data name="Conferences" xml:space="preserve">
-    <value>Conferences</value>
-  </data>
-  <data name="Jobs" xml:space="preserve">
-    <value>Jobs</value>
-  </data>
-  <data name="Scholarships" xml:space="preserve">
-    <value>Scholarships</value>
-  </data>
-  <data name="Fellowships" xml:space="preserve">
-    <value>Fellowships</value>
-  </data>
-  <data name="Internships" xml:space="preserve">
-    <value>Internships</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Register</value>
-  </data>
-  <data name="Individual" xml:space="preserve">
-    <value>Individual</value>
-  </data>
-  <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
-  </data>
-  <data name="VolunteeringOpportunities" xml:space="preserve">
-    <value>Volunteering Opportunities</value>
-  </data>
-  <data name="AccountSettings" xml:space="preserve">
-    <value>Account Settings</value>
-  </data>
-  <data name="AddOpportunity" xml:space="preserve">
-    <value>My Opportunities</value>
-  </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Contact Us</value>
-  </data>
-  <data name="About" xml:space="preserve">
-    <value>About Us</value>
-  </data>
-  <data name="AllOpportunities" xml:space="preserve">
-    <value>All Opportunities</value>
-  </data>
-  <data name="All rights reserved © 2025" xml:space="preserve">
-    <value>All rights reserved © 2025
-</value>
-  </data>
-  <data name="AboutUs" xml:space="preserve">
-    <value>About Us</value>
-  </data>
-  <data name="ContactUs" xml:space="preserve">
-    <value>Contact Us</value>
+  <data name="OrgLoginAlert" xml:space="preserve">
+    <value>Les organisations ne peuvent pas se connecter ici !!</value>
   </data>
 </root>

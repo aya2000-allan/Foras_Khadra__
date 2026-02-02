@@ -76,15 +76,53 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
+        // Toggle Password
         function togglePassword() {
             const el = document.getElementById('Password');
             el.type = (el.type === 'password') ? 'text' : 'password';
         }
+
+        // SweetAlert for Organization Login
+        @if (TempData["OrgLoginAlert"] != null)
+        {
+                <text>
+                    const message = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["OrgLoginAlert"]));
+                    const redirectUrl = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["OrgLoginRedirect"]));
+                    const redirectText = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["OrgLoginRedirectText"]));
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: message,
+                        confirmButtonText: redirectText,
+                        allowOutsideClick: false,
+                        customClass: {
+                            popup: 'swal2-popup-center',
+                            title: 'swal2-title-center'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed && redirectUrl) {
+                            window.location.href = redirectUrl;
+                        }
+                    });
+                </text>
+        }
     </script>
+
+    <style>
+        /* SweetAlert Center Text */
+        .swal2-popup-center {
+            direction: ltr; /* اتجاه عادي للصفحة */
+            text-align: center;
+        }
+
+        .swal2-title-center {
+            text-align: center;
+        }
+    </style>
 }
 
 <style>
@@ -100,6 +138,7 @@
         overflow:hidden;
         font-family: "Tajawal", "Cairo", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
     }
+
 
     /* Big soft circle like the screenshot */
     .auth-bg-circle{

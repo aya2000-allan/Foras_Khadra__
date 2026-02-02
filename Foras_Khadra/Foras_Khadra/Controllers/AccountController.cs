@@ -2,11 +2,12 @@
 using Foras_Khadra.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using NETCore.MailKit.Core;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using NETCore.MailKit.Core;
 
 namespace Foras_Khadra.Controllers
 {
@@ -15,6 +16,7 @@ namespace Foras_Khadra.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly Microsoft.AspNetCore.Identity.UI.Services.IEmailSender _emailSender;
+        private readonly IStringLocalizer<AccountController> _localizer;
 
         // بيانات Admin الثابت
         private const string AdminEmail = "admin@org.com";
@@ -23,11 +25,12 @@ namespace Foras_Khadra.Controllers
         public AccountController(
             Microsoft.AspNetCore.Identity.UI.Services.IEmailSender emailSender,
             SignInManager<ApplicationUser> signInManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, IStringLocalizer<AccountController> localizer)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _emailSender = emailSender;
+            _localizer = localizer;
         }
 
         // ===== GET: RegisterUser =====
@@ -117,12 +120,16 @@ namespace Foras_Khadra.Controllers
                 return View(model);
             }
 
-            // **تأكد أن المستخدم ليس منظمة**
             if (await _userManager.IsInRoleAsync(user, "Organization"))
             {
-                ModelState.AddModelError("", "لا يمكن للمنظمات تسجيل الدخول من هنا");
-                return View(model);
+                TempData["OrgLoginAlert"] = _localizer["OrgLoginAlert"].Value; // نص عربي/إنجليزي جاهز
+                TempData["OrgLoginRedirectText"] = _localizer["OrgLoginRedirectText"].Value;
+                TempData["OrgLoginRedirect"] = Url.Action("Login", "Organization");
+                return RedirectToAction("Login");
             }
+
+
+
 
             // تحقق كلمة المرور باستخدام SignInManager
             var result = await _signInManager.PasswordSignInAsync(
