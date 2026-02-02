@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foras_Khadra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260131094854_LastUpdate")]
-    partial class LastUpdate
+    [Migration("20260201222605_UpdateLOrgOpportunity")]
+    partial class UpdateLOrgOpportunity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

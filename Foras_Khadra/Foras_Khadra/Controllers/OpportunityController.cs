@@ -157,6 +157,7 @@ namespace Foras_Khadra.Controllers
             if (!string.IsNullOrEmpty(model.Benefits)) old.Benefits = model.Benefits;
             if (!string.IsNullOrEmpty(model.ApplyLink)) old.ApplyLink = model.ApplyLink;
 
+            
             // **تحديد الناشر تلقائياً حسب من أنشأ الفرصة**
             var creator = await _userManager.FindByIdAsync(old.CreatedByUserId);
             if (await _userManager.IsInRoleAsync(creator, "Organization"))
@@ -168,9 +169,26 @@ namespace Foras_Khadra.Controllers
             {
                 old.PublishedBy = "Admin";
             }
-            _context.SaveChanges();
-            // تحديد المستخدم الحالي
+
             var currentUser = await _userManager.GetUserAsync(User);
+            var orgCurrent = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == currentUser.Id);
+
+            if (orgCurrent != null)
+            {
+                var reelsRequest = await _context.ReelsRequests
+                    .FirstOrDefaultAsync(r => r.OpportunityId == old.Id && r.OrganizationId == orgCurrent.Id);
+
+                if (reelsRequest != null && reelsRequest.IsRejected)
+                {
+                    reelsRequest.IsRejected = false;
+                    reelsRequest.RejectionReason = null;
+                    reelsRequest.IsCompleted = false;
+                    reelsRequest.IsInProgress = false;
+                    reelsRequest.RequestDate = DateTime.Now; // إعادة ضبط التاريخ
+                }
+            }
+
+            await _context.SaveChangesAsync();
 
             // إعادة التوجيه حسب الدور
             if (await _userManager.IsInRoleAsync(currentUser, "Admin"))
@@ -281,7 +299,9 @@ namespace Foras_Khadra.Controllers
                         HasRequestedReels = request != null,
                         IsReelsCompleted = request != null && request.IsCompleted,
                         IsReelsRejected = request != null && request.IsRejected,         // ✅ مرفوض
-                        RejectionReason = request != null ? request.RejectionReason : "" // ✅ سبب الرفض
+                        RejectionReason = request != null ? request.RejectionReason : "" ,// ✅ سبب الرفض
+                        IsReelsInProgress = request != null && request.IsInProgress
+
                     };
                 }).ToList()
             };
