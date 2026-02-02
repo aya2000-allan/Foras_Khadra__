@@ -35,29 +35,29 @@
             direction: rtl;
         }
 
-    .contact-form .iti__flag-container,
-    .contact-form .iti__selected-flag {
-        border-radius: 0 16px 16px 0 !important;
-        overflow: hidden;
-    }
-
-    .contact-form .iti__flag-container {
-        padding: 0 !important;
-        margin: 0 !important;
-        width: auto;
-        border-radius: 16px;
-    }
-
-    .contact-form .iti__selected-flag {
-        padding: 0 12px;
-        margin: 0;
-    }
-
     .contact-form .iti input::placeholder {
         color: #6c757d;
         opacity: 1;
     }
+
+    .contact-form .iti__flag-container,
+    .contact-form .iti__selected-flag {
+        border-radius:  16px 0 0 16px  !important;
+        overflow: hidden;
+    }
 </style>
+
+@if (dir == "rtl")
+{
+    <style>
+        .contact-form .iti__flag-container,
+        .contact-form .iti__selected-flag {
+            border-radius: 0 16px 16px 0 !important;
+            overflow: hidden;
+
+        }
+    </style>
+}
 
 <body>
 
@@ -148,6 +148,8 @@
                 utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js"
             });
 
+            print(iti);
+
             const form = document.getElementById('contactForm');
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -192,7 +194,7 @@
                         console.log(err.message);
                         Swal.fire({
                             icon: 'error',
-                            title: '@Localizer["ErrorTitle"]',
+                            title: "@Localizer["ErrorTitle"]", //this was thowing an error in french because of the single qoute '
                             text: '@Localizer["ErrorText"]'
                         });
                     });
