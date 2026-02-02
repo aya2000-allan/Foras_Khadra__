@@ -147,6 +147,9 @@
   <data name="NoAccount" xml:space="preserve">
     <value>Vous n’avez pas de compte ?</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Se connecter</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Mot de passe</value>
   </data>

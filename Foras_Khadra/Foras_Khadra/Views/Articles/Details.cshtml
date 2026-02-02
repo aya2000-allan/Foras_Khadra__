@@ -6,7 +6,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Model.TitleAr;
+    
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
   
@@ -24,6 +24,9 @@
     var shareFacebook = $"https://www.facebook.com/sharer/sharer.php?u={encodedUrl}";
     var shareLinkedIn = $"https://www.linkedin.com/sharing/share-offsite/?url={encodedUrl}";
     var shareWhatsApp = $"https://wa.me/?text={encodedTitle}%20{encodedUrl}";
+    ViewData["Title"] = culture == "ar" ? Model.TitleAr :
+                         culture == "en" ? Model.TitleEn :
+                         Model.TitleFr;
 }
 
 @section Styles {

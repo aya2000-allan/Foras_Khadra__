@@ -123,6 +123,9 @@
   <data name="ReadMore" xml:space="preserve">
     <value>Lire la suite</value>
   </data>
+  <data name="Title" xml:space="preserve">
+    <value>Page d'accueil</value>
+  </data>
   <data name="ViewAll" xml:space="preserve">
     <value>Voir tout</value>
   </data>

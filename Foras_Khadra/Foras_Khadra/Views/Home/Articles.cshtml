@@ -2,6 +2,8 @@
 @{
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
+    ViewData["Title"] = Localizer["Title"];
+
 }
 <html lang="@culture" dir="@dir">
 
