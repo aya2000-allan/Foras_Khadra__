@@ -196,5 +196,21 @@
   <data name="Footer_Heading_Line2" xml:space="preserve">
     <value>Youth of the Arab World</value>
   </data>
+<data name="Policies" xml:space="preserve">
+  <value>Our Policies</value>
+</data>
+<data name="PrivacyPolicy" xml:space="preserve">
+  <value>Privacy Policy</value>
+</data>
+<data name="UsagePolicy" xml:space="preserve">
+  <value>Usage Policy</value>
+</data>
+<data name="TermsAndConditions" xml:space="preserve">
+  <value>Terms &amp; Conditions</value>
+</data>
+
+<data name="BrowseJobs" xml:space="preserve">
+  <value>Browse Jobs</value>
+</data>
 
 </root>
