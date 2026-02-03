@@ -2,62 +2,584 @@
 @using Foras_Khadra.Helpers
 @using Microsoft.AspNetCore.Mvc.Rendering
 
-<h2 class="mb-4">جميع الفرص</h2>
-<form method="get" class="row mb-4 g-2">
-    <!-- فلتر النوع -->
-    <div class="col-md-4">
-        <select name="type" class="form-select">
-            <option value="">كل الفرص</option>
-            @foreach (var item in Model.TypeSelectList)
-            {
-                <option value="@item.Value" selected="@(item.Selected ? "selected" : null)">
-                    @item.Text
-                </option>
-            }
-        </select>
-    </div>
+<style>
+    :root {
+        --primary-green: #25652C;
+        --accent-orange: #F99D27;
+        --light-green-bg: #DEE8DF;
+        --filter-gray: #B6C7B9;
+        --search-btn-green: #2D6A31;
+    }
 
-    <!-- فلتر الدولة -->
-    <div class="col-md-4">
-        <input type="text"
-               name="country"
-               class="form-control"
-               placeholder="اكتب اسم الدولة"
-               value="@Model.SelectedCountry" />
-    </div>
+    .page-wrapper {
+        direction: rtl;
+        margin-top: 35px;
+        position: relative;
+    }
+
+    /* --- Restored Header Styles --- */
+    .custom-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
+        margin-bottom: 30px;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 15px; /* Restored your gap */
+    }
+
+    .header-logo {
+        background-color: var(--accent-orange);
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+    }
+
+    .header-title {
+        color: var(--primary-green);
+        font-weight: 700;
+        font-size: 2rem;
+        margin: 0;
+    }
+
+    .filter-btn {
+        background-color: var(--light-green-bg);
+        border: 1px solid #BBCFBE;
+        border-radius: 6px;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        color: var(--primary-green);
+    }
+
+    /* --- Filter Windows --- */
+    .filter-window {
+        position: absolute;
+        top: 75px;
+        left: 0;
+        width: 320px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        z-index: 1050;
+        display: none;
+    }
+
+    /* This positions the sub-menu relative to the main filter window */
+    .sub-filter-menu {
+        position: absolute;
+        top: 0;
+        left: 102%; /* Pops out to the right side of the main window */
+        width: 280px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        z-index: 1060;
+        display: none;
+        padding: 15px;
+    }
+
+    .filter-window-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        border-bottom: 2px solid #3B82F6;
+    }
+
+    .filter-option-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        cursor: pointer;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+        .filter-option-item.active {
+            background-color: var(--filter-gray);
+            color: var(--primary-green);
+        }
+
+    /* Sub-menu checkbox list styles */
+    /* Ensure the list is scrollable */
+    .checkbox-list {
+        max-height: 200px;
+        overflow-y: auto;
+        padding-right: 5px; /* Space for the scrollbar */
+        direction: rtl; /* Keeps scrollbar on the correct side for Arabic */
+    }
+
+        /* 1. Define the overall width of the scrollbar */
+        .checkbox-list::-webkit-scrollbar {
+            width: 6px;
+            display: block; /* Ensures it stays visible */
+        }
+
+        /* 2. Style the draggable handle (the "thumb") */
+        .checkbox-list::-webkit-scrollbar-thumb {
+            background: #ddd; /* Matches the grey color in your screenshot */
+            border-radius: 10px;
+        }
+
+        /* 3. Style the background track */
+        .checkbox-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        /* 4. HIDE THE ARROWS (The buttons at the top and bottom) */
+        .checkbox-list::-webkit-scrollbar-button {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+        font-size: 0.9rem;
+    }
+
+    .sub-menu-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 15px;
+        padding-top: 10px;
+        border-top: 1px solid #eee;
+    }
+
+    .btn-search-sub {
+        background-color: var(--search-btn-green);
+        color: white;
+        border: none;
+        padding: 5px 20px;
+        border-radius: 6px;
+    }
+
+    .btn-cancel-sub {
+        background: none;
+        border: none;
+        color: var(--search-btn-green);
+        cursor: pointer;
+    }
+
+    /* --- Card Grid --- */
+    .opp-card {
+        border: 1px solid #f0f0f0;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+        padding: 15px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .opp-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        margin-bottom: 12px;
+    }
+
+    .opp-category-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
+
+    .type-tag, .category-tag {
+        color: #F99D27;
+    }
 
 
-    <div class="col-md-4 d-flex gap-2">
-        <button type="submit" class="btn btn-primary">فلترة</button>
-        <a href="@Url.Action("AllOpportunities", "Home")" class="btn btn-secondary">إعادة ضبط</a>
-    </div>
-</form>
 
-@if (!Model.Opportunities.Any())
-{
-    <p>لا توجد فرص حالياً.</p>
-}
-else
-{
-    <div class="row">
+    .opp-title {
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #000;
+    }
+
+
+
+    .opp-description {
+        font-size: 1.2rem;
+        font-weight: 300;
+        color: #000;
+        margin-bottom: 20px;
+    }
+
+
+
+    .btn-details {
+        background-color: var(--accent-orange);
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 12px;
+        border-radius: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        margin-top: auto;
+    }
+
+    /* --- Pagination Styling --- */
+    .pagination-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding-top: 20px;
+        /*border-top: 1px solid #eee; /* Subtle top separator */
+        direction: rtl;
+    }
+
+    /* Text Link Styling */
+    .next-page-prompt a {
+        color: var(--primary-green);
+        text-decoration: underline;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    /* Page Numbers Container */
+    .pagination-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Individual Boxes */
+    .page-link-num, .pagination-arrow {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #DDE2E5;
+        border-radius: 4px;
+        background-color:white;
+        text-decoration: none;
+        color: #212B36;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+        /* The Active Page (Green Border) */
+        .page-link-num.active {
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+        }
+
+    /* Grey Arrow Styling */
+    .prev-arrow {
+        background-color: #919EAB; /* Light grey background from screenshot */
+        border: none;
+        color: #C4CDD5;
+    }
+
+    .next-arrow {
+        background-color: transparent;
+        color: #CBD5E1;
+    }
+
+    .page-link-dots {
+        color: #718096;
+        padding: 0 5px;
+    }
+
+    .page-link-num:hover:not(.active) {
+        background-color: #f7f9fc;
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<div class="page-wrapper container">
+    <header class="custom-header">
+        <div class="header-right">
+            <div class="header-logo">
+                <img src="/images/about_us_leaf.svg" alt="Logo" />
+            </div>
+            <h1 class="header-title">جميع الفرص</h1>
+        </div>
+        <div class="header-left">
+            <div class="search-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+            <div class="filter-btn" id="filterToggleBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+            </div>
+        </div>
+
+        <div class="filter-window shadow" id="filterWindow">
+            <div class="filter-window-header">
+                <span class="sort-by-label">
+                    عرض حسب
+                    <i class="bi bi-caret-up-fill" style="font-size: 0.7rem; color: #B6C7B9;"></i>
+                </span>
+                <a href="@Url.Action("AllOpportunities", "Home")" class="reset-link">إعادة ضبط</a>
+            </div>
+
+            <form method="get">
+                <div class="filter-option-item active" id="typeOptionTrigger">
+                    <span>نوع الفرصة</span>
+                    <i class="bi bi-caret-left-fill"></i>
+                </div>
+
+                
+                <div class="filter-option-item" id="countryOptionTrigger">
+                    <span>الدولة</span>
+                    <i class="bi bi-caret-left-fill"></i>
+                </div>
+
+                <div class="sub-filter-menu shadow" id="countrySubMenu">
+                    <div class="p-2">
+                        <label class="form-label mb-2" style="font-size: 0.9rem; color: #666;">أدخل اسم الدولة</label>
+                        <input type="text" name="country" class="form-control border-1 shadow-sm"
+                               placeholder="السودان" value="@Model.SelectedCountry" id="countryInput"
+                               style="font-size: 0.9rem; direction: rtl;">
+                    </div>
+                    <div class="sub-menu-footer mt-3">
+                        <button type="button" class="btn-cancel-sub" id="cancelCountrySub">إلغاء</button>
+                        <button type="submit" class="btn-search-sub">بحث</button>
+                    </div>
+                </div>
+
+                <div class="sub-filter-menu shadow" id="typeSubMenu">
+                    <div class="checkbox-list">
+                    
+                        @foreach (var item in Model.TypeSelectList)
+                        {
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="type" value="@item.Value" @(item.Selected ? "checked" : "")> @item.Text
+                            </label>
+                        }
+                    </div>
+                    <div class="sub-menu-footer">
+                        <button type="button" class="btn-cancel-sub" id="cancelSub">إلغاء</button>
+                        <button type="submit" class="btn-search-sub">بحث</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <div class="row g-4">
         @foreach (var opp in Model.Opportunities)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
+            <div class="col-lg-4 col-md-6">
+                <div class="opp-card shadow-sm">
                     @if (!string.IsNullOrEmpty(opp.ImagePath))
                     {
-                        <img src="@opp.ImagePath" class="card-img-top" alt="@opp.Title">
+                        <img src="@opp.ImagePath" class="opp-image" alt="@opp.Title">
                     }
-                    <div class="card-body">
-                        <h5 class="card-title">@opp.Title</h5>
-                        <p class="card-text">@opp.Description</p>
-                        <p><strong>الدولة:</strong> @opp.AvailableCountries</p>
-                        <p><strong>النوع:</strong> @opp.Type.GetDisplayName()</p>
-                        <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })"
-                           class="btn btn-primary btn-sm">عرض التفاصيل</a>
+                    <div class="opp-category-row">
+                        <span class="type-tag">@opp.Type.GetDisplayName()</span>
+                        <span class="category-tag">@opp.AvailableCountries</span>
                     </div>
+                    <h3 class="opp-title">@opp.Title</h3>
+                    <p class="opp-description">@opp.Description</p>
+                    <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">عرض التفاصيل</a>
                 </div>
             </div>
         }
     </div>
-}
+    <div class="pagination-container mt-5 mb-5">
+        <div class="next-page-prompt">
+            <a href="#">انتقل إلى الصفحة التالية</a>
+        </div>
+        <div class="pagination-controls">
+            <a href="#" class="pagination-arrow next-arrow"><i class="bi bi-chevron-right"></i></a>
+            <a href="#" class="page-link-num">10</a>
+            <a href="#" class="page-link-num">9</a>
+            <span class="page-link-dots">...</span>   
+            <a href="#" class="page-link-num">2</a>
+            <a href="#" class="page-link-num active">1</a>
+            <a href="#" class="pagination-arrow prev-arrow"><i class="bi bi-chevron-left"></i></a>
+
+        </div>
+
+       
+    </div>
+</div>
+
+<script>
+    const filterBtn = document.getElementById('filterToggleBtn');
+    const filterWindow = document.getElementById('filterWindow');
+
+    // Triggers
+    const typeTrigger = document.getElementById('typeOptionTrigger');
+    const countryTrigger = document.getElementById('countryOptionTrigger');
+
+    // Sub-menus
+    const typeSubMenu = document.getElementById('typeSubMenu');
+    const countrySubMenu = document.getElementById('countrySubMenu');
+
+    // Cancel buttons
+    const cancelSub = document.getElementById('cancelSub');
+    const cancelCountrySub = document.getElementById('cancelCountrySub');
+
+    // Helper to clear active states
+    function clearActiveStates() {
+        typeTrigger.classList.remove('active');
+        countryTrigger.classList.remove('active');
+    }
+
+    // Toggle Main Menu
+    filterBtn.addEventListener('click', (e) => {
+        const isOpening = filterWindow.style.display !== 'block';
+        filterWindow.style.display = isOpening ? 'block' : 'none';
+
+        // When closing the main window, close all submenus too
+        if (!isOpening) {
+            typeSubMenu.style.display = 'none';
+            countrySubMenu.style.display = 'none';
+            clearActiveStates();
+        }
+        e.stopPropagation();
+    });
+
+    // Toggle Type Sub-Menu
+    typeTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpening = typeSubMenu.style.display !== 'block';
+
+        // Close Country menu
+        countrySubMenu.style.display = 'none';
+        clearActiveStates();
+
+        if (isOpening) {
+            typeSubMenu.style.display = 'block';
+            typeTrigger.classList.add('active');
+        } else {
+            typeSubMenu.style.display = 'none';
+        }
+    });
+
+    // Toggle Country Sub-Menu
+    countryTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpening = countrySubMenu.style.display !== 'block';
+
+        // Close Type menu
+        typeSubMenu.style.display = 'none';
+        clearActiveStates();
+
+        if (isOpening) {
+            countrySubMenu.style.display = 'block';
+            countryTrigger.classList.add('active');
+        } else {
+            countrySubMenu.style.display = 'none';
+        }
+    });
+
+    // Cancel buttons logic
+    cancelSub.addEventListener('click', (e) => {
+        e.stopPropagation();
+        typeSubMenu.style.display = 'none';
+        typeTrigger.classList.remove('active');
+    });
+
+    cancelCountrySub.addEventListener('click', (e) => {
+        e.stopPropagation();
+        countrySubMenu.style.display = 'none';
+        countryTrigger.classList.remove('active');
+    });
+
+    // Close everything when clicking outside
+    document.addEventListener('click', (e) => {
+        // Check if the click was outside the main window AND sub-menus
+        if (!filterWindow.contains(e.target) && e.target !== filterBtn) {
+            filterWindow.style.display = 'none';
+            typeSubMenu.style.display = 'none';
+            countrySubMenu.style.display = 'none';
+            clearActiveStates();
+        }
+    });
+
+
+        // --- Pagination Logic ---
+    const pageNumbers = document.querySelectorAll('.page-link-num');
+    const prevBtn = document.querySelector('.prev-arrow');
+    const nextBtn = document.querySelector('.next-arrow');
+    const nextPrompt = document.querySelector('.next-page-prompt a');
+
+    let currentPage = 1;
+    const maxPages = 10; // Based on your HTML showing 10 as the end
+
+    function updatePagination(newPage) {
+        if (newPage < 1 || newPage > maxPages) return;
+
+        currentPage = newPage;
+
+        // 1. Update active class on numbers
+        pageNumbers.forEach(num => {
+            num.classList.remove('active');
+            if (parseInt(num.innerText) === currentPage) {
+                num.classList.add('active');
+            }
+        });
+
+        // 2. Handle Arrow States (Visual feedback)
+        prevBtn.style.opacity = (currentPage === 1) ? "0.5" : "1";
+        prevBtn.style.pointerEvents = (currentPage === 1) ? "none" : "auto";
+
+        nextBtn.style.opacity = (currentPage === maxPages) ? "0.5" : "1";
+        nextBtn.style.pointerEvents = (currentPage === maxPages) ? "none" : "auto";
+
+        // 3. Trigger Action (Redirect or AJAX)
+        // Option A: URL Redirect (Standard for MVC)
+        const url = new URL(window.location.href);
+        url.searchParams.set('pageNumber', currentPage);
+        window.location.href = url.href;
+    }
+
+    // Number Click
+    pageNumbers.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const val = parseInt(e.target.innerText);
+            if (!isNaN(val)) updatePagination(val);
+        });
+    });
+
+    // Arrow Clicks
+    prevBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        updatePagination(currentPage - 1);
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        updatePagination(currentPage + 1);
+    });
+
+    // "Next Page" text prompt logic
+    nextPrompt.addEventListener('click', (e) => {
+        e.preventDefault();
+        updatePagination(currentPage + 1);
+    });
+</script>
