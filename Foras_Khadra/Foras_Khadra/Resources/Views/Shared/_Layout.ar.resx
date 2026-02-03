@@ -195,6 +195,22 @@
   <data name="Footer_Heading_Line2" xml:space="preserve">
     <value>شباب الوطن العربي</value>
   </data>
+<data name="Policies" xml:space="preserve">
+  <value>سياساتنا</value>
+</data>
+<data name="PrivacyPolicy" xml:space="preserve">
+  <value>سياسة الخصوصية</value>
+</data>
+<data name="UsagePolicy" xml:space="preserve">
+  <value>سياسة الاستخدام</value>
+</data>
+<data name="TermsAndConditions" xml:space="preserve">
+  <value>الشروط والأحكام</value>
+</data>
+
+<data name="BrowseJobs" xml:space="preserve">
+  <value>تصفح الوظائف</value>
+</data>
 
 
 </root>
