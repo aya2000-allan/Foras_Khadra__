@@ -190,4 +190,11 @@
   <data name="ContactUs" xml:space="preserve">
     <value>Contact Us</value>
   </data>
+    <data name="Footer_Heading_Line1" xml:space="preserve">
+    <value>From &amp; To</value>
+  </data>
+  <data name="Footer_Heading_Line2" xml:space="preserve">
+    <value>Youth of the Arab World</value>
+  </data>
+
 </root>
