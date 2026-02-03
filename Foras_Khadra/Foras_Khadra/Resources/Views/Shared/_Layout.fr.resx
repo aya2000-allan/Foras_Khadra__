@@ -189,4 +189,11 @@
   <data name="ContactUs" xml:space="preserve">
     <value>Contact</value>
   </data>
+    <data name="Footer_Heading_Line1" xml:space="preserve">
+    <value>De et vers</value>
+  </data>
+  <data name="Footer_Heading_Line2" xml:space="preserve">
+    <value>La jeunesse du monde arabe</value>
+  </data>
+
 </root>

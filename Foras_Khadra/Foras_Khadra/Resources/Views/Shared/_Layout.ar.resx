@@ -189,4 +189,12 @@
   <data name="ContactUs" xml:space="preserve">
     <value>تواصل معنا</value>
   </data>
+    <data name="Footer_Heading_Line1" xml:space="preserve">
+    <value>من وإلى</value>
+  </data>
+  <data name="Footer_Heading_Line2" xml:space="preserve">
+    <value>شباب الوطن العربي</value>
+  </data>
+
+
 </root>
