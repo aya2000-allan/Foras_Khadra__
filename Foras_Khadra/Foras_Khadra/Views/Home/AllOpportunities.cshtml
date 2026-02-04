@@ -76,23 +76,31 @@
     </header>
 
     <div class="row g-4" >
-        @foreach (var opp in Model.Opportunities)
+        @if (!Model.Opportunities.Any())
         {
-            <div class="col-lg-4 col-md-6">
-                <div class="opp-card shadow-sm">
-                    @if (!string.IsNullOrEmpty(opp.ImagePath))
-                    {
-                        <img src="@opp.ImagePath" class="opp-image" alt="@opp.Title">
-                    }
-                    <div class="opp-category-row">
-                        <span class="type-tag">@opp.Type.GetDisplayName()</span>
-                        <span class="category-tag">@opp.AvailableCountries</span>
-                    </div>
-                    <h3 class="opp-title">@opp.Title</h3>
-                    <p class="opp-description">@opp.Description</p>
-                    <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">عرض التفاصيل</a>
-                </div>
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">لا توجد فرص حالياً تطابق بحثك.</p>
             </div>
+        }
+        else{
+            @foreach (var opp in Model.Opportunities)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="opp-card shadow-sm">
+                        @if (!string.IsNullOrEmpty(opp.ImagePath))
+                        {
+                            <img src="@opp.ImagePath" class="opp-image" alt="@opp.Title">
+                        }
+                        <div class="opp-category-row">
+                            <span class="type-tag">@opp.Type.GetDisplayName()</span>
+                            <span class="category-tag">@opp.AvailableCountries</span>
+                        </div>
+                        <h3 class="opp-title">@opp.Title</h3>
+                        <p class="opp-description">@opp.Description</p>
+                        <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">عرض التفاصيل</a>
+                    </div>
+                </div>
+            }
         }
     </div>
     <div class="pagination-container mt-5 mb-5">
