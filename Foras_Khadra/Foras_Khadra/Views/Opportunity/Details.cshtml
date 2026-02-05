@@ -1,112 +1,96 @@
 ﻿@model Foras_Khadra.Models.Opportunity
 
-<h2>@Model.Title</h2>
-
-<style>
-    .apply-button {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #25652c;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        font-weight: bold;
-        transition: background-color 0.3s;
-        margin-right: 10px;
-    }
-
-    .apply-button:hover {
-        background-color: #f99d27;
-        color: white;
-    }
-
-    .btn-back {
-        display: inline-block;
-        padding: 8px 15px;
-        background-color: #6c757d;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        font-weight: bold;
-        margin-left: 10px;
-    }
-
-    .btn-back:hover {
-        background-color: #5a6268;
-    }
-</style>
-
-@if (!string.IsNullOrEmpty(Model.ImagePath))
-{
-    <img src="@Model.ImagePath" width="250" />
+@{
+    ViewData["Title"] = Model.Title;
 }
 
-<p><strong>النوع:</strong> @Model.Type</p>
+<link href="~/css/opportunity-deatails.css" rel="stylesheet" />
+<div class="opp-container">
+    <div class="opp-header">
+        <div class="opp-title">
+            
+            <div class="btn-back-container">
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-controller="Opportunity" asp-action="Index" style="text-decoration:none"><span style="color:#F99D27">↪</span></a>
+                }
+                @if (User.IsInRole("Organization"))
+                {
+                    <a asp-controller="Opportunity" asp-action="OrgOpportunities" style="text-decoration:none"><span style="transform: scaleY(-1);color:#F99D27">↪</span></a>
+                }
+                @if (User.IsInRole("User"))
+                {
+                    <a asp-controller="Home" asp-action="AllOpportunities" style="text-decoration:none" ><span style="transform: scaleY(-1);color:#F99D27">↪</span></a>
+                }
+            </div>
+            <span>@Model.Title</span>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.ApplyLink))
+        {
+            if (User.IsInRole("Admin") || User.IsInRole("User") || User.IsInRole("Organization"))
+            {
+                <a href="@Model.ApplyLink" target="_blank" class="apply-button">قدم الآن</a>
+            }
+            else if (!User.Identity.IsAuthenticated)
+            {
+                <a href="javascript:void(0);" class="apply-button" id="guestApply">قدم الآن</a>
+            }
+        }
 
-<p>
-    <strong>
-        نشر بواسطة: @(Model.IsPublishedByAdmin ? "الأدمن" : Model.PublishedBy)
-    </strong>
+       
+    </div>
 
-    @if (Model.IsPublishedByAdmin)
-    {
-        <!-- أيقونة توثيق دائرية -->
-        <span style="
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            background-color: #25652c;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 18px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-left: 5px;
-            vertical-align: middle;
-        " title="موثق إداري">
-            ✔
-        </span>
-    }
-</p>
-<p>
+    <div class="main-card">
+        <div class="card-info-content">
+            <div class="info-grid">
+                <span class="info-label">تاريخ النشر</span>
+                <span class="info-value">@Model.PublishDate.ToShortDateString()</span>
 
+                <span class="info-label">نوع الفرصة</span>
+                <span class="info-value">@Model.Type</span>
 
+                <span class="info-label">نشر بواسطة</span>
+                <span class="info-value">
+                    @(Model.IsPublishedByAdmin ? "الأدمن" : Model.PublishedBy)
+                    @if (Model.IsPublishedByAdmin)
+                    {
+                        <span class="verify-badge" title="موثق إداري">✔</span>
+                    }
+                </span>
 
+                <span class="info-label">الدول المتاحة</span>
+                <span class="info-value">@Model.AvailableCountries</span>
 
-<p><strong>تاريخ النشر:</strong> @Model.PublishDate.ToShortDateString()</p>
-<p><strong>الوصف:</strong> @Model.Description</p>
-<p><strong>التفاصيل:</strong> @Model.Details</p>
-<p><strong>الدول المتاحة:</strong> @Model.AvailableCountries</p>
-<p><strong>معايير القبول:</strong> @Model.EligibilityCriteria</p>
-<p><strong>مميزات الفرصة:</strong> @Model.Benefits</p>
+                <span class="info-label">الوصف</span>
+                <span class="info-value"> @Model.Description</span>
+            </div>
+            
+        </div>
+        <div class="card-image-wrapper">
+            @if (!string.IsNullOrEmpty(Model.ImagePath))
+            {
+                <img src="@Model.ImagePath" alt="Opportunity Image" />
+            }
+            else
+            {
+                <div style="background:#eee; height:100%;"></div>
+            }
+        </div>
+    </div>
 
-<!-- زر التقديم -->
-@if (!string.IsNullOrEmpty(Model.ApplyLink))
-{
-    if (User.IsInRole("Admin") || User.IsInRole("User") || User.IsInRole("Organization"))
-    {
-        <a href="@Model.ApplyLink" target="_blank" class="apply-button">قدم الآن</a>
-    }
-    else if (!User.Identity.IsAuthenticated)
-    {
-        <a href="javascript:void(0);" class="apply-button" id="guestApply">قدم الآن</a>
-    }
-}
+    <div class="details-card">
+        <div class="section-title">التفاصيل</div>
+        <div class="section-content">@Model.Details</div>
 
-<!-- زر الرجوع حسب الدور -->
-@if (User.IsInRole("Admin"))
-{
-    <a asp-controller="Opportunity" asp-action="Index" class="btn-back">رجوع</a>
-}
-@if (User.IsInRole("Organization"))
-{
-    <a asp-controller="Opportunity" asp-action="OrgOpportunities" class="btn-back">رجوع</a>
-}
-@if (User.IsInRole("User"))
-{
-    <a asp-controller="Home" asp-action="AllOpportunities" class="btn-back">رجوع</a>
-}
+        <div class="section-title">معايير القبول</div>
+        <div class="section-content">@Model.EligibilityCriteria</div>
+
+        <div class="section-title">مميزات الفرصة</div>
+        <div class="section-content">@Model.Benefits</div>
+    </div>
+
+   
+</div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
