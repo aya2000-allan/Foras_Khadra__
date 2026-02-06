@@ -68,6 +68,30 @@
 }
 
 <style>
+    html, body {
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* خلي المحتوى يضغط الفوتر لأسفل */
+body > .container {
+  flex: 1 0 auto;
+}
+
+/* الفوتر ما يترك مسافة تحت */
+footer.custom-footer {
+  margin-top: auto;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
     /* =========================
        NAV / DROPDOWN BASE
     ========================= */
@@ -359,6 +383,20 @@
             flex: 0 0 auto !important;
         }
     }
+
+    .nav-btn--icon img.lang-flag {
+    width: 28px;
+    height: 22px;
+    border-radius: 3px;
+    object-fit: cover;
+}
+
+.footer-bottom {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+
 </style>
 
 @if (!hideNavAndFooter)
@@ -462,11 +500,25 @@
                     }
 
                     <div class="custom-dropdown" style="background:none;">
-                        <button class="nav-btn nav-btn--icon" type="button"
-                                onclick="toggleDropdown('langMenu', event)"
-                                aria-label="@Localizer["Languages"]">
-                            <i class="fa-solid fa-globe"></i>
-                        </button>
+                      <button class="nav-btn nav-btn--icon" type="button"
+        onclick="toggleDropdown('langMenu', event)"
+        aria-label="@Localizer["Languages"]">
+
+    @if (culture == "ar")
+    {
+        <img src="~/Images/sa.png" alt="Arabic" class="lang-flag">
+    }
+    else if (culture == "fr")
+    {
+        <img src="~/Images/fr.png" alt="French" class="lang-flag">
+    }
+    else
+    {
+        <img src="~/Images/us.png" alt="English" class="lang-flag">
+    }
+
+</button>
+
 
                         <div class="dropdown-list" id="langMenu">
                             <a asp-controller="Language" asp-action="Change" asp-route-culture="ar" asp-route-returnUrl="@Context.Request.Path">
@@ -492,7 +544,7 @@
 }
 
 <div class="container">
-    <main role="main" class="pb-3">
+    <main role="main" ">
         @RenderBody()
     </main>
 </div>
