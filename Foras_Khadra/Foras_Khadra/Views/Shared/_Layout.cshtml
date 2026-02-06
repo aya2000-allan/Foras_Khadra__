@@ -543,11 +543,12 @@ footer.custom-footer {
     </header>
 }
 
-<div class="container">
-    <main role="main" ">
+<div class="container" style="flex:1 0 auto;">
+    <main role="main">
         @RenderBody()
     </main>
 </div>
+
 
 @if (!hideNavAndFooter)
 {

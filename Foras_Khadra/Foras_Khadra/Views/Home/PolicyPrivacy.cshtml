@@ -1,100 +1,215 @@
-﻿@using Microsoft.Extensions.Options
-@using System.Globalization
+﻿@using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Localizer["TitlePage"];
-    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var isRtl = culture == "ar";
 }
 
-<!DOCTYPE html>
-<html lang="@culture">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-       
-        .rtl {
-            direction: rtl;
-            text-align: right;
-        }
+<style>
+    /* ===== Page Background like screenshot ===== */
+    .policy-page {
+        @* background:#e8ece9; /* dark green behind */ *@
+        padding: 42px 14px 70px;
+        min-height: 100vh;
+    }
 
-        .ltr {
-            direction: ltr;
-            text-align: left;
-        }
+    /* Top title area */
+   /* Top title area */
+.policy-hero {
+    background-color: #25652C;
+    text-align: center;
+    color: #fff;
 
-        h2 {
-            color: #2a7a2f;
-            margin-top: 30px;
-        }
+    max-width: 880px;
+    margin: 0 auto 18px;   /* نفس الكارد تمامًا */
 
-        p, li {
-            margin: 8px 0;
-        }
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    padding: 16px 12px;
+    border-bottom: 4px solid #F99D27;
 
-        ul {
-            padding-right: 20px;
-        }
+}
 
-        .contact {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-    <div class="@(culture == "ar" ? "rtl" : "ltr")">
+
+    .policy-hero h1 {
+        margin: 0;
+        font-weight: 800;
+        font-size: 22px;
+        line-height: 1.2;
+        font-family: "Cairo","Tajawal",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    }
+
+    /* White main card */
+    .policy-card {
+        max-width: 880px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 14px 35px rgba(0,0,0,.18);
+        padding: 18px 16px 16px;
+    }
+
+    /* Each section (light gray box with orange bar) */
+    .policy-section {
+        position: relative;
+        background: #f6f7f6;
+        border: 1px solid #e8ece9;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin: 12px 0;
+    }
+
+    .policy-section::before {
+        content: "";
+        position: absolute;
+        top: 12px;
+        bottom: 12px;
+        width: 4px;
+        background: #F99D27; /* orange bar */
+        border-radius: 6px;
+        inset-inline-end: 10px; /* right in RTL, left in LTR automatically */
+    }
+
+    /* Titles inside boxes */
+    .policy-section h2 {
+        margin: 0 0 10px 0;
+        color: #25652C;
+        font-weight: 800;
+        font-size: 16px;
+        font-family: "Cairo","Tajawal",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+        padding-inline-end: 16px; /* space away from orange bar */
+    }
+
+    .policy-section p,
+    .policy-section li {
+        color: #2f3a33;
+        font-size: 13px;
+        line-height: 1.9;
+        margin: 0 0 8px 0;
+        font-family: "Cairo","Tajawal",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    }
+
+    .policy-section p:last-child { margin-bottom: 0; }
+
+    /* Lists: use logical padding so RTL/LTR is correct */
+    .policy-section ul {
+        margin: 0;
+        padding-inline-start: 18px;
+        padding-inline-end: 0;
+    }
+
+    .policy-section li { margin: 6px 0; }
+
+    /* Contact as pill like screenshot */
+    .policy-contact-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #F99D27;
+        color: #fff;
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-weight: 800;
+        font-size: 13px;
+        text-decoration: none;
+        margin-top: 6px;
+    }
+
+    /* Direction helpers */
+    .rtl { direction: rtl; text-align: right; }
+    .ltr { direction: ltr; text-align: left; }
+
+    /* Responsive */
+    @@media (max-width: 520px) {
+        .policy-card { padding: 14px 12px; }
+        .policy-section { padding: 12px 12px; }
+        .policy-section::before { inset-inline-end: 8px; }
+    }
+</style>
+
+<div class="policy-page @(isRtl ? "rtl" : "ltr")" dir="@(isRtl ? "rtl" : "ltr")">
+
+    <!-- Top green header (only title, without adding new text keys) -->
+    <div class="policy-hero">
         <h1>@Localizer["TitlePage"]</h1>
-        <h2>@Localizer["TitleIntro"]</h2>
-        <p>@Localizer["Intro"]</p>
-
-        <h2>@Localizer["DataCollected"]</h2>
-        <ul>
-            <li>@Localizer["DataCollected1"]</li>
-            <li>@Localizer["DataCollected2"]</li>
-        </ul>
-
-        <h2>@Localizer["DataUsage"]</h2>
-        <ul>
-            <li>@Localizer["DataUsage1"]</li>
-            <li>@Localizer["DataUsage2"]</li>
-            <li>@Localizer["DataUsage3"]</li>
-        </ul>
-
-        <h2>@Localizer["Cookies"]</h2>
-        <ul>
-            <li>@Localizer["Cookies1"]</li>
-            <li>@Localizer["Cookies2"]</li>
-        </ul>
-
-        <h2>@Localizer["DataSharing"]</h2>
-        <ul>
-            <li>@Localizer["DataSharing1"]</li>
-            <li>@Localizer["DataSharing2"]</li>
-            <li>@Localizer["DataSharing3"]</li>
-        </ul>
-
-        <h2>@Localizer["DataProtection"]</h2>
-        <ul>
-            <li>@Localizer["DataProtection1"]</li>
-            <li>@Localizer["DataProtection2"]</li>
-        </ul>
-
-        <h2>@Localizer["UserRights"]</h2>
-        <ul>
-            <li>@Localizer["UserRights1"]</li>
-            <li>@Localizer["UserRights2"]</li>
-        </ul>
-
-        <h2>@Localizer["ChildrenPrivacy"]</h2>
-        <p>@Localizer["ChildrenPrivacyText"]</p>
-
-        <h2>@Localizer["Changes"]</h2>
-        <p>@Localizer["ChangesText"]</p>
-
-        <h2>@Localizer["Contact"]</h2>
-        <p class="contact">@Localizer["ContactEmail"]</p>
     </div>
-</body>
-</html>
+
+    <!-- Main white card -->
+    <div class="policy-card">
+
+        <div class="policy-section">
+            <h2>@Localizer["TitleIntro"]</h2>
+            <p>@Localizer["Intro"]</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["DataCollected"]</h2>
+            <ul>
+                <li>@Localizer["DataCollected1"]</li>
+                <li>@Localizer["DataCollected2"]</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["DataUsage"]</h2>
+            <ul>
+                <li>@Localizer["DataUsage1"]</li>
+                <li>@Localizer["DataUsage2"]</li>
+                <li>@Localizer["DataUsage3"]</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["Cookies"]</h2>
+            <ul>
+                <li>@Localizer["Cookies1"]</li>
+                <li>@Localizer["Cookies2"]</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["DataSharing"]</h2>
+            <ul>
+                <li>@Localizer["DataSharing1"]</li>
+                <li>@Localizer["DataSharing2"]</li>
+                <li>@Localizer["DataSharing3"]</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["DataProtection"]</h2>
+            <ul>
+                <li>@Localizer["DataProtection1"]</li>
+                <li>@Localizer["DataProtection2"]</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["UserRights"]</h2>
+            <ul>
+                <li>@Localizer["UserRights1"]</li>
+                <li>@Localizer["UserRights2"]</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["ChildrenPrivacy"]</h2>
+            <p>@Localizer["ChildrenPrivacyText"]</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["Changes"]</h2>
+            <p>@Localizer["ChangesText"]</p>
+        </div>
+
+        <div class="policy-section" style="text-align:center;">
+            <h2 style="text-align:inherit;">@Localizer["Contact"]</h2>
+
+            <!-- نفس النص (ContactEmail) بدون تعديل -->
+            <span class="policy-contact-pill">@Localizer["ContactEmail"]</span>
+        </div>
+
+    </div>
+</div>
