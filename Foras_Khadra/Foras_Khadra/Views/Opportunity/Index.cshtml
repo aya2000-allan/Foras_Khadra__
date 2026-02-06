@@ -4,106 +4,116 @@
 @{
     var organizations = _context.Organizations.Select(o => o.Name).ToList();
     var selectedOrg = Context.Request.Query["organization"].ToString();
-
-    // ترتيب الأنواع أبجدياً حسب اسم النوع
-    var sortedModel = Model.OrderBy(m => m.Key.ToString()).ToList();
+    
+    // Flatten model for easier pagination/list rendering while keeping the "Internship" label logic
+    var allFilteredOpportunities = Model.Values.SelectMany(x => x)
+        .Where(o => string.IsNullOrEmpty(selectedOrg) || o.PublishedBy == selectedOrg)
+        .ToList();
 }
 
-<div class="d-flex align-items-center justify-content-between mb-3">
-    <h2>قائمة الفرص</h2>
-    <div>
-        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary me-2">
-            العودة للوحة التحكم
-        </a>
-        <a asp-action="Create" class="btn btn-success">إضافة فرصة جديدة</a>
-    </div>
-</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="~/css/admin-opportunities.css" />
 
-<div class="mb-3">
-    <label>فلتر حسب المنظمة:</label>
-    <select class="form-select w-auto" onchange="filterByOrganization(this.value)">
-        <option value="">كل المنظمات</option>
-        @foreach (var org in organizations)
-        {
-            <option value="@org" selected="@(org == selectedOrg ? "selected" : null)">@org</option>
-        }
-    </select>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
-        <!-- Vertical Tabs -->
-        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            @foreach (var group in sortedModel)
-            {
-                var type = group.Key;
-                var tabId = "tab" + type.ToString();
-                var filteredOpportunities = string.IsNullOrEmpty(selectedOrg)
-                ? group.Value
-                : group.Value.Where(o => o.PublishedBy == selectedOrg).ToList();
-                var btnClass = filteredOpportunities.Any() ? "bg-success text-white" : "bg-danger text-white";
-                var activeClass = group.Equals(sortedModel.First()) ? "active" : "";
-
-                <button class="nav-link @btnClass @activeClass" id="@tabId-tab" data-bs-toggle="pill"
-                        data-bs-target="#@tabId" type="button" role="tab" aria-controls="@tabId"
-                        aria-selected="@(activeClass == "active")">
-                    @type
-                </button>
-            }
-        </div>
-    </div>
-
-    <div class="col-md-9">
-        <!-- Tab Content -->
-        <div class="tab-content" id="v-pills-tabContent">
-            @foreach (var group in sortedModel)
-            {
-                var type = group.Key;
-                var tabId = "tab" + type.ToString();
-                var activeClass = group.Equals(sortedModel.First()) ? "show active" : "";
-                var filteredOpportunities = string.IsNullOrEmpty(selectedOrg)
-                ? group.Value
-                : group.Value.Where(o => o.PublishedBy == selectedOrg).ToList();
-
-                <div class="tab-pane fade @activeClass" id="@tabId" role="tabpanel" aria-labelledby="@tabId-tab">
-                    @if (!filteredOpportunities.Any())
-                    {
-                        <p>لا توجد فرص حالياً لهذه المنظمة.</p>
-                    }
-                    else
-                    {
-                        <div class="row">
-                            @foreach (var opp in filteredOpportunities)
-                            {
-                                <div class="col-md-4 mb-3">
-                                    <div class="card h-100">
-                                        @if (!string.IsNullOrEmpty(opp.ImagePath))
-                                        {
-                                            <img src="@opp.ImagePath" class="card-img-top" alt="صورة الفرصة">
-                                        }
-                                        <div class="card-body">
-                                            <h5 class="card-title">@opp.Title</h5>
-                                            <p class="card-text">@opp.Description</p>
-
-                                            <div class="d-flex flex-wrap gap-1">
-                                                <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })"
-                                                   class="btn btn-primary btn-sm">عرض التفاصيل</a>
-                                                <a href="@Url.Action("Edit", "Opportunity", new { id = opp.Id })"
-                                                   class="btn btn-warning btn-sm">تعديل</a>
-                                                <form asp-action="Delete" asp-controller="Opportunity" asp-route-id="@opp.Id"
-                                                      method="post" onsubmit="return confirm('هل أنت متأكد من حذف هذه الفرصة؟');"
-                                                      style="display:inline;">
-                                                    <button type="submit" class="btn btn-danger btn-sm">حذف</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
+<div class="page-wrapper container-fluid p-0">
+    <header class="admin-header">
+        <div class="header-container">
+            <h1 class="header-title">قائمة الفرص</h1>
+            
+            <div class="header-actions">
+                <div class="search-filter-wrapper">
+                    <div class="search-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <div class="filter-btn" id="filterToggleBtn">
+                        <i class="bi bi-sliders"></i>
+                    </div>
+                    
+                    <div class="filter-window shadow" id="filterWindow">
+                        <div class="p-3">
+                            <label class="form-label mb-2">فلتر حسب المنظمة</label>
+                            <select class="form-select" onchange="filterByOrganization(this.value)">
+                                <option value="">كل المنظمات</option>
+                                @foreach (var org in organizations)
+                                {
+                                    <option value="@org" selected="@(org == selectedOrg ? "selected" : null)">@org</option>
+                                }
+                            </select>
                         </div>
-                    }
+                    </div>
+                </div>
+
+                <a asp-action="Create" class="btn-add-opportunity">
+                    <span>+</span> إضافة فرصة جديدة
+                </a>
+                
+                <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
+                    العودة للوحة التحكم
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="content-body container py-4">
+        <div class="table-labels d-none d-md-flex">
+            <div class="label-col title-label" style="text-align:end">عنوان الفرصة</div>
+            <div class="label-col actions-label"></div>
+            <div class="label-col" style="text-align:start">نوع الفرصة</div>
+            <div class="label-col">اسم المنظمة</div>
+            <div class="label-col actions-label"></div>
+
+        </div>
+
+        <div class="opportunity-list">
+            @if (!allFilteredOpportunities.Any())
+            {
+                <div class="text-center py-5 text-white">
+                    <p>لا توجد فرص حالياً تطابق هذا البحث.</p>
                 </div>
             }
+            else
+            {
+                @foreach (var opp in allFilteredOpportunities)
+                {
+                    <div class="opportunity-row-card">
+
+                        <div class="title-col">
+                            <div class="opp-img-container">
+                                <img src="@(string.IsNullOrEmpty(opp.ImagePath) ? "/images/default.jpg" : opp.ImagePath)" alt="Opp Image" />
+                            </div>
+                            <span class="opp-title-text">@opp.Title</span>
+                        </div>
+
+                         <div class="info-col">
+                            @opp.Type.ToString()
+                        </div>
+
+                         <div class="info-col">
+                            @opp.PublishedBy
+                        </div>
+                         <div class="action-buttons">
+                           <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="action-icon view-btn">
+                                <i class="bi bi-eye-fill"></i>
+                            </a>
+                            <a href="@Url.Action("Edit", "Opportunity", new { id = opp.Id })" class="action-icon edit-btn">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                            
+                             <form asp-action="Delete" asp-controller="Opportunity" asp-route-id="@opp.Id"
+                                  method="post" onsubmit="return confirm('هل أنت متأكد من حذف هذه الفرصة؟');">
+                                <button type="submit" class="action-icon delete-btn"><i class="bi bi-trash-fill"></i></button>
+                            </form>
+                        </div>
+
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="pagination-container mt-5">
+            <div class="next-page-prompt">
+                <a href="#" id="nextPrompt">انتقل إلى الصفحة التالية</a>
+            </div>
+            <div class="pagination-controls" id="paginationControls"></div>
         </div>
     </div>
 </div>
@@ -111,13 +121,57 @@
 <script>
     function filterByOrganization(org) {
         const url = new URL(window.location.href);
-        if (org) {
-            url.searchParams.set('organization', org);
-        } else {
-            url.searchParams.delete('organization');
-        }
+        if (org) url.searchParams.set('organization', org);
+        else url.searchParams.delete('organization');
         window.location.href = url.toString();
     }
-</script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    // Toggle Filter Window
+    const filterBtn = document.getElementById('filterToggleBtn');
+    const filterWindow = document.getElementById('filterWindow');
+    if(filterBtn) {
+        filterBtn.onclick = (e) => {
+            filterWindow.style.display = filterWindow.style.display === 'block' ? 'none' : 'block';
+            e.stopPropagation();
+        };
+    }
+    document.onclick = () => filterWindow.style.display = 'none';
+    filterWindow.onclick = (e) => e.stopPropagation();
+
+    // Pagination Logic (Preserved from your code)
+    document.addEventListener('DOMContentLoaded', function () {
+        const cardsPerPage = 10;
+        const items = document.querySelectorAll('.opportunity-row-card');
+        const totalPages = Math.ceil(items.length / cardsPerPage);
+        const controls = document.getElementById('paginationControls');
+        const nextPrompt = document.getElementById('nextPrompt');
+        let currentPage = 1;
+
+        function showPage(page) {
+            currentPage = page;
+            const start = (page - 1) * cardsPerPage;
+            const end = start + cardsPerPage;
+            items.forEach((item, index) => {
+                item.style.display = (index >= start && index < end) ? 'flex' : 'none';
+            });
+            renderControls();
+            nextPrompt.parentElement.style.visibility = (currentPage === totalPages) ? 'hidden' : 'visible';
+        }
+
+        function renderControls() {
+            let html = `<a href="#" class="pagination-arrow prev-arrow ${currentPage === 1 ? 'disabled-link' : ''}" data-page="${currentPage - 1}"><i class="bi bi-chevron-right"></i></a>`;
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<a href="#" class="page-link-num ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</a>`;
+            }
+            html += `<a href="#" class="pagination-arrow next-arrow ${currentPage === totalPages ? 'disabled-link' : ''}" data-page="${currentPage + 1}"><i class="bi bi-chevron-left"></i></a>`;
+            controls.innerHTML = html;
+            controls.querySelectorAll('a').forEach(link => {
+                link.onclick = (e) => {
+                    e.preventDefault();
+                    showPage(parseInt(link.dataset.page));
+                }
+            });
+        }
+        if (items.length > 0) showPage(1);
+    });
+</script>
