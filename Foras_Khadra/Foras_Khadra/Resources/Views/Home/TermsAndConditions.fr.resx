@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Accounts" xml:space="preserve">
+    <value>Comptes</value>
+  </data>
+  <data name="Accounts1" xml:space="preserve">
+    <value>Les utilisateurs doivent fournir des informations exactes lors de l’inscription.</value>
+  </data>
+  <data name="Accounts2" xml:space="preserve">
+    <value>La plateforme se réserve le droit de suspendre ou supprimer les comptes non conformes.</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contactez-nous</value>
+  </data>
+  <data name="ContactEmail" xml:space="preserve">
+    <value>info@foraskhadra.com</value>
+  </data>
+  <data name="ContentIP" xml:space="preserve">
+    <value>Contenu et propriété intellectuelle</value>
+  </data>
+  <data name="ContentIP1" xml:space="preserve">
+    <value>Tout le contenu de la plateforme appartient à la plateforme ou à ses partenaires.</value>
+  </data>
+  <data name="ContentIP2" xml:space="preserve">
+    <value>Aucune reproduction ou republication n’est autorisée sans autorisation écrite préalable.</value>
+  </data>
+  <data name="ExternalLinks" xml:space="preserve">
+    <value>Liens externes</value>
+  </data>
+  <data name="ExternalLinksText" xml:space="preserve">
+    <value>La plateforme peut contenir des liens vers des sites externes dont elle n’est pas responsable.</value>
+  </data>
+  <data name="Intro" xml:space="preserve">
+    <value>En utilisant la plateforme Foras Khadra, vous acceptez les présentes conditions générales. Si vous n’êtes pas d’accord, veuillez ne pas utiliser la plateforme.</value>
+  </data>
+  <data name="Liability" xml:space="preserve">
+    <value>Responsabilité</value>
+  </data>
+  <data name="Liability1" xml:space="preserve">
+    <value>La plateforme n’est pas responsable des dommages directs ou indirects résultant d’une mauvaise utilisation.</value>
+  </data>
+  <data name="Liability2" xml:space="preserve">
+    <value>La plateforme se réserve le droit de modifier ces conditions à tout moment.</value>
+  </data>
+  <data name="TermsUsage" xml:space="preserve">
+    <value>Conditions d’utilisation</value>
+  </data>
+  <data name="TermsUsage1" xml:space="preserve">
+    <value>La plateforme doit être utilisée uniquement à des fins légales et légitimes.</value>
+  </data>
+  <data name="TermsUsage2" xml:space="preserve">
+    <value>Il est interdit de publier tout contenu abusif, frauduleux, illégal ou portant atteinte aux droits d’autrui.</value>
+  </data>
+  <data name="TermsUsage3" xml:space="preserve">
+    <value>Les utilisateurs sont responsables de la confidentialité de leurs informations de compte et mots de passe.</value>
+  </data>
+  <data name="TitleIntro" xml:space="preserve">
+    <value>Introduction</value>
+  </data>
+  <data name="TitlePage" xml:space="preserve">
+    <value>Conditions Générales </value>
+  </data>
+</root>
