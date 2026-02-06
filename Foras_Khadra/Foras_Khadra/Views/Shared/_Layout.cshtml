@@ -529,7 +529,7 @@
             <div class="footer-links">
 
                 <div class="footer-column">
-                    <h4>تصفح الفرص</h4>
+                        <h4> @Localizer["BrowseOpp"]</h4>
                     <ul>
                         <li><a href="~/Home/AllOpportunities">@Localizer["AllOpportunities"]</a></li>
                         <li><a href="~/Home/AllOpportunities?type=Competitions">@Localizer["Competitions"]</a></li>
@@ -539,7 +539,7 @@
                 </div>
 
                 <div class="footer-column">
-                    <h4>تصفح الوظائف</h4>
+                        <h4>@Localizer["BrowseJobs"] </h4>
                     <ul>
                         <li><a href="~/Home/AllOpportunities?type=Jobs">@Localizer["Jobs"]</a></li>
                         <li><a href="~/Home/AllOpportunities?type=Scholarships">@Localizer["Scholarships"]</a></li>
@@ -549,7 +549,7 @@
                 </div>
 
                 <div class="footer-column">
-                    <h4>روابط إضافية</h4>
+                        <h4>@Localizer["AdditionalLinks"]</h4>
                     <ul>
                         <li><a href="~/Home/Articles">@Localizer["Articles"]</a></li>
                         <li><a href="~/Home/AboutUs">@Localizer["AboutUs"]</a></li>
@@ -560,9 +560,9 @@
                   <div class="footer-column">
         <h4>@Localizer["Policies"]</h4>
         <ul>
-            <li><a asp-controller="Home" asp-action="PrivacyPolicy">@Localizer["PrivacyPolicy"]</a></li>
-            <li><a asp-controller="Home" asp-action="UsagePolicy">@Localizer["UsagePolicy"]</a></li>
-            <li><a asp-controller="Home" asp-action="Terms">@Localizer["TermsAndConditions"]</a></li>
+                            <li><a href="~/Home/PolicyPrivacy">@Localizer["PrivacyPolicy"]</a></li>
+                            <li><a href="~/Home/UsagePolicy">@Localizer["UsagePolicy"]</a></li>
+                            <li><a href="~/Home/TermsAndConditions">@Localizer["TermsAndConditions"]</a></li>
         </ul>
     </div>
 

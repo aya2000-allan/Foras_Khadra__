@@ -189,28 +189,31 @@
   <data name="ContactUs" xml:space="preserve">
     <value>تواصل معنا</value>
   </data>
-    <data name="Footer_Heading_Line1" xml:space="preserve">
+  <data name="Footer_Heading_Line1" xml:space="preserve">
     <value>من وإلى</value>
   </data>
   <data name="Footer_Heading_Line2" xml:space="preserve">
     <value>شباب الوطن العربي</value>
   </data>
-<data name="Policies" xml:space="preserve">
-  <value>سياساتنا</value>
-</data>
-<data name="PrivacyPolicy" xml:space="preserve">
-  <value>سياسة الخصوصية</value>
-</data>
-<data name="UsagePolicy" xml:space="preserve">
-  <value>سياسة الاستخدام</value>
-</data>
-<data name="TermsAndConditions" xml:space="preserve">
-  <value>الشروط والأحكام</value>
-</data>
-
-<data name="BrowseJobs" xml:space="preserve">
-  <value>تصفح الوظائف</value>
-</data>
-
-
+  <data name="Policies" xml:space="preserve">
+    <value>سياساتنا</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>سياسة الخصوصية</value>
+  </data>
+  <data name="UsagePolicy" xml:space="preserve">
+    <value>سياسة الاستخدام</value>
+  </data>
+  <data name="TermsAndConditions" xml:space="preserve">
+    <value>الشروط والأحكام</value>
+  </data>
+  <data name="BrowseJobs" xml:space="preserve">
+    <value>تصفح الوظائف</value>
+  </data>
+  <data name="BrowseOpp" xml:space="preserve">
+    <value>تصفح الفرص</value>
+  </data>
+  <data name="AdditionalLinks" xml:space="preserve">
+    <value>روابط إضافية</value>
+  </data>
 </root>

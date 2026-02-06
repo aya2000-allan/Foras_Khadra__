@@ -196,16 +196,16 @@ namespace Foras_Khadra.Controllers
             if (string.IsNullOrEmpty(email))
                 return View();
 
-            // 1️⃣ نجيب المستخدم
+            //  نجيب المستخدم
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
                 return View("ForgotPasswordConfirmation");
             // مهم: ما نفضح إذا الإيميل موجود أو لا
 
-            // 2️⃣ توليد Token
+            //  توليد Token
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            // 3️⃣ توليد رابط إعادة التعيين
+            //  توليد رابط إعادة التعيين
             var resetLink = Url.Action(
                 "ResetPassword",
                 "Account",
@@ -215,61 +215,52 @@ namespace Foras_Khadra.Controllers
 
             string emailBody = $@"
 <!DOCTYPE html>
-<html lang='ar' dir='rtl'>
+<html lang='{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}' dir='{(CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? "rtl" : "ltr")}'>
 <head>
     <meta charset='UTF-8'>
-    <title>إعادة تعيين كلمة المرور</title>
+    <title>{_localizer["ResetPasswordSubject"]}</title>
 </head>
 <body style='font-family: Tahoma, Arial, sans-serif; background-color: #f4f6f8; padding: 20px;'>
     <div style='max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 8px;'>
-        
+
         <h2 style='text-align: center; color: #2c3e50;'>Foras Khadra</h2>
 
-        <p>مرحبًا،</p>
+        <p>{_localizer["ResetPasswordGreeting"]}</p>
 
-        <p>
-            لقد تلقّينا طلبًا لإعادة تعيين كلمة المرور الخاصة بحسابك على منصة
-            <strong>Foras Khadra</strong>.
-        </p>
-
-        <p>
-            لإعادة تعيين كلمة المرور، يرجى الضغط على الزر أدناه:
-        </p>
+        <p>{_localizer["ResetPasswordBody"]}</p>
 
         <div style='text-align: center; margin: 30px 0;'>
             <a href='{resetLink}'
                style='background-color: #28a745; color: #ffffff; padding: 12px 30px;
                       text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: bold;'>
-                إعادة تعيين كلمة المرور
+                {_localizer["ResetPasswordButton"]}
             </a>
         </div>
 
-        <p>
-            إذا لم تقم بطلب إعادة تعيين كلمة المرور، يرجى تجاهل هذا البريد الإلكتروني.
-        </p>
+        <p>{_localizer["ResetPasswordIgnore"]}</p>
 
-        <p>
-            مع تحيات فريق <strong>Foras Khadra</strong>
-        </p>
+        <p>{_localizer["ResetPasswordRegards"]}</p>
 
         <hr style='margin-top: 30px;' />
 
         <p style='font-size: 12px; color: #777; text-align: center;'>
-            هذا البريد الإلكتروني مرسل تلقائيًا، الرجاء عدم الرد عليه.
+            {_localizer["ResetPasswordFooter"]}
         </p>
     </div>
 </body>
 </html>
 ";
 
-            // 5️⃣ إرسال الإيميل
+            //  إرسال الإيميل
+            string emailSubject = $"{_localizer["SiteName"]} - {_localizer["ResetPasswordSubject"]}";
+
             await _emailSender.SendEmailAsync(
                 user.Email,
-                "إعادة تعيين كلمة المرور - Foras Khadra",
+                emailSubject,
                 emailBody
             );
 
-            // 6️⃣ صفحة تأكيد الإرسال
+            //  صفحة تأكيد الإرسال
             return View("ForgotPasswordConfirmation");
         }
 

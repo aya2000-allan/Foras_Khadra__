@@ -123,4 +123,28 @@
   <data name="OrgLoginAlert" xml:space="preserve">
     <value>Les organisations ne peuvent pas se connecter ici !!</value>
   </data>
+  <data name="ResetPasswordSubject" xml:space="preserve">
+    <value>Réinitialiser le mot de passe</value>
+  </data>
+  <data name="ResetPasswordGreeting" xml:space="preserve">
+    <value>Bonjour,</value>
+  </data>
+  <data name="ResetPasswordBody" xml:space="preserve">
+    <value>Nous avons reçu une demande de réinitialisation de votre mot de passe</value>
+  </data>
+  <data name="ResetPasswordButton" xml:space="preserve">
+    <value>Réinitialiser le mot de passe</value>
+  </data>
+  <data name="ResetPasswordIgnore" xml:space="preserve">
+    <value>Si vous n'avez pas demandé la réinitialisation, veuillez ignorer cet e-mail</value>
+  </data>
+  <data name="ResetPasswordRegards" xml:space="preserve">
+    <value>Cordialement, équipe Foras Khadra</value>
+  </data>
+  <data name="ResetPasswordFooter" xml:space="preserve">
+    <value>Cet e-mail est envoyé automatiquement, merci de ne pas répondre</value>
+  </data>
+  <data name="SiteName" xml:space="preserve">
+    <value>Foras khadra</value>
+  </data>
 </root>

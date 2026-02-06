@@ -123,4 +123,28 @@
   <data name="OrgLoginAlert" xml:space="preserve">
     <value>لا يمكن للمنظمات تسجيل الدخول من هنا!!</value>
   </data>
+  <data name="ResetPasswordSubject" xml:space="preserve">
+    <value>إعادة تعيين كلمة المرور</value>
+  </data>
+  <data name="ResetPasswordGreeting" xml:space="preserve">
+    <value>مرحبًا،</value>
+  </data>
+  <data name="ResetPasswordBody" xml:space="preserve">
+    <value>لقد تلقّينا طلبًا لإعادة تعيين كلمة المرور الخاصة بك</value>
+  </data>
+  <data name="ResetPasswordButton" xml:space="preserve">
+    <value>إعادة تعيين كلمة المرور</value>
+  </data>
+  <data name="ResetPasswordIgnore" xml:space="preserve">
+    <value>إذا لم تقم بطلب إعادة التعيين، يرجى تجاهل هذا البريد</value>
+  </data>
+  <data name="ResetPasswordRegards" xml:space="preserve">
+    <value>مع تحيات فريق فرص خضراء</value>
+  </data>
+  <data name="ResetPasswordFooter" xml:space="preserve">
+    <value>هذا البريد الإلكتروني مرسل تلقائيًا، الرجاء عدم الرد عليه</value>
+  </data>
+  <data name="SiteName" xml:space="preserve">
+    <value>فرص خضراء</value>
+  </data>
 </root>

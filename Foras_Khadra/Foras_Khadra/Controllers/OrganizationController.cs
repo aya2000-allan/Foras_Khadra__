@@ -11,6 +11,7 @@ using Microsoft.Extensions.Localization;
 using Nager.Country;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -315,35 +316,41 @@ namespace Foras_Khadra.Controllers
             // رسالة الإيميل
             string emailBody = $@"
 <!DOCTYPE html>
-<html lang='ar' dir='rtl'>
+<html lang='{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}' dir='{(CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? "rtl" : "ltr")}'>
 <head>
     <meta charset='UTF-8'>
-    <title>إعادة تعيين كلمة المرور</title>
+    <title>{_localizer["ResetPasswordSubject"]}</title>
 </head>
 <body style='font-family: Tahoma, Arial; background-color: #f4f6f8; padding:20px;'>
     <div style='max-width:600px;margin:auto;background:#fff;padding:30px;border-radius:8px;'>
         <h2 style='text-align:center;'>Foras Khadra</h2>
-        <p>تحية طيبة،</p>
-        <p>تم استلام طلب لإعادة تعيين كلمة المرور الخاصة بحساب منظمتكم <strong>{organization.Name}</strong> على منصة Foras Khadra.</p>
+        <p>{_localizer["ResetPasswordGreeting"]}</p>
+        <p>{string.Format(_localizer["ResetPasswordBodyOrg"], organization.Name)}</p>
         <p style='text-align:center;margin:30px 0;'>
             <a href='{resetLink}' 
-               style='background:#28a745; /* اللون الأخضر */
-                      color:#fff;
-                      padding:12px 30px;
-                      text-decoration:none;
-                      border-radius:6px;
-                      font-weight:bold;'>
-                إعادة تعيين كلمة المرور
+               style='background:#28a745; color:#fff; padding:12px 30px;
+                      text-decoration:none; border-radius:6px; font-weight:bold;'>
+                {_localizer["ResetPasswordButton"]}
             </a>
         </p>
-        <p>إذا لم تقم منظمتكم بطلب إعادة تعيين كلمة المرور، يرجى تجاهل هذا البريد الإلكتروني.</p>
-        <p>مع فائق الاحترام،<br/>فريق <strong>Foras Khadra</strong></p>
+        <p>{_localizer["ResetPasswordIgnore"]}</p>
+        <p>{_localizer["ResetPasswordRegards"]}</p>
     </div>
 </body>
 </html>";
 
-            await _emailSender.SendEmailAsync(organization.ContactEmail, "إعادة تعيين كلمة المرور", emailBody);
+
+            string emailSubject = $"{_localizer["SiteName"]} - {_localizer["ResetPasswordSubject"]}";
+
+            await _emailSender.SendEmailAsync(
+    organization.ContactEmail,
+    emailSubject,
+    emailBody
+); 
             return View("ForgotPasswordConfirmation");
+
+
+
         }
 
         [HttpGet]
