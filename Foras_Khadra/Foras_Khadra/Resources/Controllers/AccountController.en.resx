@@ -168,4 +168,7 @@
   <data name="training_opportunities" xml:space="preserve">
     <value>Training Opportunities</value>
   </data>
+  <data name="EmailAlreadyUsed" xml:space="preserve">
+    <value>This email is already in use</value>
+  </data>
 </root>

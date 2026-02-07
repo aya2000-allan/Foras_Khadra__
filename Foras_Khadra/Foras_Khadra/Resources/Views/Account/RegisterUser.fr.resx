@@ -123,14 +123,125 @@
   <data name="conferences" xml:space="preserve">
     <value>Conférences</value>
   </data>
+  <data name="ConfirmPasswordLabel" xml:space="preserve">
+    <value>Confirmez votre mot de passe</value>
+  </data>
+  <data name="ConfirmPasswordPlaceholder" xml:space="preserve">
+    <value>Entrez la confirmation de votre mot de passe</value>
+  </data>
+  <data name="CountryLabel" xml:space="preserve">
+    <value>Votre pays</value>
+  </data>
+  <data name="CountryPlaceholder" xml:space="preserve">
+    <value>Sélectionnez votre pays</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>Entrez votre email</value>
+  </data>
   <data name="fellowships" xml:space="preserve">
     <value>Bourses de recherche</value>
+  </data>
+  <data name="FillAllFieldsAlert" xml:space="preserve">
+    <value>Veuillez remplir tous les champs avant de continuer</value>
+  </data>
+  <data name="FirstNameLabel" xml:space="preserve">
+    <value>Votre prénom</value>
+  </data>
+  <data name="FirstNamePlaceholder" xml:space="preserve">
+    <value>Entrez votre prénom</value>
   </data>
   <data name="grants" xml:space="preserve">
     <value>Bourses</value>
   </data>
+  <data name="IndividualAccount" xml:space="preserve">
+    <value>Compte Individuel</value>
+  </data>
   <data name="jobs" xml:space="preserve">
     <value>Emplois</value>
+  </data>
+  <data name="LastNameLabel" xml:space="preserve">
+    <value>Votre nom de famille</value>
+  </data>
+  <data name="LastNamePlaceholder" xml:space="preserve">
+    <value>Entrez votre nom de famille</value>
+  </data>
+  <data name="NationalityLabel" xml:space="preserve">
+    <value>Votre nationalité</value>
+  </data>
+  <data name="NationalityPlaceholder" xml:space="preserve">
+    <value>Sélectionnez votre nationalité</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="OrgAccount" xml:space="preserve">
+    <value>Compte Organisation</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Créer un compte</value>
+  </data>
+  <data name="PasswordLabel" xml:space="preserve">
+    <value>Votre mot de passe</value>
+  </data>
+  <data name="PasswordMismatchAlert" xml:space="preserve">
+    <value>Votre mot de passe et sa confirmation ne correspondent pas</value>
+  </data>
+  <data name="PasswordPlaceholder" xml:space="preserve">
+    <value>Entrez votre mot de passe</value>
+  </data>
+  <data name="PrevButton" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="Progress25" xml:space="preserve">
+    <value>25% Terminé</value>
+  </data>
+  <data name="RegHeaderSubtitle" xml:space="preserve">
+    <value>Bienvenue ! Suivez les étapes ci-dessous pour accéder à toutes les opportunités et profiter de nombreuses fonctionnalités</value>
+  </data>
+  <data name="RegHeaderTitle" xml:space="preserve">
+    <value>Créer un compte</value>
+  </data>
+  <data name="SelectCountryNationalityAlert" xml:space="preserve">
+    <value>Veuillez sélectionner votre pays et votre nationalité avant de continuer</value>
+  </data>
+  <data name="SelectInterestAlert" xml:space="preserve">
+    <value>Veuillez sélectionner au moins un centre d'intérêt</value>
+  </data>
+  <data name="ShowHidePasswordLabel" xml:space="preserve">
+    <value>Afficher/Masquer le mot de passe</value>
+  </data>
+  <data name="Step1Title" xml:space="preserve">
+    <value>Sélectionnez le type de compte</value>
+  </data>
+  <data name="Step2Title" xml:space="preserve">
+    <value>Informations personnelles</value>
+  </data>
+  <data name="Step3Title" xml:space="preserve">
+    <value>Pays et nationalité</value>
+  </data>
+  <data name="Step4Hint" xml:space="preserve">
+    <value>Vous pouvez sélectionner plusieurs options</value>
+  </data>
+  <data name="Step4Title" xml:space="preserve">
+    <value>Centres d'intérêt</value>
+  </data>
+  <data name="Stepper1" xml:space="preserve">
+    <value>Type de compte</value>
+  </data>
+  <data name="Stepper2" xml:space="preserve">
+    <value>Informations personnelles</value>
+  </data>
+  <data name="Stepper3" xml:space="preserve">
+    <value>Pays et nationalité</value>
+  </data>
+  <data name="Stepper4" xml:space="preserve">
+    <value>Centres d'intérêt</value>
+  </data>
+  <data name="SubmitButton" xml:space="preserve">
+    <value>Créer mon compte</value>
   </data>
   <data name="training_opportunities" xml:space="preserve">
     <value>Opportunités de formation</value>

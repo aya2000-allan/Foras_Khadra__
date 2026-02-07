@@ -1,41 +1,78 @@
 ﻿using Foras_Khadra.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Foras_Khadra.Resources.Views.Account;
 
 namespace Foras_Khadra.ViewModels
 {
     public class RegisterViewModel
     {
-        // ===== للفرد =====
-        [Required(ErrorMessage = "الاسم الأول مطلوب")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.FirstNameRequired)
+        )]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "الاسم الأخير مطلوب")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.LastNameRequired)
+        )]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "البريد الإلكتروني مطلوب")]
-        [EmailAddress(ErrorMessage = "البريد الإلكتروني غير صالح")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.EmailRequired)
+        )]
+        [EmailAddress(
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.EmailInvalid)
+        )]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "الدولة مطلوبة")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.CountryRequired)
+        )]
         public string Country { get; set; }
 
-        [Required(ErrorMessage = "الجنسية مطلوبة")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.NationalityRequired)
+        )]
         public string Nationality { get; set; }
 
-        [Required(ErrorMessage = "كلمة المرور مطلوبة")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.PasswordRequired)
+        )]
         [DataType(DataType.Password)]
-        [StringLength(100, MinimumLength = 8, ErrorMessage = "كلمة المرور يجب أن تكون على الأقل 8 أحرف")]
+        [StringLength(100, MinimumLength = 8,
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.PasswordLength)
+        )]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$",
-    ErrorMessage = "كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم ورمز خاص")]
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.PasswordComplexity)
+        )]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "تأكيد كلمة المرور مطلوب")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.ConfirmPasswordRequired)
+        )]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "كلمة المرور غير متطابقة")]
+        [Compare("Password",
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.PasswordMismatch)
+        )]
         public string ConfirmPassword { get; set; }
 
-        [MinLength(1, ErrorMessage = "اختر اهتمام واحد على الأقل")]
-        public List<string> Interests { get; set; } = new List<string>(); // ما يلمس asp-for مباشرة
+        [MinLength(1,
+            ErrorMessageResourceType = typeof(RegisterResources),
+            ErrorMessageResourceName = nameof(RegisterResources.SelectInterestAlert)
+        )]
+        public List<string> Interests { get; set; } = new List<string>();
+
         public List<InterestItem> AvailableInterests { get; set; } = new List<InterestItem>
         {
             new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
@@ -46,6 +83,7 @@ namespace Foras_Khadra.ViewModels
             new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
             new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
         };
+
         public List<string> Countries { get; set; } = new List<string>();
         public List<string> Nationalities { get; set; } = new List<string>();
     }

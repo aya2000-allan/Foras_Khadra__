@@ -85,7 +85,7 @@ namespace Foras_Khadra.Controllers
             var existingUser = await _userManager.FindByEmailAsync(model.Email);
             if (existingUser != null)
             {
-                ModelState.AddModelError("Email", "هذا البريد الإلكتروني مستخدم من قبل");
+                ModelState.AddModelError("Email", _localizer["EmailAlreadyUsed"]);
                 return View(model);
             }
 
