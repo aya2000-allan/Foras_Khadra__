@@ -223,8 +223,25 @@
 
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        function showSwal(message) {
+            Swal.fire({
+                icon: "warning",
+                iconColor: "#fff",
+                allowOutsideClick: false,
+                confirmButtonText: "حسناً",
+                confirmButtonColor: "#F99D27",
+                html: `<div class="foras-swal-msg">${message}</div>`,
+                customClass: {
+                    popup: "foras-swal",
+                    confirmButton: "foras-swal-btn",
+                    icon: "foras-swal-icon"
+                }
+            });
+        }
+
         let currentStep = 1;
 
         function showStep(step){
@@ -270,7 +287,7 @@
             if(step === 1){
                 const type = document.querySelector('input[name="AccountType"]:checked')?.value;
                 if(!type){
-                    alert('اختاري نوع الحساب');
+                    showSwal('اختار نوع الحساب');
                     return false;
                 }
             }
@@ -279,7 +296,7 @@
                 const name = document.getElementById('Name')?.value?.trim();
                 const sector = document.getElementById('Sector')?.value?.trim();
                 if(!name || !sector){
-                    alert('أكملي بيانات المنظمة');
+                    showSwal('أكمل بيانات المنظمة');
                     return false;
                 }
             }
@@ -288,7 +305,7 @@
                 const c = document.getElementById('Country')?.value;
                 const loc = document.getElementById('Location')?.value?.trim();
                 if(!c || !loc){
-                    alert('أكملي بيانات الموقع');
+                    showSwal('أكمل بيانات الموقع');
                     return false;
                 }
             }
@@ -301,11 +318,11 @@
                 const cpw = document.getElementById('OrgConfirmPassword')?.value;
 
                 if(!contact || !email || !phone || !pw || !cpw){
-                    alert('يرجى ملء جميع الحقول المطلوبة');
+                    showSwal('يرجى ملء جميع الحقول المطلوبة');
                     return false;
                 }
                 if(pw !== cpw){
-                    alert('كلمة المرور غير متطابقة');
+                    showSwal('كلمة المرور غير متطابقة');
                     return false;
                 }
             }
@@ -318,6 +335,48 @@
 }
 
 <style>
+/* ===== Foras Swal Design (same as screenshot) ===== */
+.foras-swal{
+  border-radius: 22px !important;
+  padding: 34px 26px 26px !important;
+  box-shadow: 0 18px 45px rgba(0,0,0,.14) !important;
+  max-width: 920px !important;
+  direction: rtl !important;
+  text-align: center !important;
+}
+.foras-swal .swal2-icon.foras-swal-icon{
+  width: 70px !important;
+  height: 70px !important;
+  margin: 6px auto 14px !important;
+  border: none !important;
+  background: #F99D27 !important;
+  color: #fff !important;
+}
+.foras-swal .swal2-icon.foras-swal-icon .swal2-icon-content{
+  font-size: 44px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+.foras-swal-msg{
+  color: #25652C;
+  font-weight: 800;
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 1.35;
+  margin: 4px auto 18px;
+  max-width: 820px;
+}
+.foras-swal .swal2-confirm.foras-swal-btn{
+  border-radius: 12px !important;
+  padding: 14px 30px !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  box-shadow: none !important;
+  width: min(520px, 90%) !important;
+}
+.foras-swal .swal2-actions{
+  margin: 10px 0 0 !important;
+}
+
 /* نفس ستايل Register الفرد */
 .reg-page{
     min-height: calc(100vh - 120px);

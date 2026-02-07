@@ -214,98 +214,114 @@
             progress: @Html.Raw(Json.Serialize(Localizer["Progress"].Value))
         };
     </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
+<script>
+ function showSwal(message) {
+    Swal.fire({
+        icon: "warning",
+        iconColor: "#fff",
+        allowOutsideClick: false,
+        confirmButtonText: "OK",
+        confirmButtonColor: "#F99D27",
+        html: `<div class="foras-swal-msg">${message}</div>`,
+        customClass: {
+            popup: "foras-swal",
+            confirmButton: "foras-swal-btn",
+            icon: "foras-swal-icon"
+        }
+    });
+}
 
 
-        let currentStep = 1;
 
-        function showStep(step){
-            document.querySelectorAll('.reg-step').forEach(s => s.classList.remove('active'));
-            document.querySelector(`.reg-step[data-step="${step}"]`).classList.add('active');
+    function showStep(step){
+        document.querySelectorAll('.reg-step').forEach(s => s.classList.remove('active'));
+        document.querySelector(`.reg-step[data-step="${step}"]`).classList.add('active');
 
-            document.querySelectorAll('.reg-stepper-item').forEach(i => i.classList.remove('active'));
-            document.querySelector(`.reg-stepper-item[data-s="${step}"]`).classList.add('active');
+        document.querySelectorAll('.reg-stepper-item').forEach(i => i.classList.remove('active'));
+        document.querySelector(`.reg-stepper-item[data-s="${step}"]`).classList.add('active');
 
-            const percentMap = {1:25, 2:50, 3:75, 4:100};
-            const p = percentMap[step] || 25;
-            document.getElementById('progressFill').style.width = p + '%';
+        const percentMap = {1:25, 2:50, 3:75, 4:100};
+        const p = percentMap[step] || 25;
+        document.getElementById('progressFill').style.width = p + '%';
         document.getElementById('progressText').innerText = `${i18n.progress} ${p}%`;
-                    currentStep = step;
-        }
+        currentStep = step;
+    }
 
-        function nextStep(){
-            if(currentStep === 1){
-                const type = document.querySelector('input[name="AccountType"]:checked')?.value;
-                if(type === 'organization'){
-                    window.location.href = '@Url.Action("Register", "Organization")';
-                    return;
-                }
-            }
-            if(!validateStep(currentStep)) return;
-            showStep(Math.min(currentStep + 1, 4));
-        }
-
-        function prevStep(){ showStep(Math.max(currentStep - 1, 1)); }
-
-        function togglePassword(id){
-            const el = document.getElementById(id);
-            el.type = el.type === 'password' ? 'text' : 'password';
-        }
-
-                function validateStep(step){
-            if(step === 2){
-                const fn = document.getElementById('FirstName')?.value?.trim();
-                const ln = document.getElementById('LastName')?.value?.trim();
-                const em = document.getElementById('Email')?.value?.trim();
-                const pw = document.getElementById('Password')?.value;
-                const cpw = document.getElementById('ConfirmPassword')?.value;
-
-                if(!fn || !ln || !em || !pw || !cpw){
-                    alert(i18n.fillAll);
-                    return false;
-                }
-                if(pw !== cpw){
-                    alert(i18n.passwordMismatch);
-                    return false;
-                }
-            }
-
-            if(step === 3){
-                const c = document.getElementById('Country')?.value;
-                const n = document.getElementById('Nationality')?.value;
-                if(!c || !n){
-                    alert(i18n.selectCountry);
-                    return false;
-                }
-            }
-
-            if(step === 4){
-                const checked = document.querySelectorAll('input[name="Interests"]:checked');
-                if(checked.length === 0){
-                    alert(i18n.selectInterest);
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-
-                function submitForm() {
-            const checked = document.querySelectorAll('input[name="Interests"]:checked');
-            if(checked.length === 0){
-                alert(i18n.selectInterest);
+    function nextStep(){
+        if(currentStep === 1){
+            const type = document.querySelector('input[name="AccountType"]:checked')?.value;
+            if(type === 'organization'){
+                window.location.href = '@Url.Action("Register", "Organization")';
                 return;
             }
-            document.getElementById('registerWizard').submit();
+        }
+        if(!validateStep(currentStep)) return;
+        showStep(Math.min(currentStep + 1, 4));
+    }
+
+    function prevStep(){ showStep(Math.max(currentStep - 1, 1)); }
+
+    function togglePassword(id){
+        const el = document.getElementById(id);
+        el.type = el.type === 'password' ? 'text' : 'password';
+    }
+
+    function validateStep(step){
+        if(step === 2){
+            const fn = document.getElementById('FirstName')?.value?.trim();
+            const ln = document.getElementById('LastName')?.value?.trim();
+            const em = document.getElementById('Email')?.value?.trim();
+            const pw = document.getElementById('Password')?.value;
+            const cpw = document.getElementById('ConfirmPassword')?.value;
+
+            if(!fn || !ln || !em || !pw || !cpw){
+                showSwal(i18n.fillAll);
+                return false;
+            }
+            if(pw !== cpw){
+                showSwal(i18n.passwordMismatch);
+                return false;
+            }
         }
 
+        if(step === 3){
+            const c = document.getElementById('Country')?.value;
+            const n = document.getElementById('Nationality')?.value;
+            if(!c || !n){
+                showSwal(i18n.selectCountry);
+                return false;
+            }
+        }
 
-        showStep(1);
+        if(step === 4){
+            const checked = document.querySelectorAll('input[name="Interests"]:checked');
+            if(checked.length === 0){
+                showSwal(i18n.selectInterest);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function submitForm() {
+        const checked = document.querySelectorAll('input[name="Interests"]:checked');
+        if(checked.length === 0){
+            showSwal(i18n.selectInterest);
+            return;
+        }
+        document.getElementById('registerWizard').submit();
+    }
+
+    showStep(1);
+</script>
+
+    
 
 
-    </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -654,6 +670,29 @@
     font-weight:700;
     font-size:14px;
 }
+.swal-btn-big {
+    font-size: 16px !important;
+    padding: 12px 34px !important; /* 👈 الطول والعرض */
+    border-radius: 10px !important;
+    font-weight: 700;
+}
+/* عربي */
+html[dir="rtl"] .reg-label {
+    text-align: right;
+}
+
+/* إنجليزي + فرنسي */
+html[dir="ltr"] .reg-label {
+    text-align: left;
+}
+html[dir="rtl"] .reg-field {
+    text-align: right;
+}
+
+html[dir="ltr"] .reg-field {
+    text-align: left;
+}
+
 
 /* Responsive */
 @@media (max-width: 900px){
@@ -666,4 +705,91 @@
     .reg-grid-2{ grid-template-columns: 1fr; }
     .reg-eye{ top:40px; }
 }
+/* نص داخل input / select حسب اللغة */
+html[dir="rtl"] .reg-input{
+    text-align: right;
+    direction: rtl;
+}
+
+html[dir="ltr"] .reg-input{
+    text-align: left;
+    direction: ltr;
+}
+html[dir="ltr"] .reg-input::placeholder{
+    text-align: left;
+}
+
+html[dir="rtl"] .reg-input::placeholder{
+    text-align: right;
+}
+/* ===== Eye icon position by language ===== */
+
+/* عربي */
+html[dir="rtl"] .has-eye .reg-eye{
+    left: 10px;
+    right: auto;
+}
+
+/* إنجليزي + فرنسي */
+html[dir="ltr"] .has-eye .reg-eye{
+    right: 10px;
+    left: auto;
+}
+/* ===== Foras Swal Design (same as screenshot) ===== */
+.foras-swal{
+  border-radius: 22px !important;
+  padding: 34px 26px 26px !important;
+  box-shadow: 0 18px 45px rgba(0,0,0,.14) !important;
+  max-width: 920px !important;
+}
+
+/* direction حسب اللغة */
+html[dir="rtl"] .foras-swal{ direction: rtl !important; text-align:center !important; }
+html[dir="ltr"] .foras-swal{ direction: ltr !important; text-align:center !important; }
+
+/* أيقونة الدائرة البرتقالية */
+.foras-swal .swal2-icon.foras-swal-icon{
+  width: 70px !important;
+  height: 70px !important;
+  margin: 6px auto 14px !important;
+  border: none !important;
+  background: #F99D27 !important;
+  color: #fff !important;
+}
+.foras-swal .swal2-icon.foras-swal-icon .swal2-icon-content{
+  font-size: 44px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+/* النص الأخضر */
+.foras-swal-msg{
+  color: #25652C;
+  font-weight: 800;
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 1.35;
+  text-align: center;
+  margin: 4px auto 18px;
+  max-width: 820px;
+}
+
+/* زر كبسولة */
+.foras-swal .swal2-confirm.foras-swal-btn{
+  border-radius: 12px !important;
+  padding: 14px 30px !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  box-shadow: none !important;
+}
+
+/* زر بعرض قريب من الصورة */
+.foras-swal .swal2-confirm.foras-swal-btn{
+  width: min(520px, 90%) !important;
+}
+
+.foras-swal .swal2-actions{
+  margin: 10px 0 0 !important;
+}
+
+
 </style>
