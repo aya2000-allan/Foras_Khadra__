@@ -1,0 +1,214 @@
+/* Layout */
+.page-wrapper {
+  display: flex;
+}
+
+/* Left side */
+.side-panel {
+  width: 34%;
+  position: relative;
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 22px;
+}
+
+.side-bg {
+  background: #bbcfbe;
+  height: 54%;
+  border-bottom-right-radius: 300px;
+}
+
+/* Right side */
+.form-panel {
+  width: 70%;
+  background: #fff;
+  padding: 40px 60px;
+  border-radius: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-back-dashboard {
+  border: 1px solid #f99d27;
+  color: #f99d27;
+  padding: 8px 20px;
+  border-radius: 16px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 21px;
+  height: 58px;
+  width: 245px;
+  text-align: center;
+}
+/* Title */
+.page-title {
+  color: #25652c;
+  text-align: right;
+  margin: 44px 0;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+/* Validation */
+.validation-summary {
+  color: #c62828;
+  margin-bottom: 10px;
+}
+
+/* Upload box */
+.upload-box {
+  margin-bottom: 20px;
+}
+
+.discription {
+  color: #8c8c8c;
+  font-weight: 500;
+  font-size: 16px;
+  margin: 14px 0;
+}
+.upload-area {
+  border: 1px dashed #0885864d;
+  border-radius: 4px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 100%;
+  height: 266px;
+  margin-bottom: 40px;
+  background-color: #d0fcfd0d;
+}
+
+.upload-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.upload-area span {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.upload-area .browse {
+  color: #25652c;
+}
+.upload-area small {
+  display: block;
+  color: #676767;
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+/* Fields */
+.field {
+  margin-bottom: 15px;
+}
+.dropdown {
+  display: flex;
+  border-radius: 16px;
+  border: 1px solid #a8a8a8;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 16px 8px;
+  border-radius: 16px;
+  border: 1px solid #a8a8a8;
+  font-size: 16px;
+  outline: none;
+  color: #8c8c8c;
+}
+
+.dropdown.field select {
+  border: none;
+}
+.field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.custom-dropdown-arrow {
+  position: relative;
+  left: 3.2%;
+}
+/* Actions */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin: 35px 0;
+  height: 65px;
+}
+
+.btn-primary {
+  flex: 4;
+  background: #f99d27;
+  border: none;
+  border-radius: 16px;
+  padding: 12px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  color: #f99d27;
+  background: #fff;
+  border: 2px solid #f99d27;
+}
+
+.btn-outline {
+  flex: 1;
+  border: 2px solid #f99d27;
+  border-radius: 16px;
+  padding: 12px;
+  color: #f99d27;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.btn-outline:hover {
+  background: #f99d27;
+  color: #fff;
+}
+
+/*Quil Text editor style*/
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+  border: 1px solid #a8a8a8 !important;
+}
+
+.ql-toolbar.ql-snow {
+  border-radius: 16px 16px 0 0;
+}
+
+.ql-container.ql-snow {
+  border-radius: 0 0 16px 16px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .page-wrapper {
+    flex-direction: column;
+  }
+
+  .side-panel {
+    display: none;
+  }
+
+  .form-panel {
+    width: 100%;
+  }
+}

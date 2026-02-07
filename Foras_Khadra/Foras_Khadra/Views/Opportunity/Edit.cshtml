@@ -1,66 +1,220 @@
 ﻿@model Foras_Khadra.Models.OpportunityEditVM
 
-<h2>تعديل الفرصة</h2>
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
 
-    <div class="mb-3">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" />
+
+@{
+    ViewData["Title"] = "تعديل الفرصة";
+}
+
+<link rel="stylesheet" href="~/css/opportunity-create.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+<div class="header">
+    <h2 class="page-title"> تعديل الفرصة </h2>
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
+                        العودة للوحة التحكم
+                    </a>
+                </div>
+<div class="page-wrapper">
+
+    <!-- Form panel -->
+    <div class="form-panel">
+
+        <form id="editForm"
+              method="post"
+              enctype="multipart/form-data"
+               asp-action="Edit" >
+
+            <div asp-validation-summary="All" class="validation-summary"></div>
+
+         <!-- Image (same logic: required file upload) -->
+            <div class="upload-box">
+                <h3 class="discription">رفع صورةالفرصة </h3>
+
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <div class="current-image-preview" style="display:flex;align-items:center;gap:12px;margin-bottom:12px; background-color:#EEF1F7; justify-content:space-between ;border-radius:26px;padding:12px;">
+                        <img src="@Model.ImagePath" alt="صورة الفرصة" style="width:90px;height:auto;border-radius:16px;box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
+                        <button type="button" id="deleteImageBtn" title="حذف الصورة" style="    height: 40px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        text-decoration: none;
+                        font-size: 1.5rem; border: 1px solid #ff383c;
+                        color: #ff383c;
+                        background: none;">
+                           <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </div>
+                }
+
+                <label class="upload-area">
+                    <input asp-for="Image" id="ImageInput" type="file" required hidden />
+                    <div class="upload-icon">
+                        <img src="~/images/upload-icon.svg" alt="">
+                    </div>
+                    <p>Drag & drop files or <a href="#">Browse</a></p>
+                    <small>JPEG, PNG</small>
+                </label>
+                <input type="hidden" name="RemoveImage" id="RemoveImage" value="false" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <!-- Title (same logic) -->
+            <div class="field">
+                <input asp-for="Title" placeholder="عنوان الفرصة"required />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+           
+            <!-- PublishedBy (same readonly logic) -->
+            <div class="field">
+
+                @if (!string.IsNullOrEmpty(Model.PublishedBy))
+                {
+                    <input asp-for="PublishedBy" placeholder="نشر بواسطة : Admin" readonly  />
+                }
+                else
+                {
+                    <input asp-for="PublishedBy" placeholder="نشر بواسطة"/>
+                }
+
+                <span asp-validation-for="PublishedBy" class="text-danger"></span>
+            </div>
+
+            <!-- Type (same enum logic) -->
+            <div class="field dropdown">
+                <select asp-for="Type"
+                        asp-items="Html.GetEnumSelectList<OpportunityType>()"
+                        required>
+                    <option value="">اختر نوع الفرصة</option>
+                </select>
+                <img src="~/images/lets-icons_arrow-drop-down.svg"
+                     class="custom-dropdown-arrow" />
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <!-- Available Countries -->
+            <div class="field">
+                <textarea asp-for="AvailableCountries" rows="1" placeholder=" دول الفرصة (افصل بينها بفاصلة) " style="min-height: 56px;" required ></textarea>
+                <span asp-validation-for="AvailableCountries" class="text-danger"></span>
+            </div>
+
+            <!-- Eligibility Criteria -->
+            <div class="field">
+                <textarea asp-for="EligibilityCriteria" rows="2" placeholder="حدد معايير أهلية الفرصة" required></textarea>
+                <span asp-validation-for="EligibilityCriteria" class="text-danger"></span>
+            </div>
+
+
+            <!-- Description -->
+            <div class="field">
+                <textarea asp-for="Description" rows="3" placeholder="وصف الفرصة" required></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- Benefits -->
+            <div class="field">
+                <textarea asp-for="Benefits" rows="2" placeholder="الفوائد"required></textarea>
+                <span asp-validation-for="Benefits" class="text-danger"></span>
+            </div>
+          
+
+            <!-- Apply Link -->
+            <div class="field">
+                <input asp-for="ApplyLink" placeholder="رابط التقديم" required />
+                <span asp-validation-for="ApplyLink" class="text-danger"></span>
+            </div>
+
+             <!-- Detial -->
+            <div class="field">
+                <h3 class="discription"> تفاصيل الفرصة </h3>
+
+                <!-- Quill editor -->
+                <div id="editorAr" style="height: 376px;"></div>
+
+                <!-- Hidden input bound to Model -->
+                <input type="hidden" asp-for="Details" id="detial" />
+
+                <span asp-validation-for="Details" class="text-danger"></span>
+            </div>
+
+          
+            <!-- Actions -->
+            <div class="actions">
+                <button type="submit" class="btn-primary">حفظ التعديلات</button>
+                <a asp-action="Index" class="btn-outline">إلغاء</a>
+            </div>
+
+        </form>
     </div>
 
-    <div class="mb-3">
-        <label>صورة تعبّر عن الفرصة (اختياري)</label>
-        <input asp-for="Image" type="file" class="form-control" />
-        @if (!string.IsNullOrEmpty(Model.ImagePath))
-        {
-            <img src="@Model.ImagePath" alt="صورة الفرصة" style="width:150px;margin-top:5px;" />
+    <!-- Decorative panel -->
+    <div class="side-panel">
+        <div class="side-bg"></div>
+        <div class="side-illustration">
+            <img src="~/images/contact_illustration.svg" alt="">
+        </div>
+    </div>
+
+</div>
+<link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+    
+}
+<script>
+    // Initialize Quill editor
+    var quillAr = new Quill('#editorAr', {
+        theme: 'snow',
+        placeholder: 'اكتب التفاصيل هنا...',
+        modules: {
+            toolbar: [
+                [{ header: [1, 2, false] }],
+                ['bold', 'italic', 'underline'],
+                ['link', 'image'],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                ['clean']
+            ]
         }
-    </div>
+    });
+</script>
 
-    <div class="mb-3">
-        <label asp-for="PublishedBy"></label>
-        <input asp-for="PublishedBy" class="form-control" readonly />
-    </div>
+<script>
+    // Populate editor with initial content from the model (serialized safely to a JS string)
+    var initialDetails = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Details ?? ""));
 
-    <div class="mb-3">
-        <label asp-for="Type"></label>
-        <select asp-for="Type" class="form-control" asp-items="Html.GetEnumSelectList<OpportunityType>()">
-            <option value="">-- اختر النوع --</option>
-        </select>
-    </div>
+    // Initialize Quill editor (already created above) and set contents if any
+    if (initialDetails) {
+        // Use Quill's clipboard API to paste HTML
+        quillAr.clipboard.dangerouslyPasteHTML(initialDetails);
+        // Keep the hidden input in sync so server validation sees the current value
+        document.getElementById('detial').value = initialDetails;
+    }
 
-    <div class="mb-3">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-    </div>
+    // On form submit, set the hidden input value to the Quill editor content
+    document.getElementById('editForm').addEventListener('submit', function () {
+        document.getElementById('detial').value = quillAr.root.innerHTML;
+    });
+</script>
 
-    <div class="mb-3">
-        <label asp-for="Details"></label>
-        <textarea asp-for="Details" class="form-control"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="AvailableCountries">الدول (افصل بين الدول بفاصلة)</label>
-        <input asp-for="AvailableCountries" class="form-control" placeholder="مثال: الأردن, الجزائر" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="EligibilityCriteria"></label>
-        <textarea asp-for="EligibilityCriteria" class="form-control"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Benefits"></label>
-        <textarea asp-for="Benefits" class="form-control"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="ApplyLink"></label>
-        <input asp-for="ApplyLink" class="form-control" />
-    </div>
-
-    <button type="submit" class="btn btn-success">حفظ التعديلات</button>
-    <a asp-action="Index" class="btn btn-secondary">رجوع</a>
-</form>
+<script>
+    // Delete current image preview handler
+    var deleteBtn = document.getElementById('deleteImageBtn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', function () {
+            var preview = document.querySelector('.current-image-preview');
+            if (preview) preview.style.display = 'none';
+            var removeInput = document.getElementById('RemoveImage');
+            if (removeInput) removeInput.value = 'true';
+            var fileInput = document.getElementById('ImageInput');
+            if (fileInput) fileInput.value = '';
+        });
+    }
+</script>
+</>

@@ -1,0 +1,286 @@
+.page-wrapper {
+  direction: rtl;
+}
+
+/* Header Styling */
+.admin-header {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 15px 40px;
+}
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-title {
+  color: #25652c;
+  font-size: 36px;
+  font-weight: 700;
+}
+.header-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.search-filter-wrapper {
+  display: flex;
+  gap: 30px;
+  position: relative;
+  margin-left: 22px;
+}
+.filter-btn,
+.search-icon {
+  color: #25652c;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.btn-add-opportunity {
+  background-color: #f99d27;
+  padding: 8px 20px;
+  border-radius: 16px;
+  text-decoration: none;
+  font-size: 21px;
+  font-weight: 600;
+  height: 58px;
+  width: 245px;
+  color: #fff;
+  text-align: center;
+}
+.btn-back-dashboard {
+  border: 1px solid #f99d27;
+  color: #f99d27;
+  padding: 8px 20px;
+  border-radius: 16px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 21px;
+  height: 58px;
+  width: 245px;
+  text-align: center;
+}
+
+/* List/Table Styling */
+.table-labels {
+  display: flex;
+  padding: 10px 20px;
+  color: #112d14;
+  font-weight: bold;
+  text-align: center;
+  margin: 22px 0px;
+  font-size: 24px;
+}
+.label-col {
+  flex: 1;
+}
+.title-label {
+  text-align: right;
+}
+
+.opportunity-row-card {
+  background: #fff;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  color: #000;
+}
+.info-col {
+  flex: 1;
+  text-align: center;
+  font-weight: 500;
+}
+.title-col {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 100px;
+}
+.opp-title-text {
+  font-weight: bold;
+}
+.opp-img-container img {
+  width: 60px;
+  height: 45px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Action Icons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  flex: 0.5;
+  justify-content: center;
+}
+.action-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.5rem;
+}
+.view-btn {
+  border: 1px solid #25652c;
+  color: #25652c;
+}
+.edit-btn {
+  border: 1px solid #f99d27;
+  color: #f99d27;
+}
+.delete-btn {
+  border: 1px solid #ff383c;
+  color: #ff383c;
+  background: none;
+}
+
+/* Filter Window */
+.filter-window {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: white;
+  color: #000;
+  z-index: 100;
+  display: none;
+  min-width: 200px;
+  border-radius: 8px;
+}
+
+/* Pagination - Matching your green style */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+}
+.page-link-num,
+.pagination-arrow {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #333;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 3px;
+  color: #000000;
+  text-decoration: none;
+  border-radius: 4px;
+}
+/* Grey Arrow Styling */
+.prev-arrow {
+  background-color: #919eab;
+  border: none;
+  color: #c4cdd5;
+}
+
+.next-arrow {
+  background-color: #919eab;
+  border: none;
+  color: #c4cdd5;
+}
+
+.page-link-num.active {
+  border-color: #000000;
+  color: #000000;
+}
+.next-page-prompt a {
+  color: #0c2710;
+  text-decoration: underline;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+/* Overlay */
+.delete-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+/* Box */
+.delete-box {
+  background: #fff;
+  width: 720px;
+  max-width: 92%;
+  border-radius: 28px;
+  padding: 45px 30px 35px;
+  text-align: center;
+  position: relative;
+  direction: rtl;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+}
+
+/* Close button */
+.delete-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: #eee;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Illustration */
+.delete-illustration img {
+  max-width: 230px;
+  margin-bottom: 20px;
+}
+
+/* Title */
+.delete-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+/* Opportunity name */
+.delete-name {
+  font-size: 26px;
+  font-weight: 700;
+  color: #25652c;
+  margin-bottom: 35px;
+}
+
+/* Actions */
+.delete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+/* Back button */
+.btn-back {
+  background: #fff;
+  border: 3px solid #f99d27;
+  color: #f99d27;
+  font-size: 22px;
+  padding: 14px 55px;
+  border-radius: 22px;
+  cursor: pointer;
+}
+
+/* Delete button */
+.btn-danger {
+  background: #ff383c;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  padding: 14px 65px;
+  border-radius: 22px;
+  cursor: pointer;
+}
