@@ -185,7 +185,13 @@
                         <div class="reg-progress-bar">
                             <div id="progressFill" class="reg-progress-fill" style="width:25%"></div>
                         </div>
-                        <div id="progressText" class="reg-progress-text">@Localizer["Progress25"]</div>
+                        <div id="progressText" class="reg-progress-text"
+                             data-label-ar="التقدم"
+                             data-label-en="Progress"
+                             data-label-fr="Progression">
+                        </div>
+
+
                     </div>
                 </form>
             </div>
@@ -204,6 +210,9 @@
 </div>
 
 @section Scripts {
+    <script>
+        const currentLang = '@culture'; // ar / en / fr
+    </script>
     <partial name="_ValidationScriptsPartial" />
     <script>
         const i18n = {
@@ -211,7 +220,6 @@
             passwordMismatch: @Html.Raw(Json.Serialize(Localizer["PasswordMismatchAlert"].Value)),
             selectCountry: @Html.Raw(Json.Serialize(Localizer["SelectCountryNationalityAlert"].Value)),
             selectInterest: @Html.Raw(Json.Serialize(Localizer["SelectInterestAlert"].Value)),
-            progress: @Html.Raw(Json.Serialize(Localizer["Progress"].Value))
         };
     </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -235,19 +243,38 @@
 
 
 
-    function showStep(step){
-        document.querySelectorAll('.reg-step').forEach(s => s.classList.remove('active'));
-        document.querySelector(`.reg-step[data-step="${step}"]`).classList.add('active');
+                              function showStep(step) {
+            // إخفاء/إظهار الخطوات
+            document.querySelectorAll('.reg-step').forEach(s => s.classList.remove('active'));
+            document.querySelector(`.reg-step[data-step="${step}"]`).classList.add('active');
 
-        document.querySelectorAll('.reg-stepper-item').forEach(i => i.classList.remove('active'));
-        document.querySelector(`.reg-stepper-item[data-s="${step}"]`).classList.add('active');
+            document.querySelectorAll('.reg-stepper-item').forEach(i => i.classList.remove('active'));
+            document.querySelector(`.reg-stepper-item[data-s="${step}"]`).classList.add('active');
 
-        const percentMap = {1:25, 2:50, 3:75, 4:100};
-        const p = percentMap[step] || 25;
-        document.getElementById('progressFill').style.width = p + '%';
-        document.getElementById('progressText').innerText = `${i18n.progress} ${p}%`;
-        currentStep = step;
-    }
+            // نسبة التقدم
+            const percentMap = {1:25, 2:50, 3:75, 4:100};
+            const p = percentMap[step] || 25;
+            document.getElementById('progressFill').style.width = p + '%';
+
+            // ترجمة Progress حسب لغة الصفحة
+            const progressText = document.getElementById('progressText');
+            let label = progressText.dataset.labelEn; // افتراضي
+
+            if(currentLang === 'ar') label = progressText.dataset.labelAr;
+            else if(currentLang === 'fr') label = progressText.dataset.labelFr;
+
+            progressText.innerText = `${label} ${p}%`;
+
+            currentStep = step;
+        }
+
+
+        // تشغيل الخطوة 1 افتراضياً بعد تحميل الصفحة
+        document.addEventListener("DOMContentLoaded", function() {
+            showStep(1);
+        });
+
+
 
     function nextStep(){
         if(currentStep === 1){
