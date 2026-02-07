@@ -12,7 +12,8 @@
         public bool HasRequestedReels { get; set; }
         public bool IsReelsCompleted { get; set; }
         public bool IsReelsRejected { get; set; }           
-        public string RejectionReason { get; set; }   
+        public string RejectionReason { get; set; }
+        public bool IsReelsInProgress { get; set; }
 
     }
 }

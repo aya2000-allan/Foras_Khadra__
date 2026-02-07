@@ -27,7 +27,7 @@ namespace Foras_Khadra.Controllers
             var model = new AdminDashboardViewModel
             {
                 TotalOrganizations = await _context.Organizations.CountAsync(),
-                TotalUsers = await _context.Users.CountAsync(u => u.Role == UserRole.User),
+                TotalUsers = await _context.TeamMember.CountAsync(),
                 TotalOpportunities = await _context.Opportunities.CountAsync(),
                 TotalArticles = await _context.Articles.CountAsync(),
                 TotalReelsRequests = totalReelsRequests,
@@ -54,7 +54,8 @@ namespace Foras_Khadra.Controllers
                     RequestDate = r.RequestDate,
                     IsCompleted = r.IsCompleted,
                     IsRejected = r.IsRejected,
-                    IsInProgress = r.IsInProgress, // حالة جاري العمل عليها
+                    IsInProgress = r.IsInProgress, 
+
                     RejectionReason = r.RejectionReason
                 })
                 .ToList();

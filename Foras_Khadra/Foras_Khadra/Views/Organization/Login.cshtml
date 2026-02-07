@@ -1,35 +1,298 @@
 ﻿@model Foras_Khadra.Models.OrganizationLoginViewModel
+@using Microsoft.Extensions.Options;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"];
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+}
 
-<form asp-action="Login" method="post">
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
-    <div>
-        <label>البريد الإلكتروني</label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+<div class="auth-page" dir="@dir">
+    <div class="auth-bg-circle"></div>
+
+    <div class="auth-card">
+        <h1 class="auth-title">@Localizer["LoginTitle"]</h1>
+        <p class="auth-subtitle">@Localizer["LoginSubtitle"]</p>
+
+        <form asp-action="Login" method="post" class="mt-4">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label auth-label">@Localizer["Email"]</label>
+                <div class="auth-input">
+                    <input asp-for="Email" class="form-control auth-control" placeholder="@Localizer["Email"]" />
+                </div>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-2">
+                <label asp-for="Password" class="form-label auth-label">@Localizer["Password"]</label>
+
+                <div class="auth-input has-icon">
+                    <input asp-for="Password" id="OrgPassword" class="form-control auth-control" type="password" placeholder="@Localizer["PasswordPlaceholder"]" />
+                    <button type="button" class="auth-eye" onclick="togglePassword('OrgPassword')"
+                            aria-label="إظهار/إخفاء كلمة المرور">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <!-- Remember + Forgot -->
+            <div class="d-flex align-items-center justify-content-between mt-2 mb-3 auth-row">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMeOrg" />
+                    <label class="form-check-label" for="rememberMeOrg">@Localizer["RememberMe"]</label>
+                </div>
+
+                <a asp-controller="Organization" asp-action="ForgotPassword" class="auth-link">
+                    @Localizer["ForgotPassword"]
+                </a>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn auth-btn w-100">@Localizer["LoginButton"]</button>
+
+           
+
+            <div class="auth-footer">
+                <span>@Localizer["NoAccount"]</span>
+                <a asp-action="Register" asp-controller="Organization" class="auth-link ms-1">@Localizer["CreateAccount"]</a>
+            </div>
+        </form>
     </div>
-
-    <div>
-        <label>كلمة المرور</label>
-        <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-
-    <!--  نسيت كلمة المرور -->
-    <div style="margin-top:10px;">
-        <a asp-controller="Organization"
-           asp-action="ForgotPassword">
-            نسيت كلمة المرور؟
-        </a>
-    </div>
-
-    <button type="submit" style="margin-top:15px;">
-        تسجيل الدخول
-    </button>
-</form>
+</div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function togglePassword(id) {
+            const el = document.getElementById(id);
+            el.type = (el.type === 'password') ? 'text' : 'password';
+        }
+
+        // SweetAlert للمستخدم العادي
+        @if (TempData["UserLoginAlert"] != null)
+        {
+                <text>
+                    const message = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["UserLoginAlert"]));
+                    const redirectUrl = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["UserLoginRedirect"]));
+                    const redirectText = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["UserLoginRedirectText"]));
+
+                    Swal.fire({
+                        icon: 'warning',
+                        allowOutsideClick: false,
+                        html: '<div style="text-align:center;">' + message + '</div>', // النص هنا فقط
+                        customClass: {
+                            popup: '@(culture == "ar" ? "swal-rtl" : "swal-ltr")'
+                        },
+                        confirmButtonText: redirectText
+                    }).then((result) => {
+                        if (result.isConfirmed && redirectUrl) {
+                            window.location.href = redirectUrl;
+                        }
+                    });
+                </text>
+        }
+    </script>
 }
+
+<style>
+
+    /* RTL للغة العربية */
+    .swal-rtl {
+        direction: rtl !important;
+        text-align: center !important;
+    }
+
+    /* LTR للغة الإنجليزية/الفرنسية */
+    .swal-ltr {
+        direction: ltr !important;
+        text-align: center !important;
+    }
+/* Page */
+.auth-page{
+    min-height: calc(100vh - 120px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:40px 16px;
+    background:#F2FBF3;
+    overflow:hidden;
+    font-family:"Tajawal","Cairo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+
+/* Big soft circle */
+.auth-bg-circle{
+    position:absolute;
+    width:763px;
+    height:743px;
+    border-radius:50%;
+    background:#E2F6E4;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    z-index:0;
+}
+
+/* Card */
+.auth-card{
+    width:100%;
+    max-width:523px;
+    background:#fff;
+    border-radius:18px;
+    height: 735px;
+    padding:28px 26px;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    z-index:1;
+}
+
+/* Title */
+.auth-title{
+    margin:0;
+    text-align:center;
+    color:#25652C;
+    font-weight:600;
+    font-size:48px;
+    line-height:1.1;
+}
+
+.auth-subtitle{
+    margin-top:20px;
+    margin-bottom:0;
+    text-align:center;
+    color:#25652C;
+    font-size:20px;
+    font-weight:300;
+}
+
+/* Labels */
+.auth-label{
+    color:#000;
+    font-weight:800;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+/* Inputs */
+.auth-input{ position:relative; }
+
+.auth-control{
+    border-radius:10px;
+    padding:12px 14px;
+    border:1px solid #dfe7e2;
+    background:#fff;
+    box-shadow:none !important;
+}
+.auth-control:focus{
+    border-color:#9ad0a7;
+    box-shadow:0 0 0 .2rem rgba(43,160,82,.15) !important;
+}
+
+/* Eye */
+.has-icon .auth-control{ padding-left:44px; }
+.auth-eye{
+    position:absolute;
+    left:10px;
+    top:50%;
+    transform:translateY(-50%);
+    border:0;
+    background:transparent;
+    color:#8aa496;
+    padding:6px;
+    cursor:pointer;
+}
+
+/* Row */
+.auth-row .form-check-label{
+    color:#2f3a33;
+    font-size:13px;
+    font-weight:600;
+}
+
+.auth-link{
+    color:#2f3a33;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+}
+.auth-link:hover{ text-decoration:underline; }
+
+/* Button */
+.auth-btn{
+    background:#f4a029;
+    border:none;
+    border-radius:10px;
+    padding:12px 14px;
+    font-weight:800;
+    color:#fff;
+    margin-top:6px;
+}
+.auth-btn:hover{ background:#ee9414; color:#fff; }
+
+/* Divider */
+.auth-divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin:18px 0 12px;
+    color:#93a49a;
+    font-size:12px;
+    font-weight:700;
+}
+.auth-divider::before,
+.auth-divider::after{
+    content:"";
+    height:1px;
+    background:#e8efe9;
+    flex:1;
+}
+
+/* Social */
+.auth-social{
+    display:flex;
+    gap:10px;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+.auth-social-btn{
+    flex:1;
+    min-width:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:10px;
+    border:1px solid #dfe7e2;
+    border-radius:10px;
+    background:#fff;
+    text-decoration:none;
+    color:#2f3a33;
+    font-weight:700;
+    font-size:12px;
+}
+
+/* Footer */
+.auth-footer{
+    margin-top:16px;
+    text-align:center;
+    color:#25652C;
+    font-size:16px;
+    font-weight:400;
+    padding-top: 40px;
+}
+</style>

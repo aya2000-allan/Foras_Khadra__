@@ -22,11 +22,14 @@ public class ArticlesController : Controller
 
         var query = _context.Articles.AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(search))
-        {
-            query = query.Where(a =>
-                a.Title.Contains(search));
-        }
+     if (!string.IsNullOrWhiteSpace(search))
+{
+    query = query.Where(a =>
+        a.TitleAr.Contains(search) ||
+        a.TitleEn.Contains(search) ||
+        a.TitleFr.Contains(search));
+}
+
 
         int totalItems = await query.CountAsync();
         int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
@@ -124,8 +127,12 @@ public class ArticlesController : Controller
             existing.ImagePath = "/uploads/" + fileName;
         }
 
-        existing.Title = article.Title;
-        existing.Content = article.Content;
+        existing.TitleAr = article.TitleAr;
+        existing.TitleEn = article.TitleEn;
+        existing.TitleFr = article.TitleFr;
+        existing.ContentAr = article.ContentAr;
+        existing.ContentEn = article.ContentEn;
+        existing.ContentFr = article.ContentFr;
         existing.Author = article.Author;
 
         await _context.SaveChangesAsync();

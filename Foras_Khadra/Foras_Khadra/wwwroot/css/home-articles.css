@@ -1,0 +1,353 @@
+.home-articles{ direction: rtl; }
+
+/* ===== section header (title + svg icon) ===== */
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start; /* بدل space-between */
+  margin: 8px 0 12px;
+    gap: 10px;                  /* مسافة بين الايقونة والعنوان */
+
+}
+.section-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex: 0 0 auto;
+}
+
+.section-title{
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+  color:#25652C;
+}
+.section-icon svg{ width:30px; height:30px; }
+.mt-24{ margin-top: 24px; }
+
+/* ===== Latest layout ===== */
+.latest-grid-wrap{
+  display:grid;
+  grid-template-columns: 360px 1fr;          /* يسار صغار | يمين كبير */
+  grid-template-areas: "mini big";
+  gap: 14px;
+  align-items: stretch;
+}
+
+.latest-mini-area{ grid-area: mini; }
+.latest-big-area{ grid-area: big; }
+
+.latest-mini-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* cards */
+.latest-card{
+  position:relative;
+  display:block;
+  border-radius: 14px;
+  overflow:hidden;
+  background-size: cover;
+  background-position: center;
+  text-decoration:none;
+  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+}
+
+.latest-card.small{ height: 120px; }
+.latest-card.big{ height: 252px; }
+
+.latest-overlay{
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.10) 0%, rgba(0,0,0,.75) 100%);
+}
+
+.latest-info{
+  position:absolute;
+  right: 14px;
+  left: 70px;
+  bottom: 14px;
+  z-index: 2;
+}
+.latest-title{
+  color:#fff;
+  font-weight: 900;
+  line-height:1.25;
+  display:-webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow:hidden;
+}
+.latest-card.small .latest-title{ font-size: 13px; }
+.latest-card.big .latest-title{ font-size: 18px; }
+
+.latest-date{
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,.85);
+}
+
+/* arrow circle bottom-left */
+.latest-arrow{
+  position:absolute;
+  left: 12px;
+  bottom: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.55);
+  border: 1px solid rgba(255,255,255,.25);
+  display:grid;
+  place-items:center;
+  z-index: 3;
+}
+.latest-arrow i{ color:#fff; font-size: 13px; }
+
+/* "اقرأ المزيد" only on big card */
+.latest-more{
+  position:absolute;
+  left: 56px;
+  bottom: 16px;
+  z-index: 3;
+  color:#fff;
+  font-weight: 800;
+  font-size: 13px;
+  opacity: .95;
+}
+
+/* ===== اقرأ أيضًا list ===== */
+/* ===== اقرأ أيضًا (مثل الصورة) ===== */
+.readalso-list{
+  display:flex;
+  flex-direction:column;
+}
+
+.readalso-item{
+  display:flex;
+  align-items:flex-start;
+  gap: 16px;
+  padding: 10px 0;
+}
+
+.ra-date{
+  /* width: 54px; */
+  text-align:center;
+  color:#F99D27;
+  font-weight: 400;
+  flex: 0 0 54px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  /* gap: 4px; */
+}
+
+.ra-date .d{
+  font-size:26px;
+  color:#000000;  
+ text-decoration: underline;     /* خط تحت اليوم */
+}
+
+.ra-date .m{
+  font-size:22px;
+}
+
+.ra-date .y{
+  font-size:22px;
+  opacity:.95;
+}
+
+
+/* الصورة يمين */
+.ra-thumb{
+  width: 380px;
+  /* height: 374px; */
+  border-radius: 10px;
+  overflow:hidden;
+  background:#d8e6db;
+  flex: 0 0 170px;
+}
+.ra-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* المحتوى يسار */
+.ra-body{
+    position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ra-tag{
+  font-size: 12px;
+  color:#7a7a7a;
+  margin-bottom: 6px;
+}
+
+.ra-title{
+  margin: 0 0 6px;
+  font-size: 36px;
+  font-weight: 700;
+  font-size: bold;
+  color:#000000;
+}
+
+.ra-excerpt{
+  margin: 0 0 12px;
+  font-size: 20px;
+  color:#3b3b3b;
+  font-weight: 300;
+  line-height: 1.75;
+  max-height: 4.6em;
+  overflow:hidden;
+  font-size: light;
+}
+
+/* اقرأ المزيد مع دائرة */
+.ra-more{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 24px;
+  font-size: bold;
+  color: #0C2710;
+}
+.ra-more :hover{
+  text-decoration: underline;
+  color: #1a4421;
+
+}
+.ra-more-icon{
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 3px solid #0C2710;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+    font-size: bold;
+
+}
+.ra-more-icon :hover{
+  text-decoration: underline;
+  color: #1a4421;
+
+}
+.ra-more-icon i{
+  font-size: 14px;
+  color:#0C2710;
+}
+
+/* نخليها عاليسار */
+.ra-more{
+  float: left;
+}
+
+.ra-divider{
+  height:1px;
+  background: rgba(0,0,0,.08);
+}
+.ra-body{ text-align:right; }
+
+.pagination-wrap{
+  margin-top: 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 14px;
+}
+
+.pagination{
+  display:flex;
+  align-items:center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pg-btn{
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: #f4f7f4;
+  color: #2a2a2a;
+  text-decoration:none;
+  display:grid;
+  place-items:center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.pg-btn.active{
+  background:#ffffff;
+  border-color: rgba(0,0,0,.18);
+}
+
+.pg-btn.disabled{
+  pointer-events:none;
+  opacity: .4;
+}
+
+.pg-dots{
+  color: rgba(0,0,0,.45);
+  padding: 0 4px;
+  font-weight: 800;
+}
+
+.pg-next-text{
+  color:#1f8f3a;
+  font-weight:800;
+  text-decoration:none;
+  font-size: 13px;
+}
+.latest-more{
+  position:absolute;
+  left:56px;
+  bottom:16px;
+  z-index:4;           /* أعلى من overlay */
+  color:#fff;
+  font-weight:800;
+  font-size:13px;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+
+@media (max-width: 650px){
+  .readalso-item{
+    gap: 12px;
+  }
+  .ra-thumb{
+    width: 140px;
+    height: 92px;
+    flex-basis: 140px;
+  }
+  .ra-title{ font-size: 16px; }
+}
+
+
+
+/* responsive */
+@media (max-width: 900px){
+  .latest-grid-wrap{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "big"
+      "mini";
+  }
+  .latest-card.big{ height: 220px; }
+  .latest-card.small{ height: 120px; }
+}
+
+@media (max-width: 600px){
+  .readalso-row{ flex-direction:column; }
+  .ra-right{ justify-content:flex-end; }
+}

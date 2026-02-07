@@ -104,71 +104,49 @@ else
 
                     <!-- Label للحالة -->
                     <td>
-                        <span id="statusLabel-@req.Id"
-                              class="status-label @(req.IsCompleted ? "completed" : req.IsRejected ? "rejected" : req.IsInProgress ? "pending" : "")">
-                            @(req.IsCompleted ? "تم الانتهاء" : req.IsRejected ? "مرفوض" : req.IsInProgress ? "جاري العمل عليها" : "")
-                        </span>
+                        @if (req.IsInProgress || req.IsCompleted)
+                        {
+                            <span id="statusLabel-@req.Id"
+                                  class="status-label @(req.IsCompleted ? "completed" : "pending")">
+                                @(req.IsCompleted ? "تم الانتهاء" : "جاري العمل عليها")
+                            </span>
+                        }
+                        else
+                        {
+                            @* لا يظهر شيء للحالات الأخرى مثل المرفوضة أو الجديدة *@
+                            <span id="statusLabel-@req.Id" class="status-label d-none"></span>
+                        }
                     </td>
+
 
 
                     <!-- Dropdown + حقل سبب الرفض -->
                     <td>
                         <select class="form-select" onchange="handleStatusChange(this, @req.Id)">
-                            @* الخيار الافتراضي للطلبات الجديدة *@
-                            @if (!req.IsInProgress && !req.IsCompleted && !req.IsRejected)
-                            {
-                                <option value="" selected>-----</option>
-                            }
+                            @* الخيار الافتراضي للطلبات الجديدة أو المرفوضة سابقًا *@
+                            <option value="" selected="@( !req.IsInProgress && !req.IsCompleted ? "selected" : null )">-----</option>
 
                             @* جاري العمل عليها *@
-                            @if (req.IsInProgress)
-                            {
-                                <text>
-                                <option value="pending" selected>جاري العمل عليها</option></text>
-                            }
-                            else
-                            {
-                                <text>
-                                <option value="pending">جاري العمل عليها</option></text>
-                            }
+                            <option value="pending" selected="@( req.IsInProgress ? "selected" : null )">جاري العمل عليها</option>
 
                             @* تم الانتهاء *@
-                            @if (req.IsCompleted)
-                            {
-                                <text>
-                                <option value="completed" selected>تم الانتهاء</option></text>
-                            }
-                            else
-                            {
-                                <text>
-                                <option value="completed">تم الانتهاء</option></text>
-                            }
+                            <option value="completed" selected="@( req.IsCompleted ? "selected" : null )">تم الانتهاء</option>
 
-                            @* مرفوض *@
-                            @if (req.IsRejected)
-                            {
-                                <text>
-                                <option value="rejected" selected>مرفوض</option></text>
-                            }
-                            else
-                            {
-                                <text>
-                                <option value="rejected">مرفوض</option></text>
-                            }
+                            @* مرفوض لا يتم تحديده افتراضيًا *@
+                            <option value="rejected">مرفوض</option>
                         </select>
 
-
-
-
-
+                        @* حقل سبب الرفض يبدأ مخفي دائمًا *@
                         <input type="text"
                                id="rejectionInput-@req.Id"
-                               class="form-control mt-1 @(req.IsRejected ? "" : "d-none")"
+                               class="form-control mt-1 d-none"
                                placeholder="سبب الرفض"
-                               value="@req.RejectionReason"
+                               value=""
                                onkeydown="saveRejectionOnEnter(event, @req.Id)"
                                onchange="saveRejection(@req.Id, this.value)" />
                     </td>
+
+
                 </tr>
             }
         </tbody>
@@ -193,7 +171,7 @@ else
 </style>
 
 <script>
-        function handleStatusChange(select, id){
+            function handleStatusChange(select, id){
         const value = select.value;
         const label = document.getElementById(`statusLabel-${id}`);
         const input = document.getElementById(`rejectionInput-${id}`);
@@ -206,20 +184,21 @@ else
             label.className = "status-label rejected";
             if(input.value) saveRejection(id, input.value);
         } else {
+            // الحالة ليست مرفوضة أو فارغة
             input.classList.add("d-none");
             input.value = "";
 
-            //  هنا حدثنا النص والحالة لكل اختيار
             if(value === "completed") {
                 label.textContent = "تم الانتهاء";
+                label.className = "status-label completed";
             } else if(value === "pending") {
                 label.textContent = "جاري العمل عليها";
+                label.className = "status-label pending";
             } else {
+                // الحالة فارغة
                 label.textContent = "";
+                label.className = "status-label";
             }
-
-            //  تحديث الـ class للـ label
-            label.className = "status-label " + (value === "pending" ? "pending" : value === "completed" ? "completed" : "");
 
             // إرسال التحديث للـ Controller
             fetch(`/Admin/ToggleReelsRequest?id=${id}&newStatus=${value}`, {
@@ -228,6 +207,7 @@ else
             });
         }
     }
+
 
     function saveRejectionOnEnter(event, id){
         if(event.key === "Enter"){

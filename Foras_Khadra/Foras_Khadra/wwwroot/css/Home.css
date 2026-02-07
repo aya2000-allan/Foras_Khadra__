@@ -204,11 +204,28 @@ background: var(--orange);
 
 /* ===== VISION & GOALS ===== */
 .vision-goals {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     gap: 70px;
     padding: 50px 60px;
+    direction: ltr; /* نحمي من RTL لخبطة */
 }
+
+/* نخلي النص عربي */
+.vg-box {
+    direction: rtl;
+    width: 50%;
+}
+
+.vg-box.vision {
+    order: 1; /* اليسار */
+}
+
+.vg-box.goals {
+    order: 2; /* اليمين */
+}
+
 
 
 .vg-box .vg-title {
@@ -365,9 +382,13 @@ background: var(--orange);
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-    .vision-goals,
-    .teams-section {
+    .vision-goals {
+        flex-direction: column;
         padding: 30px;
+    }
+
+    .vg-box {
+        width: 100%;
     }
 }
 

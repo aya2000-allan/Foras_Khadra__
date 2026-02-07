@@ -123,6 +123,49 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        var toolbarOptions = [
+            [{ header: [1, 2, false] }],
+            ['bold', 'italic', 'underline'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['link'],
+            ['clean'],
+            [{ align: [] }]
+        ];
+
+        // Arabic (RTL)
+        var quillAr = new Quill('#editorAr', {
+            theme: 'snow',
+            modules: { toolbar: toolbarOptions }
+        });
+        quillAr.root.setAttribute('dir', 'rtl');
+        quillAr.root.innerHTML = `@Html.Raw(Model.BioAr ?? "")`;
+
+        // English
+        var quillEn = new Quill('#editorEn', {
+            theme: 'snow',
+            modules: { toolbar: toolbarOptions }
+        });
+        quillEn.root.setAttribute('dir', 'ltr');
+        quillEn.root.innerHTML = `@Html.Raw(Model.BioEn ?? "")`;
+
+        // French
+        var quillFr = new Quill('#editorFr', {
+            theme: 'snow',
+            modules: { toolbar: toolbarOptions }
+        });
+        quillFr.root.setAttribute('dir', 'ltr');
+        quillFr.root.innerHTML = `@Html.Raw(Model.BioFr ?? "")`;
+
+        // On submit
+        document.querySelector('form').addEventListener('submit', function () {
+            document.getElementById('BioAr').value = quillAr.root.innerHTML;
+            document.getElementById('BioEn').value = quillEn.root.innerHTML;
+            document.getElementById('BioFr').value = quillFr.root.innerHTML;
+        });
+    </script>
+
 }
 
 <script src="https://cdn.tiny.cloud/1/k3nev6h7ssngildxe8woxosup3usjprj94xwqhdzpccl1a5a/tinymce/6/tinymce.min.js"></script>

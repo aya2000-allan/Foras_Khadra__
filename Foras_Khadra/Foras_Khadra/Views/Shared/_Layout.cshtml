@@ -1,6 +1,4 @@
-﻿
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 @{
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
@@ -13,355 +11,676 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Foras_Khadra</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/layout_style.css">
 </head>
 
-
 <body>
 
-    <style>
-        .language-dropdown {
-            position: relative;
-            display: inline-block;
-        }
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
-        .lang-toggle {
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
+@{
+    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
 
-        .lang-list {
-            display: none; /* مخفي افتراضي */
-            position: absolute;
-            top: 100%;
-            left: 0;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            background: white;
-            border: 1px solid #ccc;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 100;
-        }
+    bool hideNavAndFooter = false;
 
-            .lang-list li {
-                padding: 5px 10px;
-            }
+    var userIsAuthenticated = User.Identity.IsAuthenticated;
+    var isAdmin = false;
+    var isOrganization = false;
 
-                .lang-list li a {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    text-decoration: none;
-                    color: black;
-                }
-
-                    .lang-list li a:hover {
-                        background-color: #f0f0f0;
-                    }
-
-    </style>
-
-
-    @using Microsoft.AspNetCore.Identity
-    @inject UserManager<ApplicationUser> UserManager
-    @inject SignInManager<ApplicationUser> SignInManager
-    @using Microsoft.AspNetCore.Localization;
-    @using Microsoft.Extensions.Options;
-    @using System.Globalization;
-    @using Microsoft.AspNetCore.Mvc.Localization
-    @inject IViewLocalizer Localizer
-
-
-    @{
-        var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
-        var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
-
-        bool hideNavAndFooter = false;
-
-        var userIsAuthenticated = User.Identity.IsAuthenticated;
-        var isAdmin = false;
-        var isOrganization = false;
-
-        if (userIsAuthenticated)
+    if (userIsAuthenticated)
+    {
+        var userEmail = User.Identity.Name;
+        var appUser = await UserManager.FindByEmailAsync(userEmail);
+        if (appUser != null)
         {
-            var userEmail = User.Identity.Name;
-            var appUser = await UserManager.FindByEmailAsync(userEmail);
-            if (appUser != null)
-            {
-                isAdmin = await UserManager.IsInRoleAsync(appUser, "Admin");
-                isOrganization = await UserManager.IsInRoleAsync(appUser, "Organization");
-            }
+            isAdmin = await UserManager.IsInRoleAsync(appUser, "Admin");
+            isOrganization = await UserManager.IsInRoleAsync(appUser, "Organization");
         }
-
-        if (currentController == "Admin" && currentAction == "ReelsRequestsDashboard")
-        {
-            hideNavAndFooter = true;
-        }
-        else
-        {
-            // باقي الشروط القديمة للـ Admin
-            if (isAdmin)
-            {
-                // الشروط القديمة بدون أي تغيير
-                if ((currentController == "Opportunity" && (currentAction == "Index" || currentAction == "Create" || currentAction == "Edit"))
-                || (currentController == "AdminController")) // مثال: أي Controller إداري آخر
-                {
-                    hideNavAndFooter = true;
-                }
-                else
-                {
-                    hideNavAndFooter = false;
-                }
-            }
-        }
-
-        // إذا المستخدم Admin والصفحة من Articles، نخفي Navbar و Footer
-        if (isAdmin && currentController == "Articles")
-        {
-            hideNavAndFooter = true;
-        }
-
-
     }
 
-    
-
-    @if (!hideNavAndFooter)
+    if (currentController == "Admin" && currentAction == "ReelsRequestsDashboard")
     {
-        <!-- Navbar -->
-        <header>
-            <div class="top-banner">
-                <div class="logo">
-                    <img src="~/Images/logo.png" alt="شعار المنصة" />
+        hideNavAndFooter = true;
+    }
+    else
+    {
+        if (isAdmin)
+        {
+            if ((currentController == "Opportunity" && (currentAction == "Index" || currentAction == "Create" || currentAction == "Edit"))
+                || (currentController == "AdminController"))
+            {
+                hideNavAndFooter = true;
+            }
+        }
+    }
+
+    if (isAdmin && currentController == "Articles") hideNavAndFooter = true;
+    if (isAdmin && currentController == "Team") hideNavAndFooter = true;
+}
+
+<style>
+    html, body {
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* خلي المحتوى يضغط الفوتر لأسفل */
+body > .container {
+  flex: 1 0 auto;
+}
+
+/* الفوتر ما يترك مسافة تحت */
+footer.custom-footer {
+  margin-top: auto;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+    /* =========================
+       NAV / DROPDOWN BASE
+    ========================= */
+    .nav-btn {
+        background: #fff;
+        color: #25652C;
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-weight: 800;
+        font-size: 13px;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    .nav-btn:hover { background: #f4fbf5; }
+    .custom-dropdown { position: relative; }
+
+    .dropdown-list {
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        min-width: 190px;
+        background: #fff;
+        border: 1px solid #e6ece8;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,.08);
+        padding: 8px;
+        z-index: 999;
+    }
+    .dropdown-list.show { display: block; }
+
+    .dropdown-list a,
+    .dropdown-list button.dropdown-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #2f3a33;
+        font-weight: 700;
+        font-size: 13px;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+    }
+    .dropdown-list a:hover,
+    .dropdown-list button.dropdown-btn:hover { background: #f4fbf5; }
+
+    .lang-flag {
+        width: 20px;
+        height: 14px;
+        border-radius: 3px;
+        object-fit: cover;
+    }
+
+    html[dir="rtl"] .dropdown-list { right: 0; left: auto; }
+    html[dir="ltr"] .dropdown-list { left: 0; right: auto; }
+
+    .menu-items > a {
+        background: #25652C !important;
+        color: #fff !important;
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-weight: 800;
+        font-size: 13px;
+        text-decoration: none;
+        display: inline-block;
+        white-space: nowrap;
+        transition: .2s;
+    }
+
+    .nav-btn--yellow {
+        background: #F99D27 !important;
+        color: #fff !important;
+    }
+    .nav-btn--yellow:hover { background: #ef981d !important; }
+
+    .nav-btn--icon {
+        color: #fff !important;
+        background-color: #25652C !important;
+        width: 42px;
+        height: 42px;
+        padding: 0 !important;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+    .nav-btn--icon:hover { color: #000 !important; }
+
+    /* =========================
+       NAVBAR LAYOUT (Desktop)
+    ========================= */
+    .top-banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+    }
+    .nav-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        width: 100%;
+    }
+
+    .mobile-menu-btn {
+        display: none;
+        background: transparent;
+        border: 0;
+        font-size: 26px;
+        cursor: pointer;
+        padding: 6px 10px;
+        border-radius: 10px;
+    }
+
+    /* =========================
+       FOOTER HERO
+    ========================= */
+    .footer-hero-wrap {
+        max-width: 100%;
+        margin: 0 auto 14px auto;
+        padding-top: 80px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+    }
+    .footer-hero-wrap .social-icons {
+        display: flex;
+        gap: 18px;
+        justify-content: center;
+        width: fit-content;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    .footer-hero-title {
+        width: 100%;
+        color: #fff;
+        font-family: 'Cairo', sans-serif;
+        text-align: center;
+    }
+    .footer-hero-line1 {
+        position: relative;
+        display: inline-block;
+        font-weight: 700;
+        font-size: clamp(36px, 5vw, 60px);
+        line-height: 1.05;
+        padding: 0 14px;
+        white-space: nowrap;
+        margin-bottom: 10px;
+    }
+    .footer-hero-line2 {
+        font-weight: 700;
+        font-size: clamp(20px, 2.2vw, 28px);
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+
+    /* =========================
+       MOBILE NAV
+    ========================= */
+    @@media (max-width: 992px) {
+        header { background: #25652C; }
+
+        .top-banner { flex-wrap: wrap; gap: 10px; padding: 10px 12px; }
+        .mobile-menu-btn { display: inline-flex; align-items: center; justify-content: center; order: 1; color: #fff; }
+
+        .logo { order: 2; flex: 1; display: flex; align-items: center; justify-content: center; }
+        html[dir="rtl"] .logo { justify-content: flex-end; }
+        html[dir="ltr"] .logo { justify-content: flex-start; }
+        .logo img { max-height: 34px; width: auto; }
+
+        #navContent {
+            order: 3;
+            width: 100%;
+            display: none !important;
+            flex-direction: column;
+            gap: 14px;
+            padding-top: 10px;
+        }
+        #navContent.show { display: flex !important; }
+
+        .menu-items {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0 !important;
+            align-items: stretch;
+        }
+        .menu-items > a, .menu-items .nav-btn {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+            padding: 12px 14px;
+        }
+
+        .auth-section {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px !important;
+        }
+        .auth-section .custom-dropdown { width: 100%; max-width: 420px; }
+        .auth-section .custom-dropdown > button { width: 100%; }
+
+        .dropdown-list {
+            position: static !important;
+            width: 100% !important;
+            min-width: unset !important;
+            box-shadow: none !important;
+            margin-top: 8px;
+            border-radius: 12px;
+        }
+
+        /* شيل الخطوط/الفواصل بالموبايل */
+        .menu-items > a{
+            display: block !important;
+            margin: 0 !important;
+            border-radius: 0 !important;
+        }
+        .menu-items > a,
+        .menu-items > a:focus,
+        .menu-items > a:hover{
+            border: 0 !important;
+            outline: 0 !important;
+            box-shadow: none !important;
+        }
+    }
+
+    /* =========================
+       FOOTER RESPONSIVE
+    ========================= */
+    @@media (max-width: 992px) {
+        .footer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+            text-align: center;
+        }
+        .footer-left { width: 100%; display: flex; flex-direction: column; align-items: center; }
+
+        .footer-links {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+            justify-items: center;
+        }
+
+        .footer-column { width: 100%; max-width: 420px; }
+        .footer-logo { width: 100%; display: flex; justify-content: center; }
+        .footer-logo img { max-width: 180px; height: auto; }
+
+        .footer-hero-wrap { padding-top: 40px; }
+        .footer-hero-wrap .social-icons { gap: 14px; }
+    }
+
+    /* =========================
+       DESKTOP FOOTER FIX (4 columns)
+    ========================= */
+    @@media (min-width: 993px) {
+        .footer-container{
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 60px !important;
+        }
+
+        .footer-links{
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(160px, 1fr)) !important; /* 4 أعمدة */
+            gap: 28px !important;
+            align-items: start !important;
+        }
+
+        .footer-column{
+            width: 100% !important;
+            max-width: none !important;
+        }
+
+        .footer-logo{
+            flex: 0 0 auto !important;
+        }
+    }
+
+    .nav-btn--icon img.lang-flag {
+    width: 28px;
+    height: 22px;
+    border-radius: 3px;
+    object-fit: cover;
+}
+
+.footer-bottom {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+
+</style>
+
+@if (!hideNavAndFooter)
+{
+    <header>
+        <div class="top-banner">
+
+            <button class="mobile-menu-btn" type="button" onclick="toggleMobileMenu(event)" aria-label="menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="logo">
+                <img src="~/Images/logo.png" alt="شعار المنصة" />
+            </div>
+
+            <div class="nav-content" id="navContent">
+                <div class="menu-items">
+                    <a asp-controller="Home" asp-action="Index" data-close-menu>@Localizer["Home"]</a>
+                    <a asp-controller="Home" asp-action="Articles" data-close-menu>@Localizer["Articles"]</a>
+                    <a asp-controller="Home" asp-action="News" data-close-menu>@Localizer["News"]</a>
+
+                    <div class="custom-dropdown">
+                        <button class="nav-btn" style="background-color:#25652C;color:#fff" type="button"
+                                onclick="toggleDropdown('opportunitiesDropdown', event)">
+                            @Localizer["Opportunities"]
+                        </button>
+
+                        <div class="dropdown-list" id="opportunitiesDropdown">
+                            <a asp-controller="Home" asp-action="AllOpportunities" data-close-menu>@Localizer["AllOpportunities"]</a>
+                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Competitions" data-close-menu>@Localizer["Competitions"]</a>
+                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Conferences" data-close-menu>@Localizer["Conferences"]</a>
+                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Volunteering" data-close-menu>@Localizer["VolunteeringOpportunities"]</a>
+                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Jobs" data-close-menu>@Localizer["Jobs"]</a>
+                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Scholarships" data-close-menu>@Localizer["Scholarships"]</a>
+                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Fellowships" data-close-menu>@Localizer["Fellowships"]</a>
+                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Internships" data-close-menu>@Localizer["Internships"]</a>
+                        </div>
+                    </div>
+
+                    <a asp-controller="Home" asp-action="AboutUs" data-close-menu>@Localizer["AboutUs"]</a>
+                    <a asp-controller="Contact" asp-action="Index" data-close-menu>@Localizer["ContactUs"]</a>
                 </div>
 
-                <div class="nav-content">
-                    <div class="menu-items">
-                        <a asp-controller="Home" asp-action="Index">@Localizer["Home"]</a>
-                        <a asp-controller="Home" asp-action="Articles">@Localizer["Articles"]</a>
-                        <a asp-controller="Home" asp-action="News">@Localizer["News"]</a>
+                <div class="auth-section d-flex gap-2 align-items-center">
+                    @if (!userIsAuthenticated)
+                    {
+                        <div class="custom-dropdown">
+                            <button class="nav-btn" type="button" onclick="toggleDropdown('loginMenu', event)">
+                                @Localizer["Login"]
+                            </button>
+                            <div class="dropdown-list" id="loginMenu">
+                                <a asp-controller="Account" asp-action="Login" data-close-menu>@Localizer["Individual"]</a>
+                                <a asp-controller="Organization" asp-action="Login" data-close-menu>@Localizer["Organization"]</a>
+                            </div>
+                        </div>
 
                         <div class="custom-dropdown">
-                            <button class="dropdown-button" onclick="toggleOpportunities()">@Localizer["Opportunities"]</button>
-                            <div class="dropdown-list" id="opportunitiesDropdown">
-                                <a asp-controller="Home" asp-action="AllOpportunities"> @Localizer["AllOpportunities"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Competitions">@Localizer["Competitions"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Conferences">@Localizer["Conferences"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Volunteering">@Localizer["VolunteeringOpportunities"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Jobs">@Localizer["Jobs"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Scholarships">@Localizer["Scholarships"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Fellowships">@Localizer["Fellowships"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Internships">@Localizer["Internships"]</a>
+                            <button class="nav-btn nav-btn--yellow" type="button" onclick="toggleDropdown('registerMenu', event)">
+                                @Localizer["Register"]
+                            </button>
+                            <div class="dropdown-list" id="registerMenu">
+                                <a asp-controller="Account" asp-action="RegisterUser" data-close-menu>@Localizer["Individual"]</a>
+                                <a asp-controller="Organization" asp-action="Register" data-close-menu>@Localizer["Organization"]</a>
                             </div>
                         </div>
+                    }
+                    else
+                    {
+                        <div class="custom-dropdown">
+                            <button class="nav-btn" type="button" onclick="toggleDropdown('userOrgMenu', event)">
+                                @if (isOrganization)
+                                {
+                                    <iconify-icon icon="mdi:office-building" width="26" height="26"></iconify-icon>
+                                }
+                                else
+                                {
+                                    <iconify-icon icon="mdi:account" width="26" height="26"></iconify-icon>
+                                }
+                            </button>
 
-                        <a asp-controller="Home" asp-action="AboutUs">@Localizer["AboutUs"]</a>
-                        <a asp-controller="Contact" asp-action="Index">@Localizer["ContactUs"]</a>
-                    </div>
-
-                    <div class="auth-section d-flex gap-2 align-items-center">
-                        @if (!userIsAuthenticated)
-                        {
-                            <div class="custom-dropdown">
-                                <button onclick="toggleLoginMenu()">@Localizer["Login"]</button>
-                                <div class="dropdown-list" id="loginMenu">
-                                    <a asp-controller="Account" asp-action="Login">@Localizer["Individual"]</a>
-                                    <a asp-controller="Organization" asp-action="Login">@Localizer["Organization"]</a>
-                                </div>
+                            <div class="dropdown-list" id="userOrgMenu">
+                                @if (isOrganization)
+                                {
+                                    <a asp-controller="Opportunity" asp-action="OrgOpportunities" data-close-menu>@Localizer["AddOpportunity"]</a>
+                                    <a asp-controller="Organization" asp-action="ProfileSetting" data-close-menu>@Localizer["AccountSettings"]</a>
+                                    <form asp-controller="Organization" asp-action="Logout" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="dropdown-btn">@Localizer["Logout"]</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Account" asp-action="ProfileSettings" data-close-menu>@Localizer["AccountSettings"]</a>
+                                    <form asp-controller="Account" asp-action="Logout" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="dropdown-btn">@Localizer["Logout"]</button>
+                                    </form>
+                                }
                             </div>
-
-                            <div class="custom-dropdown">
-                                <button onclick="toggleRegisterMenu()">@Localizer["Register"]</button>
-                                <div class="dropdown-list" id="registerMenu">
-                                    <a asp-controller="Account" asp-action="RegisterUser">@Localizer["Individual"]</a>
-                                    <a asp-controller="Organization" asp-action="Register">@Localizer["Organization"]</a>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="custom-dropdown">
-                                <button onclick="toggleUserOrgMenu()">
-                                    @if (isOrganization)
-                                    {
-                                        <iconify-icon icon="mdi:office-building" width="30" height="30"></iconify-icon>
-                                    }
-                                    else
-                                    {
-                                        <iconify-icon icon="mdi:account" width="30" height="30"></iconify-icon>
-                                    }
-                                </button>
-                                <div class="dropdown-list" id="userOrgMenu">
-                                    @if (isOrganization)
-                                    {
-                                        <a asp-controller="Opportunity" asp-action="OrgOpportunities">@Localizer["AddOpportunity"] </a>
-                                        <a asp-controller="Organization" asp-action="ProfileSetting">@Localizer["AccountSettings"]</a>
-                                        <form asp-controller="Organization" asp-action="Logout" method="post">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit">@Localizer["Logout"]</button>
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <a asp-controller="Account" asp-action="ProfileSettings">@Localizer["AccountSettings"]</a>
-                                        <form asp-controller="Account" asp-action="Logout" method="post">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit"> @Localizer["Logout"]</button>
-                                        </form>
-                                    }
-                                </div>
-                            </div>
-                        }
-
-
-
-                        <div class="language-dropdown">
-                            <button class="lang-toggle">اللغات</button>
-
-                            <ul class="lang-list">
-                                <li class="lang-option">
-                                    <a asp-controller="Language"
-                                       asp-action="Change"
-                                       asp-route-culture="ar"
-                                       asp-route-returnUrl="@Context.Request.Path">
-                                        <img src="~/Images/sa.png" alt="Arabic">
-                                        <span>@Localizer["Arabic"]</span>
-                                    </a>
-                                </li>
-
-                                <li class="lang-option">
-                                    <a asp-controller="Language"
-                                       asp-action="Change"
-                                       asp-route-culture="en"
-                                       asp-route-returnUrl="@Context.Request.Path">
-                                        <img src="~/Images/us.png" alt="English">
-                                        <span>@Localizer["English"]</span>
-                                    </a>
-                                </li>
-
-                                <li class="lang-option">
-                                    <a asp-controller="Language"
-                                       asp-action="Change"
-                                       asp-route-culture="fr"
-                                       asp-route-returnUrl="@Context.Request.Path">
-                                        <img src="~/Images/fr.png" alt="French">
-                                        <span>@Localizer["French"]</span>
-                                    </a>
-                                </li>
-                            </ul>
                         </div>
+                    }
 
-                    </div>
-                </div>
-            </div>
-        </header>
+                    <div class="custom-dropdown" style="background:none;">
+                      <button class="nav-btn nav-btn--icon" type="button"
+        onclick="toggleDropdown('langMenu', event)"
+        aria-label="@Localizer["Languages"]">
+
+    @if (culture == "ar")
+    {
+        <img src="~/Images/sa.png" alt="Arabic" class="lang-flag">
+    }
+    else if (culture == "fr")
+    {
+        <img src="~/Images/fr.png" alt="French" class="lang-flag">
+    }
+    else
+    {
+        <img src="~/Images/us.png" alt="English" class="lang-flag">
     }
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+</button>
 
-    @if (!hideNavAndFooter)
-    {
-        <!-- Footer كامل -->
-        <footer class="custom-footer">
-            <div class="footer-container">
+
+                        <div class="dropdown-list" id="langMenu">
+                            <a asp-controller="Language" asp-action="Change" asp-route-culture="ar" asp-route-returnUrl="@Context.Request.Path">
+                                <img src="~/Images/sa.png" alt="Arabic" class="lang-flag">
+                                <span>@Localizer["Arabic"]</span>
+                            </a>
+                            <a asp-controller="Language" asp-action="Change" asp-route-culture="en" asp-route-returnUrl="@Context.Request.Path">
+                                <img src="~/Images/us.png" alt="English" class="lang-flag">
+                                <span>@Localizer["English"]</span>
+                            </a>
+                            <a asp-controller="Language" asp-action="Change" asp-route-culture="fr" asp-route-returnUrl="@Context.Request.Path">
+                                <img src="~/Images/fr.png" alt="French" class="lang-flag">
+                                <span>@Localizer["French"]</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </header>
+}
+
+<div class="container" style="flex:1 0 auto;">
+    <main role="main">
+        @RenderBody()
+    </main>
+</div>
+
+
+@if (!hideNavAndFooter)
+{
+    <footer class="custom-footer">
+        <div class="footer-container">
+
             <div class="footer-left">
-                <h2 class="footer-heading" lang="ar">من وإلى شباب الوطن العربي</h2>
-                <img src="/images/footerText.png" alt="footer text" class="footer-heading-img" />
-                <div class="social-icons">
+                <div class="footer-hero-wrap">
+                    <div class="footer-hero-title">
+                        <div class="footer-hero-line1">@Localizer["Footer_Heading_Line1"]</div>
+                        <div class="footer-hero-line2">@Localizer["Footer_Heading_Line2"]</div>
+                    </div>
+
+                    <div class="social-icons">
                         <a href="mailto:suppforaskhadra@gmail.com">
                             <iconify-icon icon="ic:round-email" width="34" height="34"></iconify-icon>
                         </a>
-                        <a href="https://www.linkedin.com/company/foraskhadra/"><iconify-icon icon="mage:linkedin" width="34" height="34"></iconify-icon></a>
-                    <a href="https://www.facebook.com/profile.php?id=61559156656756"><iconify-icon icon="mage:facebook-square" width="34" height="34"></iconify-icon></a>
-                    <a href="https://www.instagram.com/foras_khadra/"><iconify-icon icon="basil:instagram-solid" width="34" height="34"></iconify-icon></a>
+                        <a href="https://www.linkedin.com/company/foraskhadra/">
+                            <iconify-icon icon="mage:linkedin" width="34" height="34"></iconify-icon>
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=61559156656756">
+                            <iconify-icon icon="mage:facebook-square" width="34" height="34"></iconify-icon>
+                        </a>
+                        <a href="https://www.instagram.com/foras_khadra/">
+                            <iconify-icon icon="basil:instagram-solid" width="34" height="34"></iconify-icon>
+                        </a>
+                    </div>
                 </div>
-                
             </div>
+
             <div class="footer-links">
+
                 <div class="footer-column">
-                    <h4>تصفح الفرص</h4>
+                        <h4> @Localizer["BrowseOpp"]</h4>
                     <ul>
-                            <li><a href="~/Home/AllOpportunities">@Localizer["AllOpportunities"]</a></li>
-                            <li><a href="~/Home/AllOpportunities?type=Competitions">@Localizer["Competitions"]</a></li>
-                            <li><a href="~/Home/AllOpportunities?type=Conferences">@Localizer["Conferences"]</a></li>
-                            <li><a href="~/Home/AllOpportunities?type=Volunteering">@Localizer["VolunteeringOpportunities"]</a></li>
+                        <li><a href="~/Home/AllOpportunities">@Localizer["AllOpportunities"]</a></li>
+                        <li><a href="~/Home/AllOpportunities?type=Competitions">@Localizer["Competitions"]</a></li>
+                        <li><a href="~/Home/AllOpportunities?type=Conferences">@Localizer["Conferences"]</a></li>
+                        <li><a href="~/Home/AllOpportunities?type=Volunteering">@Localizer["VolunteeringOpportunities"]</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-column">
+                        <h4>@Localizer["BrowseJobs"] </h4>
                     <ul>
-                            <li><a href="~/Home/AllOpportunities?type=Jobs">@Localizer["Jobs"]</a></li>
-                            <li><a href="~/Home/AllOpportunities?type=Scholarships">@Localizer["Scholarships"]</a></li>
-                            <li><a href="~/Home/AllOpportunities?type=Fellowships">@Localizer["Fellowships"]</a></li>
-                            <li><a href="~/Home/AllOpportunities?type=Internships">@Localizer["Internships"]</a></li>
+                        <li><a href="~/Home/AllOpportunities?type=Jobs">@Localizer["Jobs"]</a></li>
+                        <li><a href="~/Home/AllOpportunities?type=Scholarships">@Localizer["Scholarships"]</a></li>
+                        <li><a href="~/Home/AllOpportunities?type=Fellowships">@Localizer["Fellowships"]</a></li>
+                        <li><a href="~/Home/AllOpportunities?type=Internships">@Localizer["Internships"]</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-column">
-                    <h4>روابط إضافية</h4>
+                        <h4>@Localizer["AdditionalLinks"]</h4>
                     <ul>
-                            <li><a href="~/Home/Articles">@Localizer["Articles"]</a></li>
-                            <li><a href="~/Home/AboutUs">@Localizer["AboutUs"]</a></li>
-                            <li><a href="~/contact/Index">@Localizer["ContactUs"]</a></li>
+                        <li><a href="~/Home/Articles">@Localizer["Articles"]</a></li>
+                        <li><a href="~/Home/AboutUs">@Localizer["AboutUs"]</a></li>
+                        <li><a href="~/contact/Index">@Localizer["ContactUs"]</a></li>
                     </ul>
                 </div>
+
+                  <div class="footer-column">
+        <h4>@Localizer["Policies"]</h4>
+        <ul>
+                            <li><a href="~/Home/PolicyPrivacy">@Localizer["PrivacyPolicy"]</a></li>
+                            <li><a href="~/Home/UsagePolicy">@Localizer["UsagePolicy"]</a></li>
+                            <li><a href="~/Home/TermsAndConditions">@Localizer["TermsAndConditions"]</a></li>
+        </ul>
+    </div>
+
             </div>
+
             <div class="footer-logo">
                 <img src="/images/logo.png" alt="شعار فرص خضراء" />
             </div>
         </div>
-        <div class="footer-bottom">
-                <p>@Localizer["All rights reserved © 2025"]</p>
+
+        <div class="footer-bottom" style="text-align:center; padding:14px 0; border-top:1px solid #e6ece8; margin-top:20px;">
+            <p>@Localizer["All rights reserved © 2025"]</p>
         </div>
     </footer>
-    }
-    <!-- سكربتات -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+}
 
-    <script>
-        function toggleOpportunities() { document.getElementById("opportunitiesDropdown").classList.toggle("show"); }
-        function toggleLoginMenu() { document.getElementById("loginMenu").classList.toggle("show"); }
-        function toggleRegisterMenu() { document.getElementById("registerMenu").classList.toggle("show"); }
-        function toggleUserOrgMenu() { document.getElementById("userOrgMenu").classList.toggle("show"); }
-        function toggleLangMenu() { document.getElementById("languageMenu").classList.toggle("show"); }
+<!-- Scripts -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
 
-        document.addEventListener("click", function(e){
-            if(!e.target.closest(".custom-dropdown") && !e.target.closest(".language-dropdown")) {
-                ["loginMenu","registerMenu","userOrgMenu","opportunitiesDropdown"].forEach(id=>{
-                    var el = document.getElementById(id);
-                    if(el) el.classList.remove("show");
-                });
-                var langMenu = document.getElementById("languageMenu");
-                if(langMenu) langMenu.classList.remove("show");
-            }
+<script>
+    function toggleDropdown(id, event) {
+        if (event) event.stopPropagation();
+
+        const menu = document.getElementById(id);
+        if (!menu) return;
+
+        document.querySelectorAll(".dropdown-list").forEach(x => {
+            if (x !== menu) x.classList.remove("show");
         });
-    </script>
 
-    <script>
-    const toggle = document.querySelector('.lang-toggle');
-    const langList = document.querySelector('.lang-list');
+        menu.classList.toggle("show");
+    }
 
-    toggle.addEventListener('click', () => {
-        langList.style.display = langList.style.display === 'block' ? 'none' : 'block';
+    document.addEventListener("click", function (e) {
+        if (!e.target.closest(".custom-dropdown")) {
+            document.querySelectorAll(".dropdown-list").forEach(x => x.classList.remove("show"));
+        }
     });
 
-    // إخفاء القائمة لو ضغط المستخدم برة
-    document.addEventListener('click', (e) => {
-        if (!toggle.contains(e.target) && !langList.contains(e.target)) {
-            langList.style.display = 'none';
+    function toggleMobileMenu(event) {
+        if (event) event.stopPropagation();
+        const nav = document.getElementById("navContent");
+        if (!nav) return;
+        nav.classList.toggle("show");
+    }
+
+    document.addEventListener("click", function (e) {
+        const link = e.target.closest("[data-close-menu]");
+        if (link) {
+            const nav = document.getElementById("navContent");
+            if (nav && window.innerWidth <= 992) nav.classList.remove("show");
+        }
+    });
+
+    window.addEventListener("resize", function () {
+        const nav = document.getElementById("navContent");
+        if (!nav) return;
+        if (window.innerWidth > 992) {
+            nav.classList.remove("show");
         }
     });
 </script>
 
-
-    @RenderSection("Scripts", required: false)
+@RenderSection("Scripts", required: false)
 </body>
 </html>

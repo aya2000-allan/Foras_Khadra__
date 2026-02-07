@@ -340,8 +340,10 @@
 
     .sideblock-more:hover {
         text-decoration: underline;
+        color: #25652C;
     }
 
+    
 /* ============================= */
 /* Responsive */
 /* ============================= */
@@ -354,3 +356,112 @@
         height: 240px;
     }
 }
+
+/* ===== Read Also New Design ===== */
+
+.readalso-grid{
+  display: grid;
+  gap: 14px;
+  padding-top: 12px;
+}
+
+.readalso-card{
+  position: relative;
+  height: 160px;
+  border-radius: 18px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  display: block;
+  text-decoration: none;
+  box-shadow: 0 10px 22px rgba(0,0,0,.15);
+}
+
+/* طبقة غامقة */
+.readalso-overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,.65) 0%,
+    rgba(0,0,0,.45) 50%,
+    rgba(0,0,0,.25) 100%
+  );
+}
+
+/* السهم */
+.readalso-arrow{
+  position: absolute;
+  left: 14px;
+  top: 80%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  /* background: rgba(0,0,0,.55); */
+  border: 1px solid rgba(255,255,255,.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.readalso-arrow i{
+  color: #fff;
+  font-size: 15px;
+}
+
+/* المحتوى */
+.readalso-content{
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  left: 70px;
+  z-index: 3;
+  direction: rtl;
+}
+
+.readalso-title{
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.4;
+  margin-bottom: 6px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.readalso-date{
+  font-size: 14px;
+  color: rgba(255,255,255,.85);
+}
+
+/* حركة لطيفة */
+.readalso-card{
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.readalso-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 26px rgba(0,0,0,.25);
+}
+
+
+.author-green{
+    color: #1f8f3a;   
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.author-verified{
+    color: #F99D27;   
+    font-size: 40px;
+    position: relative;
+    top: -1px;
+}
+

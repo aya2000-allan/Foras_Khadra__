@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Nager.Country;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,17 +23,19 @@ namespace Foras_Khadra.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IStringLocalizer<OrganizationController> _localizer;
 
         public OrganizationController(
             ApplicationDbContext context,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IStringLocalizer<OrganizationController> localizer)
         {
             _context = context;
             _signInManager = signInManager;
             _userManager = userManager;
             _emailSender = emailSender;
+            _localizer = localizer;
         }
 
         private List<SelectListItem> GetCountries()
@@ -163,10 +167,13 @@ namespace Foras_Khadra.Controllers
             var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
             var isNormalUser = await _userManager.IsInRoleAsync(user, "User"); // المستخدم العادي
 
-            if (isNormalUser)
+
+            if (await _userManager.IsInRoleAsync(user, "User")) // المستخدم العادي
             {
-                ModelState.AddModelError("", "المستخدم العادي لا يمكنه تسجيل الدخول هنا");
-                return View(model);
+                TempData["UserLoginAlert"] = _localizer["UserLoginAlert"].Value; // النص العربي/الإنجليزي/الفرنسي
+                TempData["UserLoginRedirectText"] = _localizer["UserLoginRedirectText"].Value; // نص الزر
+                TempData["UserLoginRedirect"] = Url.Action("Login", "Account"); // صفحة تسجيل دخول المستخدمين
+                return RedirectToAction("Login");
             }
 
             // تحقق كلمة المرور
@@ -187,7 +194,7 @@ namespace Foras_Khadra.Controllers
             if (isAdmin)
                 return RedirectToAction("Dashboard", "Admin");
             else
-                return RedirectToAction("Dashboard", "Organization");
+                return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Dashboard() => View();
@@ -309,35 +316,41 @@ namespace Foras_Khadra.Controllers
             // رسالة الإيميل
             string emailBody = $@"
 <!DOCTYPE html>
-<html lang='ar' dir='rtl'>
+<html lang='{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}' dir='{(CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? "rtl" : "ltr")}'>
 <head>
     <meta charset='UTF-8'>
-    <title>إعادة تعيين كلمة المرور</title>
+    <title>{_localizer["ResetPasswordSubject"]}</title>
 </head>
 <body style='font-family: Tahoma, Arial; background-color: #f4f6f8; padding:20px;'>
     <div style='max-width:600px;margin:auto;background:#fff;padding:30px;border-radius:8px;'>
         <h2 style='text-align:center;'>Foras Khadra</h2>
-        <p>تحية طيبة،</p>
-        <p>تم استلام طلب لإعادة تعيين كلمة المرور الخاصة بحساب منظمتكم <strong>{organization.Name}</strong> على منصة Foras Khadra.</p>
+        <p>{_localizer["ResetPasswordGreeting"]}</p>
+        <p>{string.Format(_localizer["ResetPasswordBodyOrg"], organization.Name)}</p>
         <p style='text-align:center;margin:30px 0;'>
             <a href='{resetLink}' 
-               style='background:#28a745; /* اللون الأخضر */
-                      color:#fff;
-                      padding:12px 30px;
-                      text-decoration:none;
-                      border-radius:6px;
-                      font-weight:bold;'>
-                إعادة تعيين كلمة المرور
+               style='background:#28a745; color:#fff; padding:12px 30px;
+                      text-decoration:none; border-radius:6px; font-weight:bold;'>
+                {_localizer["ResetPasswordButton"]}
             </a>
         </p>
-        <p>إذا لم تقم منظمتكم بطلب إعادة تعيين كلمة المرور، يرجى تجاهل هذا البريد الإلكتروني.</p>
-        <p>مع فائق الاحترام،<br/>فريق <strong>Foras Khadra</strong></p>
+        <p>{_localizer["ResetPasswordIgnore"]}</p>
+        <p>{_localizer["ResetPasswordRegards"]}</p>
     </div>
 </body>
 </html>";
 
-            await _emailSender.SendEmailAsync(organization.ContactEmail, "إعادة تعيين كلمة المرور", emailBody);
+
+            string emailSubject = $"{_localizer["SiteName"]} - {_localizer["ResetPasswordSubject"]}";
+
+            await _emailSender.SendEmailAsync(
+    organization.ContactEmail,
+    emailSubject,
+    emailBody
+); 
             return View("ForgotPasswordConfirmation");
+
+
+
         }
 
         [HttpGet]
