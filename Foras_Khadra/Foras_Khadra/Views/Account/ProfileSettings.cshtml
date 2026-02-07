@@ -1,18 +1,32 @@
 ﻿@model Foras_Khadra.Models.EditProfileViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">إعدادات الملف الشخصي</h2>
+@{
+    ViewData["Title"] = Localizer["PageTitle"];
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+}
+
+<div class="container mt-5" dir="@dir">
+    <h2 class="mb-4 text-center">@Localizer["CardSettings"]</h2>
 
     <div class="row">
         <!-- التاب الجانبي -->
         <div class="col-md-3 mb-3">
             <div class="nav flex-column nav-pills" id="profile-tabs">
-                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#viewProfile">
-                    عرض الملف الشخصي
+                <button class="nav-link active"
+                        data-bs-toggle="pill"
+                        data-bs-target="#viewCard">
+                    @Localizer["ViewMyCard"]
                 </button>
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#editProfile">
-                    تعديل الملف الشخصي
+
+                <button class="nav-link"
+                        data-bs-toggle="pill"
+                        data-bs-target="#editCard">
+                    @Localizer["EditMyCard"]
                 </button>
             </div>
         </div>
@@ -21,72 +35,103 @@
         <div class="col-md-9">
             <div class="tab-content">
 
-                <!-- 👁️ عرض البروفايل -->
-                <div class="tab-pane fade show active" id="viewProfile">
+                <!--  عرض البطاقة -->
+                <div class="tab-pane fade show active" id="viewCard">
                     <div class="card">
                         <div class="card-body">
-                            <p><strong>الاسم:</strong> @Model.FirstName @Model.LastName</p>
-                            <p><strong>البريد الإلكتروني:</strong> @Model.Email</p>
-                            <p><strong>الدولة:</strong> @Model.Country</p>
-                            <p><strong>الجنسية:</strong> @Model.Nationality</p>
+                            <p>
+                                <strong>@Localizer["FirstName"]:</strong>
+                                @Model.FirstName @Model.LastName
+                            </p>
 
-                            <p><strong>الاهتمامات:</strong></p>
+                            <p>
+                                <strong>@Localizer["Email"]:</strong>
+                                @Model.Email
+                            </p>
+
+                            <p>
+                                <strong>@Localizer["Country"]:</strong>
+                                @Model.Country
+                            </p>
+
+                            <p>
+                                <strong>@Localizer["Nationality"]:</strong>
+                                @Model.Nationality
+                            </p>
+
+                            <p><strong>@Localizer["Interests"]:</strong></p>
                             <ul>
                                 @foreach (var i in Model.Interests)
                                 {
-                                    <li>@i</li>
+                                    <li>@Localizer[i]</li>
                                 }
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- ✏️ تعديل البروفايل -->
-                <div class="tab-pane fade" id="editProfile">
+                <!-- ✏️ تعديل البطاقة -->
+                <div class="tab-pane fade" id="editCard">
                     <form asp-action="ProfileSettings" method="post">
                         @Html.AntiForgeryToken()
 
                         @if (TempData["Success"] != null)
                         {
                             <div class="alert alert-success">
-                                @TempData["Success"]
+                                @Localizer["SuccessMessage"]
                             </div>
                         }
 
                         <div class="row mb-3">
                             <div class="col">
-                                <label asp-for="FirstName"></label>
+                                <label asp-for="FirstName">
+                                    @Localizer["FirstName"]
+                                </label>
                                 <input asp-for="FirstName" class="form-control" />
                                 <span asp-validation-for="FirstName" class="text-danger"></span>
                             </div>
+
                             <div class="col">
-                                <label asp-for="LastName"></label>
+                                <label asp-for="LastName">
+                                    @Localizer["LastName"]
+                                </label>
                                 <input asp-for="LastName" class="form-control" />
                                 <span asp-validation-for="LastName" class="text-danger"></span>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Email"></label>
+                            <label asp-for="Email">
+                                @Localizer["Email"]
+                            </label>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col">
-                                <label asp-for="Country"></label>
+                                <label asp-for="Country">
+                                    @Localizer["Country"]
+                                </label>
                                 <select asp-for="Country" class="form-select">
-                                    <option value="">اختر الدولة</option>
+                                    <option value="">
+                                        @Localizer["SelectCountry"]
+                                    </option>
                                     @foreach (var c in Model.Countries)
                                     {
                                         <option value="@c">@c</option>
                                     }
                                 </select>
                             </div>
+
                             <div class="col">
-                                <label asp-for="Nationality"></label>
+                                <label asp-for="Nationality">
+                                    @Localizer["Nationality"]
+                                </label>
                                 <select asp-for="Nationality" class="form-select">
-                                    <option value="">اختر الجنسية</option>
+                                    <option value="">
+                                        @Localizer["SelectNationality"]
+                                    </option>
                                     @foreach (var n in Model.Nationalities)
                                     {
                                         <option value="@n">@n</option>
@@ -96,7 +141,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label>الاهتمامات</label>
+                            <label>@Localizer["Interests"]</label>
                             <div class="d-flex flex-wrap gap-3">
                                 @foreach (var interest in Model.AvailableInterests)
                                 {
@@ -104,15 +149,19 @@
                                         <input class="form-check-input"
                                                type="checkbox"
                                                name="Interests"
-                                               value="@interest"
-                                               @(Model.Interests.Contains(interest) ? "checked" : "") />
-                                        <label class="form-check-label">@interest</label>
+                                               value="@interest.Key"
+                                               @(Model.Interests.Contains(interest.Key) ? "checked" : "") />
+                                        <label class="form-check-label">
+                                            @Localizer[interest.Key]
+                                        </label>
                                     </div>
                                 }
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-success">حفظ التعديلات</button>
+                        <button type="submit" class="btn btn-success">
+                            @Localizer["SaveChanges"]
+                        </button>
                     </form>
                 </div>
 

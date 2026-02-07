@@ -117,103 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Articles" xml:space="preserve">
-    <value>Articles</value>
+  <data name="Country" xml:space="preserve">
+    <value>Pays</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Accueil</value>
+  <data name="EditMyCard" xml:space="preserve">
+    <value>Modifier les paramètres de la carte</value>
   </data>
-  <data name="News" xml:space="preserve">
-    <value>Nouvelles</value>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
   </data>
-  <data name="Opportunities" xml:space="preserve">
-    <value>Opportunités</value>
+  <data name="FirstName" xml:space="preserve">
+    <value>Prénom</value>
   </data>
-  <data name="Competitions" xml:space="preserve">
-    <value>Compétitions</value>
+  <data name="Interests" xml:space="preserve">
+    <value>Centres d’intérêt</value>
   </data>
-  <data name="Conferences" xml:space="preserve">
-    <value>Conférences</value>
+  <data name="LastName" xml:space="preserve">
+    <value>Nom</value>
   </data>
-  <data name="Jobs" xml:space="preserve">
-    <value>Emplois</value>
+  <data name="Nationality" xml:space="preserve">
+    <value>Nationalité</value>
   </data>
-  <data name="Scholarships" xml:space="preserve">
-    <value>Bourses</value>
-  </data>
-  <data name="Fellowships" xml:space="preserve">
-    <value>Bourses de recherche</value>
-  </data>
-  <data name="Internships" xml:space="preserve">
-    <value>Stages</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Déconnexion</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Connexion</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Inscription</value>
-  </data>
-  <data name="Individual" xml:space="preserve">
-    <value>Individuel</value>
-  </data>
-  <data name="Organization" xml:space="preserve">
-    <value>Pour l'organisation</value>
-  </data>
-  <data name="VolunteeringOpportunities" xml:space="preserve">
-    <value>Opportunités de bénévolat</value>
-  </data>
-  <data name="AccountSettings" xml:space="preserve">
+  <data name="PageTitle" xml:space="preserve">
     <value>Mon Compte</value>
   </data>
-  <data name="AddOpportunity" xml:space="preserve">
-    <value>Mes Opportunités</value>
+  <data name="CardSettings" xml:space="preserve">
+    <value>Ma carte</value>
   </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Contact</value>
+  <data name="ProfileView" xml:space="preserve">
+    <value>Voir ma carte</value>
   </data>
-  <data name="About" xml:space="preserve">
-    <value>À propos</value>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Enregistrer les modifications</value>
   </data>
-  <data name="AllOpportunities" xml:space="preserve">
-    <value>Toutes les opportunités</value>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Sélectionner le pays</value>
   </data>
-  <data name="All rights reserved © 2025" xml:space="preserve">
-    <value>Tous droits réservés © 2025</value>
+  <data name="SelectNationality" xml:space="preserve">
+    <value>Sélectionner la nationalité</value>
   </data>
-  <data name="AboutUs" xml:space="preserve">
-    <value>À propos</value>
+  <data name="SuccessMessage" xml:space="preserve">
+    <value>Modifications enregistrées avec succès</value>
   </data>
-  <data name="ContactUs" xml:space="preserve">
-    <value>Contact</value>
+  <data name="ViewMyCard" xml:space="preserve">
+    <value>Voir ma carte</value>
   </data>
-  <data name="Footer_Heading_Line1" xml:space="preserve">
-    <value>De et vers</value>
+  <data name="competitions" xml:space="preserve">
+    <value>Concours</value>
   </data>
-  <data name="Footer_Heading_Line2" xml:space="preserve">
-    <value>La jeunesse du monde arabe</value>
+  <data name="conferences" xml:space="preserve">
+    <value>Conférences</value>
   </data>
-  <data name="Policies" xml:space="preserve">
-    <value>Nos politiques</value>
+  <data name="fellowships" xml:space="preserve">
+    <value>Bourses de recherche</value>
   </data>
-  <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Politique de confidentialité</value>
+  <data name="volunteer_opportunities" xml:space="preserve">
+    <value>Opportunités de bénévolat</value>
   </data>
-  <data name="UsagePolicy" xml:space="preserve">
-    <value>Politique d'utilisation</value>
+  <data name="jobs" xml:space="preserve">
+    <value>Emplois</value>
   </data>
-  <data name="TermsAndConditions" xml:space="preserve">
-    <value>Conditions générales</value>
+  <data name="grants" xml:space="preserve">
+    <value>Bourses</value>
   </data>
-  <data name="BrowseJobs" xml:space="preserve">
-    <value>Parcourir les emplois</value>
-  </data>
-  <data name="BrowseOpp" xml:space="preserve">
-    <value>Parcourir les Opportunités</value>
-  </data>
-  <data name="AdditionalLinks" xml:space="preserve">
-    <value>Liens supplémentaires</value>
+  <data name="training_pportunities" xml:space="preserve">
+    <value>Opportunités de formation</value>
   </data>
 </root>

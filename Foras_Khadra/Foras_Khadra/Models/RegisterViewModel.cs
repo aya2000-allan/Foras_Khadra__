@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Foras_Khadra.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Foras_Khadra.ViewModels
 {
@@ -35,10 +36,16 @@ namespace Foras_Khadra.ViewModels
 
         [MinLength(1, ErrorMessage = "اختر اهتمام واحد على الأقل")]
         public List<string> Interests { get; set; } = new List<string>(); // ما يلمس asp-for مباشرة
-        public List<string> AvailableInterests { get; set; } = new List<string> // الخيارات
-    {
-        "المسابقات", "المؤتمرات", "فرص التطوع", "الوظائف", "المنح", "الزمالات", "فرص التدريب"
-    };
+        public List<InterestItem> AvailableInterests { get; set; } = new List<InterestItem>
+        {
+            new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
+            new InterestItem { Key = "conferences", DisplayName = "المؤتمرات" },
+            new InterestItem { Key = "volunteer_opportunities", DisplayName = "فرص التطوع" },
+            new InterestItem { Key = "jobs", DisplayName = "الوظائف" },
+            new InterestItem { Key = "grants", DisplayName = "المنح" },
+            new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
+            new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
+        };
         public List<string> Countries { get; set; } = new List<string>();
         public List<string> Nationalities { get; set; } = new List<string>();
     }

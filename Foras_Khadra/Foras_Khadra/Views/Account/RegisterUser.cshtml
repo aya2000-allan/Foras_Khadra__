@@ -1,9 +1,15 @@
 ﻿@model Foras_Khadra.ViewModels.RegisterViewModel
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "إنشاء حساب";
+    ViewData["Title"] = Localizer["PageTitle"];
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
 }
 
-<div class="reg-page" dir="rtl">
+<div class="reg-page" dir="@dir">
     <div class="reg-bg-circle"></div>
 
     <div class="reg-wrap">
@@ -176,10 +182,13 @@
                             @foreach (var interest in Model.AvailableInterests)
                             {
                                 <label class="reg-check">
-                                    <input type="checkbox" name="Interests" value="@interest"
-                                           @(Model.Interests != null && Model.Interests.Contains(interest) ? "checked" : "") />
+                                    <input type="checkbox"
+                                           name="Interests"
+                                           value="@interest.Key"
+                                           @(Model.Interests != null && Model.Interests.Contains(interest.Key) ? "checked" : "") />
+
                                     <span class="reg-check-box"></span>
-                                    <span class="reg-check-text">@interest</span>
+                                    <span class="reg-check-text">@Localizer[interest.Key]</span>
                                 </label>
                             }
                         </div>
