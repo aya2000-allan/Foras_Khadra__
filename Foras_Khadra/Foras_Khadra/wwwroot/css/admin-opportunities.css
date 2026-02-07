@@ -196,3 +196,91 @@
   font-weight: 700;
   font-size: 1.5rem;
 }
+/* Overlay */
+.delete-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+/* Box */
+.delete-box {
+  background: #fff;
+  width: 720px;
+  max-width: 92%;
+  border-radius: 28px;
+  padding: 45px 30px 35px;
+  text-align: center;
+  position: relative;
+  direction: rtl;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+}
+
+/* Close button */
+.delete-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: #eee;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Illustration */
+.delete-illustration img {
+  max-width: 230px;
+  margin-bottom: 20px;
+}
+
+/* Title */
+.delete-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+/* Opportunity name */
+.delete-name {
+  font-size: 26px;
+  font-weight: 700;
+  color: #25652c;
+  margin-bottom: 35px;
+}
+
+/* Actions */
+.delete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+/* Back button */
+.btn-back {
+  background: #fff;
+  border: 3px solid #f99d27;
+  color: #f99d27;
+  font-size: 22px;
+  padding: 14px 55px;
+  border-radius: 22px;
+  cursor: pointer;
+}
+
+/* Delete button */
+.btn-danger {
+  background: #ff383c;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  padding: 14px 65px;
+  border-radius: 22px;
+  cursor: pointer;
+}

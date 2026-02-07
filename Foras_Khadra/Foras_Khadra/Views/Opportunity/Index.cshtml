@@ -98,10 +98,13 @@
                                 <i class="bi bi-pencil-fill"></i>
                             </a>
                             
-                             <form asp-action="Delete" asp-controller="Opportunity" asp-route-id="@opp.Id"
-                                  method="post" onsubmit="return confirm('هل أنت متأكد من حذف هذه الفرصة؟');">
-                                <button type="submit" class="action-icon delete-btn"><i class="bi bi-trash-fill"></i></button>
-                            </form>
+                             <form method="post" >
+                                <button type="button"
+                                        class="action-icon delete-btn"
+                                        onclick="openDeleteModal('@opp.Id', '@opp.Title')">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>                           
+                             </form>
                         </div>
 
                     </div>
@@ -117,7 +120,33 @@
         </div>
     </div>
 </div>
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="delete-overlay">
+    <div class="delete-box">
 
+        <button class="delete-close" onclick="closeDeleteModal()">×</button>
+
+        <div class="delete-illustration">
+            <img src="/images/delete-confirm.png" alt="Delete illustration">
+        </div>
+
+        <h2 class="delete-title">
+            هل أنت متأكد من حذف الفرصة التالية ؟
+        </h2>
+
+        <p id="deleteOppName" class="delete-name">
+            اسم الفرصة التي تم اختيارها
+        </p>
+
+        <div class="delete-actions">
+            <button class="btn-back" onclick="closeDeleteModal()">تراجع</button>
+
+            <form id="deleteForm" method="post">
+                <button type="submit" class="btn-danger">حذف</button>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
     function filterByOrganization(org) {
         const url = new URL(window.location.href);
@@ -174,4 +203,20 @@
         }
         if (items.length > 0) showPage(1);
     });
+</script>
+
+<script>
+    const deleteModal = document.getElementById("deleteModal");
+    const deleteForm = document.getElementById("deleteForm");
+    const deleteOppName = document.getElementById("deleteOppName");
+
+    function openDeleteModal(id, title) {
+        deleteOppName.textContent = title;
+        deleteForm.action = `/Opportunity/Delete/${id}`;
+        deleteModal.style.display = "flex";
+    }
+
+    function closeDeleteModal() {
+        deleteModal.style.display = "none";
+    }
 </script>
