@@ -171,4 +171,7 @@
   <data name="EmailAlreadyUsed" xml:space="preserve">
     <value>Cet e-mail est déjà utilisé</value>
   </data>
+  <data name="ProfileUpdatedSuccess" xml:space="preserve">
+    <value>Votre profil a été mis à jour avec succès</value>
+  </data>
 </root>

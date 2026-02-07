@@ -37,20 +37,12 @@ namespace Foras_Khadra.Controllers
         [HttpGet]
         public IActionResult RegisterUser()
         {
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             var model = new RegisterViewModel
             {
-                Countries = GetCountries(),
-                Nationalities = GetCountries(),
-                AvailableInterests = new List<InterestItem>
-        {
-            new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
-            new InterestItem { Key = "conferences", DisplayName = "المؤتمرات" },
-            new InterestItem { Key = "volunteer_opportunities", DisplayName = "فرص التطوع" },
-            new InterestItem { Key = "jobs", DisplayName = "الوظائف" },
-            new InterestItem { Key = "grants", DisplayName = "المنح" },
-            new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
-            new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
-        }
+                Countries = GetCountries(culture),
+                Nationalities = GetCountries(culture),
+                AvailableInterests = GetAvailableInterests(culture)
             };
             return View(model);
         }
@@ -63,16 +55,7 @@ namespace Foras_Khadra.Controllers
             var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             model.Countries = GetCountries(culture);
             model.Nationalities = GetCountries(culture);
-            model.AvailableInterests = new List<InterestItem>
-    {
-        new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
-        new InterestItem { Key = "conferences", DisplayName = "المؤتمرات" },
-        new InterestItem { Key = "volunteer_opportunities", DisplayName = "فرص التطوع" },
-        new InterestItem { Key = "jobs", DisplayName = "الوظائف" },
-        new InterestItem { Key = "grants", DisplayName = "المنح" },
-        new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
-        new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
-    };
+            model.AvailableInterests = GetAvailableInterests(culture);
 
             if (!ModelState.IsValid) return View(model);
 
@@ -98,7 +81,7 @@ namespace Foras_Khadra.Controllers
                 FullName = $"{model.FirstName} {model.LastName}".Trim(),
                 Country = model.Country,
                 Nationality = model.Nationality,
-                Interests = model.Interests, // هنا نخزن الـ Key فقط
+                Interests = model.Interests,
                 Role = UserRole.User,
                 CreatedAt = System.DateTime.Now
             };
@@ -139,16 +122,12 @@ namespace Foras_Khadra.Controllers
 
             if (await _userManager.IsInRoleAsync(user, "Organization"))
             {
-                TempData["OrgLoginAlert"] = _localizer["OrgLoginAlert"].Value; // نص عربي/إنجليزي جاهز
+                TempData["OrgLoginAlert"] = _localizer["OrgLoginAlert"].Value;
                 TempData["OrgLoginRedirectText"] = _localizer["OrgLoginRedirectText"].Value;
                 TempData["OrgLoginRedirect"] = Url.Action("Login", "Organization");
                 return RedirectToAction("Login");
             }
 
-
-
-
-            // تحقق كلمة المرور باستخدام SignInManager
             var result = await _signInManager.PasswordSignInAsync(
                 user,
                 model.Password,
@@ -162,7 +141,6 @@ namespace Foras_Khadra.Controllers
                 return View(model);
             }
 
-            // تحقق الدور لتوجيه المستخدم
             if (await _userManager.IsInRoleAsync(user, "Admin"))
             {
                 return RedirectToAction("Dashboard", "Admin");
@@ -172,7 +150,6 @@ namespace Foras_Khadra.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-
 
         // ===== Logout =====
         [HttpPost]
@@ -186,7 +163,7 @@ namespace Foras_Khadra.Controllers
         // ===== مساعد لجلب الدول والجنسية =====
         private List<string> GetCountries(string culture = null)
         {
-            culture ??= CultureInfo.CurrentUICulture.TwoLetterISOLanguageName; // ar / en
+            culture ??= CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(c =>
                 {
@@ -202,6 +179,22 @@ namespace Foras_Khadra.Controllers
                 .OrderBy(r => r)
                 .ToList();
         }
+
+        // ===== مساعد لجلب الاهتمامات حسب اللغة =====
+        private List<InterestItem> GetAvailableInterests(string culture)
+        {
+            return new List<InterestItem>
+            {
+                new InterestItem { Key = "competitions", DisplayName = culture == "ar" ? "المسابقات" : culture == "fr" ? "Concours" : "Competitions" },
+                new InterestItem { Key = "conferences", DisplayName = culture == "ar" ? "المؤتمرات" : culture == "fr" ? "Conférences" : "Conferences" },
+                new InterestItem { Key = "volunteer_opportunities", DisplayName = culture == "ar" ? "فرص التطوع" : culture == "fr" ? "Opportunités de bénévolat" : "Volunteer Opportunities" },
+                new InterestItem { Key = "jobs", DisplayName = culture == "ar" ? "الوظائف" : culture == "fr" ? "Emplois" : "Jobs" },
+                new InterestItem { Key = "grants", DisplayName = culture == "ar" ? "المنح" : culture == "fr" ? "Bourses" : "Scholarships" },
+                new InterestItem { Key = "fellowships", DisplayName = culture == "ar" ? "الزمالات" : culture == "fr" ? "Bourses de recherche" : "Fellowships" },
+                new InterestItem { Key = "training_opportunities", DisplayName = culture == "ar" ? "فرص التدريب" : culture == "fr" ? "Opportunités de formation" : "Training Opportunities" }
+            };
+        }
+
 
         // ==== Forgot Password ====
         [HttpGet]
@@ -338,6 +331,8 @@ namespace Foras_Khadra.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login");
 
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
             var model = new EditProfileViewModel
             {
                 FirstName = user.FirstName,
@@ -345,19 +340,10 @@ namespace Foras_Khadra.Controllers
                 Email = user.Email,
                 Country = user.Country,
                 Nationality = user.Nationality,
-                Interests = user.Interests, // قائمة الـ Keys المختارة
-                Countries = GetCountries(),
-                Nationalities = GetCountries(),
-                AvailableInterests = new List<InterestItem> // لازم نضيفها
-        {
-            new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
-            new InterestItem { Key = "conferences", DisplayName = "المؤتمرات" },
-            new InterestItem { Key = "volunteer_opportunities", DisplayName = "فرص التطوع" },
-            new InterestItem { Key = "jobs", DisplayName = "الوظائف" },
-            new InterestItem { Key = "grants", DisplayName = "المنح" },
-            new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
-            new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
-        }
+                Interests = user.Interests,
+                Countries = GetCountries(culture),
+                Nationalities = GetCountries(culture),
+                AvailableInterests = GetAvailableInterests(culture)
             };
 
             return View(model);
@@ -367,23 +353,13 @@ namespace Foras_Khadra.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProfileSettings(EditProfileViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-                model.Countries = GetCountries(culture);
-                model.Nationalities = GetCountries(culture);
-                model.AvailableInterests = new List<InterestItem> // لازم نضيفها
-        {
-            new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
-            new InterestItem { Key = "conferences", DisplayName = "المؤتمرات" },
-            new InterestItem { Key = "volunteer_opportunities", DisplayName = "فرص التطوع" },
-            new InterestItem { Key = "jobs", DisplayName = "الوظائف" },
-            new InterestItem { Key = "grants", DisplayName = "المنح" },
-            new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
-            new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
-        };
-                return View(model);
-            }
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+            model.Countries = GetCountries(culture);
+            model.Nationalities = GetCountries(culture);
+            model.AvailableInterests = GetAvailableInterests(culture);
+
+            if (!ModelState.IsValid) return View(model);
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login");
@@ -393,13 +369,12 @@ namespace Foras_Khadra.Controllers
             user.FullName = $"{model.FirstName} {model.LastName}";
             user.Country = model.Country;
             user.Nationality = model.Nationality;
-            user.Interests = model.Interests; // حفظ الـ Keys
+            user.Interests = model.Interests;
 
             if (user.Email != model.Email)
             {
                 user.Email = model.Email;
                 user.UserName = model.Email;
-
                 user.NormalizedEmail = _userManager.NormalizeEmail(model.Email);
                 user.NormalizedUserName = _userManager.NormalizeName(model.Email);
             }
@@ -407,7 +382,7 @@ namespace Foras_Khadra.Controllers
             await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
 
-            TempData["Success"] = "تم تحديث بياناتك بنجاح";
+            TempData["Success"] = _localizer["ProfileUpdatedSuccess"].Value;
             return RedirectToAction("ProfileSettings");
         }
 

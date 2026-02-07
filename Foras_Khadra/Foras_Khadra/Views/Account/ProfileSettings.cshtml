@@ -10,355 +10,184 @@
     var dir = culture == "ar" ? "rtl" : "ltr";
 }
 
-<style>
-    /* صفحة RTL/LTR */
-    .profile-page { min-height: 100vh; }
-    .profile-title { color:#1f6b3a; font-weight:800; }
+<div class="container mt-5" dir="@dir">
+    <h2 class="mb-4 text-center">@Localizer["CardSettings"]</h2>
 
-    /* wrapper بدون كارد كبير */
-    .profile-card { background: transparent; box-shadow:none; border:none; }
+    <div class="row">
+        <!-- التاب الجانبي -->
+        <div class="col-md-3 mb-3">
+            <div class="nav flex-column nav-pills" id="profile-tabs">
+                <button class="nav-link active"
+                        data-bs-toggle="pill"
+                        data-bs-target="#viewCard">
+                    @Localizer["ViewMyCard"]
+                </button>
 
-    /* عمود التابات */
-    .profile-side{
-        background: transparent !important;
-        border: none !important;
-        padding-top: 12px !important;
-        display:flex;
-        justify-content:flex-end;
-    }
+                <button class="nav-link"
+                        data-bs-toggle="pill"
+                        data-bs-target="#editCard">
+                    @Localizer["EditMyCard"]
+                </button>
+            </div>
+        </div>
 
-    .profile-tabs{
-        width: 220px;
-        display:flex;
-        flex-direction:column;
-        gap:12px;
-        padding-top: 50px;
-    }
+        <!-- المحتوى -->
+        <div class="col-md-9">
+            <div class="tab-content">
 
-    .profile-tabs .nav-link{
-        border-radius:999px;
-        padding:10px 16px;
-        font-weight:800;
-        border:1px solid rgba(31,107,58,.25);
-        background:#f1fbf4;
-        color:#1f6b3a;
-        text-align:center;
-        box-shadow:none;
-    }
+                <!--  عرض البطاقة -->
+                <div class="tab-pane fade show active" id="viewCard">
+                    <div class="card">
+                        <div class="card-body">
+                            <p>
+                                <strong>@Localizer["FirstName"]:</strong>
+                                @Model.FirstName @Model.LastName
+                            </p>
 
-    .profile-tabs .nav-link.active{
-        background:#1f6b3a;
-        color:#fff;
-        border-color:#1f6b3a;
-    }
+                            <p>
+                                <strong>@Localizer["Email"]:</strong>
+                                @Model.Email
+                            </p>
 
-    /* بطاقة عرض البروفايل */
-    .profile-id-card{
-        max-width: 560px;
-        background:#fff;
-        border-radius:14px;
-        box-shadow:0 10px 30px rgba(0,0,0,.10);
-        overflow:hidden;
-        border:1px solid rgba(31,107,58,.12);
-        margin-inline-start: 40px; /* بدل margin-right عشان RTL/LTR */
-    }
+                            <p>
+                                <strong>@Localizer["Country"]:</strong>
+                                @Model.Country
+                            </p>
 
-    .idcard-header{
-        background:#1f6b3a;
-        color:#fff;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        padding:10px 14px;
-    }
+                            <p>
+                                <strong>@Localizer["Nationality"]:</strong>
+                                @Model.Nationality
+                            </p>
 
-    .idcard-title{ font-weight:900; }
-
-    .idcard-logo img{
-        width: 70px;
-        height: 28px;
-        object-fit: contain;
-    }
-
-    .idcard-body{
-        display:flex;
-        gap:18px;
-        padding:16px 18px 18px;
-    }
-
-    .idcard-avatar{
-        width:120px;
-        height:120px;
-        border-radius:8px;
-        object-fit:cover;
-        border:1px solid rgba(0,0,0,.12);
-    }
-
-    .idcard-right{ flex:1; }
-
-    .idrow{
-        display:grid;
-        grid-template-columns:120px 1fr;
-        gap:14px;
-        padding:6px 0;
-    }
-
-    .idlabel{ color:#6a6a6a; font-weight:800; }
-    .idvalue{ color:#1f6b3a; font-weight:800; }
-
-    /* inputs */
-    .profile-input, .profile-select{
-        border-radius:12px;
-        padding:10px 12px;
-        border:1px solid rgba(0,0,0,.12);
-    }
-    .profile-input:focus, .profile-select:focus{
-        border-color: rgba(31,107,58,.55);
-        box-shadow: 0 0 0 .2rem rgba(31,107,58,.12);
-    }
-
-    /* الاهتمامات */
-    .interests-grid{
-        display:flex;
-        flex-wrap:wrap;
-        gap:14px 18px;
-    }
-    .interest-item{
-        display:flex;
-        align-items:center;
-        gap:10px;
-        cursor:pointer;
-        user-select:none;
-    }
-    .interest-text{
-        font-weight:700;
-        color:#2b2b2b;
-        font-size:14px;
-    }
-
-    /* checkbox orange */
-    .form-check-input{
-        width:18px;
-        height:18px;
-        border:2px solid #f28c28 !important;
-        border-radius:4px;
-        background:#fff;
-        cursor:pointer;
-        position: relative;
-    }
-    .form-check-input:focus{
-        border-color:#f28c28 !important;
-        box-shadow:0 0 0 .15rem rgba(242,140,40,.35);
-    }
-    .form-check-input:checked{
-        background-color:#f28c28 !important;
-        border-color:#f28c28 !important;
-    }
-    .form-check-input:checked::after{
-        content:"";
-        position:absolute;
-        width:5px; height:9px;
-        border:solid #fff;
-        border-width:0 2px 2px 0;
-        transform:rotate(45deg);
-        top:2px;
-        left:6px;
-    }
-
-    .btn-save{
-        background:#1f6b3a;
-        color:#fff;
-        border:none;
-        padding:10px 18px;
-        border-radius:12px;
-        font-weight:800;
-    }
-    .btn-save:hover{ background:#185a31; color:#fff; }
-
-    .tab-content > .active{
-        animation: fadeIn .30s ease;
-        padding-top:10px;
-    }
-    @@keyframes fadeIn{
-        from{ opacity:0; transform:translateY(4px); }
-        to{ opacity:1; transform:none; }
-    }
-
-    @@media (max-width:768px){
-        .profile-tabs{ width:100%; }
-        .profile-side{ justify-content:center; }
-        .profile-id-card{ max-width:100%; margin-inline-start:0; }
-        .idcard-body{ flex-direction:column; align-items:center; }
-        .idrow{ grid-template-columns:110px 1fr; width:100%; }
-    }
-</style>
-
-<div class="profile-page py-5" dir="@dir">
-    <div class="container">
-        <h2 class="profile-title mb-4 text-center">@Localizer["CardSettings"]</h2>
-
-        <div class="profile-card">
-            <div class="row align-items-start">
-
-                <!-- التابات -->
-                <div class="col-md-4 p-4 p-md-5 profile-side">
-                    <div class="nav flex-column nav-pills profile-tabs" role="tablist">
-                        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#viewProfile" type="button">
-                            @Localizer["ViewMyCard"]
-                        </button>
-                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#editProfile" type="button">
-                            @Localizer["EditMyCard"]
-                        </button>
+                            <p><strong>@Localizer["Interests"]:</strong></p>
+                            <ul>
+                                @foreach (var key in Model.Interests)
+                                {
+                                    var interest = Model.AvailableInterests.FirstOrDefault(x => x.Key == key);
+                                    if (interest != null)
+                                    {
+                                        <li>@interest.DisplayName</li>
+                                    }
+                                }
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
-                <!-- المحتوى -->
-                <div class="col-md-8 p-4 p-md-5">
-                    <div class="tab-content">
+                <!-- ✏️ تعديل البطاقة -->
+                <div class="tab-pane fade" id="editCard">
+                    <form asp-action="ProfileSettings" method="post">
+                        @Html.AntiForgeryToken()
 
-                        <!-- عرض البطاقة -->
-                        <div class="tab-pane fade show active" id="viewProfile">
-                            <div class="profile-id-card">
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success">
+                                @Localizer["SuccessMessage"]
+                            </div>
+                        }
 
-                                <div class="idcard-header">
-                                    <div class="idcard-title">@Localizer["ViewMyCard"]</div>
-                                    <div class="idcard-logo">
-                                        <img src="~/images/logo.png" alt="Foras Logo" />
-                                    </div>
-                                </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="FirstName">
+                                    @Localizer["FirstName"]
+                                </label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
 
-                                <div class="idcard-body">
-                                    <div>
-                                        <img class="idcard-avatar"
-                                             src="https://via.placeholder.com/120"
-                                             alt="profile" />
-                                    </div>
-
-                                    <div class="idcard-right">
-                                        <div class="idrow">
-                                            <div class="idlabel">@Localizer["FirstName"]</div>
-                                            <div class="idvalue">@Model.FirstName @Model.LastName</div>
-                                        </div>
-
-                                        <div class="idrow">
-                                            <div class="idlabel">@Localizer["Email"]</div>
-                                            <div class="idvalue">@Model.Email</div>
-                                        </div>
-
-                                        <div class="idrow">
-                                            <div class="idlabel">@Localizer["Country"]</div>
-                                            <div class="idvalue">@Model.Country</div>
-                                        </div>
-
-                                        <div class="idrow">
-                                            <div class="idlabel">@Localizer["Nationality"]</div>
-                                            <div class="idvalue">@Model.Nationality</div>
-                                        </div>
-
-                                        <div class="idrow">
-                                            <div class="idlabel">@Localizer["Interests"]</div>
-                                            <div class="idvalue">
-                                                @if (Model.Interests != null && Model.Interests.Any())
-                                                {
-                                                    @string.Join("، ", Model.Interests.Select(i => Localizer[i]))
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            <div class="col">
+                                <label asp-for="LastName">
+                                    @Localizer["LastName"]
+                                </label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
                             </div>
                         </div>
 
-                        <!-- تعديل الملف -->
-                        <div class="tab-pane fade" id="editProfile">
-                            <form asp-action="ProfileSettings" method="post">
-                                @Html.AntiForgeryToken()
-
-                                @if (TempData["Success"] != null)
-                                {
-                                    <div class="alert alert-success">@Localizer["SuccessMessage"]</div>
-                                }
-
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <label asp-for="FirstName" class="form-label">@Localizer["FirstName"]</label>
-                                        <input asp-for="FirstName" class="form-control profile-input" />
-                                        <span asp-validation-for="FirstName" class="text-danger"></span>
-                                    </div>
-
-                                    <div class="col">
-                                        <label asp-for="LastName" class="form-label">@Localizer["LastName"]</label>
-                                        <input asp-for="LastName" class="form-control profile-input" />
-                                        <span asp-validation-for="LastName" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label asp-for="Email" class="form-label">@Localizer["Email"]</label>
-                                    <input asp-for="Email" class="form-control profile-input" />
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <div class="col">
-                                        <label asp-for="Country" class="form-label">@Localizer["Country"]</label>
-                                        <select asp-for="Country" class="form-select profile-select">
-                                            <option value="">@Localizer["SelectCountry"]</option>
-                                            @foreach (var c in Model.Countries)
-                                            {
-                                                <option value="@c">@c</option>
-                                            }
-                                        </select>
-                                        <span asp-validation-for="Country" class="text-danger"></span>
-                                    </div>
-
-                                    <div class="col">
-                                        <label asp-for="Nationality" class="form-label">@Localizer["Nationality"]</label>
-                                        <select asp-for="Nationality" class="form-select profile-select">
-                                            <option value="">@Localizer["SelectNationality"]</option>
-                                            @foreach (var n in Model.Nationalities)
-                                            {
-                                                <option value="@n">@n</option>
-                                            }
-                                        </select>
-                                        <span asp-validation-for="Nationality" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                               <div class="mb-4">
-    <label class="form-label">@Localizer["Interests"]</label>
-
-    <div class="interests-grid">
-        @foreach (var interest in Model.AvailableInterests)
-        {
-            <label class="interest-item">
-                <input class="form-check-input"
-                       type="checkbox"
-                       name="Interests"
-                       value="@interest.Key"
-                       @(Model.Interests != null && Model.Interests.Contains(interest.Key) ? "checked" : "") />
-
-                <span class="interest-text">
-                    @Localizer[interest.DisplayName]
-                </span>
-            </label>
-        }
-    </div>
-</div>
-
-
-
-                                <button type="submit" class="btn btn-save">@Localizer["SaveChanges"]</button>
-                            </form>
+                        <div class="mb-3">
+                            <label asp-for="Email">
+                                @Localizer["Email"]
+                            </label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
-                    </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label asp-for="Country">
+                                    @Localizer["Country"]
+                                </label>
+                                <select asp-for="Country" class="form-select">
+                                    <option value="">
+                                        @Localizer["SelectCountry"]
+                                    </option>
+                                    @foreach (var c in Model.Countries)
+                                    {
+                                        if (c == Model.Country)
+                                        {
+                                            <option value="@c" selected>@c</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@c">@c</option>
+                                        }
+                                    }
+
+
+
+                                </select>
+                            </div>
+
+                            <div class="col">
+                                <label asp-for="Nationality">
+                                    @Localizer["Nationality"]
+                                </label>
+                                <select asp-for="Nationality" class="form-select">
+                                    <option value="">
+                                        @Localizer["SelectNationality"]
+                                    </option>
+                                    @foreach (var n in Model.Nationalities)
+                                    {
+                                        if (n == Model.Nationality)
+                                        {
+                                            <option value="@n" selected>@n</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@n">@n</option>
+                                        }
+                                    }
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>@Localizer["Interests"]</label>
+                            <div class="d-flex flex-wrap gap-3">
+                                @foreach (var interest in Model.AvailableInterests)
+                                {
+                                    <div class="form-check form-check-inline">
+                                        <input type="checkbox"
+                                               name="Interests"
+                                               value="@interest.Key"
+                                               @(Model.Interests.Contains(interest.Key) ? "checked" : "") />
+                                        <label class="form-check-label">
+                                           @interest.DisplayName
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">
+                            @Localizer["SaveChanges"]
+                        </button>
+                    </form>
                 </div>
 
             </div>
         </div>
-
     </div>
 </div>
 

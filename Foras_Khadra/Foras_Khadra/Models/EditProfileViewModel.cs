@@ -26,14 +26,15 @@ namespace Foras_Khadra.Models
         // للعرض
         public List<InterestItem> AvailableInterests { get; set; } = new()
 {
-    new InterestItem { Key = "competitions" },
-    new InterestItem { Key = "conferences" },
-    new InterestItem { Key = "volunteer_opportunities" },
-    new InterestItem { Key = "jobs" },
-    new InterestItem { Key = "grants" },
-    new InterestItem { Key = "fellowships" },
-    new InterestItem { Key = "training_opportunities" }
+    new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
+    new InterestItem { Key = "conferences", DisplayName = "المؤتمرات" },
+    new InterestItem { Key = "volunteer_opportunities", DisplayName = "فرص التطوع" },
+    new InterestItem { Key = "jobs", DisplayName = "الوظائف" },
+    new InterestItem { Key = "grants", DisplayName = "المنح" },
+    new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
+    new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
 };
+
 
         public List<string> Countries { get; set; } = new();
         public List<string> Nationalities { get; set; } = new();
