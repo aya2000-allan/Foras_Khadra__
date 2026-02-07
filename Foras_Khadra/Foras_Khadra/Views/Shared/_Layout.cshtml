@@ -69,28 +69,28 @@
 
 <style>
     html, body {
-  height: 100%;
-  margin: 0 !important;
-  padding: 0 !important;
-}
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-/* خلي المحتوى يضغط الفوتر لأسفل */
-body > .container {
-  flex: 1 0 auto;
-}
+    /* خلي المحتوى يضغط الفوتر لأسفل */
+    body > .container {
+        flex: 1 0 auto;
+    }
 
-/* الفوتر ما يترك مسافة تحت */
-footer.custom-footer {
-  margin-top: auto;
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
+    /* الفوتر ما يترك مسافة تحت */
+    footer.custom-footer {
+        margin-top: auto;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
 
     /* =========================
        NAV / DROPDOWN BASE
@@ -258,74 +258,111 @@ footer.custom-footer {
     /* =========================
        MOBILE NAV
     ========================= */
-    @@media (max-width: 992px) {
-        header { background: #25652C; }
+   @@media (max-width: 992px) {
+    header { background: #25652C; }
 
-        .top-banner { flex-wrap: wrap; gap: 10px; padding: 10px 12px; }
-        .mobile-menu-btn { display: inline-flex; align-items: center; justify-content: center; order: 1; color: #fff; }
-
-        .logo { order: 2; flex: 1; display: flex; align-items: center; justify-content: center; }
-        html[dir="rtl"] .logo { justify-content: flex-end; }
-        html[dir="ltr"] .logo { justify-content: flex-start; }
-        .logo img { max-height: 34px; width: auto; }
-
-        #navContent {
-            order: 3;
-            width: 100%;
-            display: none !important;
-            flex-direction: column;
-            gap: 14px;
-            padding-top: 10px;
-        }
-        #navContent.show { display: flex !important; }
-
-        .menu-items {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 0 !important;
-            align-items: stretch;
-        }
-        .menu-items > a, .menu-items .nav-btn {
-            width: 100%;
-            text-align: center;
-            justify-content: center;
-            padding: 12px 14px;
-        }
-
-        .auth-section {
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px !important;
-        }
-        .auth-section .custom-dropdown { width: 100%; max-width: 420px; }
-        .auth-section .custom-dropdown > button { width: 100%; }
-
-        .dropdown-list {
-            position: static !important;
-            width: 100% !important;
-            min-width: unset !important;
-            box-shadow: none !important;
-            margin-top: 8px;
-            border-radius: 12px;
-        }
-
-        /* شيل الخطوط/الفواصل بالموبايل */
-        .menu-items > a{
-            display: block !important;
-            margin: 0 !important;
-            border-radius: 0 !important;
-        }
-        .menu-items > a,
-        .menu-items > a:focus,
-        .menu-items > a:hover{
-            border: 0 !important;
-            outline: 0 !important;
-            box-shadow: none !important;
-        }
+    /* Wrapper */
+    .top-banner{
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 12px;
+        direction: ltr; /* يخلي زر التوجل يسار في كل اللغات */
     }
+
+    /* Toggle button */
+    .mobile-menu-btn{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        order: 1;
+        color: #fff;
+    }
+
+    /* Logo */
+    .logo{
+        order: 2;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* logo alignment per language */
+    html[dir="rtl"] .logo{ justify-content: flex-end; }
+    html[dir="ltr"] .logo{ justify-content: flex-start; }
+
+    .logo img { max-height: 34px; width: auto; }
+
+    /* Menu container */
+    #navContent{
+        order: 3;
+        width: 100%;
+        display: none !important; /* مغلق افتراضيًا */
+        flex-direction: column;
+        gap: 14px;
+        padding-top: 10px;
+        direction: ltr; /* الافتراضي */
+    }
+    #navContent.show{ display: flex !important; }
+
+    /* خليه RTL فقط لما اللغة عربية */
+    html[dir="rtl"] #navContent{ direction: rtl; }
+
+    /* Menu items */
+    .menu-items{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0 !important;
+        align-items: stretch;
+    }
+
+    .menu-items > a,
+    .menu-items .nav-btn{
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        padding: 12px 14px;
+        border-radius: 0 !important; /* شكل موحد */
+    }
+
+    /* Auth section */
+    .auth-section{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px !important;
+    }
+
+    .auth-section .custom-dropdown{
+        width: 100%;
+        max-width: 420px;
+    }
+    .auth-section .custom-dropdown > button{
+        width: 100%;
+    }
+
+    /* Dropdown list on mobile */
+    .dropdown-list{
+        position: static !important;
+        width: 100% !important;
+        min-width: unset !important;
+        box-shadow: none !important;
+        margin-top: 8px;
+        border-radius: 12px;
+    }
+
+    /* remove outlines and borders on mobile links */
+    .menu-items > a,
+    .menu-items > a:focus,
+    .menu-items > a:hover{
+        border: 0 !important;
+        outline: 0 !important;
+        box-shadow: none !important;
+    }
+}
+
 
     /* =========================
        FOOTER RESPONSIVE
@@ -385,18 +422,18 @@ footer.custom-footer {
     }
 
     .nav-btn--icon img.lang-flag {
-    width: 28px;
-    height: 22px;
-    border-radius: 3px;
-    object-fit: cover;
+        width: 30px;
+        height: 20px;
+        border-radius: 3px;
+        object-fit: cover;
+    }
+
+  
+    iconify-icon {
+    vertical-align: middle;
 }
 
-.footer-bottom {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-
+    
 </style>
 
 @if (!hideNavAndFooter)
@@ -500,37 +537,37 @@ footer.custom-footer {
                     }
 
                     <div class="custom-dropdown" style="background:none;">
-                      <button class="nav-btn nav-btn--icon" type="button"
-        onclick="toggleDropdown('langMenu', event)"
-        aria-label="@Localizer["Languages"]">
+                        <button class="nav-btn nav-btn--icon" type="button"
+                                onclick="toggleDropdown('langMenu', event)"
+                                aria-label="@Localizer["Languages"]">
 
-    @if (culture == "ar")
-    {
-        <img src="~/Images/pa.png" alt="Arabic" class="lang-flag">
-    }
-    else if (culture == "fr")
-    {
-        <img src="~/Images/fr.png" alt="French" class="lang-flag">
-    }
-    else
-    {
-        <img src="~/Images/us.png" alt="English" class="lang-flag">
-    }
+                           @if (culture == "ar")
+{
+<iconify-icon icon="flagpack:ps" width="26" height="26"></iconify-icon>
+}
+else if (culture == "fr")
+{
+    <iconify-icon icon="twemoji:flag-france" width="26" height="26"></iconify-icon>
+}
+else
+{
+    <iconify-icon icon="twemoji:flag-united-states" width="26" height="26"></iconify-icon>
+}
 
-</button>
 
+                        </button>
 
                         <div class="dropdown-list" id="langMenu">
                             <a asp-controller="Language" asp-action="Change" asp-route-culture="ar" asp-route-returnUrl="@Context.Request.Path">
-                                <img src="~/Images/pa.png" alt="Arabic" class="lang-flag">
+    <iconify-icon icon="flagpack:ps" width="22" height="22"></iconify-icon>
                                 <span>@Localizer["Arabic"]</span>
                             </a>
                             <a asp-controller="Language" asp-action="Change" asp-route-culture="en" asp-route-returnUrl="@Context.Request.Path">
-                                <img src="~/Images/us.png" alt="English" class="lang-flag">
+<iconify-icon icon="twemoji:flag-united-states" width="22" height="22"></iconify-icon>
                                 <span>@Localizer["English"]</span>
                             </a>
                             <a asp-controller="Language" asp-action="Change" asp-route-culture="fr" asp-route-returnUrl="@Context.Request.Path">
-                                <img src="~/Images/fr.png" alt="French" class="lang-flag">
+<iconify-icon icon="twemoji:flag-france" width="22" height="22"></iconify-icon>
                                 <span>@Localizer["French"]</span>
                             </a>
                         </div>
@@ -549,10 +586,9 @@ footer.custom-footer {
     </main>
 </div>
 
-
 @if (!hideNavAndFooter)
 {
-    <footer class="custom-footer">
+    <footer class="custom-footer pb-0 mt-4 pt-1">
         <div class="footer-container">
 
             <div class="footer-left">
@@ -582,7 +618,7 @@ footer.custom-footer {
             <div class="footer-links">
 
                 <div class="footer-column">
-                        <h4> @Localizer["BrowseOpp"]</h4>
+                    <h4> @Localizer["BrowseOpp"]</h4>
                     <ul>
                         <li><a href="~/Home/AllOpportunities">@Localizer["AllOpportunities"]</a></li>
                         <li><a href="~/Home/AllOpportunities?type=Competitions">@Localizer["Competitions"]</a></li>
@@ -592,7 +628,7 @@ footer.custom-footer {
                 </div>
 
                 <div class="footer-column">
-                        <h4>@Localizer["BrowseJobs"] </h4>
+                    <h4>@Localizer["BrowseJobs"] </h4>
                     <ul>
                         <li><a href="~/Home/AllOpportunities?type=Jobs">@Localizer["Jobs"]</a></li>
                         <li><a href="~/Home/AllOpportunities?type=Scholarships">@Localizer["Scholarships"]</a></li>
@@ -602,7 +638,7 @@ footer.custom-footer {
                 </div>
 
                 <div class="footer-column">
-                        <h4>@Localizer["AdditionalLinks"]</h4>
+                    <h4>@Localizer["AdditionalLinks"]</h4>
                     <ul>
                         <li><a href="~/Home/Articles">@Localizer["Articles"]</a></li>
                         <li><a href="~/Home/AboutUs">@Localizer["AboutUs"]</a></li>
@@ -610,14 +646,14 @@ footer.custom-footer {
                     </ul>
                 </div>
 
-                  <div class="footer-column">
-        <h4>@Localizer["Policies"]</h4>
-        <ul>
-                            <li><a href="~/Home/PolicyPrivacy">@Localizer["PrivacyPolicy"]</a></li>
-                            <li><a href="~/Home/UsagePolicy">@Localizer["UsagePolicy"]</a></li>
-                            <li><a href="~/Home/TermsAndConditions">@Localizer["TermsAndConditions"]</a></li>
-        </ul>
-    </div>
+                <div class="footer-column">
+                    <h4>@Localizer["Policies"]</h4>
+                    <ul>
+                        <li><a href="~/Home/PolicyPrivacy">@Localizer["PrivacyPolicy"]</a></li>
+                        <li><a href="~/Home/UsagePolicy">@Localizer["UsagePolicy"]</a></li>
+                        <li><a href="~/Home/TermsAndConditions">@Localizer["TermsAndConditions"]</a></li>
+                    </ul>
+                </div>
 
             </div>
 
@@ -626,7 +662,7 @@ footer.custom-footer {
             </div>
         </div>
 
-        <div class="footer-bottom" style="text-align:center; padding:14px 0; border-top:1px solid #e6ece8; margin-top:20px;">
+        <div class="footer-bottom pt-3" style="text-align:center;  border-top:1px solid #e6ece8; ">
             <p>@Localizer["All rights reserved © 2025"]</p>
         </div>
     </footer>
@@ -678,6 +714,12 @@ footer.custom-footer {
         if (window.innerWidth > 992) {
             nav.classList.remove("show");
         }
+    });
+
+    // تأكيد: المينو ما تكون مفتوحة تلقائيًا عند التحميل
+    document.addEventListener("DOMContentLoaded", function () {
+        const nav = document.getElementById("navContent");
+        if (nav) nav.classList.remove("show");
     });
 </script>
 
