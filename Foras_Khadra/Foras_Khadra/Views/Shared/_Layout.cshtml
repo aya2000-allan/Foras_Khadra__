@@ -506,7 +506,7 @@ footer.custom-footer {
 
     @if (culture == "ar")
     {
-        <img src="~/Images/sa.png" alt="Arabic" class="lang-flag">
+        <img src="~/Images/pa.png" alt="Arabic" class="lang-flag">
     }
     else if (culture == "fr")
     {
@@ -522,7 +522,7 @@ footer.custom-footer {
 
                         <div class="dropdown-list" id="langMenu">
                             <a asp-controller="Language" asp-action="Change" asp-route-culture="ar" asp-route-returnUrl="@Context.Request.Path">
-                                <img src="~/Images/sa.png" alt="Arabic" class="lang-flag">
+                                <img src="~/Images/pa.png" alt="Arabic" class="lang-flag">
                                 <span>@Localizer["Arabic"]</span>
                             </a>
                             <a asp-controller="Language" asp-action="Change" asp-route-culture="en" asp-route-returnUrl="@Context.Request.Path">

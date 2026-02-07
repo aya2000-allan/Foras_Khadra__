@@ -1,121 +1,436 @@
 ﻿@model Foras_Khadra.Models.EditProfileViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">إعدادات الملف الشخصي</h2>
+<style>
+    /* RTL */
+    .profile-page {
+        direction: rtl;
+    }
 
-    <div class="row">
-        <!-- التاب الجانبي -->
-        <div class="col-md-3 mb-3">
-            <div class="nav flex-column nav-pills" id="profile-tabs">
-                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#viewProfile">
-                    عرض الملف الشخصي
-                </button>
-                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#editProfile">
-                    تعديل الملف الشخصي
-                </button>
-            </div>
-        </div>
+    /* خلفية الصفحة */
+    .profile-page {
+        @* background: #eef7ef; *@
+        min-height: 100vh;
+    }
 
-        <!-- المحتوى -->
-        <div class="col-md-9">
-            <div class="tab-content">
+    /* العنوان */
+    .profile-title {
+        color: #1f6b3a;
+        font-weight: 800;
+    }
 
-                <!-- 👁️ عرض البروفايل -->
-                <div class="tab-pane fade show active" id="viewProfile">
-                    <div class="card">
-                        <div class="card-body">
-                            <p><strong>الاسم:</strong> @Model.FirstName @Model.LastName</p>
-                            <p><strong>البريد الإلكتروني:</strong> @Model.Email</p>
-                            <p><strong>الدولة:</strong> @Model.Country</p>
-                            <p><strong>الجنسية:</strong> @Model.Nationality</p>
+    /* wrapper شفاف (زي الصورة ما في كارد كبير حول الكل) */
+    .profile-card {
+        background: transparent;
+        box-shadow: none;
+        border: none;
+    }
 
-                            <p><strong>الاهتمامات:</strong></p>
-                            <ul>
-                                @foreach (var i in Model.Interests)
-                                {
-                                    <li>@i</li>
-                                }
-                            </ul>
-                        </div>
+    /* عمود اليمين (بدون صندوق) */
+    .profile-side {
+        background: transparent !important;
+        border: none !important;
+        padding-top: 12px !important;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    /* أزرار اليمين */
+    .profile-tabs {
+        width: 220px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding-top: 50px;
+    }
+
+    .profile-tabs .nav-link {
+        border-radius: 999px;
+        padding: 10px 16px;
+        font-weight: 800;
+        border: 1px solid rgba(31, 107, 58, .25);
+        background: #f1fbf4;
+        color: #1f6b3a;
+        text-align: center;
+        box-shadow: none;
+    }
+
+    .profile-tabs .nav-link.active {
+        background: #1f6b3a;
+        color: #fff;
+        border-color: #1f6b3a;
+    }
+
+    /* بطاقة عرض البروفايل */
+    .profile-id-card {
+        max-width: 560px;
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .10);
+        overflow: hidden;
+        border: 1px solid rgba(31, 107, 58, .12);
+        margin-right: 40px;
+        /* خففها أو خلّيها 0 auto لو بدك توسيط */
+    }
+
+    /* هيدر البطاقة */
+    .idcard-header {
+        background: #1f6b3a;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+    }
+
+    .idcard-title {
+        font-weight: 900;
+    }
+
+    .idcard-logo .logo-box {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 30px;
+        border-radius: 6px;
+        @* background: rgba(255, 255, 255, .15); *@
+        font-weight: 900;
+        font-size: 12px;
+    }
+
+    /* جسم البطاقة */
+    .idcard-body {
+        display: flex;
+        gap: 18px;
+        padding: 16px 18px 18px;
+    }
+
+    .idcard-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1px solid rgba(0, 0, 0, .12);
+    }
+
+    /* صفوف البيانات */
+    .idcard-right {
+        flex: 1;
+    }
+
+    .idrow {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 14px;
+        padding: 6px 0;
+    }
+
+    .idlabel {
+        color: #6a6a6a;
+        font-weight: 800;
+    }
+
+    .idvalue {
+        color: #1f6b3a;
+        font-weight: 800;
+    }
+
+    /* حقول الفورم */
+    .profile-input,
+    .profile-select {
+        border-radius: 12px;
+        padding: 10px 12px;
+        border: 1px solid rgba(0, 0, 0, .12);
+    }
+
+    .profile-input:focus,
+    .profile-select:focus {
+        border-color: rgba(31, 107, 58, .55);
+        box-shadow: 0 0 0 .2rem rgba(31, 107, 58, .12);
+    }
+
+    /* الاهتمامات */
+    .interests-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px 18px;
+        
+    }
+
+    .interest-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .interest-text {
+        font-weight: 700;
+        color: #2b2b2b;
+        font-size: 14px;
+    }
+
+    /* 체크 بوكس برتقالي */
+    .interest-item .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, .2);
+    }
+
+    .interest-item .form-check-input:checked {
+        background-color: #f28c28;
+        border-color: #f28c28;
+    }
+    .form-check-input{
+                border: 1px solid #f28c28;
+
+    }
+
+    /* زر الحفظ */
+    .btn-save {
+        background: #1f6b3a;
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 12px;
+        font-weight: 800;
+    }
+
+    .btn-save:hover {
+        background: #185a31;
+        color: #fff;
+    }
+
+    /* موبايل */
+    @@media (max-width: 768px) {
+        .profile-tabs {
+            width: 100%;
+        }
+
+        .profile-side {
+            justify-content: center;
+        }
+
+        .profile-id-card {
+            max-width: 100%;
+            margin-right: 0;
+        }
+
+        .idcard-body {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .idrow {
+            grid-template-columns: 110px 1fr;
+            width: 100%;
+        }
+    }
+    .tab-content>.active {
+        animation: fadeIn 0.3s ease;
+        padding-top: 10px;
+    }
+    /* ===== Checkbox Orange Border ===== */
+
+/* الحالة العادية */
+.form-check-input {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #f28c28 !important; /* برتقالي */
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* عند التركيز */
+.form-check-input:focus {
+    border-color: #f28c28 !important;
+    box-shadow: 0 0 0 0.15rem rgba(242, 140, 40, 0.35);
+}
+
+/* عند التحديد */
+.form-check-input:checked {
+    background-color: #f28c28 !important;
+    border-color: #f28c28 !important;
+}
+
+/* علامة الصح داخل المربع */
+.form-check-input:checked::after {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    top: 2px;
+    left: 6px;
+}
+
+/* hover */
+.form-check-input:hover {
+    border-color: #f28c28;
+}
+
+
+</style>
+
+<div class="profile-page py-5">
+    <div class="container">
+        <h2 class="profile-title mb-4 text-center">إعدادات الملف الشخصي</h2>
+
+        <div class="profile-card">
+            <div class="row align-items-start">
+
+
+
+                <div class="col-md-4 p-4 p-md-5 profile-side">
+                    <div class="nav flex-column nav-pills profile-tabs" id="profile-tabs" role="tablist">
+                        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#viewProfile"
+                                type="button">
+                            عرض البطاقة الشخصية
+                        </button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#editProfile" type="button">
+                            تعديل الملف الشخصي
+                        </button>
                     </div>
                 </div>
+                <div class="col-md-8 p-4 p-md-5">
+                    <div class="tab-content">
 
-                <!-- ✏️ تعديل البروفايل -->
-                <div class="tab-pane fade" id="editProfile">
-                    <form asp-action="ProfileSettings" method="post">
-                        @Html.AntiForgeryToken()
+                        <!-- 👁️ عرض البطاقة الشخصية -->
+                        <div class="tab-pane fade show active" id="viewProfile">
+                            <div class="profile-id-card">
 
-                        @if (TempData["Success"] != null)
-                        {
-                            <div class="alert alert-success">
-                                @TempData["Success"]
-                            </div>
-                        }
+                                <div class="idcard-header">
+                                    
+                                    <div class="idcard-title">البطاقة الشخصية</div>
+                                <div class="idcard-logo">
+                                        <img class="logo-box" src="~/images/logo.png" alt="Foras Logo" />
+                                    </div>
+                                </div>
 
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label asp-for="FirstName"></label>
-                                <input asp-for="FirstName" class="form-control" />
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
-                            </div>
-                            <div class="col">
-                                <label asp-for="LastName"></label>
-                                <input asp-for="LastName" class="form-control" />
-                                <span asp-validation-for="LastName" class="text-danger"></span>
+                                <div class="idcard-body">
+                                    <div class="idcard-left">
+                                        <img class="idcard-avatar" src="https://via.placeholder.com/120"
+                                             alt="profile" />
+                                    </div>
+
+                                    <div class="idcard-right">
+                                        <div class="idrow">
+                                            <div class="idlabel">الاسم</div>
+                                            <div class="idvalue">@Model.FirstName @Model.LastName</div>
+                                        </div>
+
+                                        <div class="idrow">
+                                            <div class="idlabel">البريد الإلكتروني</div>
+                                            <div class="idvalue">@Model.Email</div>
+                                        </div>
+
+                                        <div class="idrow">
+                                            <div class="idlabel">الدولة</div>
+                                            <div class="idvalue">@Model.Country</div>
+                                        </div>
+
+                                        <div class="idrow">
+                                            <div class="idlabel">الجنسية</div>
+                                            <div class="idvalue">@Model.Nationality</div>
+                                        </div>
+
+                                        <div class="idrow">
+                                            <div class="idlabel">الاهتمامات</div>
+                                            <div class="idvalue">
+                                                @if (Model.Interests != null && Model.Interests.Any())
+                                                {
+                                                    @string.Join("، ", Model.Interests)
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Email"></label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
+                        <!-- ✏️ تعديل الملف الشخصي -->
+                        <div class="tab-pane fade" id="editProfile">
+                            <form asp-action="ProfileSettings" method="post">
+                                @Html.AntiForgeryToken()
 
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label asp-for="Country"></label>
-                                <select asp-for="Country" class="form-select">
-                                    <option value="">اختر الدولة</option>
-                                    @foreach (var c in Model.Countries)
-                                    {
-                                        <option value="@c">@c</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label asp-for="Nationality"></label>
-                                <select asp-for="Nationality" class="form-select">
-                                    <option value="">اختر الجنسية</option>
-                                    @foreach (var n in Model.Nationalities)
-                                    {
-                                        <option value="@n">@n</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label>الاهتمامات</label>
-                            <div class="d-flex flex-wrap gap-3">
-                                @foreach (var interest in Model.AvailableInterests)
+                                @if (TempData["Success"] != null)
                                 {
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               name="Interests"
-                                               value="@interest"
-                                               @(Model.Interests.Contains(interest) ? "checked" : "") />
-                                        <label class="form-check-label">@interest</label>
+                                    <div class="alert alert-success">
+                                        @TempData["Success"]
                                     </div>
                                 }
-                            </div>
+
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label asp-for="FirstName" class="form-label"></label>
+                                        <input asp-for="FirstName" class="form-control profile-input" />
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                    <div class="col">
+                                        <label asp-for="LastName" class="form-label"></label>
+                                        <input asp-for="LastName" class="form-control profile-input" />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Email" class="form-label"></label>
+                                    <input asp-for="Email" class="form-control profile-input" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label asp-for="Country" class="form-label"></label>
+                                        <select asp-for="Country" class="form-select profile-select">
+                                            <option value="">اختر الدولة</option>
+                                            @foreach (var c in Model.Countries)
+                                            {
+                                                <option value="@c">@c</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label asp-for="Nationality" class="form-label"></label>
+                                        <select asp-for="Nationality" class="form-select profile-select">
+                                            <option value="">اختر الجنسية</option>
+                                            @foreach (var n in Model.Nationalities)
+                                            {
+                                                <option value="@n">@n</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label">الاهتمامات</label>
+                                    <div class="interests-grid">
+                                        @foreach (var interest in Model.AvailableInterests)
+                                        {
+                                            <label class="interest-item">
+                                                <input class="form-check-input" type="checkbox" name="Interests"
+                                                       value="@interest" @(Model.Interests.Contains(interest) ? "checked" :
+                                                                                                                                                                  "") />
+                                                <span class="interest-text">@interest</span>
+                                            </label>
+                                        }
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-save">حفظ التعديلات</button>
+                            </form>
                         </div>
 
-                        <button type="submit" class="btn btn-success">حفظ التعديلات</button>
-                    </form>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
