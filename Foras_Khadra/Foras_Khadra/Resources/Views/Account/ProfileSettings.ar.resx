@@ -183,4 +183,7 @@
   <data name="training_pportunities" xml:space="preserve">
     <value>فرص التدريب</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>الاسم الكامل</value>
+  </data>
 </root>
