@@ -147,4 +147,28 @@
   <data name="SiteName" xml:space="preserve">
     <value>Foras khadra</value>
   </data>
+  <data name="competitions" xml:space="preserve">
+    <value>Concours</value>
+  </data>
+  <data name="conferences" xml:space="preserve">
+    <value>Conférences</value>
+  </data>
+  <data name="volunteer_opportunities" xml:space="preserve">
+    <value>Opportunités de bénévolat</value>
+  </data>
+  <data name="jobs" xml:space="preserve">
+    <value>Emplois</value>
+  </data>
+  <data name="grants" xml:space="preserve">
+    <value>Bourses</value>
+  </data>
+  <data name="fellowships" xml:space="preserve">
+    <value>Bourses de recherche</value>
+  </data>
+  <data name="training_opportunities" xml:space="preserve">
+    <value>Opportunités de formation</value>
+  </data>
+  <data name="EmailAlreadyUsed" xml:space="preserve">
+    <value>Cet e-mail est déjà utilisé</value>
+  </data>
 </root>

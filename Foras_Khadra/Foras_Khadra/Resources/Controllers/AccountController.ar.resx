@@ -147,4 +147,28 @@
   <data name="SiteName" xml:space="preserve">
     <value>فرص خضراء</value>
   </data>
+  <data name="competitions" xml:space="preserve">
+    <value>المسابقات</value>
+  </data>
+  <data name="conferences" xml:space="preserve">
+    <value>المؤتمرات</value>
+  </data>
+  <data name="volunteer_opportunities" xml:space="preserve">
+    <value>فرص التطوع</value>
+  </data>
+  <data name="jobs" xml:space="preserve">
+    <value>الوظائف</value>
+  </data>
+  <data name="grants" xml:space="preserve">
+    <value>المنح</value>
+  </data>
+  <data name="fellowships" xml:space="preserve">
+    <value>الزمالات</value>
+  </data>
+  <data name="training_opportunities" xml:space="preserve">
+    <value>فرص التدريب</value>
+  </data>
+  <data name="EmailAlreadyUsed" xml:space="preserve">
+    <value>هذا البريد الإلكتروني مستخدم من قبل</value>
+  </data>
 </root>

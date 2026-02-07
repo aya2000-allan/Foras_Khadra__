@@ -41,7 +41,16 @@ namespace Foras_Khadra.Controllers
             {
                 Countries = GetCountries(),
                 Nationalities = GetCountries(),
-                AvailableInterests = new List<string> { "المسابقات", "المؤتمرات", "فرص التطوع", "الوظائف", "المنح", "الزمالات", "فرص التدريب" }
+                AvailableInterests = new List<InterestItem>
+        {
+            new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
+            new InterestItem { Key = "conferences", DisplayName = "المؤتمرات" },
+            new InterestItem { Key = "volunteer_opportunities", DisplayName = "فرص التطوع" },
+            new InterestItem { Key = "jobs", DisplayName = "الوظائف" },
+            new InterestItem { Key = "grants", DisplayName = "المنح" },
+            new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
+            new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
+        }
             };
             return View(model);
         }
@@ -51,9 +60,19 @@ namespace Foras_Khadra.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterUser(RegisterViewModel model)
         {
-            model.Countries = GetCountries();
-            model.Nationalities = GetCountries();
-            model.AvailableInterests = new List<string> { "المسابقات", "المؤتمرات", "فرص التطوع", "الوظائف", "المنح", "الزمالات", "فرص التدريب" };
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            model.Countries = GetCountries(culture);
+            model.Nationalities = GetCountries(culture);
+            model.AvailableInterests = new List<InterestItem>
+    {
+        new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
+        new InterestItem { Key = "conferences", DisplayName = "المؤتمرات" },
+        new InterestItem { Key = "volunteer_opportunities", DisplayName = "فرص التطوع" },
+        new InterestItem { Key = "jobs", DisplayName = "الوظائف" },
+        new InterestItem { Key = "grants", DisplayName = "المنح" },
+        new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
+        new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
+    };
 
             if (!ModelState.IsValid) return View(model);
 
@@ -63,12 +82,11 @@ namespace Foras_Khadra.Controllers
                 return View(model);
             }
 
-            // ===== تحقق من أن الإيميل غير مستخدم =====
             var existingUser = await _userManager.FindByEmailAsync(model.Email);
             if (existingUser != null)
             {
-                ModelState.AddModelError("Email", "هذا البريد الإلكتروني مستخدم من قبل");
-                return View(model); // الفورم يرجع مع البيانات محفوظة
+                ModelState.AddModelError("Email", _localizer["EmailAlreadyUsed"]);
+                return View(model);
             }
 
             var user = new ApplicationUser
@@ -80,7 +98,7 @@ namespace Foras_Khadra.Controllers
                 FullName = $"{model.FirstName} {model.LastName}".Trim(),
                 Country = model.Country,
                 Nationality = model.Nationality,
-                Interests = model.Interests,
+                Interests = model.Interests, // هنا نخزن الـ Key فقط
                 Role = UserRole.User,
                 CreatedAt = System.DateTime.Now
             };
@@ -93,7 +111,6 @@ namespace Foras_Khadra.Controllers
                 return View(model);
             }
 
-            // إضافة الدور User (تأكد من أنه موجود)
             await _userManager.AddToRoleAsync(user, "User");
 
             return RedirectToAction("RegisterConfirmation");
@@ -167,12 +184,17 @@ namespace Foras_Khadra.Controllers
         }
 
         // ===== مساعد لجلب الدول والجنسية =====
-        private List<string> GetCountries()
+        private List<string> GetCountries(string culture = null)
         {
+            culture ??= CultureInfo.CurrentUICulture.TwoLetterISOLanguageName; // ar / en
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(c =>
                 {
-                    try { return new RegionInfo(c.Name).EnglishName; }
+                    try
+                    {
+                        var region = new RegionInfo(c.Name);
+                        return culture == "ar" ? region.NativeName : region.EnglishName;
+                    }
                     catch { return null; }
                 })
                 .Where(r => !string.IsNullOrEmpty(r))
@@ -180,7 +202,6 @@ namespace Foras_Khadra.Controllers
                 .OrderBy(r => r)
                 .ToList();
         }
-
 
         // ==== Forgot Password ====
         [HttpGet]
@@ -324,9 +345,19 @@ namespace Foras_Khadra.Controllers
                 Email = user.Email,
                 Country = user.Country,
                 Nationality = user.Nationality,
-                Interests = user.Interests,
+                Interests = user.Interests, // قائمة الـ Keys المختارة
                 Countries = GetCountries(),
-                Nationalities = GetCountries()
+                Nationalities = GetCountries(),
+                AvailableInterests = new List<InterestItem> // لازم نضيفها
+        {
+            new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
+            new InterestItem { Key = "conferences", DisplayName = "المؤتمرات" },
+            new InterestItem { Key = "volunteer_opportunities", DisplayName = "فرص التطوع" },
+            new InterestItem { Key = "jobs", DisplayName = "الوظائف" },
+            new InterestItem { Key = "grants", DisplayName = "المنح" },
+            new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
+            new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
+        }
             };
 
             return View(model);
@@ -338,8 +369,19 @@ namespace Foras_Khadra.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Countries = GetCountries();
-                model.Nationalities = GetCountries();
+                var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+                model.Countries = GetCountries(culture);
+                model.Nationalities = GetCountries(culture);
+                model.AvailableInterests = new List<InterestItem> // لازم نضيفها
+        {
+            new InterestItem { Key = "competitions", DisplayName = "المسابقات" },
+            new InterestItem { Key = "conferences", DisplayName = "المؤتمرات" },
+            new InterestItem { Key = "volunteer_opportunities", DisplayName = "فرص التطوع" },
+            new InterestItem { Key = "jobs", DisplayName = "الوظائف" },
+            new InterestItem { Key = "grants", DisplayName = "المنح" },
+            new InterestItem { Key = "fellowships", DisplayName = "الزمالات" },
+            new InterestItem { Key = "training_opportunities", DisplayName = "فرص التدريب" }
+        };
                 return View(model);
             }
 
@@ -351,9 +393,8 @@ namespace Foras_Khadra.Controllers
             user.FullName = $"{model.FirstName} {model.LastName}";
             user.Country = model.Country;
             user.Nationality = model.Nationality;
-            user.Interests = model.Interests;
+            user.Interests = model.Interests; // حفظ الـ Keys
 
-            //  تعديل الإيميل بدون التأثير على الباسورد
             if (user.Email != model.Email)
             {
                 user.Email = model.Email;
@@ -364,8 +405,6 @@ namespace Foras_Khadra.Controllers
             }
 
             await _userManager.UpdateAsync(user);
-
-            // (اختياري لكن مفضل)
             await _signInManager.RefreshSignInAsync(user);
 
             TempData["Success"] = "تم تحديث بياناتك بنجاح";
