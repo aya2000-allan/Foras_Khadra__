@@ -205,7 +205,16 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-   
+    <script>
+        const i18n = {
+            fillAll: @Html.Raw(Json.Serialize(Localizer["FillAllFieldsAlert"].Value)),
+            passwordMismatch: @Html.Raw(Json.Serialize(Localizer["PasswordMismatchAlert"].Value)),
+            selectCountry: @Html.Raw(Json.Serialize(Localizer["SelectCountryNationalityAlert"].Value)),
+            selectInterest: @Html.Raw(Json.Serialize(Localizer["SelectInterestAlert"].Value)),
+            progress: @Html.Raw(Json.Serialize(Localizer["Progress"].Value))
+        };
+    </script>
+
     <script>
 
 
@@ -221,8 +230,8 @@
             const percentMap = {1:25, 2:50, 3:75, 4:100};
             const p = percentMap[step] || 25;
             document.getElementById('progressFill').style.width = p + '%';
-            document.getElementById('progressText').innerText = `@Localizer["Progress"] ${p}%`;
-            currentStep = step;
+        document.getElementById('progressText').innerText = `${i18n.progress} ${p}%`;
+                    currentStep = step;
         }
 
         function nextStep(){
@@ -244,7 +253,7 @@
             el.type = el.type === 'password' ? 'text' : 'password';
         }
 
-        function validateStep(step){
+                function validateStep(step){
             if(step === 2){
                 const fn = document.getElementById('FirstName')?.value?.trim();
                 const ln = document.getElementById('LastName')?.value?.trim();
@@ -253,11 +262,11 @@
                 const cpw = document.getElementById('ConfirmPassword')?.value;
 
                 if(!fn || !ln || !em || !pw || !cpw){
-                    alert('@Localizer["FillAllFieldsAlert"]');
+                    alert(i18n.fillAll);
                     return false;
                 }
                 if(pw !== cpw){
-                    alert('@Localizer["PasswordMismatchAlert"]');
+                    alert(i18n.passwordMismatch);
                     return false;
                 }
             }
@@ -266,7 +275,7 @@
                 const c = document.getElementById('Country')?.value;
                 const n = document.getElementById('Nationality')?.value;
                 if(!c || !n){
-                    alert('@Localizer["SelectCountryNationalityAlert"]');
+                    alert(i18n.selectCountry);
                     return false;
                 }
             }
@@ -274,7 +283,7 @@
             if(step === 4){
                 const checked = document.querySelectorAll('input[name="Interests"]:checked');
                 if(checked.length === 0){
-                    alert('@Localizer["SelectInterestAlert"]');
+                    alert(i18n.selectInterest);
                     return false;
                 }
             }
@@ -282,14 +291,16 @@
             return true;
         }
 
-        function submitForm() {
+
+                function submitForm() {
             const checked = document.querySelectorAll('input[name="Interests"]:checked');
             if(checked.length === 0){
-                alert('@Localizer["SelectInterestAlert"]');
+                alert(i18n.selectInterest);
                 return;
             }
             document.getElementById('registerWizard').submit();
         }
+
 
         showStep(1);
 

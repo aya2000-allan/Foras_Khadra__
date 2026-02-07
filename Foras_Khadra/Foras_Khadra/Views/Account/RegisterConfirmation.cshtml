@@ -1,8 +1,15 @@
-﻿@{
-    ViewData["Title"] = "تأكيد إنشاء الحساب";
+﻿@using Microsoft.Extensions.Options;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["PageTitle"];
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
 }
 
-<div class="auth-page" dir="rtl">
+<div class="auth-page" dir="@dir">
     <div class="auth-bg-circle"></div>
 
     <div class="auth-card auth-success">
@@ -18,16 +25,16 @@
             </svg>
         </div>
 
-        <h1 class="auth-title">تم إنشاء حسابك بنجاح 🎉</h1>
+        <h1 class="auth-title"> @Localizer["SuccessTitle"]</h1>
 
         <p class="auth-subtitle">
-            يمكنك الآن تسجيل الدخول والاستفادة من جميع الخدمات المتاحة لك.
+            @Localizer["SuccessSubtitle"]
         </p>
 
         <a asp-controller="Account"
            asp-action="Login"
            class="btn auth-btn w-100 mt-4">
-            الذهاب إلى تسجيل الدخول
+            @Localizer["GoToLogin"]
         </a>
     </div>
 </div>
