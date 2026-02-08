@@ -1,52 +1,253 @@
 ﻿@model IEnumerable<Foras_Khadra.Models.TeamMember>
 
-<div class="d-flex align-items-center justify-content-between mb-3">
-    <h2>أعضاء الفريق</h2>
-    <div>
-        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary me-2">
-            العودة للوحة التحكم
-        </a>
-        <a asp-action="Create" class="btn btn-primary">
-            إضافة عضو جديد
-        </a>
+@{
+    ViewData["Title"] = "Team";
+    Layout = "_Layout";
+
+    int page = ViewBag.Page ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    string search = ViewBag.Search as string;
+}
+
+
+@section Styles {
+    <link rel="stylesheet" asp-append-version="true" href="~/css/articles-index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+}
+
+<div class="container py-5" dir="rtl">
+
+    <!-- Header -->
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-6 text-center text-md-start">
+            <h2 class="main-title mb-0">أعضاء الفريق</h2>
+        </div>
+
+        <div class="col-md-6 d-flex justify-content-md-end align-items-center gap-3 d-flex-mobile">
+            <!-- Search (Server-side) -->
+            <form method="get" class="search-wrapper d-flex align-items-center flex-grow-1 flex-md-grow-0">
+                <i class="fa-solid fa-magnifying-glass text-muted ms-2"></i>
+                <input type="text" name="search" value="@search"
+                       class="form-control border-0 shadow-none bg-transparent"
+                       placeholder="البحث..." style="min-width: 150px;">
+                <button type="submit" class="btn p-0 me-2" style="border:0;background:transparent;">
+                    <i class="fa-solid fa-sliders text-muted cursor-pointer" title="بحث"></i>
+                </button>
+            </form>
+
+            <a asp-action="Create" class="btn btn-add" style="background:#f99d27;color:#fff;">
+                <i class="fa-solid fa-plus ms-1"></i> إضافة عضو
+            </a>
+
+            <a asp-controller="Admin" asp-action="Dashboard" class="header-btn secondary">
+                <i class="fa-solid fa-gauge"></i>
+                العودة للوحة التحكم
+            </a>
+        </div>
     </div>
+
+      
+        <div class="table-container mb-4">
+            <div class="table-responsive" style="overflow-x:visible;">
+                <table class="table articles-table">
+                    <thead>
+                        <tr class="text-muted">
+                            <th style="width:80px;"></th>
+                            <th class="text-center">الاسم</th>
+                            <th class="text-center">نوع العضوية</th>
+                            
+                        </tr>
+                    </thead>
+                    @foreach (var group in Model.GroupBy(m => m.Department)){
+                        
+
+                    <tbody>
+                        @foreach (var member in group.OrderByDescending(m => m.Membership))
+                        {
+                          
+                            <tr>
+                                
+                                <td>
+                                    <img src="@(string.IsNullOrEmpty(member.ImagePath)? "https://via.placeholder.com/50": member.ImagePath)"
+                                         class="rounded"
+                                         style="width:50px;height:50px;object-fit:cover;"
+                                         alt="عضو" />
+                                </td>
+
+                                <td class="fw-bold text-dark text-center">@member.NameAr</td>
+                                <td class="text-muted  text-center ">@member.Membership</td>
+                                
+                                <td>
+                                    <div class="d-flex justify-content-end">
+                                        <a asp-action="Details" asp-route-id="@member.Id" class="action-icon icon-view" title="عرض">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+
+                                        <a asp-action="Edit" asp-route-id="@member.Id" class="action-icon icon-edit" title="تعديل">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </a>
+
+                                        <button type="button"
+                                                class="action-icon icon-delete"
+                                                onclick="confirmDelete(@member.Id, '@member.NameAr')"
+                                                title="حذف">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+
+                                        <form id="deleteForm-@member.Id"
+                                              asp-action="Delete"
+                                              asp-route-id="@member.Id"
+                                              method="post"
+                                              class="d-none">
+                                            @Html.AntiForgeryToken()
+                                        </form>
+                                        
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    }
+                </table>
+            </div>
+        </div>
+    
+
 </div>
 
-@foreach (var group in Model.GroupBy(m => m.Department))
-{
-    <h3>@group.Key</h3> <!-- اسم القسم -->
+<div class="articles-pagination d-flex align-items-center justify-content-between mt-4" dir="rtl">
+    <p class="pagination-label m-0">انتقل إلى الصفحة التالية</p>
 
-    <table class="table table-bordered mb-4">
-        <thead>
-            <tr>
-                <th>صورة</th>
-                <th>الاسم</th>
-                <th>نوع العضوية</th>
-                <th>خيارات</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var member in group.OrderByDescending(m => m.Membership)) 
+    <nav aria-label="Page navigation">
+        <ul class="pagination m-0" style="direction:ltr;">
+
+            <!-- السابق -->
+            <li class="page-item @(page == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(page - 1)"
+                   asp-route-search="@search"
+                   aria-label="Prev">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </li>
+
+            @for (int i = 1; i <= totalPages; i++)
             {
-                <tr>
-                    <td>
-                        @if (!string.IsNullOrEmpty(member.ImagePath))
-                        {
-                            <img src="@member.ImagePath" width="80" />
-                        }
-                    </td>
-                    <td>@member.NameAr - @member.NameEn</td>
-                    <td>@member.Membership</td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@member.Id" class="btn btn-info btn-sm">عرض</a>
-                        <a asp-action="Edit" asp-route-id="@member.Id" class="btn btn-warning btn-sm">تعديل</a>
-                        <form asp-action="Delete" asp-route-id="@member.Id" method="post" style="display:inline"
-                              onsubmit="return confirm('هل تريد الحذف؟');">
-                            <button type="submit" class="btn btn-danger btn-sm">حذف</button>
-                        </form>
-                    </td>
-                </tr>
+                if (i == 1 || i == totalPages || (i >= page - 1 && i <= page + 1))
+                {
+                    <li class="page-item @(i == page ? "active" : "")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-page="@i"
+                           asp-route-search="@search">@i</a>
+                    </li>
+                }
+                else if (i == page - 2 || i == page + 2)
+                {
+                    <li class="page-item disabled"><span class="page-link">..</span></li>
+                }
             }
-        </tbody>
-    </table>
+
+            <!-- التالي -->
+            <li class="page-item @(page == totalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(page + 1)"
+                   asp-route-search="@search"
+                   aria-label="Next">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+</div>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+                function confirmDelete(id, title) {
+                    Swal.fire({
+                        html: `
+                            <div style="text-align:center;">
+        <img src="/images/delete.svg" style=";margin-bottom:14px;" />
+                                <h5 style="margin:0 0 10px 0;font-weight:700;color:#000000;font-weight:bold;">
+        هل أنت متأكد من حذف العضو ؟                        </h5>
+                            </div>
+                        `,
+                        input: 'text',
+                        inputValue: title,
+                        inputAttributes: { readonly: true },
+                        showCancelButton: true,
+                        confirmButtonText: 'حذف',
+                        cancelButtonText: 'تراجع',
+                        reverseButtons: true,
+                        buttonsStyling: false,
+                        customClass: {
+                            popup: 'swal-rtl-popup',
+                            input: 'swal-rtl-input',
+                            confirmButton: 'swal-btn swal-btn-danger',
+                            cancelButton: 'swal-btn swal-btn-cancel'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('deleteForm-' + id).submit();
+
+                        }
+                    });
+                }
+    </script>
+
+    <style>
+        /* RTL */
+        .swal-rtl-popup {
+            direction: rtl;
+            border-radius: 12px;
+        }
+
+        .swal-rtl-input {
+            text-align: center !important;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            font-weight: 600;
+            color: #25652C;
+            font-size: 16px;
+            margin-top: 8px;
+            pointer-events: none;
+        }
+
+        /* ترتيب الأزرار */
+        .swal2-actions {
+            display: flex !important;
+            gap: 12px; /* 👈 المسافة بين الزرين */
+        }
+
+        /* Buttons style */
+        .swal-btn {
+            min-width: 120px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            border: none;
+        }
+
+        /* زر الحذف (يمين) */
+        .swal-btn-danger {
+            background: #ff383c;
+            color: #fff;
+        }
+
+        /* زر التراجع (يسار) */
+        .swal-btn-cancel {
+            background: #fff;
+            color: #f99d27;
+            border: 2px solid #f99d27;
+        }
+
+    </style>
 }

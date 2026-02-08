@@ -1,113 +1,172 @@
 ﻿@model Foras_Khadra.ViewModels.TeamMemberEditViewModel
+@{
+    ViewData["Title"] = "تعديل العضو";
+}
 
-<h2>تعديل العضو</h2>
+<link rel="stylesheet" href="~/css/team-create.css" />
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-..."
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 
-<link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 
-<div asp-validation-summary="All" class="text-danger"></div>
+<h2 class="page-title">تعديل العضو</h2>
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data"
-      onsubmit="tinymce.triggerSave();">    <input type="hidden" asp-for="Id" />
+<div class="page-wrapper">
 
-    <div class="form-group mb-2">
-        <label asp-for="NameAr"></label>
-        <input asp-for="NameAr" class="form-control" />
-        <span asp-validation-for="NameAr" class="text-danger"></span>
-    </div>
+    <!-- Form panel -->
+    <div class="form-panel">
 
-    <div class="form-group mb-2">
-        <label asp-for="NameEn"></label>
-        <input asp-for="NameEn" class="form-control" />
-        <span asp-validation-for="NameEn" class="text-danger"></span>
-    </div>
+        <div asp-validation-summary="All" class="validation-summary"></div>
+        <!-- Current Image -->
+        <div class="upload-box">
+            <h3 class="discription">الصورة الحالية</h3>
 
-    <div class="form-group mb-2">
-        <label asp-for="NameFr"></label>
-        <input asp-for="NameFr" class="form-control" />
-        <span asp-validation-for="NameFr" class="text-danger"></span>
-    </div>
+            @if (!string.IsNullOrEmpty(ViewBag.ExistingImage as string))
+            {
+                <div class="current-file-card">
+                    <img src="@ViewBag.ExistingImage" style=" width: 52px; height: 52px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb;" />
 
-    <div class="form-group mb-2">
-        <label asp-for="Gender"></label>
-        <select asp-for="Gender" class="form-control"
-                asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.GenderType>()">
-            <option value="">اختر جنس العضو</option>
-        </select>
-        <span asp-validation-for="Gender" class="text-danger"></span>
-    </div>
+                    <div style="flex: 1;display: flex;flex-direction: column;gap: 4px;">
+                        <div class="file-name">
+                            @System.IO.Path.GetFileName(ViewBag.ExistingImage)
+                        </div>
+                        <div class="file-status">
+                            <span class="file-size">Uploaded</span>
+                            <span class="file-check">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p>لا توجد صورة حالية</p>
+            }
+        </div>
+        <!-- Upload new image -->
+        <div class="upload-box">
+            <h3 class="discription">تغيير الصورة (اختياري)</h3>
 
-    <div class="form-group mb-2">
-        <label asp-for="Membership"></label>
-        <select asp-for="Membership" class="form-control"
-                asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.MembershipType>()">
-            <option value="">اختر العضوية</option>
-        </select>
-        <span asp-validation-for="Membership" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-2">
-        <label asp-for="Department"></label>
-        <select asp-for="Department" class="form-control"
-                asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.Department>()">
-            <option value="">اختر القسم</option>
-        </select>
-        <span asp-validation-for="Department" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-2">
-        <div class="form-group mb-2">
-            <label>البيو بالعربي</label>
-            <div id="editorAr" style="height:300px"></div>
-            <input type="hidden" asp-for="BioAr" id="BioAr" />
-            <span asp-validation-for="BioAr" class="text-danger"></span>
+            <label class="upload-area">
+                <input type="file" name="ImageFile" accept=".jpg,.jpeg,.png" hidden />
+                <div class="upload-icon">
+                    <img src="~/images/upload-icon.svg" />
+                </div>
+                <p>
+                    Drag & drop files or <a href="#" class="browse">Browse</a>
+                </p>
+                <small>Supported formats: JPEG, PNG</small>
+            </label>
         </div>
 
-        <div class="form-group mb-2">
-            <label>البيو بالانجليزي</label>
-            <div id="editorEn" style="height:300px"></div>
-            <input type="hidden" asp-for="BioEn" id="BioEn" />
-            <span asp-validation-for="BioEn" class="text-danger"></span>
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" >
+            <input type="hidden" asp-for="Id" />
+
+            <!-- Name Fields -->
+            
+
+            <div class="field">
+                <h3 class="discription">الاسم بالعربية</h3>
+                <input asp-for="NameAr" placeholder="الاسم بالعربية" />
+                <span asp-validation-for="NameAr" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <h3 class="discription">الاسم بالإنجليزية</h3>
+                <input asp-for="NameEn" placeholder="الاسم بالإنجليزية" />
+                <span asp-validation-for="NameEn" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <h3 class="discription">الاسم بالفرنسية</h3>
+                <input asp-for="NameFr" placeholder="الاسم بالفرنسية" />
+                <span asp-validation-for="NameFr" class="text-danger"></span>
+            </div>
+
+            <!-- Gender -->
+            <h3 class="discription">اختر جنس العضو</h3>
+            <div class="field dropdown">
+                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.GenderType>()">
+                    <option value="">اختر جنس العضو</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+                <img src="~/images/lets-icons_arrow-drop-down.svg" class="custom-dropdown-arrow" />
+            </div>
+
+            <!-- Membership -->
+            <h3 class="discription">اختر نوع العضوية</h3>
+            <div class="field dropdown">
+                <select asp-for="Membership"
+                        asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.MembershipType>()">
+                    <option value="">اختر نوع العضوية</option>
+                </select>
+                <span asp-validation-for="Membership" class="text-danger"></span>
+                <img src="~/images/lets-icons_arrow-drop-down.svg" class="custom-dropdown-arrow" />
+            </div>
+
+            <h3 class="discription">اختر القسم</h3>
+            <!-- Department -->
+            <div class="field dropdown">
+                <select asp-for="Department"
+                        asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.Department>()">
+                    <option value="">اختر القسم</option>
+                </select>
+                <span asp-validation-for="Department" class="text-danger"></span>
+                <img src="~/images/lets-icons_arrow-drop-down.svg" class="custom-dropdown-arrow" />
+            </div>
+
+            <!-- Bio Fields -->
+            <div class="field">
+                <h3 class="discription">نبذة عنه بالعربي</h3>
+
+                <div id="editorAr" class="quill-editor"></div>
+                <textarea asp-for="BioAr" id="BioAr" hidden></textarea>
+
+                <span asp-validation-for="BioAr" class="text-danger"></span>
+            </div>
+
+
+            <div class="field">
+                <h3 class="discription">نبذة عنه بالإنجليزي</h3>
+                <div id="editorEn" class="quill-editor"></div>
+                <textarea asp-for="BioEn" id="BioEn" hidden></textarea>
+                <span asp-validation-for="BioEn" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <h3 class="discription">نبذة عنه بالفرنسي</h3>
+                <div id="editorFr" class="quill-editor"></div>
+                <textarea asp-for="BioFr" id="BioFr" hidden></textarea>
+                <span asp-validation-for="BioFr" class="text-danger"></span>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+                <button type="submit" class="btn-primary">حفظ التعديلات</button>
+                <a asp-action="Index" class="btn-outline">إلغاء</a>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Side panel -->
+    <div class="side-panel">
+        <div class="side-bg"></div>
+        <div class="side-illustration">
+            <img src="~/images/contact_illustration.svg" />
         </div>
-
-        
-        <div class="form-group mb-2">
-            <label> البيو بالفرنسي</label>
-            <div id="editorFr" style="height:300px"></div>
-            <input type="hidden" asp-for="BioFr" id="BioFr" />
-            <span asp-validation-for="BioFr" class="text-danger"></span>
-        </div>
-
-
-        
     </div>
 
-    <div class="form-group mb-2">
-        <label>الصورة الحالية</label><br />
-        @if (!string.IsNullOrEmpty(ViewBag.ExistingImage as string))
-        {
-            <img src="@ViewBag.ExistingImage" width="150" />
-        }
-        else
-        {
-            <p>لا توجد صورة حالية.</p>
-        }
-    </div>
-
-    <div class="form-group mb-2">
-        <label>رفع صورة جديدة (اختياري)</label>
-        <input type="file" name="ImageFile" class="form-control" accept=".jpg,.jpeg,.png" />
-    </div>
-
-    <div class="form-group mt-2 d-flex gap-2">
-        <button type="submit" class="btn btn-success flex-fill">حفظ التعديلات</button>
-        <a asp-action="Index" class="btn btn-secondary flex-fill">العودة للقائمة</a>
-    </div>
-
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 
     <script>
         var toolbarOptions = [
@@ -119,7 +178,7 @@
             [{ align: [] }]
         ];
 
-        // Arabic (RTL)
+        // Arabic
         var quillAr = new Quill('#editorAr', {
             theme: 'snow',
             modules: { toolbar: toolbarOptions }
@@ -152,3 +211,40 @@
     </script>
 
 }
+<style>
+    .file-name {
+        font-weight: 700;
+        font-size: 14px;
+        color: #1f2937;
+    }
+
+    .file-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .file-check {
+        color: #22c55e;
+        font-size: 14px;
+    }
+
+    .current-file-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #F1F4F8;
+        border-radius: 14px;
+        padding: 12px 14px;
+        margin-bottom: 18px;
+        gap: 14px;
+    }
+
+    .quill-editor {
+        background: #fff;
+        border-radius: 8px;
+    }
+
+</style>
