@@ -39,7 +39,17 @@ namespace Foras_Khadra.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult PolicyPrivacy()
+        {
+            return View();
+        }
+
+        public IActionResult TermsAndConditions()
+        {
+            return View();
+        }
+
+        public IActionResult UsagePolicy()
         {
             return View();
         }

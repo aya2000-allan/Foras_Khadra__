@@ -1,19 +1,23 @@
 ﻿@model Foras_Khadra.ViewModels.RegisterViewModel
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "إنشاء حساب";
+    ViewData["Title"] = Localizer["PageTitle"];
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
 }
 
-<div class="reg-page" dir="rtl">
+<div class="reg-page" dir="@dir">
     <div class="reg-bg-circle"></div>
 
     <div class="reg-wrap">
 
         <!-- Header -->
         <div class="reg-header">
-            <h1 class="reg-title">إنشاء حساب</h1>
-            <p class="reg-subtitle">
-                أهلاً وسهلاً، قم باتباع الخطوات التالية لتتمكن من الوصول إلى كافة الفرص والحصول على العديد من الميزات
-            </p>
+            <h1 class="reg-title">@Localizer["RegHeaderTitle"]</h1>
+            <p class="reg-subtitle">@Localizer["RegHeaderSubtitle"]</p>
         </div>
 
         <div class="reg-card">
@@ -22,103 +26,93 @@
 
                 <form asp-action="RegisterUser" method="post" id="registerWizard">
                     @Html.AntiForgeryToken()
-                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
                     <!-- STEP 1: Account type -->
                     <section class="reg-step active" data-step="1">
-                        <h2 class="reg-step-title">حدد نوع الحساب الخاص بك</h2>
+                        <h2 class="reg-step-title">@Localizer["Stepper1"]</h2>
 
                         <div class="reg-type-grid">
                             <!-- Org -->
                             <label class="reg-type-card">
                                 <input type="radio" name="AccountType" value="organization" disabled />
                                 <span class="reg-type-radio"></span>
-
                                 <div class="reg-type-icon">
-                                    <!-- group icon -->
                                     <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M16 11c1.657 0 3-1.567 3-3.5S17.657 4 16 4s-3 1.567-3 3.5S14.343 11 16 11Z" stroke="currentColor" stroke-width="1.8"/>
-                                        <path d="M8 11c1.657 0 3-1.567 3-3.5S9.657 4 8 4 5 5.567 5 7.5 6.343 11 8 11Z" stroke="currentColor" stroke-width="1.8"/>
-                                        <path d="M2.5 20c.5-3.5 3.5-6 7-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                                        <path d="M21.5 20c-.5-3.5-3.5-6-7-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                                        <path d="M9 20c.4-3 2.3-5 3-5s2.6 2 3 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                        <path d="M16 11c1.657 0 3-1.567 3-3.5S17.657 4 16 4s-3 1.567-3 3.5S14.343 11 16 11Z" stroke="currentColor" stroke-width="1.8" />
+                                        <path d="M8 11c1.657 0 3-1.567 3-3.5S9.657 4 8 4 5 5.567 5 7.5 6.343 11 8 11Z" stroke="currentColor" stroke-width="1.8" />
+                                        <path d="M2.5 20c.5-3.5 3.5-6 7-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                                        <path d="M21.5 20c-.5-3.5-3.5-6-7-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                                        <path d="M9 20c.4-3 2.3-5 3-5s2.6 2 3 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                                     </svg>
                                 </div>
-
                                 <div class="reg-type-text">
-                                    <div class="reg-type-name">حساب منظمة</div>
+                                    <div class="reg-type-name">@Localizer["OrgAccount"]</div>
                                 </div>
                             </label>
 
-                            <!-- Individual (default checked) -->
+                            <!-- Individual -->
                             <label class="reg-type-card">
                                 <input type="radio" name="AccountType" value="individual" checked />
                                 <span class="reg-type-radio"></span>
-
                                 <div class="reg-type-icon">
-                                    <!-- user icon -->
                                     <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M12 12c2.21 0 4-1.99 4-4.444C16 5.1 14.21 3 12 3S8 5.1 8 7.556C8 10.01 9.79 12 12 12Z" stroke="currentColor" stroke-width="1.8"/>
-                                        <path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                        <path d="M12 12c2.21 0 4-1.99 4-4.444C16 5.1 14.21 3 12 3S8 5.1 8 7.556C8 10.01 9.79 12 12 12Z" stroke="currentColor" stroke-width="1.8" />
+                                        <path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                                     </svg>
                                 </div>
-
                                 <div class="reg-type-text">
-                                    <div class="reg-type-name">حساب فردي</div>
+                                    <div class="reg-type-name">@Localizer["IndividualAccount"]</div>
                                 </div>
                             </label>
                         </div>
 
                         <button type="button" class="btn reg-btn w-100" onclick="nextStep()">
-                            التالي
+                            @Localizer["Next"]
                         </button>
                     </section>
 
                     <!-- STEP 2: Personal info -->
                     <section class="reg-step" data-step="2">
-                        <h2 class="reg-step-title">المعلومات الشخصية</h2>
-
+                        <h2 class="reg-step-title">@Localizer["Step2Title"]</h2>
                         <div class="reg-grid-2">
                             <div class="reg-field">
-                                <label asp-for="FirstName" class="reg-label">الاسم الأول</label>
-                                <input asp-for="FirstName" id="FirstName" class="reg-input" placeholder="الاسم الأول" />
+                                <label asp-for="FirstName" class="reg-label">@Localizer["FirstNameLabel"]</label>
+                                <input asp-for="FirstName" id="FirstName" class="reg-input" placeholder="@Localizer["FirstNamePlaceholder"]" />
                                 <span asp-validation-for="FirstName" class="text-danger"></span>
                             </div>
                             <div class="reg-field">
-                                <label asp-for="LastName" class="reg-label">الاسم الأخير</label>
-                                <input asp-for="LastName" id="LastName" class="reg-input" placeholder="الاسم الأخير" />
+                                <label asp-for="LastName" class="reg-label">@Localizer["LastNameLabel"]</label>
+                                <input asp-for="LastName" id="LastName" class="reg-input" placeholder="@Localizer["LastNamePlaceholder"]" />
                                 <span asp-validation-for="LastName" class="text-danger"></span>
                             </div>
                         </div>
 
                         <div class="reg-field">
-                            <label asp-for="Email" class="reg-label">البريد الإلكتروني</label>
-                            <input asp-for="Email" id="Email" class="reg-input" type="email" placeholder="أدخل بريدك الإلكتروني" />
+                            <label asp-for="Email" class="reg-label">@Localizer["EmailLabel"]</label>
+                            <input asp-for="Email" id="Email" class="reg-input" type="email" placeholder="@Localizer["EmailPlaceholder"]" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
                         <div class="reg-grid-2">
                             <div class="reg-field has-eye">
-                                <label asp-for="Password" class="reg-label">ادخل كلمة المرور</label>
-                                <input asp-for="Password" id="Password" class="reg-input" type="password" placeholder="ادخل كلمة المرور" />
-                                <button type="button" class="reg-eye" onclick="togglePassword('Password')"
-                                        aria-label="إظهار/إخفاء كلمة المرور">
+                                <label asp-for="Password" class="reg-label">@Localizer["PasswordLabel"]</label>
+                                <input asp-for="Password" id="Password" class="reg-input" type="password" placeholder="@Localizer["PasswordPlaceholder"]" />
+                                <button type="button" class="reg-eye" onclick="togglePassword('Password')" aria-label="@Localizer["ShowHidePasswordLabel"]">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
-                                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2" />
+                                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2" />
                                     </svg>
                                 </button>
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
 
                             <div class="reg-field has-eye">
-                                <label asp-for="ConfirmPassword" class="reg-label">ادخل تأكيد كلمة المرور</label>
-                                <input asp-for="ConfirmPassword" id="ConfirmPassword" class="reg-input" type="password" placeholder="ادخل تأكيد كلمة المرور" />
-                                <button type="button" class="reg-eye" onclick="togglePassword('ConfirmPassword')"
-                                        aria-label="إظهار/إخفاء كلمة المرور">
+                                <label asp-for="ConfirmPassword" class="reg-label">@Localizer["ConfirmPasswordLabel"]</label>
+                                <input asp-for="ConfirmPassword" id="ConfirmPassword" class="reg-input" type="password" placeholder="@Localizer["ConfirmPasswordPlaceholder"]" />
+                                <button type="button" class="reg-eye" onclick="togglePassword('ConfirmPassword')" aria-label="@Localizer["ShowHidePasswordLabel"]">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
-                                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2" />
+                                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2" />
                                     </svg>
                                 </button>
                                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
@@ -126,20 +120,19 @@
                         </div>
 
                         <div class="reg-actions">
-                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">رجوع</button>
-                            <button type="button" class="btn reg-btn" onclick="nextStep()">التالي</button>
+                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">@Localizer["Back"]</button>
+                            <button type="button" class="btn reg-btn" onclick="nextStep()">@Localizer["Next"]</button>
                         </div>
                     </section>
 
                     <!-- STEP 3: Country -->
                     <section class="reg-step" data-step="3">
-                        <h2 class="reg-step-title">الدولة والموقع</h2>
-
+                        <h2 class="reg-step-title">@Localizer["Step3Title"]</h2>
                         <div class="reg-grid-1">
                             <div class="reg-field">
-                                <label asp-for="Country" class="reg-label">اختر دولتك</label>
+                                <label asp-for="Country" class="reg-label">@Localizer["CountryLabel"]</label>
                                 <select asp-for="Country" id="Country" class="reg-input">
-                                    <option value="">اختر دولتك</option>
+                                    <option value="">@Localizer["CountryPlaceholder"]</option>
                                     @foreach (var c in Model.Countries)
                                     {
                                         <option value="@c">@c</option>
@@ -147,11 +140,10 @@
                                 </select>
                                 <span asp-validation-for="Country" class="text-danger"></span>
                             </div>
-
                             <div class="reg-field">
-                                <label asp-for="Nationality" class="reg-label">اختر الدولة التي تسكن بها</label>
+                                <label asp-for="Nationality" class="reg-label">@Localizer["NationalityLabel"]</label>
                                 <select asp-for="Nationality" id="Nationality" class="reg-input">
-                                    <option value="">اختر الجنسية</option>
+                                    <option value="">@Localizer["NationalityPlaceholder"]</option>
                                     @foreach (var n in Model.Nationalities)
                                     {
                                         <option value="@n">@n</option>
@@ -160,33 +152,31 @@
                                 <span asp-validation-for="Nationality" class="text-danger"></span>
                             </div>
                         </div>
-
                         <div class="reg-actions">
-                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">رجوع</button>
-                            <button type="button" class="btn reg-btn" onclick="nextStep()">التالي</button>
+                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">@Localizer["Back"]</button>
+                            <button type="button" class="btn reg-btn" onclick="nextStep()">@Localizer["Next"]</button>
                         </div>
                     </section>
 
                     <!-- STEP 4: Interests -->
                     <section class="reg-step" data-step="4">
-                        <h2 class="reg-step-title">الاهتمامات</h2>
-                        <p class="reg-hint">يمكنك تحديد أكثر من خيار</p>
+                        <h2 class="reg-step-title">@Localizer["Step4Title"]</h2>
+                        <p class="reg-hint">@Localizer["Step4Hint"]</p>
 
                         <div class="reg-checks">
                             @foreach (var interest in Model.AvailableInterests)
                             {
                                 <label class="reg-check">
-                                    <input type="checkbox" name="Interests" value="@interest"
-                                           @(Model.Interests != null && Model.Interests.Contains(interest) ? "checked" : "") />
+                                    <input type="checkbox" name="Interests" value="@interest.Key" @(Model.Interests != null && Model.Interests.Contains(interest.Key) ? "checked" : "") />
                                     <span class="reg-check-box"></span>
-                                    <span class="reg-check-text">@interest</span>
+                                    <span class="reg-check-text">@Localizer[interest.Key]</span>
                                 </label>
                             }
                         </div>
 
                         <div class="reg-actions">
-                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">رجوع</button>
-                            <button type="submit" class="btn reg-btn">أنشئ حسابي</button>
+                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">@Localizer["Back"]</button>
+                            <button type="button" class="btn reg-btn" onclick="submitForm()">@Localizer["SubmitButton"]</button>
                         </div>
                     </section>
 
@@ -195,7 +185,13 @@
                         <div class="reg-progress-bar">
                             <div id="progressFill" class="reg-progress-fill" style="width:25%"></div>
                         </div>
-                        <div id="progressText" class="reg-progress-text">تم إنجاز %25</div>
+                        <div id="progressText" class="reg-progress-text"
+                             data-label-ar="التقدم"
+                             data-label-en="Progress"
+                             data-label-fr="Progression">
+                        </div>
+
+
                     </div>
                 </form>
             </div>
@@ -203,114 +199,187 @@
             <!-- Right: Stepper -->
             <aside class="reg-side">
                 <div class="reg-stepper">
-                    <div class="reg-stepper-item active" data-s="1">
-                        <span class="dot"></span>
-                        <span class="label">تحديد الفئة</span>
-                    </div>
-                    <div class="reg-stepper-item" data-s="2">
-                        <span class="dot"></span>
-                        <span class="label">المعلومات الشخصية</span>
-                    </div>
-                    <div class="reg-stepper-item" data-s="3">
-                        <span class="dot"></span>
-                        <span class="label">الدولة والموقع</span>
-                    </div>
-                    <div class="reg-stepper-item" data-s="4">
-                        <span class="dot"></span>
-                        <span class="label">الاهتمامات</span>
-                    </div>
+                    <div class="reg-stepper-item active" data-s="1"><span class="dot"></span><span class="label">@Localizer["Stepper1"]</span></div>
+                    <div class="reg-stepper-item" data-s="2"><span class="dot"></span><span class="label">@Localizer["Stepper2"]</span></div>
+                    <div class="reg-stepper-item" data-s="3"><span class="dot"></span><span class="label">@Localizer["Stepper3"]</span></div>
+                    <div class="reg-stepper-item" data-s="4"><span class="dot"></span><span class="label">@Localizer["Stepper4"]</span></div>
                 </div>
             </aside>
         </div>
     </div>
 </div>
 
-@section Scripts{
-    <partial name="_ValidationScriptsPartial" />
-
+@section Scripts {
     <script>
-        let currentStep = 1;
+        const currentLang = '@culture'; // ar / en / fr
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const i18n = {
+            fillAll: @Html.Raw(Json.Serialize(Localizer["FillAllFieldsAlert"].Value)),
+            passwordMismatch: @Html.Raw(Json.Serialize(Localizer["PasswordMismatchAlert"].Value)),
+            selectCountry: @Html.Raw(Json.Serialize(Localizer["SelectCountryNationalityAlert"].Value)),
+            selectInterest: @Html.Raw(Json.Serialize(Localizer["SelectInterestAlert"].Value)),
+        };
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        function showStep(step){
+<script>
+ function showSwal(message) {
+    Swal.fire({
+        icon: "warning",
+        iconColor: "#fff",
+        allowOutsideClick: false,
+        confirmButtonText: "OK",
+        confirmButtonColor: "#F99D27",
+        html: `<div class="foras-swal-msg">${message}</div>`,
+        customClass: {
+            popup: "foras-swal",
+            confirmButton: "foras-swal-btn",
+            icon: "foras-swal-icon"
+        }
+    });
+}
+
+
+
+                              function showStep(step) {
+            // إخفاء/إظهار الخطوات
             document.querySelectorAll('.reg-step').forEach(s => s.classList.remove('active'));
             document.querySelector(`.reg-step[data-step="${step}"]`).classList.add('active');
 
-            // stepper
             document.querySelectorAll('.reg-stepper-item').forEach(i => i.classList.remove('active'));
             document.querySelector(`.reg-stepper-item[data-s="${step}"]`).classList.add('active');
 
-            // progress
+            // نسبة التقدم
             const percentMap = {1:25, 2:50, 3:75, 4:100};
             const p = percentMap[step] || 25;
             document.getElementById('progressFill').style.width = p + '%';
-            document.getElementById('progressText').innerText = `تم إنجاز %${p}`;
+
+            // ترجمة Progress حسب لغة الصفحة
+            const progressText = document.getElementById('progressText');
+            let label = progressText.dataset.labelEn; // افتراضي
+
+            if(currentLang === 'ar') label = progressText.dataset.labelAr;
+            else if(currentLang === 'fr') label = progressText.dataset.labelFr;
+
+            progressText.innerText = `${label} ${p}%`;
+
             currentStep = step;
         }
 
-        function nextStep(){
-            // إذا اختارت منظمة بالخطوة 1 نوديه على صفحة تسجيل المنظمة
-            if(currentStep === 1){
-                const type = document.querySelector('input[name="AccountType"]:checked')?.value;
-                if(type === 'organization'){
-                    // غيّري هذا المسار إذا عندك Action مختلف
-                    window.location.href = '@Url.Action("Register", "Organization")';
-                    return;
-                }
-            }
 
-            if(!validateStep(currentStep)) return;
-            showStep(Math.min(currentStep + 1, 4));
+        // تشغيل الخطوة 1 افتراضياً بعد تحميل الصفحة
+        document.addEventListener("DOMContentLoaded", function() {
+            showStep(1);
+        });
+
+
+
+    function nextStep(){
+        if(currentStep === 1){
+            const type = document.querySelector('input[name="AccountType"]:checked')?.value;
+            if(type === 'organization'){
+                window.location.href = '@Url.Action("Register", "Organization")';
+                return;
+            }
+        }
+        if(!validateStep(currentStep)) return;
+        showStep(Math.min(currentStep + 1, 4));
+    }
+
+    function prevStep(){ showStep(Math.max(currentStep - 1, 1)); }
+
+    function togglePassword(id){
+        const el = document.getElementById(id);
+        el.type = el.type === 'password' ? 'text' : 'password';
+    }
+
+    function validateStep(step){
+        if(step === 2){
+            const fn = document.getElementById('FirstName')?.value?.trim();
+            const ln = document.getElementById('LastName')?.value?.trim();
+            const em = document.getElementById('Email')?.value?.trim();
+            const pw = document.getElementById('Password')?.value;
+            const cpw = document.getElementById('ConfirmPassword')?.value;
+
+            if(!fn || !ln || !em || !pw || !cpw){
+                showSwal(i18n.fillAll);
+                return false;
+            }
+            if(pw !== cpw){
+                showSwal(i18n.passwordMismatch);
+                return false;
+            }
         }
 
-        function prevStep(){
-            showStep(Math.max(currentStep - 1, 1));
+        if(step === 3){
+            const c = document.getElementById('Country')?.value;
+            const n = document.getElementById('Nationality')?.value;
+            if(!c || !n){
+                showSwal(i18n.selectCountry);
+                return false;
+            }
         }
 
-        function togglePassword(id){
-            const el = document.getElementById(id);
-            el.type = el.type === 'password' ? 'text' : 'password';
+        if(step === 4){
+            const checked = document.querySelectorAll('input[name="Interests"]:checked');
+            if(checked.length === 0){
+                showSwal(i18n.selectInterest);
+                return false;
+            }
         }
 
-        function validateStep(step){
-            if(step === 2){
-                const fn = document.getElementById('FirstName')?.value?.trim();
-                const ln = document.getElementById('LastName')?.value?.trim();
-                const em = document.getElementById('Email')?.value?.trim();
-                const pw = document.getElementById('Password')?.value;
-                const cpw = document.getElementById('ConfirmPassword')?.value;
-                if(!fn || !ln || !em || !pw || !cpw){
-                    alert('يرجى ملء جميع الحقول قبل الانتقال.');
-                    return false;
-                }
-                if(pw !== cpw){
-                    alert('كلمة المرور وتأكيدها غير متطابقين.');
-                    return false;
-                }
-            }
+        return true;
+    }
 
-            if(step === 3){
-                const c = document.getElementById('Country')?.value;
-                const n = document.getElementById('Nationality')?.value;
-                if(!c || !n){
-                    alert('يرجى اختيار الدولة والجنسية قبل الانتقال.');
-                    return false;
-                }
-            }
-
-            if(step === 4){
-                const checked = document.querySelectorAll('input[name="Interests"]:checked');
-                if(checked.length === 0){
-                    alert('يرجى اختيار اهتمام واحد على الأقل.');
-                    return false;
-                }
-            }
-
-            return true;
+    function submitForm() {
+        const checked = document.querySelectorAll('input[name="Interests"]:checked');
+        if(checked.length === 0){
+            showSwal(i18n.selectInterest);
+            return;
         }
+        document.getElementById('registerWizard').submit();
+    }
 
-        // init
-        showStep(1);
+    showStep(1);
+</script>
+
+    
+
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // تحقق إذا كان هناك ModelState Error
+            var emailError = document.querySelector('span[data-valmsg-for="Email"]');
+            var firstNameError = document.querySelector('span[data-valmsg-for="FirstName"]');
+            var lastNameError = document.querySelector('span[data-valmsg-for="LastName"]');
+
+            if ((emailError && emailError.innerText.trim() !== '') ||
+                (firstNameError && firstNameError.innerText.trim() !== '') ||
+                (lastNameError && lastNameError.innerText.trim() !== '')) {
+                // افتح الخطوة 2 تلقائياً لأنها تحتوي على حقول الاسم والبريد وكلمة المرور
+                showStep(2);
+            }
+
+            // إذا كانت هناك أخطاء في STEP 3 (Country/Nationality)
+            var countryError = document.querySelector('span[data-valmsg-for="Country"]');
+            var nationalityError = document.querySelector('span[data-valmsg-for="Nationality"]');
+            if ((countryError && countryError.innerText.trim() !== '') ||
+                (nationalityError && nationalityError.innerText.trim() !== '')) {
+                showStep(3);
+            }
+
+            // إذا كانت هناك أخطاء في STEP 4 (Interests)
+            var interestsError = document.querySelector('span[data-valmsg-for="Interests"]');
+            if (interestsError && interestsError.innerText.trim() !== '') {
+                showStep(4);
+            }
+        });
     </script>
+
 }
 
 <style>
@@ -628,6 +697,29 @@
     font-weight:700;
     font-size:14px;
 }
+.swal-btn-big {
+    font-size: 16px !important;
+    padding: 12px 34px !important; /* 👈 الطول والعرض */
+    border-radius: 10px !important;
+    font-weight: 700;
+}
+/* عربي */
+html[dir="rtl"] .reg-label {
+    text-align: right;
+}
+
+/* إنجليزي + فرنسي */
+html[dir="ltr"] .reg-label {
+    text-align: left;
+}
+html[dir="rtl"] .reg-field {
+    text-align: right;
+}
+
+html[dir="ltr"] .reg-field {
+    text-align: left;
+}
+
 
 /* Responsive */
 @@media (max-width: 900px){
@@ -640,4 +732,91 @@
     .reg-grid-2{ grid-template-columns: 1fr; }
     .reg-eye{ top:40px; }
 }
+/* نص داخل input / select حسب اللغة */
+html[dir="rtl"] .reg-input{
+    text-align: right;
+    direction: rtl;
+}
+
+html[dir="ltr"] .reg-input{
+    text-align: left;
+    direction: ltr;
+}
+html[dir="ltr"] .reg-input::placeholder{
+    text-align: left;
+}
+
+html[dir="rtl"] .reg-input::placeholder{
+    text-align: right;
+}
+/* ===== Eye icon position by language ===== */
+
+/* عربي */
+html[dir="rtl"] .has-eye .reg-eye{
+    left: 10px;
+    right: auto;
+}
+
+/* إنجليزي + فرنسي */
+html[dir="ltr"] .has-eye .reg-eye{
+    right: 10px;
+    left: auto;
+}
+/* ===== Foras Swal Design (same as screenshot) ===== */
+.foras-swal{
+  border-radius: 22px !important;
+  padding: 34px 26px 26px !important;
+  box-shadow: 0 18px 45px rgba(0,0,0,.14) !important;
+  max-width: 920px !important;
+}
+
+/* direction حسب اللغة */
+html[dir="rtl"] .foras-swal{ direction: rtl !important; text-align:center !important; }
+html[dir="ltr"] .foras-swal{ direction: ltr !important; text-align:center !important; }
+
+/* أيقونة الدائرة البرتقالية */
+.foras-swal .swal2-icon.foras-swal-icon{
+  width: 70px !important;
+  height: 70px !important;
+  margin: 6px auto 14px !important;
+  border: none !important;
+  background: #F99D27 !important;
+  color: #fff !important;
+}
+.foras-swal .swal2-icon.foras-swal-icon .swal2-icon-content{
+  font-size: 44px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+/* النص الأخضر */
+.foras-swal-msg{
+  color: #25652C;
+  font-weight: 800;
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 1.35;
+  text-align: center;
+  margin: 4px auto 18px;
+  max-width: 820px;
+}
+
+/* زر كبسولة */
+.foras-swal .swal2-confirm.foras-swal-btn{
+  border-radius: 12px !important;
+  padding: 14px 30px !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  box-shadow: none !important;
+}
+
+/* زر بعرض قريب من الصورة */
+.foras-swal .swal2-confirm.foras-swal-btn{
+  width: min(520px, 90%) !important;
+}
+
+.foras-swal .swal2-actions{
+  margin: 10px 0 0 !important;
+}
+
+
 </style>

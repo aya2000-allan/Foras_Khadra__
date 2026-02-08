@@ -166,7 +166,7 @@
     <value>Opportunités de bénévolat</value>
   </data>
   <data name="AccountSettings" xml:space="preserve">
-    <value>Paramètres du compte</value>
+    <value>Mon Compte</value>
   </data>
   <data name="AddOpportunity" xml:space="preserve">
     <value>Mes Opportunités</value>
@@ -188,5 +188,32 @@
   </data>
   <data name="ContactUs" xml:space="preserve">
     <value>Contact</value>
+  </data>
+  <data name="Footer_Heading_Line1" xml:space="preserve">
+    <value>De et vers</value>
+  </data>
+  <data name="Footer_Heading_Line2" xml:space="preserve">
+    <value>La jeunesse du monde arabe</value>
+  </data>
+  <data name="Policies" xml:space="preserve">
+    <value>Nos politiques</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Politique de confidentialité</value>
+  </data>
+  <data name="UsagePolicy" xml:space="preserve">
+    <value>Politique d'utilisation</value>
+  </data>
+  <data name="TermsAndConditions" xml:space="preserve">
+    <value>Conditions générales</value>
+  </data>
+  <data name="BrowseJobs" xml:space="preserve">
+    <value>Parcourir les emplois</value>
+  </data>
+  <data name="BrowseOpp" xml:space="preserve">
+    <value>Parcourir les Opportunités</value>
+  </data>
+  <data name="AdditionalLinks" xml:space="preserve">
+    <value>Liens supplémentaires</value>
   </data>
 </root>

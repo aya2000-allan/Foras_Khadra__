@@ -22,11 +22,14 @@ public class ArticlesController : Controller
 
         var query = _context.Articles.AsQueryable();
 
-        if (!string.IsNullOrWhiteSpace(search))
-        {
-            query = query.Where(a =>
-                a.TitleAr.Contains(search));
-        }
+     if (!string.IsNullOrWhiteSpace(search))
+{
+    query = query.Where(a =>
+        a.TitleAr.Contains(search) ||
+        a.TitleEn.Contains(search) ||
+        a.TitleFr.Contains(search));
+}
+
 
         int totalItems = await query.CountAsync();
         int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);

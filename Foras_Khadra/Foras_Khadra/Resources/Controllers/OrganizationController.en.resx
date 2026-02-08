@@ -123,4 +123,28 @@
   <data name="UserLoginAlert" xml:space="preserve">
     <value>Users cannot log in from here!!</value>
   </data>
+  <data name="ResetPasswordSubject" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="ResetPasswordGreeting" xml:space="preserve">
+    <value>Hello,</value>
+  </data>
+  <data name="ResetPasswordBodyOrg" xml:space="preserve">
+    <value>We received a request to reset the password for your organization &lt;strong&gt;{0}&lt;/strong&gt; on Foras Khadra.</value>
+  </data>
+  <data name="ResetPasswordButton" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="ResetPasswordIgnore" xml:space="preserve">
+    <value>If you did not request a password reset, please ignore this email.</value>
+  </data>
+  <data name="ResetPasswordRegards" xml:space="preserve">
+    <value>Best regards,&lt;br/&gt;Foras Khadra Team</value>
+  </data>
+  <data name="ResetPasswordFooter" xml:space="preserve">
+    <value>This is an automated email, please do not reply.</value>
+  </data>
+  <data name="SiteName" xml:space="preserve">
+    <value>Foras Khadra</value>
+  </data>
 </root>

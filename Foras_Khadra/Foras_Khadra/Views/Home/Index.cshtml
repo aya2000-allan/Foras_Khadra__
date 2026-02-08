@@ -17,6 +17,9 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
+  body{
+  background-color: #F6FBF7;
+  }
 /* ==== Latest Articles Cards (Swiper) ==== */
 .latest-articles .article-card{
   @* background:#fff; *@
@@ -199,12 +202,73 @@
     .swal-title, .swal-text {
         text-align: center; /* دائماً وسط */
     }
+  .swal2-popup.foras-swal {
+    border-radius: 18px !important;
+    padding: 18px 22px 20px !important;
+    width: 520px !important;
+    max-width: 92vw !important;
+  }
 
+  .foras-login-card {
+    text-align: center;
+  }
 
+  .foras-login-card .foras-img {
+    width: 155px;
+    max-width: 60%;
+    margin: 6px auto 10px;
+    display: block;
+  }
+
+  .foras-login-card h3 {
+    margin: 10px 0 6px;
+    font-weight: 900;
+    color: #1f1f1f;
+    font-size: 28px;
+  }
+
+  .foras-login-card p {
+    margin: 0 0 16px;
+    color: #25652C;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .foras-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 6px;
+  }
+
+  .foras-btn {
+    border-radius: 12px;
+    padding: 12px 22px;
+    font-weight: 900;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid #F99D27;
+    background: #fff;
+    color: #F99D27;
+    min-width: 150px;
+  }
+
+  .foras-btn-primary {
+    background: #F99D27;
+    color: #fff;
+  }
+
+  /* RTL / LTR tweaks */
+  .foras-login-card.rtl { direction: rtl; }
+  .foras-login-card.ltr { direction: ltr; }
+.home-hero-bg{
+  background:#F6FBF7;
+}
 
 </style>
 <!-- Main Container -->
-<div class="container-fluid py-5 rtl " style="position:relative;margin:7% 0;">
+<div class="container-fluid py-5 rtl home-hero-bg" style="position:relative;margin:7% 0;">
 
     <!-- Floating Circles -->
     <div class="floating-shapes" id="floatingShapes"></div>
@@ -474,48 +538,73 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    document.querySelectorAll(".btn-read-more").forEach(btn => {
-        btn.addEventListener("click", function() {
-            var isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
-            var culture = '@culture'; // ar / en / fr
+  const loginPopupImg = '@Url.Content("~/images/login-required.svg")'; // <-- غيّري اسم الملف
 
-            if(!isAuthenticated) {
-                let title, text, titleClass, textClass, confirmText;
+  document.querySelectorAll(".btn-read-more").forEach(btn => {
+    btn.addEventListener("click", function () {
 
-                if(culture === "ar") {
-                    title = "تنبيه!";
-                    text = "لا يمكن قراءة هذا المقال قبل تسجيل الدخول. إذا كان لديك حساب، قم بتسجيل الدخول، وإذا لم يكن لديك حساب، أنشئ حسابًا جديدًا.";
-                    titleClass = "swal-title-rtl";
-                    textClass = "swal-text-rtl";
-                    confirmText = "حسنًا";
-                } else if(culture === "fr") {
-                    title = "Alerte!";
-                    text = "Vous ne pouvez pas lire cet article avant de vous connecter. Si vous avez un compte, connectez-vous ; sinon, créez-en un.";
-                    titleClass = "swal-title-ltr";
-                    textClass = "swal-text-ltr";
-                    confirmText = "D'accord";
-                } else {
-                    title = "Alert!";
-                    text = "You cannot read this article before logging in. If you have an account, log in; otherwise, create a new account.";
-                    titleClass = "swal-title-ltr";
-                    textClass = "swal-text-ltr";
-                    confirmText = "OK";
-                }
+      const isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+      const culture = '@culture'; // ar / en / fr
+      const isRtl = (culture === "ar");
 
-                Swal.fire({
-                    title: `<div class="${titleClass}">${title}</div>`,
-                    html: `<div class="${textClass}">${text}</div>`,
-                    icon: "info",
-                    confirmButtonText: confirmText,
-                    customClass: {
-                        popup: 'swal-popup'
-                    }
-                });
-            } else {
-                var articleId = btn.dataset.articleId;
-                window.location.href = '/Articles/Details/' + articleId;
-            }
+      if (!isAuthenticated) {
+        const tMap = {
+          ar: {
+            title: "تسجيل الدخول مطلوب!",
+            text: "أنشئ حساب لتتمكن من التقديم، وإذا كان لديك حساب بالفعل\nسجل الدخول الآن",
+            login: "تسجيل الدخول",
+            register: "إنشاء حساب"
+          },
+          en: {
+            title: "Login required!",
+            text: "Create an account to apply. If you already have an account,\nlog in now.",
+            login: "Login",
+            register: "Create account"
+          },
+          fr: {
+            title: "Connexion requise !",
+            text: "Créez un compte pour postuler. Si vous avez déjà un compte,\nconnectez-vous.",
+            login: "Se connecter",
+            register: "Créer un compte"
+          }
+        };
+
+        const t = tMap[culture] || tMap.en;
+
+        Swal.fire({
+          customClass: { popup: 'foras-swal' },
+          showConfirmButton: false,
+          showCloseButton: true,
+          focusConfirm: false,
+          html: `
+            <div class="foras-login-card ${isRtl ? "rtl" : "ltr"}">
+              <img class="foras-img" src="${loginPopupImg}" alt="login">
+              <h3>${t.title}</h3>
+              <p>${t.text.replace(/\n/g, "<br/>")}</p>
+
+              <div class="foras-actions">
+                <button id="forasLoginBtn" class="foras-btn foras-btn-primary">${t.login}</button>
+                <button id="forasRegisterBtn" class="foras-btn">${t.register}</button>
+              </div>
+            </div>
+          `
         });
-    });
-</script>
 
+        // attach events بعد ما ينرسم
+        setTimeout(() => {
+          document.getElementById("forasLoginBtn")?.addEventListener("click", () => {
+            window.location.href = "/Account/Login";
+          });
+
+          document.getElementById("forasRegisterBtn")?.addEventListener("click", () => {
+            window.location.href = "/Account/RegisterUser";
+          });
+        }, 0);
+
+      } else {
+        const articleId = btn.dataset.articleId;
+        window.location.href = '/Articles/Details/' + articleId;
+      }
+    });
+  });
+</script>

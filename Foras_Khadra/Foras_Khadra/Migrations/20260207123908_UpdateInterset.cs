@@ -5,7 +5,7 @@
 namespace Foras_Khadra.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateResetPassUser : Migration
+    public partial class UpdateInterset : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

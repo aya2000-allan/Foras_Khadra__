@@ -5,7 +5,7 @@
 namespace Foras_Khadra.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateLOrgOpportunity : Migration
+    public partial class UpdateIntersets : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

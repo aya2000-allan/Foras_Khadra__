@@ -37,11 +37,12 @@ namespace Foras_Khadra.Controllers
         [HttpGet]
         public IActionResult RegisterUser()
         {
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             var model = new RegisterViewModel
             {
-                Countries = GetCountries(),
-                Nationalities = GetCountries(),
-                AvailableInterests = new List<string> { "المسابقات", "المؤتمرات", "فرص التطوع", "الوظائف", "المنح", "الزمالات", "فرص التدريب" }
+                Countries = GetCountries(culture),
+                Nationalities = GetCountries(culture),
+                AvailableInterests = GetAvailableInterests(culture)
             };
             return View(model);
         }
@@ -51,9 +52,10 @@ namespace Foras_Khadra.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterUser(RegisterViewModel model)
         {
-            model.Countries = GetCountries();
-            model.Nationalities = GetCountries();
-            model.AvailableInterests = new List<string> { "المسابقات", "المؤتمرات", "فرص التطوع", "الوظائف", "المنح", "الزمالات", "فرص التدريب" };
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            model.Countries = GetCountries(culture);
+            model.Nationalities = GetCountries(culture);
+            model.AvailableInterests = GetAvailableInterests(culture);
 
             if (!ModelState.IsValid) return View(model);
 
@@ -63,12 +65,11 @@ namespace Foras_Khadra.Controllers
                 return View(model);
             }
 
-            // ===== تحقق من أن الإيميل غير مستخدم =====
             var existingUser = await _userManager.FindByEmailAsync(model.Email);
             if (existingUser != null)
             {
-                ModelState.AddModelError("Email", "هذا البريد الإلكتروني مستخدم من قبل");
-                return View(model); // الفورم يرجع مع البيانات محفوظة
+                ModelState.AddModelError("Email", _localizer["EmailAlreadyUsed"]);
+                return View(model);
             }
 
             var user = new ApplicationUser
@@ -93,7 +94,6 @@ namespace Foras_Khadra.Controllers
                 return View(model);
             }
 
-            // إضافة الدور User (تأكد من أنه موجود)
             await _userManager.AddToRoleAsync(user, "User");
 
             return RedirectToAction("RegisterConfirmation");
@@ -122,16 +122,12 @@ namespace Foras_Khadra.Controllers
 
             if (await _userManager.IsInRoleAsync(user, "Organization"))
             {
-                TempData["OrgLoginAlert"] = _localizer["OrgLoginAlert"].Value; // نص عربي/إنجليزي جاهز
+                TempData["OrgLoginAlert"] = _localizer["OrgLoginAlert"].Value;
                 TempData["OrgLoginRedirectText"] = _localizer["OrgLoginRedirectText"].Value;
                 TempData["OrgLoginRedirect"] = Url.Action("Login", "Organization");
                 return RedirectToAction("Login");
             }
 
-
-
-
-            // تحقق كلمة المرور باستخدام SignInManager
             var result = await _signInManager.PasswordSignInAsync(
                 user,
                 model.Password,
@@ -145,7 +141,6 @@ namespace Foras_Khadra.Controllers
                 return View(model);
             }
 
-            // تحقق الدور لتوجيه المستخدم
             if (await _userManager.IsInRoleAsync(user, "Admin"))
             {
                 return RedirectToAction("Dashboard", "Admin");
@@ -155,7 +150,6 @@ namespace Foras_Khadra.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-
 
         // ===== Logout =====
         [HttpPost]
@@ -167,18 +161,38 @@ namespace Foras_Khadra.Controllers
         }
 
         // ===== مساعد لجلب الدول والجنسية =====
-        private List<string> GetCountries()
+        private List<string> GetCountries(string culture = null)
         {
+            culture ??= CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(c =>
                 {
-                    try { return new RegionInfo(c.Name).EnglishName; }
+                    try
+                    {
+                        var region = new RegionInfo(c.Name);
+                        return culture == "ar" ? region.NativeName : region.EnglishName;
+                    }
                     catch { return null; }
                 })
                 .Where(r => !string.IsNullOrEmpty(r))
                 .Distinct()
                 .OrderBy(r => r)
                 .ToList();
+        }
+
+        // ===== مساعد لجلب الاهتمامات حسب اللغة =====
+        private List<InterestItem> GetAvailableInterests(string culture)
+        {
+            return new List<InterestItem>
+            {
+                new InterestItem { Key = "competitions", DisplayName = culture == "ar" ? "المسابقات" : culture == "fr" ? "Concours" : "Competitions" },
+                new InterestItem { Key = "conferences", DisplayName = culture == "ar" ? "المؤتمرات" : culture == "fr" ? "Conférences" : "Conferences" },
+                new InterestItem { Key = "volunteer_opportunities", DisplayName = culture == "ar" ? "فرص التطوع" : culture == "fr" ? "Opportunités de bénévolat" : "Volunteer Opportunities" },
+                new InterestItem { Key = "jobs", DisplayName = culture == "ar" ? "الوظائف" : culture == "fr" ? "Emplois" : "Jobs" },
+                new InterestItem { Key = "grants", DisplayName = culture == "ar" ? "المنح" : culture == "fr" ? "Bourses" : "Scholarships" },
+                new InterestItem { Key = "fellowships", DisplayName = culture == "ar" ? "الزمالات" : culture == "fr" ? "Bourses de recherche" : "Fellowships" },
+                new InterestItem { Key = "training_opportunities", DisplayName = culture == "ar" ? "فرص التدريب" : culture == "fr" ? "Opportunités de formation" : "Training Opportunities" }
+            };
         }
 
 
@@ -196,16 +210,16 @@ namespace Foras_Khadra.Controllers
             if (string.IsNullOrEmpty(email))
                 return View();
 
-            // 1️⃣ نجيب المستخدم
+            //  نجيب المستخدم
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
                 return View("ForgotPasswordConfirmation");
             // مهم: ما نفضح إذا الإيميل موجود أو لا
 
-            // 2️⃣ توليد Token
+            //  توليد Token
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            // 3️⃣ توليد رابط إعادة التعيين
+            //  توليد رابط إعادة التعيين
             var resetLink = Url.Action(
                 "ResetPassword",
                 "Account",
@@ -215,61 +229,52 @@ namespace Foras_Khadra.Controllers
 
             string emailBody = $@"
 <!DOCTYPE html>
-<html lang='ar' dir='rtl'>
+<html lang='{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}' dir='{(CultureInfo.CurrentCulture.TwoLetterISOLanguageName == "ar" ? "rtl" : "ltr")}'>
 <head>
     <meta charset='UTF-8'>
-    <title>إعادة تعيين كلمة المرور</title>
+    <title>{_localizer["ResetPasswordSubject"]}</title>
 </head>
 <body style='font-family: Tahoma, Arial, sans-serif; background-color: #f4f6f8; padding: 20px;'>
     <div style='max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 8px;'>
-        
+
         <h2 style='text-align: center; color: #2c3e50;'>Foras Khadra</h2>
 
-        <p>مرحبًا،</p>
+        <p>{_localizer["ResetPasswordGreeting"]}</p>
 
-        <p>
-            لقد تلقّينا طلبًا لإعادة تعيين كلمة المرور الخاصة بحسابك على منصة
-            <strong>Foras Khadra</strong>.
-        </p>
-
-        <p>
-            لإعادة تعيين كلمة المرور، يرجى الضغط على الزر أدناه:
-        </p>
+        <p>{_localizer["ResetPasswordBody"]}</p>
 
         <div style='text-align: center; margin: 30px 0;'>
             <a href='{resetLink}'
                style='background-color: #28a745; color: #ffffff; padding: 12px 30px;
                       text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: bold;'>
-                إعادة تعيين كلمة المرور
+                {_localizer["ResetPasswordButton"]}
             </a>
         </div>
 
-        <p>
-            إذا لم تقم بطلب إعادة تعيين كلمة المرور، يرجى تجاهل هذا البريد الإلكتروني.
-        </p>
+        <p>{_localizer["ResetPasswordIgnore"]}</p>
 
-        <p>
-            مع تحيات فريق <strong>Foras Khadra</strong>
-        </p>
+        <p>{_localizer["ResetPasswordRegards"]}</p>
 
         <hr style='margin-top: 30px;' />
 
         <p style='font-size: 12px; color: #777; text-align: center;'>
-            هذا البريد الإلكتروني مرسل تلقائيًا، الرجاء عدم الرد عليه.
+            {_localizer["ResetPasswordFooter"]}
         </p>
     </div>
 </body>
 </html>
 ";
 
-            // 5️⃣ إرسال الإيميل
+            //  إرسال الإيميل
+            string emailSubject = $"{_localizer["SiteName"]} - {_localizer["ResetPasswordSubject"]}";
+
             await _emailSender.SendEmailAsync(
                 user.Email,
-                "إعادة تعيين كلمة المرور - Foras Khadra",
+                emailSubject,
                 emailBody
             );
 
-            // 6️⃣ صفحة تأكيد الإرسال
+            //  صفحة تأكيد الإرسال
             return View("ForgotPasswordConfirmation");
         }
 
@@ -326,6 +331,8 @@ namespace Foras_Khadra.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login");
 
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
             var model = new EditProfileViewModel
             {
                 FirstName = user.FirstName,
@@ -334,8 +341,9 @@ namespace Foras_Khadra.Controllers
                 Country = user.Country,
                 Nationality = user.Nationality,
                 Interests = user.Interests,
-                Countries = GetCountries(),
-                Nationalities = GetCountries()
+                Countries = GetCountries(culture),
+                Nationalities = GetCountries(culture),
+                AvailableInterests = GetAvailableInterests(culture)
             };
 
             return View(model);
@@ -345,12 +353,13 @@ namespace Foras_Khadra.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProfileSettings(EditProfileViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                model.Countries = GetCountries();
-                model.Nationalities = GetCountries();
-                return View(model);
-            }
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+            model.Countries = GetCountries(culture);
+            model.Nationalities = GetCountries(culture);
+            model.AvailableInterests = GetAvailableInterests(culture);
+
+            if (!ModelState.IsValid) return View(model);
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login");
@@ -362,22 +371,18 @@ namespace Foras_Khadra.Controllers
             user.Nationality = model.Nationality;
             user.Interests = model.Interests;
 
-            //  تعديل الإيميل بدون التأثير على الباسورد
             if (user.Email != model.Email)
             {
                 user.Email = model.Email;
                 user.UserName = model.Email;
-
                 user.NormalizedEmail = _userManager.NormalizeEmail(model.Email);
                 user.NormalizedUserName = _userManager.NormalizeName(model.Email);
             }
 
             await _userManager.UpdateAsync(user);
-
-            // (اختياري لكن مفضل)
             await _signInManager.RefreshSignInAsync(user);
 
-            TempData["Success"] = "تم تحديث بياناتك بنجاح";
+            TempData["Success"] = _localizer["ProfileUpdatedSuccess"].Value;
             return RedirectToAction("ProfileSettings");
         }
 

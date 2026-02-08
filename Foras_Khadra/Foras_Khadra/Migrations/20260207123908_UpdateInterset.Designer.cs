@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foras_Khadra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260202153500_UpdateResetPassUser")]
-    partial class UpdateResetPassUser
+    [Migration("20260207123908_UpdateInterset")]
+    partial class UpdateInterset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -123,4 +123,55 @@
   <data name="OrgLoginAlert" xml:space="preserve">
     <value>Organizations cannot log in from here!!</value>
   </data>
+  <data name="ResetPasswordSubject" xml:space="preserve">
+    <value>Reset Your Password</value>
+  </data>
+  <data name="ResetPasswordGreeting" xml:space="preserve">
+    <value>Hello,</value>
+  </data>
+  <data name="ResetPasswordBody" xml:space="preserve">
+    <value>We received a request to reset your password</value>
+  </data>
+  <data name="ResetPasswordButton" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="ResetPasswordIgnore" xml:space="preserve">
+    <value>If you did not request a reset, please ignore this email</value>
+  </data>
+  <data name="ResetPasswordRegards" xml:space="preserve">
+    <value>Best regards, Foras Khadra Team</value>
+  </data>
+  <data name="ResetPasswordFooter" xml:space="preserve">
+    <value>This is an automated email, please do not reply</value>
+  </data>
+  <data name="SiteName" xml:space="preserve">
+    <value>Foras khadra</value>
+  </data>
+  <data name="competitions" xml:space="preserve">
+    <value>Competitions</value>
+  </data>
+  <data name="conferences" xml:space="preserve">
+    <value>Conferences</value>
+  </data>
+  <data name="volunteer_opportunities" xml:space="preserve">
+    <value>Volunteer Opportunities</value>
+  </data>
+  <data name="jobs" xml:space="preserve">
+    <value>Jobs</value>
+  </data>
+  <data name="grants" xml:space="preserve">
+    <value>Scholarships</value>
+  </data>
+  <data name="fellowships" xml:space="preserve">
+    <value>Fellowships</value>
+  </data>
+  <data name="training_opportunities" xml:space="preserve">
+    <value>Training Opportunities</value>
+  </data>
+  <data name="EmailAlreadyUsed" xml:space="preserve">
+    <value>This email is already in use</value>
+  </data>
+  <data name="ProfileUpdatedSuccess" xml:space="preserve">
+    <value>Your profile has been updated successfully</value>
+  </data>
 </root>

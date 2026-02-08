@@ -1,101 +1,255 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-	<!-- 
-		Microsoft ResX Schema
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
 
-		Version 1.3
-
-		The primary goals of this format is to allow a simple XML format 
-		that is mostly human readable. The generation and parsing of the 
-		various data types are done through the TypeConverter classes 
-		associated with the data types.
-
-		Example:
-
-		... ado.net/XML headers & schema ...
-		<resheader name="resmimetype">text/microsoft-resx</resheader>
-		<resheader name="version">1.3</resheader>
-		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-		<data name="Name1">this is my long string</data>
-		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-			[base64 mime encoded serialized .NET Framework object]
-		</data>
-		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-			[base64 mime encoded string representing a byte array form of the .NET Framework object]
-		</data>
-
-		There are any number of "resheader" rows that contain simple 
-		name/value pairs.
-
-		Each data row contains a name, and value. The row also contains a 
-		type or mimetype. Type corresponds to a .NET class that support 
-		text/value conversion through the TypeConverter architecture. 
-		Classes that don't support this are serialized and stored with the 
-		mimetype set.
-
-		The mimetype is used for serialized objects, and tells the 
-		ResXResourceReader how to depersist the object. This is currently not 
-		extensible. For a given mimetype the value must be set accordingly:
-
-		Note - application/x-microsoft.net.object.binary.base64 is the format 
-		that the ResXResourceWriter will generate, however the reader can 
-		read any of the formats listed below.
-
-		mimetype: application/x-microsoft.net.object.binary.base64
-		value   : The object must be serialized with 
-			: System.Serialization.Formatters.Binary.BinaryFormatter
-			: and then encoded with base64 encoding.
-
-		mimetype: application/x-microsoft.net.object.soap.base64
-		value   : The object must be serialized with 
-			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-			: and then encoded with base64 encoding.
-
-		mimetype: application/x-microsoft.net.object.bytearray.base64
-		value   : The object must be serialized into a byte array 
-			: using a System.ComponentModel.TypeConverter
-			: and then encoded with base64 encoding.
-	-->
-	
-	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-		<xsd:element name="root" msdata:IsDataSet="true">
-			<xsd:complexType>
-				<xsd:choice maxOccurs="unbounded">
-					<xsd:element name="data">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
-							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="resheader">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" />
-						</xsd:complexType>
-					</xsd:element>
-				</xsd:choice>
-			</xsd:complexType>
-		</xsd:element>
-	</xsd:schema>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>1.3</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Back" xml:space="preserve">
+    <value>رجوع</value>
+  </data>
+  <data name="competitions" xml:space="preserve">
+    <value>المسابقات</value>
+  </data>
+  <data name="conferences" xml:space="preserve">
+    <value>المؤتمرات</value>
+  </data>
+  <data name="ConfirmPasswordLabel" xml:space="preserve">
+    <value>تأكيد كلمة مرورك</value>
+  </data>
+  <data name="ConfirmPasswordPlaceholder" xml:space="preserve">
+    <value>أدخل تأكيد كلمة مرورك</value>
+  </data>
+  <data name="CountryLabel" xml:space="preserve">
+    <value>دولتك</value>
+  </data>
+  <data name="CountryPlaceholder" xml:space="preserve">
+    <value>أختر دولتك</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+  </data>
+  <data name="EmailPlaceholder" xml:space="preserve">
+    <value>أدخل بريدك الإلكتروني</value>
+  </data>
+  <data name="fellowships" xml:space="preserve">
+    <value>الزمالات</value>
+  </data>
+  <data name="FillAllFieldsAlert" xml:space="preserve">
+    <value>يرجى ملء جميع الحقول قبل الانتقال</value>
+  </data>
+  <data name="FirstNameLabel" xml:space="preserve">
+    <value>اسمك الأول</value>
+  </data>
+  <data name="FirstNamePlaceholder" xml:space="preserve">
+    <value>أدخل اسمك الأول</value>
+  </data>
+  <data name="grants" xml:space="preserve">
+    <value>المنح</value>
+  </data>
+  <data name="IndividualAccount" xml:space="preserve">
+    <value>حساب فردي</value>
+  </data>
+  <data name="jobs" xml:space="preserve">
+    <value>الوظائف</value>
+  </data>
+  <data name="LastNameLabel" xml:space="preserve">
+    <value>اسمك الأخير</value>
+  </data>
+  <data name="LastNamePlaceholder" xml:space="preserve">
+    <value>أدخل اسمك الأخير</value>
+  </data>
+  <data name="NationalityLabel" xml:space="preserve">
+    <value>جنسيتك</value>
+  </data>
+  <data name="NationalityPlaceholder" xml:space="preserve">
+    <value>أختر جنسيتك</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>التالي</value>
+  </data>
+  <data name="OrgAccount" xml:space="preserve">
+    <value>حساب منظمة</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>إنشاء حساب</value>
+  </data>
+  <data name="PasswordLabel" xml:space="preserve">
+    <value> كلمة مرورك</value>
+  </data>
+  <data name="PasswordMismatchAlert" xml:space="preserve">
+    <value>كلمة مرورك وتأكيدها غير متطابقين</value>
+  </data>
+  <data name="PasswordPlaceholder" xml:space="preserve">
+    <value>أدخل كلمة مرورك</value>
+  </data>
+  <data name="PrevButton" xml:space="preserve">
+    <value>رجوع</value>
+  </data>
+  <data name="Progress " xml:space="preserve">
+    <value>التقدم</value>
+  </data>
+  <data name="RegHeaderSubtitle" xml:space="preserve">
+    <value>أهلاً وسهلاً! قم باتباع الخطوات التالية لتتمكن من الوصول إلى كافة الفرص والحصول على العديد من الميزات</value>
+  </data>
+  <data name="RegHeaderTitle" xml:space="preserve">
+    <value>إنشاء حساب</value>
+  </data>
+  <data name="SelectCountryNationalityAlert" xml:space="preserve">
+    <value>يرجى اختيار الدولة والجنسية قبل الانتقال</value>
+  </data>
+  <data name="SelectInterestAlert" xml:space="preserve">
+    <value>يرجى اختيار اهتمام واحد على الأقل</value>
+  </data>
+  <data name="ShowHidePasswordLabel" xml:space="preserve">
+    <value>إظهار/إخفاء كلمة المرور</value>
+  </data>
+  <data name="Step1Title" xml:space="preserve">
+    <value>حدد نوع الحساب الخاص بك</value>
+  </data>
+  <data name="Step2Title" xml:space="preserve">
+    <value>المعلومات الشخصية</value>
+  </data>
+  <data name="Step3Title" xml:space="preserve">
+    <value>الدولة والجنسية</value>
+  </data>
+  <data name="Step4Hint" xml:space="preserve">
+    <value>يمكنك تحديد أكثر من خيار</value>
+  </data>
+  <data name="Step4Title" xml:space="preserve">
+    <value>الاهتمامات</value>
+  </data>
+  <data name="Stepper1" xml:space="preserve">
+    <value>نوع الحساب</value>
+  </data>
+  <data name="Stepper2" xml:space="preserve">
+    <value>المعلومات الشخصية</value>
+  </data>
+  <data name="Stepper3" xml:space="preserve">
+    <value>الدولة والجنسية</value>
+  </data>
+  <data name="Stepper4" xml:space="preserve">
+    <value>الاهتمامات</value>
+  </data>
+  <data name="SubmitButton" xml:space="preserve">
+    <value>أنشئ حسابي</value>
+  </data>
+  <data name="training_opportunities" xml:space="preserve">
+    <value>فرص التدريب</value>
+  </data>
+  <data name="volunteer_opportunities" xml:space="preserve">
+    <value>فرص التطوع</value>
+  </data>
 </root>

@@ -34,21 +34,25 @@
 
             <!-- Name -->
             <div class="field">
+                <h3 class="discription">الاسم بالعربية</h3>
                 <input asp-for="NameAr" placeholder="اسم العضو بالعربي" />
                 <span asp-validation-for="NameAr" class="text-danger"></span>
             </div>
 
             <div class="field">
+                <h3 class="discription">الاسم بالإنجليزية</h3>
                 <input asp-for="NameEn" placeholder="اسم العضو بالانجليزي" />
                 <span asp-validation-for="NameEn" class="text-danger"></span>
             </div>
 
             <div class="field">
+                <h3 class="discription">الاسم بالفرنسي</h3>
                 <input asp-for="NameFr" placeholder="اسم العضو بالفرنسي" />
                 <span asp-validation-for="NameFr" class="text-danger"></span>
             </div>
 
             <!-- Gender -->
+            <h3 class="discription">اختر جنس العضو</h3>
             <div class="field dropdown">
 
                 <select asp-for="Gender"
@@ -61,6 +65,7 @@
             </div>
 
             <!-- Membership -->
+            <h3 class="discription">اختر نوع العضوية</h3>
             <div class="field dropdown">
 
                 <select asp-for="Membership"
@@ -73,6 +78,7 @@
             </div> 
 
             <!-- Department -->
+            <h3 class="discription">اختر القسم</h3>
             <div class="field dropdown">
                 <select asp-for="Department"
                         asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.Department>()">

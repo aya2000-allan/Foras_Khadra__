@@ -1,0 +1,221 @@
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["TitlePage"];
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var isRtl = culture == "ar";
+    var dir = isRtl ? "rtl" : "ltr";
+}
+
+<style>
+    /* Page wrapper */
+    .policy-page {
+        padding: 42px 14px 70px;
+        min-height: 100vh;
+    }
+
+    /* Header same width as card */
+    .policy-hero {
+        background-color: #25652C;
+        text-align: center;
+        color: #fff;
+
+        max-width: 880px;
+        margin: 0 auto 18px;
+
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        border-bottom: 4px solid #F99D27;
+
+        padding: 16px 12px;
+    }
+
+    .policy-hero h1 {
+        margin: 0;
+        font-weight: 800;
+        font-size: 22px;
+        line-height: 1.2;
+        font-family: "Cairo","Tajawal",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    }
+
+    /* Main card */
+    .policy-card {
+        max-width: 880px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 14px 35px rgba(0,0,0,.18);
+        padding: 18px 16px 16px;
+    }
+
+    /* Section boxes */
+    .policy-section {
+        position: relative;
+        background: #f6f7f6;
+        border: 1px solid #e8ece9;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin: 12px 0;
+    }
+
+    .policy-section::before {
+        content: "";
+        position: absolute;
+        top: 12px;
+        bottom: 12px;
+        width: 4px;
+        background: #F99D27;
+        border-radius: 6px;
+        inset-inline-end: 10px; /* right in RTL, left in LTR */
+    }
+
+    /* Section titles */
+    .policy-section h2 {
+        margin: 0 0 10px 0;
+        color: #25652C;
+        font-weight: 800;
+        font-size: 16px;
+        font-family: "Cairo","Tajawal",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+        padding-inline-end: 16px;
+    }
+
+    .policy-section p,
+    .policy-section li {
+        color: #2f3a33;
+        font-size: 13px;
+        line-height: 1.9;
+        margin: 0 0 8px 0;
+        font-family: "Cairo","Tajawal",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    }
+
+    .policy-section p:last-child { margin-bottom: 0; }
+
+    .policy-section ul {
+        margin: 0;
+        padding-inline-start: 18px; /* works RTL/LTR */
+        padding-inline-end: 0;
+    }
+
+    .policy-section li { margin: 6px 0; }
+
+    /* Contact pill */
+    .policy-contact-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #F99D27;
+        color: #fff;
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-weight: 800;
+        font-size: 13px;
+        text-decoration: none;
+        margin-top: 6px;
+        font-family: "Cairo","Tajawal",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    }
+
+    /* Direction */
+    .rtl { direction: rtl; text-align: right; }
+    .ltr { direction: ltr; text-align: left; }
+
+    /* Responsive */
+    @@media (max-width: 520px) {
+        .policy-card { padding: 14px 12px; }
+        .policy-section { padding: 12px 12px; }
+        .policy-section::before { inset-inline-end: 8px; }
+    }
+
+    /* Remove default bullets */
+.policy-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Each list item as flex to align icon + text */
+.policy-section li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+/* SVG bullet */
+.policy-section li::before {
+    content: "";
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    /* your SVG as data-uri */
+    background-image: url("data:image/svg+xml;utf8,<svg width='54' height='54' viewBox='0 0 54 54' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='27' cy='27' r='27' fill='%23F99D27'/><path d='M21.9104 25.2275C22.0086 25.1232 22.1264 25.0392 22.257 24.9804C22.3877 24.9216 22.5287 24.8891 22.6719 24.8848C22.8151 24.8805 22.9578 24.9045 23.0917 24.9553C23.2257 25.0062 23.3483 25.0829 23.4526 25.1811C28.4729 29.9102 33.5101 32.7875 39.4379 34.2541C40.2376 32.0723 40.3085 29.6709 39.6179 27.3282C38.7015 24.2198 36.5674 21.5116 33.4481 19.4968C30.6635 17.6982 27.8804 17.2298 25.1879 16.777C21.791 16.2057 18.5824 15.6657 15.5204 12.4236C15.1794 12.065 14.7151 11.9211 14.2713 12.0377C13.764 12.1741 13.4238 12.575 13.2608 13.2377C12.879 14.7889 13.1244 19.1361 14.1983 23.7254C15.9226 31.0986 18.6744 34.8295 20.6797 36.6616C23.2706 39.0268 26.6538 40.3366 30.0158 40.3366C30.6495 40.3376 31.2824 40.2911 31.9092 40.1975C34.7531 39.7666 37.1204 38.3382 38.4547 36.26C32.3531 34.6727 27.1406 31.6543 21.9547 26.7718C21.8502 26.6734 21.7661 26.5554 21.7073 26.4245C21.6485 26.2935 21.6162 26.1523 21.612 26.0088C21.6079 25.8654 21.6322 25.7225 21.6833 25.5884C21.7345 25.4544 21.8117 25.3317 21.9104 25.2275ZM42.7795 34.9223C41.632 34.7457 40.5206 34.5241 39.4385 34.2561C39.2161 34.8635 38.9393 35.4495 38.6115 36.007C38.5617 36.0923 38.5092 36.1768 38.4554 36.26C39.7714 36.6007 41.1041 36.8738 42.4481 37.0782C42.5911 37.1033 42.7377 37.0996 42.8793 37.0674C43.0208 37.0351 43.1546 36.9749 43.2726 36.8903C43.3906 36.8057 43.4905 36.6984 43.5665 36.5747C43.6425 36.451 43.693 36.3133 43.7151 36.1698C43.7372 36.0263 43.7305 35.8798 43.6952 35.7389C43.66 35.5981 43.597 35.4657 43.5099 35.3495C43.4228 35.2333 43.3134 35.1357 43.1881 35.0623C43.0628 34.9889 42.9241 34.9413 42.7801 34.9223H42.7795Z' fill='white'/></svg>");
+}
+
+</style>
+
+<div class="policy-page @(isRtl ? "rtl" : "ltr")" dir="@dir">
+
+    <div class="policy-hero">
+        <h1>@Localizer["TitlePage"]</h1>
+    </div>
+
+    <div class="policy-card">
+
+        <div class="policy-section">
+            <h2>@Localizer["TitleIntro"]</h2>
+            <p>@Localizer["Intro"]</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["TermsUsage"]</h2>
+            <ul>
+                <li>@Localizer["TermsUsage1"]</li>
+                <li>@Localizer["TermsUsage2"]</li>
+                <li>@Localizer["TermsUsage3"]</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["ContentIP"]</h2>
+            <ul>
+                <li>@Localizer["ContentIP1"]</li>
+                <li>@Localizer["ContentIP2"]</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["Accounts"]</h2>
+            <ul>
+                <li>@Localizer["Accounts1"]</li>
+                <li>@Localizer["Accounts2"]</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["Liability"]</h2>
+            <ul>
+                <li>@Localizer["Liability1"]</li>
+                <li>@Localizer["Liability2"]</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>@Localizer["ExternalLinks"]</h2>
+            <p>@Localizer["ExternalLinksText"]</p>
+        </div>
+
+        <div class="policy-section" style="text-align:center;">
+            <h2 style="text-align:inherit;">@Localizer["Contact"]</h2>
+<a href="mailto:suppforaskhadra@gmail.com"
+   class="policy-contact-pill">
+    @Localizer["ContactEmail"]
+</a>
+        </div>
+
+    </div>
+</div>
