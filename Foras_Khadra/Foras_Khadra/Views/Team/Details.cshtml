@@ -43,7 +43,7 @@
             <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="border-radius:24px;">
 
                 <h4 class="fw-bold text-success ">
-                    @Model.Name
+                    @Model.NameAr
                 </h4>
 
                 <div >
@@ -71,7 +71,7 @@
                       <small class="text-muted d-block mb-2">نبذة عنه</small>
                     </div>
                     <div class="col-md-8 mb-3 text-dark lh-lg">
-                      @Html.Raw(string.IsNullOrWhiteSpace(Model.Bio)? "لا يوجد نبذة مضافة لهذا العضو.": Model.Bio)
+                      @Html.Raw(string.IsNullOrWhiteSpace(Model.BioAr)? "لا يوجد نبذة مضافة لهذا العضو.": Model.BioAr)
                     </div>
 
                 </div>
@@ -94,7 +94,7 @@
                 </div>
 
                 <h5 class="fw-bold mb-1 text-lg-end">
-                    @Model.Name
+                    @Model.NameAr
                     <i class="fa-solid fa-badge-check text-warning ms-1"></i>
                 </h5>
 

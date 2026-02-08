@@ -10,7 +10,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer" />
 
-
 <h2 class="page-title">تعديل العضو</h2>
 
 <div class="page-wrapper">
@@ -19,20 +18,16 @@
     <div class="form-panel">
 
         <div asp-validation-summary="All" class="validation-summary"></div>
+        <!-- Current Image -->
+        <div class="upload-box">
+            <h3 class="discription">الصورة الحالية</h3>
 
-        <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <input type="hidden" asp-for="Id" />
+            @if (!string.IsNullOrEmpty(ViewBag.ExistingImage as string))
+            {
+                <div class="current-file-card">
+                    <img src="@ViewBag.ExistingImage" style=" width: 52px; height: 52px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb;" />
 
-            <!-- Current Image -->
-            <div class="upload-box">
-                <h3 class="discription">الصورة الحالية</h3>
-
-                @if (!string.IsNullOrEmpty(ViewBag.ExistingImage as string))
-                {
-                    <div class="current-file-card">
-                      <img src="@ViewBag.ExistingImage" style=" width: 52px; height: 52px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb;" />
-
-                      <div style="flex: 1;display: flex;flex-direction: column;gap: 4px;">
+                    <div style="flex: 1;display: flex;flex-direction: column;gap: 4px;">
                         <div class="file-name">
                             @System.IO.Path.GetFileName(ViewBag.ExistingImage)
                         </div>
@@ -42,48 +37,76 @@
                                 <i class="fa-solid fa-circle-check"></i>
                             </span>
                         </div>
-                      </div>
                     </div>
-                }
-                else
-                {
-                    <p>لا توجد صورة حالية</p>
-                }
-            </div>
+                </div>
+            }
+            else
+            {
+                <p>لا توجد صورة حالية</p>
+            }
+        </div>
+        <!-- Upload new image -->
+        <div class="upload-box">
+            <h3 class="discription">تغيير الصورة (اختياري)</h3>
 
-            <!-- Upload new image -->
-            <div class="upload-box">
-                <h3 class="discription">تغيير الصورة (اختياري)</h3>
+            <label class="upload-area">
+                <input type="file" name="ImageFile" accept=".jpg,.jpeg,.png" hidden />
+                <div class="upload-icon">
+                    <img src="~/images/upload-icon.svg" />
+                </div>
+                <p>
+                    Drag & drop files or <a href="#" class="browse">Browse</a>
+                </p>
+                <small>Supported formats: JPEG, PNG</small>
+            </label>
+        </div>
 
-                <label class="upload-area">
-                    <input type="file" name="ImageFile" accept=".jpg,.jpeg,.png" hidden />
-                    <div class="upload-icon">
-                        <img src="~/images/upload-icon.svg" />
-                    </div>
-                    <p>
-                        Drag & drop files or <a href="#" class="browse">Browse</a>
-                    </p>
-                    <small>Supported formats: JPEG, PNG</small>
-                </label>
-            </div>
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" onsubmit="tinymce.triggerSave();">
+            <input type="hidden" asp-for="Id" />
 
-            <!-- Name -->
+            <!-- Name Fields -->
+            
+
             <div class="field">
-                <input asp-for="Name" placeholder="اسم العضو" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <h3 class="discription">الاسم بالعربية</h3>
+                <input asp-for="NameAr" placeholder="الاسم بالعربية" />
+                <span asp-validation-for="NameAr" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <h3 class="discription">الاسم بالإنجليزية</h3>
+                <input asp-for="NameEn" placeholder="الاسم بالإنجليزية" />
+                <span asp-validation-for="NameEn" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <h3 class="discription">الاسم بالفرنسية</h3>
+                <input asp-for="NameFr" placeholder="الاسم بالفرنسية" />
+                <span asp-validation-for="NameFr" class="text-danger"></span>
+            </div>
+
+            <!-- Gender -->
+            <h3 class="discription">اختر جنس العضو</h3>
+            <div class="field dropdown">
+                <select asp-for="Gender" asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.GenderType>()">
+                    <option value="">اختر جنس العضو</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+                <img src="~/images/lets-icons_arrow-drop-down.svg" class="custom-dropdown-arrow" />
             </div>
 
             <!-- Membership -->
+            <h3 class="discription">اختر نوع العضوية</h3>
             <div class="field dropdown">
                 <select asp-for="Membership"
                         asp-items="Html.GetEnumSelectList<Foras_Khadra.Models.MembershipType>()">
                     <option value="">اختر نوع العضوية</option>
                 </select>
                 <span asp-validation-for="Membership" class="text-danger"></span>
-                <img src="~/images/lets-icons_arrow-drop-down.svg"
-                     class="custom-dropdown-arrow" />
+                <img src="~/images/lets-icons_arrow-drop-down.svg" class="custom-dropdown-arrow" />
             </div>
 
+            <h3 class="discription">اختر القسم</h3>
             <!-- Department -->
             <div class="field dropdown">
                 <select asp-for="Department"
@@ -91,14 +114,26 @@
                     <option value="">اختر القسم</option>
                 </select>
                 <span asp-validation-for="Department" class="text-danger"></span>
-                <img src="~/images/lets-icons_arrow-drop-down.svg"
-                     class="custom-dropdown-arrow" />
+                <img src="~/images/lets-icons_arrow-drop-down.svg" class="custom-dropdown-arrow" />
             </div>
 
-            <!-- Bio -->
+            <!-- Bio Fields -->
             <div class="field">
-                <h3 class="discription">نبذة عنه</h3>
-                <textarea asp-for="Bio" id="Bio"></textarea>
+                <h3 class="discription">نبذة عنه بالعربي</h3>
+                <textarea asp-for="BioAr" id="BioAr"></textarea>
+                <span asp-validation-for="BioAr" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <h3 class="discription">نبذة عنه بالإنجليزي</h3>
+                <textarea asp-for="BioEn" id="BioEn"></textarea>
+                <span asp-validation-for="BioEn" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <h3 class="discription">نبذة عنه بالفرنسي</h3>
+                <textarea asp-for="BioFr" id="BioFr"></textarea>
+                <span asp-validation-for="BioFr" class="text-danger"></span>
             </div>
 
             <!-- Actions -->
@@ -115,7 +150,6 @@
         <div class="side-bg"></div>
         <div class="side-illustration">
             <img src="~/images/contact_illustration.svg" />
-
         </div>
     </div>
 
@@ -123,63 +157,19 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
+    <script src="https://cdn.tiny.cloud/1/k3nev6h7ssngildxe8woxosup3usjprj94xwqhdzpccl1a5a/tinymce/6/tinymce.min.js"></script>
     <script>
-        var toolbarOptions = [
-            [{ header: [1, 2, false] }],
-            ['bold', 'italic', 'underline'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            ['link'],
-            ['clean'],
-            [{ align: [] }]
-        ];
-
-        // Arabic (RTL)
-        var quillAr = new Quill('#editorAr', {
-            theme: 'snow',
-            modules: { toolbar: toolbarOptions }
-        });
-        quillAr.root.setAttribute('dir', 'rtl');
-        quillAr.root.innerHTML = `@Html.Raw(Model.BioAr ?? "")`;
-
-        // English
-        var quillEn = new Quill('#editorEn', {
-            theme: 'snow',
-            modules: { toolbar: toolbarOptions }
-        });
-        quillEn.root.setAttribute('dir', 'ltr');
-        quillEn.root.innerHTML = `@Html.Raw(Model.BioEn ?? "")`;
-
-        // French
-        var quillFr = new Quill('#editorFr', {
-            theme: 'snow',
-            modules: { toolbar: toolbarOptions }
-        });
-        quillFr.root.setAttribute('dir', 'ltr');
-        quillFr.root.innerHTML = `@Html.Raw(Model.BioFr ?? "")`;
-
-        // On submit
-        document.querySelector('form').addEventListener('submit', function () {
-            document.getElementById('BioAr').value = quillAr.root.innerHTML;
-            document.getElementById('BioEn').value = quillEn.root.innerHTML;
-            document.getElementById('BioFr').value = quillFr.root.innerHTML;
+        tinymce.init({
+            selector: 'textarea#BioAr, textarea#BioEn, textarea#BioFr',
+            plugins: 'lists link image table code',
+            toolbar: 'undo redo | bold italic underline | bullist numlist | link image | code',
+            menubar: false,
+            height: 200,
         });
     </script>
-
 }
-
-<script src="https://cdn.tiny.cloud/1/k3nev6h7ssngildxe8woxosup3usjprj94xwqhdzpccl1a5a/tinymce/6/tinymce.min.js"></script>
-<script>
-    tinymce.init({
-      selector: 'textarea#Bio',
-      plugins: 'lists link image table code',
-      toolbar: 'undo redo | bold italic underline | bullist numlist | link image | code',
-      menubar: false,
-      height: 376,
-    });
-</script>
 <style>
-    .file-name{
+    .file-name {
         font-weight: 700;
         font-size: 14px;
         color: #1f2937;
@@ -198,7 +188,6 @@
         font-size: 14px;
     }
 
-
     .current-file-card {
         display: flex;
         align-items: center;
@@ -209,5 +198,4 @@
         margin-bottom: 18px;
         gap: 14px;
     }
-
 </style>
