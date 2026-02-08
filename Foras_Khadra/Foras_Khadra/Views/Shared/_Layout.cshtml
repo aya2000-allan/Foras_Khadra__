@@ -55,7 +55,7 @@
     {
         if (isAdmin)
         {
-            if ((currentController == "Opportunity" && (currentAction == "Index" || currentAction == "Create" || currentAction == "Edit"))
+            if ((currentController == "Opportunity" && (currentAction == "Index" || currentAction == "Details" ||currentAction == "Create" || currentAction == "Edit"))
                 || (currentController == "AdminController"))
             {
                 hideNavAndFooter = true;
@@ -65,6 +65,7 @@
 
     if (isAdmin && currentController == "Articles") hideNavAndFooter = true;
     if (isAdmin && currentController == "Team") hideNavAndFooter = true;
+
 }
 
 <style>
@@ -462,14 +463,19 @@
                         </button>
 
                         <div class="dropdown-list" id="opportunitiesDropdown">
-                            <a asp-controller="Home" asp-action="AllOpportunities" data-close-menu>@Localizer["AllOpportunities"]</a>
-                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Competitions" data-close-menu>@Localizer["Competitions"]</a>
-                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Conferences" data-close-menu>@Localizer["Conferences"]</a>
-                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Volunteering" data-close-menu>@Localizer["VolunteeringOpportunities"]</a>
-                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Jobs" data-close-menu>@Localizer["Jobs"]</a>
-                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Scholarships" data-close-menu>@Localizer["Scholarships"]</a>
-                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Fellowships" data-close-menu>@Localizer["Fellowships"]</a>
-                            <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Internships" data-close-menu>@Localizer["Internships"]</a>
+                            @{
+                                var opportunitiesController = User.IsInRole("Organization") ? "Opportunity" : "Home";
+                                var opportunitiesAction = User.IsInRole("Organization") ? "OrgOpportunities" : "AllOpportunities";
+                            }
+                            
+                            <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" data-close-menu>@Localizer["AllOpportunities"]</a>
+                            <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Competitions" data-close-menu>@Localizer["Competitions"]</a>
+                            <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Conferences" data-close-menu>@Localizer["Conferences"]</a>
+                            <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Volunteering" data-close-menu>@Localizer["VolunteeringOpportunities"]</a>
+                            <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Jobs" data-close-menu>@Localizer["Jobs"]</a>
+                            <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Scholarships" data-close-menu>@Localizer["Scholarships"]</a>
+                            <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Fellowships" data-close-menu>@Localizer["Fellowships"]</a>
+                            <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Internships" data-close-menu>@Localizer["Internships"]</a>
                         </div>
                     </div>
 
