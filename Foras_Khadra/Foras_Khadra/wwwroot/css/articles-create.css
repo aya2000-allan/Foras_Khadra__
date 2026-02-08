@@ -270,7 +270,18 @@ body {
 /* ============================= */
 /*   Current uploaded file UI   */
 /* ============================= */
- 
+
+.current-file-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #F1F4F8;
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    gap: 14px;
+}
+
 .file-left {
     display: flex;
     align-items: center;

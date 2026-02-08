@@ -42,9 +42,15 @@
         <div class="col-md-9">
             <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="border-radius:24px;">
 
-                <h4 class="fw-bold text-success ">
+                <h4 class="fw-bold text-success mb-3">
                     @Model.NameAr
                 </h4>
+
+                <div class="mb-4">
+                    <div><strong>EN:</strong> @Model.NameEn</div>
+                    <div><strong>FR:</strong> @Model.NameFr</div>
+                </div>
+
 
                 <div >
                     <div class="text-muted mb-4">فلسطين</div>
@@ -53,28 +59,55 @@
                 <!-- Info Row -->
                 <div class="row mb-4">
                     <div class="col-md-4 mb-3">
-                        <small class="text-muted">اسم القسم</small>
-                        
+                        <small class="text-muted">نوع العضوية</small>
                     </div>
-                   <div class="col-md-8 mb-3">
-                        <div class="fw-bold">@Model.Department</div>
-                   </div>
+                    <div class="col-md-8 mb-3 fw-bold">
+                        @Model.Membership
+                    </div>
 
-
-
-                   
+                    <div class="col-md-4 mb-3">
+                        <small class="text-muted">القسم</small>
+                    </div>
+                    <div class="col-md-8 mb-3 fw-bold">
+                        @Model.Department
+                    </div>
                 </div>
+
 
                 <!-- Bio -->
                 <div class="row mb-4">
-                    <div class="col-md-4 mb-3">
-                      <small class="text-muted d-block mb-2">نبذة عنه</small>
-                    </div>
-                    <div class="col-md-8 mb-3 text-dark lh-lg">
-                      @Html.Raw(string.IsNullOrWhiteSpace(Model.BioAr)? "لا يوجد نبذة مضافة لهذا العضو.": Model.BioAr)
-                    </div>
+    <div class="col-md-4">
+        <small class="text-muted d-block mb-2">النبذة (عربي)</small>
+    </div>
+    <div class="col-md-8 lh-lg">
+        @Html.Raw(string.IsNullOrWhiteSpace(Model.BioAr)
+            ? "لا يوجد نبذة بالعربي."
+            : Model.BioAr)
+    </div>
+</div>
 
-                </div>
+<div class="row mb-4">
+    <div class="col-md-4">
+        <small class="text-muted d-block mb-2">Bio (English)</small>
+    </div>
+    <div class="col-md-8 lh-lg">
+        @Html.Raw(string.IsNullOrWhiteSpace(Model.BioEn)
+            ? "No English bio provided."
+            : Model.BioEn)
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <small class="text-muted d-block mb-2">Bio (Français)</small>
+    </div>
+    <div class="col-md-8 lh-lg">
+        @Html.Raw(string.IsNullOrWhiteSpace(Model.BioFr)
+            ? "Aucune biographie en français."
+            : Model.BioFr)
+    </div>
+</div>
+
 
                
                
