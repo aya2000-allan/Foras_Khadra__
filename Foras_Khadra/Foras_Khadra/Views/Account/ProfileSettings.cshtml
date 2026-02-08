@@ -208,7 +208,7 @@
 
     @* display:block; *@
     @* object-fit: cover; *@
-    transform: scaleX(-1); /* نفس التأثير */
+    @* transform: scaleX(-1); /* نفس التأثير */ *@
 }
 
 /* details */
@@ -278,13 +278,24 @@
     padding-left: 2.25rem;   /* مساحة للسهم */
     padding-right: 0.75rem;
 }
+/* Arabic: اقلب الـ SVG */
+[dir="ltr"] .user-id-pattern svg{
+    transform: scaleX(-1);
+}
+
+/* English: خليها طبيعية */
+[dir="rtl"] .user-id-pattern svg{
+    transform: none;
+}
+
+
 
 
 </style>
 
 <div class="profile-page py-5" dir="@dir">
     <div class="container">
-        <h2 class="profile-title mb-4 text-center">@Localizer["CardSettings"]</h2>
+        @* <h2 class="profile-title mb-4 text-center">@Localizer["CardSettings"]</h2> *@
 
         <div class="profile-card">
             <div class="row g-0">
@@ -329,7 +340,7 @@
             </div>
         </div>
 
-        <div class="user-id-body flip">
+<div class="user-id-body">
             <div class="user-id-pattern" aria-hidden="true">
                 <!-- Pattern SVG (انسخ نفس SVG اللي عندك بالمنظمة إذا بدك بالضبط) -->
              <svg width="263" height="268" viewBox="0 0 263 268" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
