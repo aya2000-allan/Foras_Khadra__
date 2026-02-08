@@ -95,23 +95,26 @@
                     const redirectText = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["OrgLoginRedirectText"]));
 
                    Swal.fire({
-  icon: 'warning',
-  html: `<div class="foras-swal-msg">${message}</div>`,
-  confirmButtonText: redirectText,
+  html: `
+    <div class="foras-swal-image-wrap">
+      <img src="/images/org-login-blocked.svg" alt="Not allowed" />
+    </div>
+    <div class="foras-swal-msg">${message}</div>
+  `,
   showConfirmButton: true,
+  confirmButtonText: redirectText,
   allowOutsideClick: false,
-  iconColor: "#fff",
   confirmButtonColor: "#F99D27",
   customClass: {
     popup: "foras-swal",
-    confirmButton: "foras-swal-btn",
-    icon: "foras-swal-icon"
+    confirmButton: "foras-swal-btn"
   }
 }).then((result) => {
   if (result.isConfirmed && redirectUrl) {
     window.location.href = redirectUrl;
   }
 });
+
 
                 </text>
         }
