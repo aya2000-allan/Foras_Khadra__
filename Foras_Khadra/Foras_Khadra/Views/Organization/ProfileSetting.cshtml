@@ -1,12 +1,18 @@
 ﻿@model Foras_Khadra.ViewModels.OrganizationProfileViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Globalization
+@{
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+}
+
 @{
     ViewData["Title"] = "Profile Settings";
 }
 
 <style>
     /* RTL */
-    .profile-page { direction: rtl; min-height: 100vh; }
+    .profile-page { min-height: 100vh; }
 
     /* العنوان */
     .profile-title {
@@ -304,13 +310,21 @@
     .org-id-pattern{ width:100%; min-height: 90px; background-position: 50% 60%; background-size: 140%; }
     .org-id-row{ grid-template-columns: 140px 1fr; }
 }
+/* Arabic: اقلب الـ SVG */
+[dir="ltr"] .user-id-pattern svg{
+    transform: scaleX(-1);
+}
 
+/* English: خليها طبيعية */
+[dir="rtl"] .user-id-pattern svg{
+    transform: none;
+}
 
 </style>
 
-<div class="profile-page py-5">
+<div class="profile-page py-5" dir="@dir">
     <div class="container">
-        <h2 class="profile-title mb-4 text-center">إعدادات الحساب</h2>
+        @* <h2 class="profile-title mb-4 text-center">إعدادات الحساب</h2> *@
 
         @if (ViewBag.SuccessMessage != null)
         {
@@ -350,7 +364,7 @@
             </div>
         </div>
 
-        <div class="org-id-body flip">
+<div class="org-id-body @(culture == "ar" ? "flip" : "")">
 <div class="org-id-pattern" aria-hidden="true">
     <!-- SVG هنا -->
     <svg width="263" height="268" viewBox="0 0 263 268" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

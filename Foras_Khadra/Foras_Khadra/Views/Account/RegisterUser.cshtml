@@ -93,31 +93,49 @@
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
-                        <div class="reg-grid-2">
-                            <div class="reg-field has-eye">
-                                <label asp-for="Password" class="reg-label">@Localizer["PasswordLabel"]</label>
-                                <input asp-for="Password" id="Password" class="reg-input" type="password" placeholder="@Localizer["PasswordPlaceholder"]" />
-                                <button type="button" class="reg-eye" onclick="togglePassword('Password')" aria-label="@Localizer["ShowHidePasswordLabel"]">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2" />
-                                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
 
-                            <div class="reg-field has-eye">
-                                <label asp-for="ConfirmPassword" class="reg-label">@Localizer["ConfirmPasswordLabel"]</label>
-                                <input asp-for="ConfirmPassword" id="ConfirmPassword" class="reg-input" type="password" placeholder="@Localizer["ConfirmPasswordPlaceholder"]" />
-                                <button type="button" class="reg-eye" onclick="togglePassword('ConfirmPassword')" aria-label="@Localizer["ShowHidePasswordLabel"]">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2" />
-                                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2" />
-                                    </svg>
-                                </button>
-                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                            </div>
-                        </div>
+
+<div class="reg-grid-2">
+    <div class="reg-field">
+        <label asp-for="Password" class="reg-label">@Localizer["PasswordLabel"]</label>
+
+        <div class="reg-input-wrap">
+            <input asp-for="Password" id="Password" class="reg-input" type="password"
+                   placeholder="@Localizer["PasswordPlaceholder"]" />
+
+            <button type="button" class="reg-eye" onclick="togglePassword('Password')"
+                    aria-label="@Localizer["ShowHidePasswordLabel"]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </button>
+        </div>
+
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="reg-field">
+        <label asp-for="ConfirmPassword" class="reg-label">@Localizer["ConfirmPasswordLabel"]</label>
+
+        <div class="reg-input-wrap">
+            <input asp-for="ConfirmPassword" id="ConfirmPassword" class="reg-input" type="password"
+                   placeholder="@Localizer["ConfirmPasswordPlaceholder"]" />
+
+            <button type="button" class="reg-eye" onclick="togglePassword('ConfirmPassword')"
+                    aria-label="@Localizer["ShowHidePasswordLabel"]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </button>
+        </div>
+
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+</div>
+
+
 
                         <div class="reg-actions">
                             <button type="button" class="btn reg-btn-outline" onclick="prevStep()">@Localizer["Back"]</button>
@@ -587,7 +605,7 @@
     box-shadow:0 0 0 .2rem rgba(43,160,82,.15);
 }
 .has-eye{ position:relative; }
-.reg-eye{
+@* .reg-eye{
     position:absolute;
     left:10px;
     bottom:5px;
@@ -596,7 +614,7 @@
     color:#9aa7a0;
     padding:7px;
     cursor:pointer;
-}
+} *@
 
 /* Interests */
 .reg-hint{
@@ -726,12 +744,12 @@ html[dir="ltr"] .reg-field {
     .reg-card{ grid-template-columns: 1fr; }
     .reg-side{ order:-1; }
 }
-@@media (max-width: 520px){
+@* @@media (max-width: 520px){
     .reg-title{ font-size:34px; }
     .reg-type-grid{ grid-template-columns: 1fr; }
     .reg-grid-2{ grid-template-columns: 1fr; }
     .reg-eye{ top:40px; }
-}
+} *@
 /* نص داخل input / select حسب اللغة */
 html[dir="rtl"] .reg-input{
     text-align: right;
@@ -818,5 +836,124 @@ html[dir="ltr"] .foras-swal{ direction: ltr !important; text-align:center !impor
   margin: 10px 0 0 !important;
 }
 
+/* خَلّي الحاوية مرجع تموضع */
+@* .has-eye{ position:relative; } *@
+
+/* button */
+.reg-field.has-eye .reg-eye{
+  position: absolute;
+  top: 58%;
+  transform: translateY(-35%);  /* مهم جداً */
+  bottom: auto !important;       /* يلغي أي bottom قديم */
+  margin: 0;
+  background: transparent;
+  border: 0;
+  color: #9aa7a0;
+  padding: 7px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+/* dir based on reg-page (because you set dir there) */
+.reg-page[dir="rtl"] .reg-field.has-eye .reg-eye{
+  left: 10px;
+  right: auto;
+}
+
+.reg-page[dir="ltr"] .reg-field.has-eye .reg-eye{
+  right: 10px;
+  left: auto;
+}
+
+/* keep text away from the icon */
+.reg-page[dir="rtl"] .reg-field.has-eye .reg-input{ padding-left: 44px; }
+.reg-page[dir="ltr"] .reg-field.has-eye .reg-input{ padding-right: 44px; }
+/* نفس فكرة organization لكن صح: العين مرتبطة بالـ input فقط */
+.reg-input-wrap{
+  position: relative;
+}
+
+/* ثبّت العين بمنتصف الحقل */
+.reg-input-wrap .reg-eye{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  bottom: auto !important;
+  border: 0;
+  background: transparent;
+  color:#9aa7a0;
+  padding: 7px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+/* لأن dir عندك على reg-page */
+.reg-page[dir="rtl"] .reg-input-wrap .reg-eye{ left: 10px; right: auto; }
+.reg-page[dir="ltr"] .reg-input-wrap .reg-eye{ right: 10px; left: auto; }
+
+/* مساحة للنص داخل الـ input حتى ما يتداخل مع العين */
+.reg-page[dir="rtl"] .reg-input-wrap .reg-input{ padding-left: 44px; }
+.reg-page[dir="ltr"] .reg-input-wrap .reg-input{ padding-right: 44px; }
+
+/* ===== Interests alignment by language ===== */
+
+/* AR (RTL) */
+.reg-page[dir="rtl"] .reg-hint{ text-align: right; }
+.reg-page[dir="rtl"] .reg-checks{ justify-content: flex-start; }
+.reg-page[dir="rtl"] .reg-check{ flex-direction: row; } /* checkbox ثم النص */
+.reg-page[dir="rtl"] .reg-check-text{ text-align: right; }
+
+/* EN/FR (LTR) */
+.reg-page[dir="ltr"] .reg-hint{ text-align: left; }
+.reg-page[dir="ltr"] .reg-checks{
+    justify-content: flex-start;   /* يبقوا من اليسار */
+}
+.reg-page[dir="ltr"] .reg-check{
+    flex-direction: row;           /* checkbox ثم النص */
+}
+.reg-page[dir="ltr"] .reg-check-text{ text-align: left; }
+/* ===== Titles/Headings alignment by language ===== */
+
+/* AR (RTL) */
+.reg-page[dir="rtl"] .reg-header{ text-align: center; } /* خليه مثل ما هو */
+.reg-page[dir="rtl"] .reg-step-title{ text-align: right; }
+.reg-page[dir="rtl"] .reg-hint{ text-align: right; }
+.reg-page[dir="rtl"] .reg-field,
+.reg-page[dir="rtl"] .reg-label{ text-align: right; }
+
+/* EN/FR (LTR) */
+.reg-page[dir="ltr"] .reg-header{ text-align: center; } /* إذا بدك الهيدر يضل بالوسط */
+.reg-page[dir="ltr"] .reg-step-title{ text-align: left; } /* عناوين الخطوات */
+.reg-page[dir="ltr"] .reg-hint{ text-align: left; }      /* نص التلميح */
+.reg-page[dir="ltr"] .reg-field,
+.reg-page[dir="ltr"] .reg-label{ text-align: left; }     /* الحقول والليبل */
+/* ===== Interests alignment ===== */
+
+/* عربي (RTL) */
+.reg-page[dir="rtl"] .reg-checks{
+  justify-content: flex-start;   /* طبيعي */
+  direction: rtl;
+}
+
+/* إنجليزي + فرنسي (LTR) */
+.reg-page[dir="ltr"] .reg-checks{
+  justify-content: flex-end;     /* 👈 يصيروا عاليمين */
+  direction: ltr;
+}
+/* ===== Swap Password / ConfirmPassword in LTR ===== */
+
+/* إنجليزي + فرنسي */
+.reg-page[dir="ltr"] .reg-grid-2 > .reg-field:first-child{
+  order: 2;   /* Password يروح عاليمين */
+}
+
+.reg-page[dir="ltr"] .reg-grid-2 > .reg-field:last-child{
+  order: 1;   /* Confirm Password يروح عاليسار */
+}
+
+/* عربي (RTL) — الطبيعي */
+.reg-page[dir="rtl"] .reg-grid-2 > .reg-field{
+  order: initial;
+}
 
 </style>

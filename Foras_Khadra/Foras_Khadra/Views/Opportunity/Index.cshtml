@@ -21,9 +21,9 @@
             
             <div class="header-actions">
                 <div class="search-filter-wrapper">
-                    <div class="search-icon">
+                   @*  <div class="search-icon">
                         <i class="bi bi-search"></i>
-                    </div>
+                    </div> *@
                     <div class="filter-btn" id="filterToggleBtn">
                         <i class="bi bi-sliders"></i>
                     </div>
@@ -45,10 +45,13 @@
                 <a asp-action="Create" class="btn-add-opportunity">
                     <span>+</span> إضافة فرصة جديدة
                 </a>
+                @if (!User.IsInRole("Organization"))
+                {
+                    <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
+                                    العودة للوحة التحكم
+                                </a>
+                }
                 
-                <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
-                    العودة للوحة التحكم
-                </a>
             </div>
         </div>
     </header>

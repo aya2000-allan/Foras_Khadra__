@@ -12,9 +12,13 @@
 
 <div class="header">
     <h2 class="page-title"> تعديل الفرصة </h2>
-    <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
+     @if (!User.IsInRole("Organization"))
+    {
+        <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
                         العودة للوحة التحكم
                     </a>
+    }
+   
                 </div>
 <div class="page-wrapper">
 
@@ -145,7 +149,13 @@
             <!-- Actions -->
             <div class="actions">
                 <button type="submit" class="btn-primary">حفظ التعديلات</button>
-                <a asp-action="Index" class="btn-outline">إلغاء</a>
+                 @if (User.IsInRole("Organization"))
+                {
+                 <a asp-action="OrgOpportunities" class="btn-outline">إلغاء</a>
+                }else{
+                    <a asp-action="Index" class="btn-outline">إلغاء</a>
+
+                }
             </div>
 
         </form>
