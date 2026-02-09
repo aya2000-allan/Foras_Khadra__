@@ -97,11 +97,109 @@
     <script>
         document.getElementById("guestApply")?.addEventListener("click", function () {
             Swal.fire({
-                icon: 'info',
-                title: 'تسجيل الدخول مطلوب',
-                html: 'سجل أو أنشئ حساب لتتمكن من التقديم.<br>إذا كنت قد أنشأت حساب سابقاً، قم بتسجيل الدخول.',
-                confirmButtonText: 'حسناً'
+                imageUrl: '/images/login-required.svg',
+                imageWidth: 165,
+                imageHeight: 129,
+                imageAlt: 'Login required illustration',
+                title: 'تسجيل الدخول مطلوب !',
+                html: 'أنشئ حساب لتتمكن من التقديم ، وإذا كان لديك حساب بالفعل<br>سجل الدخول الآن',
+                showCancelButton: true,
+                confirmButtonText: 'تسجيل الدخول',
+                cancelButtonText: 'إنشاء حساب',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    htmlContainer: 'custom-swal-text',
+                    confirmButton: 'custom-swal-confirm',
+                    cancelButton: 'custom-swal-cancel',
+                    closeButton: 'custom-swal-close'
+                },
+                showCloseButton: true,
+                buttonsStyling: false,
+                didOpen: () => {
+                    const popup = Swal.getPopup();
+                    popup.style.border = '1px solid #C77E1F';
+                    popup.style.borderRadius = '16px';
+                    popup.style.paddingBottom = '25px';
+                    popup.style.paddingTop = '20px';
+                    popup.style.width='740px';
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/Account/Login';
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    window.location.href = '/Account/RegisterUser';
+                }
             });
         });
     </script>
+    <style>
+       
+        .custom-swal-title {
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .custom-swal-text {
+            color: #666;
+            font-size: 20px;
+        }
+       
+
+
+        .custom-swal-confirm {
+            background-color: #F99D27;
+            color: white;
+            border: none;
+            padding: 14px 45px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 8px;
+            width: 200;
+            height: 65;
+            border-radius: 16px;
+        }
+        
+        .custom-swal-confirm:hover {
+            background-color: #e88d1a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3);
+        }
+        
+        .custom-swal-cancel {
+            background-color: white;
+            color: #F99D27;
+            border: 2px solid #F99D27;
+            padding: 14px 45px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 8px;
+            width: 200;
+            height: 65;
+            border-radius: 16px;
+        }
+        
+        .custom-swal-cancel:hover {
+            background-color: #FFF5E6;
+            transform: translateY(-2px);
+        }
+        
+        .custom-swal-close {
+            color: #999;
+            font-size: 28px;
+            position: relative;
+            left: auto !important;
+            right: -93% !important;
+        }
+        
+        .custom-swal-close:hover {
+            color: #F99D27;
+        }
+    </style>
 }
