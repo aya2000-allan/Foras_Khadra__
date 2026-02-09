@@ -259,7 +259,7 @@
     /* =========================
        MOBILE NAV
     ========================= */
-   @@media (max-width: 992px) {
+   @@media (max-width: 1400px) {
     header { background: #25652C; }
 
     /* Wrapper */
@@ -368,7 +368,7 @@
     /* =========================
        FOOTER RESPONSIVE
     ========================= */
-    @@media (max-width: 992px) {
+    @@media (max-width: 1400px) {
         .footer-container {
             display: flex;
             flex-direction: column;
@@ -710,14 +710,14 @@ else
         const link = e.target.closest("[data-close-menu]");
         if (link) {
             const nav = document.getElementById("navContent");
-            if (nav && window.innerWidth <= 992) nav.classList.remove("show");
+            if (nav && window.innerWidth <= 1400) nav.classList.remove("show");
         }
     });
 
     window.addEventListener("resize", function () {
         const nav = document.getElementById("navContent");
         if (!nav) return;
-        if (window.innerWidth > 992) {
+        if (window.innerWidth > 1400) {
             nav.classList.remove("show");
         }
     });
