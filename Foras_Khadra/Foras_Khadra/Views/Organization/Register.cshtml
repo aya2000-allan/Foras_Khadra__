@@ -438,10 +438,12 @@
     grid-template-columns: minmax(0,1fr) 260px;
     column-gap:56px;             /* الفراغ بين العمودين */
     @* align-items:start; *@
-    direction:ltr;
+    @* direction:ltr; *@
+    direction: inherit; /* ⭐ المهم */
+
 }
 .reg-card > *{ min-width:0; }
-.reg-main, .reg-side{ direction:rtl; }
+@* .reg-main, .reg-side{ direction:rtl; } *@
 
 /* Right stepper */
 .reg-side{
@@ -495,7 +497,7 @@
     color:#25652C;
     font-weight:700;
     font-size:18px;
-    text-align:right;
+    @* text-align:right; *@
 }
 
 /* Step 1 cards */
@@ -555,7 +557,7 @@
 }
 .reg-grid-1{ display:grid; gap:14px; }
 
-.reg-field{ text-align:right; }
+@* .reg-field{ text-align:right; } *@
 .reg-label{
     display:block;
     margin:12px 0 8px;
@@ -650,4 +652,16 @@
     .reg-type-grid{ grid-template-columns: 1fr; }
     .reg-grid-2{ grid-template-columns: 1fr; }
 }
+/* RTL (Arabic) */
+[dir="rtl"] .reg-field,
+[dir="rtl"] .reg-step-title{
+    text-align: right;
+}
+
+/* LTR (English / French) */
+[dir="ltr"] .reg-field,
+[dir="ltr"] .reg-step-title{
+    text-align: left;
+}
+
 </style>
