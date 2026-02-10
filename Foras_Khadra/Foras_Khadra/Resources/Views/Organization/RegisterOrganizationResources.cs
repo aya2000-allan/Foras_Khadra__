@@ -22,6 +22,9 @@ namespace Foras_Khadra.Resources.Views.Organization
 
         public static string EmailAlreadyUsed => Get("EmailAlreadyUsed");
 
+        public static string PhoneDigitsOnly => Get("PhoneDigitsOnly");
+
+
         private static string Get(string key)
         {
             var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
@@ -90,6 +93,10 @@ namespace Foras_Khadra.Resources.Views.Organization
                 ("ar", "EmailAlreadyUsed") => "هذا البريد الإلكتروني مستخدم من قبل",
                 ("en", "EmailAlreadyUsed") => "This email is already in use",
                 ("fr", "EmailAlreadyUsed") => "Cette adresse e-mail est déjà utilisée",
+
+                ("ar", "PhoneDigitsOnly") => "رقم الهاتف يجب أن يحتوي على أرقام فقط ويمكن أن يبدأ بعلامة +",
+                ("en", "PhoneDigitsOnly") => "Phone number must contain digits only and can start with +",
+                ("fr", "PhoneDigitsOnly") => "Le numéro de téléphone doit contenir uniquement des chiffres et peut commencer par +",
 
                 _ => key
             };

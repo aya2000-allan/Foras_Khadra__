@@ -51,10 +51,15 @@ namespace Foras_Khadra.ViewModels
         public string ContactEmail { get; set; }
 
         [Required(
-            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
-            ErrorMessageResourceName = nameof(RegisterOrganizationResources.PhoneRequired)
-        )]
+    ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+    ErrorMessageResourceName = nameof(RegisterOrganizationResources.PhoneRequired)
+)]
+        [RegularExpression(@"^\+?\d+$",
+    ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+    ErrorMessageResourceName = nameof(RegisterOrganizationResources.PhoneDigitsOnly)
+)]
         public string? PhoneNumber { get; set; }
+
 
         // ===== Password =====
         [Required(
