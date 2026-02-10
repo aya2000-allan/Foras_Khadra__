@@ -1,13 +1,13 @@
 ﻿@model Foras_Khadra.ViewModels.OrganizationProfileViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @{
     var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
-}
-
-@{
-    ViewData["Title"] = "Profile Settings";
+    ViewData["Title"] = Localizer["PageTitle"];
 }
 
 <style>
@@ -338,10 +338,10 @@
                 <div class="col-md-3 p-4 p-md-5 profile-side">
                     <div class="nav flex-column nav-pills profile-tabs" id="profileTab" role="tablist">
                         <button class="nav-link active" id="view-tab" data-bs-toggle="pill" data-bs-target="#view" type="button" role="tab">
-                            عرض البيانات
+                            @Localizer["view_org_card"]
                         </button>
                         <button class="nav-link" id="edit-tab" data-bs-toggle="pill" data-bs-target="#edit" type="button" role="tab">
-                            تعديل البيانات
+                            @Localizer["edit_org_card"]
                         </button>
                     </div>
                 </div>
@@ -357,7 +357,7 @@
         <div class="org-id-header">
            
            
-     <div class="org-id-title">بطاقة منظمة</div>
+     <div class="org-id-title">@Localizer["org_id_card_title"]</div>
      <div class="org-id-logo">
                 <!-- غيّر المسار حسب اللوجو عندك -->
                 <img src="~/images/logo.png" alt="logo" />
@@ -382,44 +382,64 @@
             <div class="org-id-details">
 
                 <div class="org-id-row">
-                    <div class="org-id-label">اسم المنظمة</div>
+                <div class="org-id-label"> @Localizer["org_name_label"]</div>
                     <div class="org-id-value">@Model.Name</div>
                 </div>
 
                 <div class="org-id-row">
-                    <div class="org-id-label">القطاع</div>
+                <div class="org-id-label">@Localizer["org_sector_label"]</div>
                     <div class="org-id-value">@Model.Sector</div>
                 </div>
 
                 <div class="org-id-row">
-                    <div class="org-id-label">الموقع</div>
+                <div class="org-id-label">@Localizer["org_location_label"]</div>
                     <div class="org-id-value">@Model.Location</div>
                 </div>
 
                 <div class="org-id-row">
-                    <div class="org-id-label">الدولة</div>
-                    <div class="org-id-value">@Model.Country</div>
-                </div>
+                <div class="org-id-label">@Localizer["org_country_label"]</div>
+                                            @{
+                                                string countryName = "";
+                                                if (!string.IsNullOrEmpty(Model.Country))
+                                                {
+                                                    try
+                                                    {
+                                                        var region = new RegionInfo(Model.Country); // الكود مثل "PS"
+                                                        countryName = culture switch
+                                                        {
+                                                            "ar" => region.NativeName,
+                                                            "fr" => region.EnglishName, // مؤقت، استبدل إذا عندك ترجمة فرنسية
+                                                            _ => region.EnglishName
+                                                        };
+                                                    }
+                                                    catch
+                                                    {
+                                                        countryName = Model.Country; // fallback إذا صار خطأ
+                                                    }
+                                                }
+                                            }
+                                            <div class="org-id-value">@countryName</div>
+                                        </div>
 
                 <div class="org-id-row">
-                    <div class="org-id-label">اسم جهة الاتصال</div>
+                <div class="org-id-label">@Localizer["org_contact_name_label"]</div>
                     <div class="org-id-value">@Model.ContactName</div>
                 </div>
 
                 <div class="org-id-row">
-                    <div class="org-id-label">رقم الهاتف</div>
+                <div class="org-id-label">@Localizer["org_phone_label"]</div>
                     <div class="org-id-value">@Model.PhoneNumber</div>
                 </div>
 
                 <div class="org-id-row">
-                    <div class="org-id-label">البريد الإلكتروني</div>
+                 <div class="org-id-label">@Localizer["org_email_label"] </div>
                     <div class="org-id-value">@Model.ContactEmail</div>
                 </div>
 
                 @if (!string.IsNullOrEmpty(Model.Website))
                 {
                     <div class="org-id-row">
-                        <div class="org-id-label">الموقع الإلكتروني</div>
+                 <div class="org-id-label">@Localizer["org_website_label"] </div>
                         <div class="org-id-value">
                             <a class="org-id-link" href="@Model.Website" target="_blank">@Model.Website</a>
                         </div>
@@ -437,48 +457,49 @@
     <form asp-action="ProfileSetting" method="post">
 
         <!-- معلومات المنظمة -->
-        <div class="edit-section-title">معلومات المنظمة</div>
+        <div class="edit-section-title">@Localizer["edit_section_org_info"]</div>
         <div class="edit-grid">
 
             <div>
-                <input asp-for="Name" class="form-control profile-input" placeholder="ادخل اسم المنظمة / المؤسسة" />
+                <input asp-for="Name" class="form-control profile-input"  />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div>
-                <input asp-for="Sector" class="form-control profile-input" placeholder="اختر القطاع الذي تنتمي إليه المنظمة" />
+                <input asp-for="Sector" class="form-control profile-input"  />
                 <span asp-validation-for="Sector" class="text-danger"></span>
             </div>
         </div>
 
         <!-- الدولة والموقع -->
-        <div class="edit-section-title mt-3">الدولة والموقع</div>
+        <div class="edit-section-title mt-3">@Localizer["edit_section_country_location"]</div>
         <div class="edit-grid">
 
-            <div>
-                <select asp-for="Country" class="form-select profile-select" asp-items="Model.Countries">
-                    <option value="">فلسطين</option>
-                </select>
-                <span asp-validation-for="Country" class="text-danger"></span>
-            </div>
+                                    <div>
+                                        <label asp-for="Country" class="form-label">الدولة</label>
+                                        <select asp-for="Country" class="form-select profile-select" asp-items="Model.Countries">
+                                            <option value="">-----</option> <!-- اختياري لتوجيه المستخدم -->
+                                        </select>
+                                        <span asp-validation-for="Country" class="text-danger"></span>
+                                    </div>
 
             <div>
-                <input asp-for="Location" class="form-control profile-input" placeholder="فلسطين" />
+                <input asp-for="Location" class="form-control profile-input"  />
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
         </div>
 
         <!-- المعلومات الشخصية -->
-        <div class="edit-section-title mt-3">المعلومات الشخصية</div>
+        <div class="edit-section-title mt-3">@Localizer["edit_section_personal_info"]</div>
         <div class="edit-grid">
 
             <div>
-                <input asp-for="ContactEmail" class="form-control profile-input" placeholder="example@email.com" />
+                <input asp-for="ContactEmail" class="form-control profile-input"  />
                 <span asp-validation-for="ContactEmail" class="text-danger"></span>
             </div>
 
             <div>
-                <input asp-for="ContactName" class="form-control profile-input" placeholder="زياد عوض" />
+                <input asp-for="ContactName" class="form-control profile-input"  />
                 <span asp-validation-for="ContactName" class="text-danger"></span>
             </div>
 
@@ -486,19 +507,19 @@
                 <!-- كود الدولة (ثابت/اختياري) -->
                 <input type="text" class="phone-code" value="+970" readonly />
                 <div style="flex:1">
-                    <input asp-for="PhoneNumber" class="form-control profile-input" placeholder="ادخل رقم الهاتف المحمول" />
+                    <input asp-for="PhoneNumber" class="form-control profile-input"  />
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
 
             <div>
-                <input asp-for="Website" class="form-control profile-input" placeholder="ادخل الموقع الإلكتروني (اختياري)" />
+                <input asp-for="Website" class="form-control profile-input"  />
             </div>
 
         </div>
 
         <div class="mt-3">
-            <button type="submit" class="btn btn-save">حفظ التعديلات</button>
+            <button type="submit" class="btn btn-save">@Localizer["btn_save"] </button>
         </div>
 
     </form>

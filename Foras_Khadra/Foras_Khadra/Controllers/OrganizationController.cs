@@ -39,12 +39,10 @@ namespace Foras_Khadra.Controllers
             _localizer = localizer;
         }
 
-        private List<SelectListItem> GetCountries()
+        private List<SelectListItem> GetCountries(string selectedCountry = null)
         {
-            // معرفة لغة الموقع الحالية: "ar", "en", "fr"
             var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
 
-            // نحصل على كل الثقافات المحددة بالدول
             var countries = CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(c =>
                 {
@@ -53,14 +51,15 @@ namespace Foras_Khadra.Controllers
                         var region = new RegionInfo(c.Name);
                         string name = culture switch
                         {
-                            "ar" => region.NativeName,   // الاسم المحلي (عادة عربي)
-                            "fr" => region.EnglishName,  // الفرنسية ليس مباشرة، نضع EnglishName مؤقتاً
+                            "ar" => region.NativeName,   // الاسم العربي/الاسم المحلي
+                            "fr" => region.EnglishName,  // الفرنسية حالياً تستخدم EnglishName
                             _ => region.EnglishName      // افتراضي إنجليزي
                         };
                         return new SelectListItem
                         {
-                            Value = region.TwoLetterISORegionName, // الكود 2 حرف
-                            Text = name
+                            Value = region.TwoLetterISORegionName,
+                            Text = name,
+                            Selected = region.TwoLetterISORegionName == selectedCountry
                         };
                     }
                     catch
@@ -69,7 +68,7 @@ namespace Foras_Khadra.Controllers
                     }
                 })
                 .Where(x => x != null)
-                .DistinctBy(x => x.Value) // تجنب التكرار
+                .DistinctBy(x => x.Value)
                 .OrderBy(x => x.Text)
                 .ToList();
 
@@ -262,7 +261,8 @@ namespace Foras_Khadra.Controllers
                 Location = organization.Location ?? "",
                 ContactName = organization.ContactName ?? "",
                 Website = organization.Website ?? "",
-                Countries = GetCountries()
+                // ← هنا نمرر الدولة الحالية لتظهر محددة بشكل صحيح
+                Countries = GetCountries(organization.Country)
             };
 
             return View(model);
@@ -272,7 +272,8 @@ namespace Foras_Khadra.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ProfileSetting(OrganizationProfileViewModel model)
         {
-            model.Countries = GetCountries();
+            // لا نحتاج تمرير selectedCountry هنا، لأنه موجود في model.Country
+            model.Countries = GetCountries(model.Country);
             if (!ModelState.IsValid)
                 return View(model);
 
