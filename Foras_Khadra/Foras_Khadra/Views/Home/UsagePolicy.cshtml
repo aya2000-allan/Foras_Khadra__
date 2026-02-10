@@ -147,6 +147,23 @@
         .policy-section { padding: 12px 12px; }
         .policy-section::before { inset-inline-end: 8px; }
     }
+    /* Flip list icon automatically for LTR languages */
+.ltr .policy-section li::before {
+    transform: scaleX(-1);
+}
+.policy-contact-pill {
+    transition: all .25s ease;
+}
+
+.policy-contact-pill:hover {
+    background: #e88914;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(249,157,39,.45);
+    text-decoration: none;
+    color: #fff;;
+}
+
+
 </style>
 
 <div class="policy-page @(isRtl ? "rtl" : "ltr")" dir="@dir">
