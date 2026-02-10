@@ -1,52 +1,90 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using Foras_Khadra.Resources.Views.Organization;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Foras_Khadra.ViewModels
 {
     public class RegisterOrganizationViewModel
     {
 
-        // Tab 2: Organization Info
-        [Required(ErrorMessage = "اسم المنظمة مطلوب")]
+        // ===== Organization Info =====
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.OrgNameRequired)
+        )]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "القطاع مطلوب")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.SectorRequired)
+        )]
         public string Sector { get; set; }
 
-        // Tab 3: Country & Location
-        [Required(ErrorMessage = "اختر الدولة")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.CountryRequired)
+        )]
         public string Country { get; set; }
 
-        [Required(ErrorMessage = "الموقع مطلوب")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.LocationRequired)
+        )]
         public string Location { get; set; }
 
-        // Tab 4: Personal Info
-        [Required(ErrorMessage = "اسم جهة الاتصال مطلوب")]
+        // ===== Contact Info =====
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.ContactNameRequired)
+        )]
         public string ContactName { get; set; }
 
-        [Required(ErrorMessage = "البريد الرسمي مطلوب")]
-        [EmailAddress(ErrorMessage = "البريد الإلكتروني غير صحيح")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.ContactEmailRequired)
+        )]
+        [EmailAddress(
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.ContactEmailInvalid)
+        )]
         public string ContactEmail { get; set; }
 
-        public string? Website { get; set; } // optional
-
-        [Required(ErrorMessage = "رقم الهاتف مطلوب")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.PhoneRequired)
+        )]
         public string? PhoneNumber { get; set; }
 
-        [Required(ErrorMessage = "كلمة المرور مطلوبة")]
-        [DataType(DataType.Password)]
-        [StringLength(100, MinimumLength = 8, ErrorMessage = "كلمة المرور يجب أن تكون على الأقل 8 أحرف")]
+        // ===== Password =====
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.PasswordRequired)
+        )]
+        [StringLength(100, MinimumLength = 8,
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.PasswordLength)
+        )]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$",
-    ErrorMessage = "كلمة المرور يجب أن تحتوي على حرف كبير، حرف صغير، رقم ورمز خاص")]
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.PasswordComplexity)
+        )]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "تأكيد كلمة المرور مطلوب")]
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "كلمتا المرور غير متطابقتين")]
+        [Required(
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.ConfirmPasswordRequired)
+        )]
+        [Compare("Password",
+            ErrorMessageResourceType = typeof(RegisterOrganizationResources),
+            ErrorMessageResourceName = nameof(RegisterOrganizationResources.PasswordMismatch)
+        )]
         public string ConfirmPassword { get; set; }
 
-        // القوائم للاستدعاء في الفيو
-        public List<SelectListItem> Countries { get; set; } = new List<SelectListItem>();
+        // ===== Optional =====
+        public string? Website { get; set; }
+
+        // ===== Lists =====
+        public List<SelectListItem> Countries { get; set; } = new();
     }
 }

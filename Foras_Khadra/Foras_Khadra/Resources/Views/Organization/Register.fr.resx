@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountTypeInd" xml:space="preserve">
+    <value>Compte individuel</value>
+  </data>
+  <data name="AccountTypeOrg" xml:space="preserve">
+    <value>Compte d’organisation</value>
+  </data>
+  <data name="BackBtn" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="ConfirmPasswordLabel" xml:space="preserve">
+    <value>Confirmez le mot de passe</value>
+  </data>
+  <data name="ConfirmPasswordPlaceholder" xml:space="preserve">
+    <value>Réentrez le mot de passe</value>
+  </data>
+  <data name="ContactEmailLabel" xml:space="preserve">
+    <value>E-mail du contact</value>
+  </data>
+  <data name="ContactEmailPlaceholder" xml:space="preserve">
+    <value>Entrez l’email du contact</value>
+  </data>
+  <data name="ContactNameLabel" xml:space="preserve">
+    <value>Personne à contacter</value>
+  </data>
+  <data name="ContactNamePlaceholder" xml:space="preserve">
+    <value>Entrez le nom de la personne responsable</value>
+  </data>
+  <data name="CountryLabel" xml:space="preserve">
+    <value>Pays</value>
+  </data>
+  <data name="CountryPlaceholder" xml:space="preserve">
+    <value>Sélectionnez un pays</value>
+  </data>
+  <data name="CreateAccountBtn" xml:space="preserve">
+    <value>Créer un compte</value>
+  </data>
+  <data name="LocationLabel" xml:space="preserve">
+    <value>Emplacement</value>
+  </data>
+  <data name="LocationPlaceholder" xml:space="preserve">
+    <value>Entrez l’emplacement de l’organisation</value>
+  </data>
+  <data name="NextBtn" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="OkBtn" xml:space="preserve">
+    <value>D’accord</value>
+  </data>
+  <data name="OrgNameLabel" xml:space="preserve">
+    <value>Nom de l’organisation</value>
+  </data>
+  <data name="OrgNamePlaceholder" xml:space="preserve">
+    <value>Entrez le nom de l’organisation</value>
+  </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Enregistrement du compte de l’organisation</value>
+  </data>
+  <data name="PasswordLabel" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="PasswordPlaceholder" xml:space="preserve">
+    <value>Entrez le mot de passe</value>
+  </data>
+  <data name="PhoneNumberLabel" xml:space="preserve">
+    <value>Numéro de téléphone</value>
+  </data>
+  <data name="PhoneNumberPlaceholder" xml:space="preserve">
+    <value>Entrez le numéro de téléphone de l’organisation</value>
+  </data>
+  <data name="Progress25" xml:space="preserve">
+    <value>25% complété</value>
+  </data>
+  <data name="Progress50" xml:space="preserve">
+    <value>50% complété</value>
+  </data>
+  <data name="Progress75" xml:space="preserve">
+    <value>75% complété</value>
+  </data>
+  <data name="Progress100" xml:space="preserve">
+    <value>100% complété</value>
+  </data>
+  <data name="ProgressLabelAr" xml:space="preserve">
+    <value>Progression</value>
+  </data>
+  <data name="SectorLabel" xml:space="preserve">
+    <value>Nom du secteur</value>
+  </data>
+  <data name="SectorPlaceholder" xml:space="preserve">
+    <value>Entrez le secteur</value>
+  </data>
+  <data name="Step1Title" xml:space="preserve">
+    <value>Sélectionnez le type de compte</value>
+  </data>
+  <data name="Step2Title" xml:space="preserve">
+    <value>Informations sur l’organisation</value>
+  </data>
+  <data name="Step3Title" xml:space="preserve">
+    <value>Pays et emplacement</value>
+  </data>
+  <data name="Step4Title" xml:space="preserve">
+    <value>Informations de contact</value>
+  </data>
+  <data name="StepperStep1" xml:space="preserve">
+    <value>Type de compte</value>
+  </data>
+  <data name="StepperStep2" xml:space="preserve">
+    <value>Informations sur l’organisation</value>
+  </data>
+  <data name="StepperStep3" xml:space="preserve">
+    <value>Pays et emplacement</value>
+  </data>
+  <data name="StepperStep4" xml:space="preserve">
+    <value>Informations de contact</value>
+  </data>
+  <data name="Subtitle" xml:space="preserve">
+    <value>Entrez les informations de votre organisation en quelques étapes simples pour compléter la création du compte</value>
+  </data>
+  <data name="SwalFillAllFields" xml:space="preserve">
+    <value>Veuillez remplir tous les champs obligatoires</value>
+  </data>
+  <data name="SwalFillLocation" xml:space="preserve">
+    <value>Complétez les informations de localisation</value>
+  </data>
+  <data name="SwalFillOrgData" xml:space="preserve">
+    <value>Complétez les informations de l’organisation</value>
+  </data>
+  <data name="SwalPasswordMismatch" xml:space="preserve">
+    <value>Le mot de passe ne correspond pas</value>
+  </data>
+  <data name="SwalSelectType" xml:space="preserve">
+    <value>Sélectionnez le type de compte</value>
+  </data>
+  <data name="WebsiteLabel" xml:space="preserve">
+    <value>Site web (facultatif)</value>
+  </data>
+  <data name="WebsitePlaceholder" xml:space="preserve">
+    <value>https://example.com</value>
+  </data>
+</root>

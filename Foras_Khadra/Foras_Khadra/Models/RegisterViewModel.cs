@@ -8,68 +8,68 @@ namespace Foras_Khadra.ViewModels
     public class RegisterViewModel
     {
         [Required(
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.FirstNameRequired)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.FirstNameRequired)
         )]
         public string FirstName { get; set; }
 
         [Required(
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.LastNameRequired)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.LastNameRequired)
         )]
         public string LastName { get; set; }
 
         [Required(
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.EmailRequired)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.EmailRequired)
         )]
         [EmailAddress(
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.EmailInvalid)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.EmailInvalid)
         )]
         public string Email { get; set; }
 
         [Required(
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.CountryRequired)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.CountryRequired)
         )]
         public string Country { get; set; }
 
         [Required(
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.NationalityRequired)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.NationalityRequired)
         )]
         public string Nationality { get; set; }
 
         [Required(
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.PasswordRequired)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.PasswordRequired)
         )]
         [DataType(DataType.Password)]
         [StringLength(100, MinimumLength = 8,
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.PasswordLength)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.PasswordLength)
         )]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$",
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.PasswordComplexity)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.PasswordComplexity)
         )]
         public string Password { get; set; }
 
         [Required(
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.ConfirmPasswordRequired)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.ConfirmPasswordRequired)
         )]
         [DataType(DataType.Password)]
         [Compare("Password",
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.PasswordMismatch)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.PasswordMismatch)
         )]
         public string ConfirmPassword { get; set; }
 
         [MinLength(1,
-            ErrorMessageResourceType = typeof(RegisterResources),
-            ErrorMessageResourceName = nameof(RegisterResources.SelectInterestAlert)
+            ErrorMessageResourceType = typeof(RegisterOrgResources),
+            ErrorMessageResourceName = nameof(RegisterOrgResources.SelectInterestAlert)
         )]
         public List<string> Interests { get; set; } = new List<string>();
 

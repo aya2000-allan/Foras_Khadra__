@@ -1,188 +1,173 @@
 ﻿@model Foras_Khadra.ViewModels.RegisterOrganizationViewModel
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "تسجيل حساب المنظمة";
+    ViewData["Title"] = Localizer["PageTitle"];
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
 }
 
-<div class="reg-page" dir="rtl">
+<div class="reg-page" dir="@dir">
     <div class="reg-bg-circle"></div>
 
     <div class="reg-wrap">
-
         <!-- Header -->
         <div class="reg-header">
-            <h1 class="reg-title">تسجيل حساب المنظمة</h1>
-            <p class="reg-subtitle">
-                أدخل معلومات منظمتك على خطوات بسيطة لإكمال إنشاء الحساب
-            </p>
+            <h1 class="reg-title">@Localizer["PageTitle"]</h1>
+            <p class="reg-subtitle">@Localizer["Subtitle"]</p>
         </div>
 
         <div class="reg-card">
-            <!-- Main -->
             <div class="reg-main">
-
                 <form asp-controller="Organization" asp-action="Register" method="post" id="orgRegisterWizard">
                     @Html.AntiForgeryToken()
-                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
                     <!-- STEP 1: Account type -->
                     <section class="reg-step active" data-step="1">
-                        <h2 class="reg-step-title">حدد نوع الحساب الخاص بك</h2>
+                        <h2 class="reg-step-title">@Localizer["Step1Title"]</h2>
 
                         <div class="reg-type-grid">
-                            <!-- Org (default checked) -->
+                            <!-- Organization Account -->
                             <label class="reg-type-card">
                                 <input type="radio" name="AccountType" value="organization" checked />
                                 <span class="reg-type-radio"></span>
-
                                 <div class="reg-type-icon">
                                     <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M16 11c1.657 0 3-1.567 3-3.5S17.657 4 16 4s-3 1.567-3 3.5S14.343 11 16 11Z" stroke="currentColor" stroke-width="1.8"/>
-                                        <path d="M8 11c1.657 0 3-1.567 3-3.5S9.657 4 8 4 5 5.567 5 7.5 6.343 11 8 11Z" stroke="currentColor" stroke-width="1.8"/>
-                                        <path d="M2.5 20c.5-3.5 3.5-6 7-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                                        <path d="M21.5 20c-.5-3.5-3.5-6-7-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                                        <path d="M9 20c.4-3 2.3-5 3-5s2.6 2 3 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                        <path d="M16 11c1.657 0 3-1.567 3-3.5S17.657 4 16 4s-3 1.567-3 3.5S14.343 11 16 11Z" stroke="currentColor" stroke-width="1.8" />
+                                        <path d="M8 11c1.657 0 3-1.567 3-3.5S9.657 4 8 4 5 5.567 5 7.5 6.343 11 8 11Z" stroke="currentColor" stroke-width="1.8" />
+                                        <path d="M2.5 20c.5-3.5 3.5-6 7-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                                        <path d="M21.5 20c-.5-3.5-3.5-6-7-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                                        <path d="M9 20c.4-3 2.3-5 3-5s2.6 2 3 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                                     </svg>
-                                </div>
-
-                                <div class="reg-type-text">
-                                    <div class="reg-type-name">حساب منظمة</div>
+                                </div>                                <div class="reg-type-text">
+                                    <div class="reg-type-name">@Localizer["AccountTypeOrg"]</div>
                                 </div>
                             </label>
 
-                            <!-- Individual -->
+                            <!-- Individual Account -->
                             <label class="reg-type-card">
                                 <input type="radio" name="AccountType" value="individual" disabled />
                                 <span class="reg-type-radio"></span>
-
                                 <div class="reg-type-icon">
                                     <svg width="56" height="56" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <path d="M12 12c2.21 0 4-1.99 4-4.444C16 5.1 14.21 3 12 3S8 5.1 8 7.556C8 10.01 9.79 12 12 12Z" stroke="currentColor" stroke-width="1.8"/>
-                                        <path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                        <path d="M12 12c2.21 0 4-1.99 4-4.444C16 5.1 14.21 3 12 3S8 5.1 8 7.556C8 10.01 9.79 12 12 12Z" stroke="currentColor" stroke-width="1.8" />
+                                        <path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                                     </svg>
-                                </div>
-
-                                <div class="reg-type-text">
-                                    <div class="reg-type-name">حساب فردي</div>
+                                </div>                                <div class="reg-type-text">
+                                    <div class="reg-type-name">@Localizer["AccountTypeInd"]</div>
                                 </div>
                             </label>
                         </div>
 
                         <button type="button" class="btn reg-btn w-100" onclick="nextStep()">
-                            التالي
+                            @Localizer["NextBtn"]
                         </button>
                     </section>
 
-                    <!-- STEP 2: Org info -->
+                    <!-- STEP 2: Organization info -->
                     <section class="reg-step" data-step="2">
-                        <h2 class="reg-step-title">معلومات المنظمة</h2>
+                        <h2 class="reg-step-title">@Localizer["Step2Title"]</h2>
 
                         <div class="reg-grid-1">
                             <div class="reg-field">
-                                <label asp-for="Name" class="reg-label">اسم المنظمة</label>
-                                <input asp-for="Name" id="Name" class="reg-input" placeholder="اكتب اسم المنظمة" />
+                                <label asp-for="Name" class="reg-label">@Localizer["OrgNameLabel"]</label>
+                                <input asp-for="Name" id="Name" class="reg-input" placeholder="@Localizer["OrgNamePlaceholder"]" />
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
 
                             <div class="reg-field">
-                                <label asp-for="Sector" class="reg-label">اسم القطاع</label>
-                                <input asp-for="Sector" id="Sector" class="reg-input" placeholder="اكتب اسم القطاع" />
+                                <label asp-for="Sector" class="reg-label">@Localizer["SectorLabel"]</label>
+                                <input asp-for="Sector" id="Sector" class="reg-input" placeholder="@Localizer["SectorPlaceholder"]" />
                                 <span asp-validation-for="Sector" class="text-danger"></span>
                             </div>
                         </div>
 
                         <div class="reg-actions">
-                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">رجوع</button>
-                            <button type="button" class="btn reg-btn" onclick="nextStep()">التالي</button>
+                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">@Localizer["BackBtn"]</button>
+                            <button type="button" class="btn reg-btn" onclick="nextStep()">@Localizer["NextBtn"]</button>
                         </div>
                     </section>
 
-                    <!-- STEP 3: Country + Location -->
+                    <!-- STEP 3: Country & Location -->
                     <section class="reg-step" data-step="3">
-                        <h2 class="reg-step-title">الدولة والموقع</h2>
+                        <h2 class="reg-step-title">@Localizer["Step3Title"]</h2>
 
                         <div class="reg-grid-2">
                             <div class="reg-field">
-                                <label asp-for="Country" class="reg-label">الدولة</label>
+                                <label asp-for="Country" class="reg-label">@Localizer["CountryLabel"]</label>
                                 <select asp-for="Country" asp-items="Model.Countries" id="Country" class="reg-input">
-                                    <option value="">اختر الدولة</option>
+                                    <option value="">@Localizer["CountryPlaceholder"]</option>
                                 </select>
+
                                 <span asp-validation-for="Country" class="text-danger"></span>
                             </div>
 
                             <div class="reg-field">
-                                <label asp-for="Location" class="reg-label">الموقع</label>
-                                <input asp-for="Location" id="Location" class="reg-input" placeholder="اكتب موقع المنظمة" />
+                                <label asp-for="Location" class="reg-label">@Localizer["LocationLabel"]</label>
+                                <input asp-for="Location" id="Location" class="reg-input" placeholder="@Localizer["LocationPlaceholder"]" />
                                 <span asp-validation-for="Location" class="text-danger"></span>
                             </div>
                         </div>
 
                         <div class="reg-actions">
-                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">رجوع</button>
-                            <button type="button" class="btn reg-btn" onclick="nextStep()">التالي</button>
+                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">@Localizer["BackBtn"]</button>
+                            <button type="button" class="btn reg-btn" onclick="nextStep()">@Localizer["NextBtn"]</button>
                         </div>
                     </section>
 
-                    <!-- STEP 4: Contact + Password -->
+                    <!-- STEP 4: Contact Info -->
                     <section class="reg-step" data-step="4">
-                        <h2 class="reg-step-title">معلومات التواصل</h2>
+                        <h2 class="reg-step-title">@Localizer["Step4Title"]</h2>
 
                         <div class="reg-grid-2">
                             <div class="reg-field">
-                                <label asp-for="ContactName" class="reg-label">جهة الاتصال</label>
-                                <input asp-for="ContactName" id="ContactName" class="reg-input" placeholder="اسم الشخص المسؤول" />
+                                <label asp-for="ContactName" class="reg-label">@Localizer["ContactNameLabel"]</label>
+                                <input asp-for="ContactName" id="ContactName" class="reg-input" placeholder="@Localizer["ContactNamePlaceholder"]" />
                                 <span asp-validation-for="ContactName" class="text-danger"></span>
                             </div>
 
                             <div class="reg-field">
-                                <label asp-for="ContactEmail" class="reg-label">البريد الإلكتروني</label>
-                                <input asp-for="ContactEmail" id="ContactEmail" class="reg-input" type="email" placeholder="بريد جهة الاتصال" />
+                                <label asp-for="ContactEmail" class="reg-label">@Localizer["ContactEmailLabel"]</label>
+                                <input asp-for="ContactEmail" id="ContactEmail" type="email" class="reg-input" placeholder="@Localizer["ContactEmailPlaceholder"]" />
                                 <span asp-validation-for="ContactEmail" class="text-danger"></span>
                             </div>
                         </div>
 
                         <div class="reg-grid-2">
                             <div class="reg-field">
-                                <label asp-for="Website" class="reg-label">الموقع الإلكتروني (اختياري)</label>
-                                <input asp-for="Website" id="Website" class="reg-input" placeholder="https://example.com" />
+                                <label asp-for="Website" class="reg-label">@Localizer["WebsiteLabel"]</label>
+                                <input asp-for="Website" id="Website" class="reg-input" placeholder="@Localizer["WebsitePlaceholder"]" />
                                 <span asp-validation-for="Website" class="text-danger"></span>
                             </div>
 
                             <div class="reg-field">
-                                <label asp-for="PhoneNumber" class="reg-label">رقم الهاتف</label>
-                                <input asp-for="PhoneNumber" id="PhoneNumber" class="reg-input" placeholder="رقم هاتف المنظمة" />
+                                <label asp-for="PhoneNumber" class="reg-label">@Localizer["PhoneNumberLabel"]</label>
+                                <input asp-for="PhoneNumber" id="PhoneNumber" class="reg-input" placeholder="@Localizer["PhoneNumberPlaceholder"]" />
                                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                             </div>
                         </div>
 
                         <div class="reg-grid-2">
                             <div class="reg-field has-eye">
-                                <label asp-for="Password" class="reg-label">كلمة المرور</label>
-                                <input asp-for="Password" id="OrgPassword" class="reg-input" type="password" placeholder="ادخل كلمة المرور" />
-                                <button type="button" class="reg-eye" onclick="togglePassword('OrgPassword')" aria-label="إظهار/إخفاء كلمة المرور">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
-                                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
-                                    </svg>
-                                </button>
+                                <label asp-for="Password" class="reg-label">@Localizer["PasswordLabel"]</label>
+                                <input asp-for="Password" id="OrgPassword" class="reg-input" type="password" placeholder="@Localizer["PasswordPlaceholder"]" />
+                                <button type="button" class="reg-eye" onclick="togglePassword('OrgPassword')"></button>
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
 
                             <div class="reg-field has-eye">
-                                <label asp-for="ConfirmPassword" class="reg-label">تأكيد كلمة المرور</label>
-                                <input asp-for="ConfirmPassword" id="OrgConfirmPassword" class="reg-input" type="password" placeholder="أعد إدخال كلمة المرور" />
-                                <button type="button" class="reg-eye" onclick="togglePassword('OrgConfirmPassword')" aria-label="إظهار/إخفاء كلمة المرور">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" stroke="currentColor" stroke-width="2"/>
-                                        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="2"/>
-                                    </svg>
-                                </button>
+                                <label asp-for="ConfirmPassword" class="reg-label">@Localizer["ConfirmPasswordLabel"]</label>
+                                <input asp-for="ConfirmPassword" id="OrgConfirmPassword" class="reg-input" type="password" placeholder="@Localizer["ConfirmPasswordPlaceholder"]" />
+                                <button type="button" class="reg-eye" onclick="togglePassword('OrgConfirmPassword')"></button>
                                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                             </div>
                         </div>
 
                         <div class="reg-actions">
-                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">رجوع</button>
-                            <button type="submit" class="btn reg-btn">إنشاء الحساب</button>
+                            <button type="button" class="btn reg-btn-outline" onclick="prevStep()">@Localizer["BackBtn"]</button>
+                            <button type="submit" class="btn reg-btn">@Localizer["CreateAccountBtn"]</button>
                         </div>
                     </section>
 
@@ -191,7 +176,12 @@
                         <div class="reg-progress-bar">
                             <div id="progressFill" class="reg-progress-fill" style="width:25%"></div>
                         </div>
-                        <div id="progressText" class="reg-progress-text">تم إنجاز %25</div>
+                        <div id="progressText" class="reg-progress-text"
+                             data-label-ar="@Localizer["ProgressLabelAr"]"
+                             data-label-en="@Localizer["ProgressLabelAr"]"
+                             data-label-fr="@Localizer["ProgressLabelAr"]">
+                        </div>
+
                     </div>
                 </form>
             </div>
@@ -201,19 +191,19 @@
                 <div class="reg-stepper">
                     <div class="reg-stepper-item active" data-s="1">
                         <span class="dot"></span>
-                        <span class="label">تحديد الفئة</span>
+                        <span class="label">@Localizer["StepperStep1"]</span>
                     </div>
                     <div class="reg-stepper-item" data-s="2">
                         <span class="dot"></span>
-                        <span class="label">معلومات المنظمة</span>
+                        <span class="label">@Localizer["StepperStep2"]</span>
                     </div>
                     <div class="reg-stepper-item" data-s="3">
                         <span class="dot"></span>
-                        <span class="label">الدولة والموقع</span>
+                        <span class="label">@Localizer["StepperStep3"]</span>
                     </div>
                     <div class="reg-stepper-item" data-s="4">
                         <span class="dot"></span>
-                        <span class="label">معلومات التواصل</span>
+                        <span class="label">@Localizer["StepperStep4"]</span>
                     </div>
                 </div>
             </aside>
@@ -221,9 +211,20 @@
     </div>
 </div>
 
+
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const swalTexts = {
+            selectType: '@Localizer["SwalSelectType"]',
+            fillOrg: '@Localizer["SwalFillOrgData"]',
+            fillLocation: '@Localizer["SwalFillLocation"]',
+            fillAll: '@Localizer["SwalFillAllFields"]',
+            passwordMismatch: '@Localizer["SwalPasswordMismatch"]',
+            okBtn: '@Localizer["OkBtn"]'
+        };
+    </script>
 
     <script>
         function showSwal(message) {
@@ -231,8 +232,8 @@
                 icon: "warning",
                 iconColor: "#fff",
                 allowOutsideClick: false,
-                confirmButtonText: "حسناً",
-                confirmButtonColor: "#F99D27",
+        confirmButtonText: swalTexts.okBtn,
+                        confirmButtonColor: "#F99D27",
                 html: `<div class="foras-swal-msg">${message}</div>`,
                 customClass: {
                     popup: "foras-swal",
@@ -255,8 +256,19 @@
             const p = percentMap[step] || 25;
 
             document.getElementById('progressFill').style.width = p + '%';
-            document.getElementById('progressText').innerText = `تم إنجاز %${p}`;
-            currentStep = step;
+        
+
+                // استخدم Culture الحالي الموجود عندك في Razor
+        let currentLang = '@culture';  // culture معرف فوق بالكود
+
+        const progressText = document.getElementById('progressText');
+        let label = progressText.dataset.labelEn; // افتراضي إنجليزي
+        if(currentLang === 'ar') label = progressText.dataset.labelAr;
+        else if(currentLang === 'fr') label = progressText.dataset.labelFr;
+
+        progressText.innerText = `${label} ${p}%`;
+
+                    currentStep = step;
         }
 
         function nextStep(){
@@ -287,8 +299,8 @@
             if(step === 1){
                 const type = document.querySelector('input[name="AccountType"]:checked')?.value;
                 if(!type){
-                    showSwal('اختار نوع الحساب');
-                    return false;
+        showSwal(swalTexts.selectType);
+                            return false;
                 }
             }
 
@@ -296,8 +308,8 @@
                 const name = document.getElementById('Name')?.value?.trim();
                 const sector = document.getElementById('Sector')?.value?.trim();
                 if(!name || !sector){
-                    showSwal('أكمل بيانات المنظمة');
-                    return false;
+        showSwal(swalTexts.fillOrg);
+                            return false;
                 }
             }
 
@@ -305,8 +317,8 @@
                 const c = document.getElementById('Country')?.value;
                 const loc = document.getElementById('Location')?.value?.trim();
                 if(!c || !loc){
-                    showSwal('أكمل بيانات الموقع');
-                    return false;
+        showSwal(swalTexts.fillLocation);
+                            return false;
                 }
             }
 
@@ -318,20 +330,24 @@
                 const cpw = document.getElementById('OrgConfirmPassword')?.value;
 
                 if(!contact || !email || !phone || !pw || !cpw){
-                    showSwal('يرجى ملء جميع الحقول المطلوبة');
-                    return false;
+        showSwal(swalTexts.fillAll);
+                            return false;
                 }
                 if(pw !== cpw){
-                    showSwal('كلمة المرور غير متطابقة');
-                    return false;
+        showSwal(swalTexts.passwordMismatch);
+                            return false;
                 }
             }
 
             return true;
         }
 
-        showStep(1);
-    </script>
+        let initialStep = 1; // الافتراضي
+        @if (ViewData["CurrentStep"] != null)
+        {
+                <text>initialStep = @ViewData["CurrentStep"];</text>
+        }
+        showStep(initialStep);    </script>
 }
 
 <style>

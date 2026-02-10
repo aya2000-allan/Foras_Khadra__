@@ -1,6 +1,7 @@
 ﻿using CountryData;
 using Foras_Khadra.Data;
 using Foras_Khadra.Models;
+using Foras_Khadra.Resources.Views.Organization;
 using Foras_Khadra.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -40,15 +41,39 @@ namespace Foras_Khadra.Controllers
 
         private List<SelectListItem> GetCountries()
         {
-            var provider = new CountryProvider();
-            var countries = provider.GetCountries();
-            return countries
-                .OrderBy(c => c.CommonName)
-                .Select(c => new SelectListItem
+            // معرفة لغة الموقع الحالية: "ar", "en", "fr"
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+            // نحصل على كل الثقافات المحددة بالدول
+            var countries = CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+                .Select(c =>
                 {
-                    Value = c.CommonName,
-                    Text = c.CommonName
-                }).ToList();
+                    try
+                    {
+                        var region = new RegionInfo(c.Name);
+                        string name = culture switch
+                        {
+                            "ar" => region.NativeName,   // الاسم المحلي (عادة عربي)
+                            "fr" => region.EnglishName,  // الفرنسية ليس مباشرة، نضع EnglishName مؤقتاً
+                            _ => region.EnglishName      // افتراضي إنجليزي
+                        };
+                        return new SelectListItem
+                        {
+                            Value = region.TwoLetterISORegionName, // الكود 2 حرف
+                            Text = name
+                        };
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                })
+                .Where(x => x != null)
+                .DistinctBy(x => x.Value) // تجنب التكرار
+                .OrderBy(x => x.Text)
+                .ToList();
+
+            return countries;
         }
 
         // ====== REGISTER ======
@@ -75,9 +100,14 @@ namespace Foras_Khadra.Controllers
             var existingUser = await _userManager.FindByEmailAsync(model.ContactEmail);
             if (existingUser != null)
             {
-                ModelState.AddModelError(nameof(model.ContactEmail), "هذا البريد الإلكتروني مستخدم من قبل");
+                ModelState.AddModelError(nameof(model.ContactEmail),
+                    RegisterOrganizationResources.EmailAlreadyUsed);
+
+                // تمرير رقم الخطوة الحالية
+                ViewData["CurrentStep"] = 4; // الخطوة الخاصة بالمعلومات الأساسية + البريد
                 return View(model);
             }
+
 
             // تحقق من قوة كلمة المرور
             if (string.IsNullOrWhiteSpace(model.Password) ||
