@@ -107,6 +107,24 @@
         border: 1px solid rgba(0,0,0,.12);
     }
 
+    /* اتجاه سهم الـ select حسب اللغة */
+    .profile-page[dir="rtl"] .profile-select {
+        direction: rtl;
+        text-align: right;
+        /* Bootstrap يحط السهم يمين، ننقله يسار */
+        background-position: left 0.75rem center;
+        padding-left: 2.25rem;   /* مساحة للسهم من اليسار */
+        padding-right: 0.75rem;
+    }
+
+    .profile-page[dir="ltr"] .profile-select {
+        direction: ltr;
+        text-align: left;
+        background-position: right 0.75rem center;
+        padding-right: 2.25rem;  /* مساحة للسهم من اليمين */
+        padding-left: 0.75rem;
+    }
+
     .profile-input:focus, .profile-select:focus {
         border-color: rgba(31,107,58,.55);
         box-shadow: 0 0 0 .2rem rgba(31,107,58,.12);
@@ -475,16 +493,19 @@
         <div class="edit-section-title mt-3">@Localizer["edit_section_country_location"]</div>
         <div class="edit-grid">
 
-                                    <div>
-                                        <label asp-for="Country" class="form-label">الدولة</label>
-                                        <select asp-for="Country" class="form-select profile-select" asp-items="Model.Countries">
-                                            <option value="">-----</option> <!-- اختياري لتوجيه المستخدم -->
-                                        </select>
-                                        <span asp-validation-for="Country" class="text-danger"></span>
-                                    </div>
+            <div>
+                <label asp-for="Country" class="form-label">@Localizer["org_country_label"]</label>
+                <select asp-for="Country" id="Country" class="form-select profile-select" asp-items="Model.Countries">
+                    <option value="">-----</option> <!-- اختياري لتوجيه المستخدم -->
+                </select>
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
 
             <div>
-                <input asp-for="Location" class="form-control profile-input"  />
+                <label asp-for="Location" class="form-label">@Localizer["org_location_label"]</label>
+                <select asp-for="Location" id="Location" class="form-select profile-select">
+                    <option value="">-----</option>
+                </select>
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>
         </div>
@@ -535,4 +556,50 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // خريطة بسيطة للمناطق حسب كود الدولة (عدلها/وسعها حسب حاجتك)
+        const regionsByCountry = {
+            'PS': ['غزة', 'الضفة الغربية', 'القدس'],
+            'JO': ['عمان', 'إربد', 'الزرقاء', 'العقبة'],
+            'EG': ['القاهرة', 'الإسكندرية', 'الجيزة'],
+        };
+
+        function fillLocations(countryCode) {
+            const locSelect = document.getElementById('Location');
+            if (!locSelect) return;
+
+            // امسح الخيارات الحالية
+            locSelect.innerHTML = '<option value=\"\">-----</option>';
+
+            const regions = regionsByCountry[countryCode] || [];
+            regions.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r;
+                opt.textContent = r;
+                locSelect.appendChild(opt);
+            });
+
+            // إذا كان في قيمة حالية مخزنة في الموديل، حاول تعيينها
+            const current = '@(Model.Location ?? "")';
+            if (current) {
+                locSelect.value = current;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const countrySelect = document.getElementById('Country');
+            if (!countrySelect) return;
+
+            // عند تحميل الصفحة أول مرة (حالة edit موجودة)
+            if (countrySelect.value) {
+                fillLocations(countrySelect.value);
+            }
+
+            // عند تغيير الدولة
+            countrySelect.addEventListener('change', function () {
+                fillLocations(this.value);
+            });
+        });
+    </script>
 }
