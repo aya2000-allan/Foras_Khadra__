@@ -202,8 +202,8 @@
                         </div>
                         <div id="progressText" class="reg-progress-text"
                              data-label-ar="@Localizer["ProgressLabelAr"]"
-                             data-label-en="@Localizer["ProgressLabelAr"]"
-                             data-label-fr="@Localizer["ProgressLabelAr"]">
+                             data-label-en="@Localizer["ProgressLabelEn"]"
+                             data-label-fr="@Localizer["ProgressLabelFr"]">
                         </div>
 
                     </div>
@@ -741,4 +741,33 @@
 .reg-page[dir="ltr"] .reg-input-wrap .reg-input{
     padding-right: 44px;
 }
+
+
+/* Make label a flex container */
+.reg-label {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* LTR: asterisk before text */
+.reg-page[dir="ltr"] .reg-label {
+    flex-direction: row-reverse; /* asterisk first */
+}
+
+.reg-page[dir="ltr"] .reg-label .text-danger {
+    margin-right: 4px;
+    margin-left: 0;
+}
+
+/* RTL: asterisk after text */
+.reg-page[dir="rtl"] .reg-label {
+    flex-direction: row; /* default: text first, asterisk after */
+}
+
+.reg-page[dir="rtl"] .reg-label .text-danger {
+    margin-left: 4px;
+    margin-right: 0;
+}
+
+
 </style>

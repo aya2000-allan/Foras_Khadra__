@@ -515,11 +515,13 @@
         <div class="edit-grid">
 
             <div>
+                <label asp-for="ContactEmail" class="form-label">@Localizer["org_email_label"]</label>
                 <input asp-for="ContactEmail" class="form-control profile-input"  />
                 <span asp-validation-for="ContactEmail" class="text-danger"></span>
             </div>
 
             <div>
+                <label asp-for="ContactName" class="form-label">@Localizer["org_contact_name_label"]</label>
                 <input asp-for="ContactName" class="form-control profile-input"  />
                 <span asp-validation-for="ContactName" class="text-danger"></span>
             </div>
@@ -527,12 +529,14 @@
             <div class="phone-group">
                 <!-- كود الدولة (ثابت/اختياري) -->
                 <div style="flex:1">
+                    <label asp-for="PhoneNumber" class="form-label">@Localizer["org_phone_label"]</label>
                     <input asp-for="PhoneNumber" class="form-control profile-input"  />
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
 
             <div>
+                <label asp-for="Website" class="form-label">@Localizer["org_website_label"]</label>
                 <input asp-for="Website" class="form-control profile-input"  />
             </div>
 
