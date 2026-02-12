@@ -491,9 +491,9 @@
                             <button class="nav-btn" type="button" onclick="toggleDropdown('loginMenu', event)">
                                 @Localizer["Login"]
                             </button>
-                            <div class="dropdown-list" id="loginMenu">
-                                <a asp-controller="Account" asp-action="Login" data-close-menu>@Localizer["Individual"]</a>
-                                <a asp-controller="Organization" asp-action="Login" data-close-menu>@Localizer["Organization"]</a>
+                            <div class="dropdown-list" id="loginMenu" >
+                                <a asp-controller="Account" asp-action="Login" style="justify-content: center !important;" data-close-menu>@Localizer["Individual"]</a>
+                                <a asp-controller="Organization" asp-action="Login" style="justify-content: center !important;" data-close-menu>@Localizer["Organization"]</a>
                             </div>
                         </div>
 
