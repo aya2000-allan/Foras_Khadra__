@@ -2,7 +2,7 @@
 
 namespace Foras_Khadra.Resources.Views.Account
 {
-    public static class RegisterResources
+    public static class RegisterOrgResources
     {
         public static string FirstNameRequired => GetMessage("FirstNameRequired");
         public static string LastNameRequired => GetMessage("LastNameRequired");

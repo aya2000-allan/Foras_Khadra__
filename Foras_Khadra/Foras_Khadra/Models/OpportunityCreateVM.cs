@@ -1,12 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Foras_Khadra.Models
 {
     public class OpportunityCreateVM
     {
         [Required]
-        public string Title { get; set; }
+        public string TitleAr { get; set; }
+        [Required]
+        public string TitleEn { get; set; }
+        [Required]
+        public string TitleFr { get; set; }
 
         [Required(ErrorMessage = "يجب رفع صورة للفرصة")]
         public IFormFile Image { get; set; } // هنا الصورة إجبارية
@@ -17,18 +22,38 @@ namespace Foras_Khadra.Models
         public OpportunityType? Type { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public string DescriptionAr { get; set; }
 
-        public string Details { get; set; }
+        [Required]
+        public string DescriptionEn { get; set; }
+        [Required]
+        public string DescriptionFr { get; set; }
 
-        public string AvailableCountries { get; set; }
-
-        public string EligibilityCriteria { get; set; }
-
-        public string Benefits { get; set; }
+        [Required]
+        public string DetailsAr { get; set; }
+        [Required]
+        public string DetailsEn { get; set; }
+        [Required]
+        public string DetailsFr { get; set; }
+        [Required]
+        public List<int> AvailableCountryIds { get; set; } = new List<int>();
+        [Required]
+        public string EligibilityCriteriaAr { get; set; }
+        [Required]
+        public string EligibilityCriteriaEn { get; set; }
+        [Required]
+        public string EligibilityCriteriaFr { get; set; }
+        [Required]
+        public string BenefitsAr { get; set; }
+        [Required]
+        public string BenefitsEn { get; set; }
+        [Required]
+        public string BenefitsFr { get; set; }
 
         [Required]
         public string ApplyLink { get; set; }
+
+        public List<SelectListItem> CountriesSelectList { get; set; } = new List<SelectListItem>();
 
 
     }

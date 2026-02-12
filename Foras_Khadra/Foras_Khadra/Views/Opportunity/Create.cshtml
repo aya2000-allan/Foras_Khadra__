@@ -1,6 +1,5 @@
 ﻿@model Foras_Khadra.Models.OpportunityCreateVM
 @using Foras_Khadra.Models
-
 @{
     ViewData["Title"] = "إضافة فرصة جديدة";
 }
@@ -9,31 +8,21 @@
 
 <div class="header">
     <h2 class="page-title">إضافة فرصة جديدة</h2>
-     @if (!User.IsInRole("Organization"))
+    @if (!User.IsInRole("Organization"))
     {
-        <a asp-controller="Admin" asp-action="Index" class="btn-back-dashboard">
-                        العودة للوحة التحكم
-                    </a>
+        <a asp-controller="Admin" asp-action="Index" class="btn-back-dashboard">العودة للوحة التحكم</a>
     }
-    
-                </div>
+</div>
+
 <div class="page-wrapper">
-
-    <!-- Form panel -->
     <div class="form-panel">
+        <form id="createForm" asp-action="Create" method="post" enctype="multipart/form-data">
 
-        <form id="createForm"
-              asp-action="Create"
-              method="post"
-              enctype="multipart/form-data">
-
-            <div asp-validation-summary="All" class="validation-summary"></div>
-
-         <!-- Image (same logic: required file upload) -->
+            <!-- Image -->
             <div class="upload-box">
-                <h3 class="discription">رفع صورةالفرصة </h3>
+                <h3 class="discription">رفع صورة الفرصة</h3>
                 <label class="upload-area">
-                    <input asp-for="Image" type="file" required hidden />
+                    <input asp-for="Image" type="file" required hidden id="imageInput" />
                     <div class="upload-icon">
                         <img src="~/images/upload-icon.svg" alt="">
                     </div>
@@ -41,138 +30,270 @@
                     <small>JPEG, PNG</small>
                 </label>
                 <span asp-validation-for="Image" class="text-danger"></span>
+
+                <!-- Image Preview -->
+                <div class="image-preview mt-2">
+                    <img id="previewImg" src="#" alt="صورة الفرصة" style="display:none; max-width:200px; max-height:200px;" />
+                </div>
             </div>
 
-            <!-- Title (same logic) -->
-            <div class="field">
-                <input asp-for="Title" placeholder="عنوان الفرصة"required />
-                <span asp-validation-for="Title" class="text-danger"></span>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" id="languageTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="arabic-tab" data-bs-toggle="tab" href="#arabic" role="tab">عربي</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="english-tab" data-bs-toggle="tab" href="#english" role="tab">English</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="french-tab" data-bs-toggle="tab" href="#french" role="tab">Français</a>
+                </li>
+            </ul>
+
+            <div class="tab-content mt-3">
+                <!-- Arabic Tab -->
+                <div class="tab-pane fade show active" id="arabic" role="tabpanel">
+                    <div class="field">
+                        <input asp-for="TitleAr" placeholder="عنوان الفرصة" required />
+                        <span asp-validation-for="TitleAr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <textarea asp-for="EligibilityCriteriaAr" rows="2" placeholder="حدد معايير أهلية الفرصة" required></textarea>
+                        <span asp-validation-for="EligibilityCriteriaAr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <textarea asp-for="BenefitsAr" rows="2" placeholder="الفوائد" required></textarea>
+                        <span asp-validation-for="BenefitsAr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <textarea asp-for="DescriptionAr" rows="3" placeholder="وصف الفرصة" required></textarea>
+                        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <h3 class="discription">تفاصيل الفرصة</h3>
+                        <!-- Arabic -->
+                        <div id="editorAr" style="height: 250px;"></div>
+                        <input type="hidden" asp-for="DetailsAr" id="detailAr" required />
+
+                        <span asp-validation-for="DetailsAr" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- English Tab -->
+                <div class="tab-pane fade" id="english" role="tabpanel">
+                    <div class="field">
+                        <input asp-for="TitleEn" placeholder="Opportunity Title" required />
+                        <span asp-validation-for="TitleEn" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <textarea asp-for="EligibilityCriteriaEn" rows="2" placeholder="Eligibility Criteria" required></textarea>
+                        <span asp-validation-for="EligibilityCriteriaEn" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <textarea asp-for="BenefitsEn" rows="2" placeholder="Benefits" required></textarea>
+                        <span asp-validation-for="BenefitsEn" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <textarea asp-for="DescriptionEn" rows="3" placeholder="Opportunity Description" required></textarea>
+                        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <h3 class="discription">Opportunity Details</h3>
+                        <div id="editorEn" style="height: 250px;"></div>
+                        <input type="hidden" asp-for="DetailsEn" id="detailEn" required />
+                        <span asp-validation-for="DetailsEn" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- French Tab -->
+                <div class="tab-pane fade" id="french" role="tabpanel">
+                    <div class="field">
+                        <input asp-for="TitleFr" placeholder="Titre de l'opportunité" required />
+                        <span asp-validation-for="TitleFr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <textarea asp-for="EligibilityCriteriaFr" rows="2" placeholder="Critères d'éligibilité" required></textarea>
+                        <span asp-validation-for="EligibilityCriteriaFr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <textarea asp-for="BenefitsFr" rows="2" placeholder="Avantages" required></textarea>
+                        <span asp-validation-for="BenefitsFr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <textarea asp-for="DescriptionFr" rows="3" placeholder="Description de l'opportunité" required></textarea>
+                        <span asp-validation-for="DescriptionFr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <h3 class="discription">Détails de l'opportunité</h3>
+                        <div id="editorFr" style="height: 250px;"></div>
+                        <input type="hidden" asp-for="DetailsFr" id="detailFr" required />
+                        <span asp-validation-for="DetailsFr" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
-           
-            <!-- PublishedBy (same readonly logic) -->
+            <!-- Published By -->
             <div class="field">
-
-                @if (!string.IsNullOrEmpty(Model.PublishedBy))
-                {
-                    <input asp-for="PublishedBy" placeholder="نشر بواسطة : Admin" readonly  />
-                }
-                else
-                {
-                    <input asp-for="PublishedBy" placeholder="نشر بواسطة"/>
-                }
-
+                <label>نشر بواسطة</label>
+                <input type="text"
+                       name="PublishedBy"
+                       value="@(User.Identity.Name.Contains("@") ? "Admin" : User.Identity.Name)"
+                       readonly
+                       class="published-by-box" />
                 <span asp-validation-for="PublishedBy" class="text-danger"></span>
             </div>
 
-            <!-- Type (same enum logic) -->
+            <!-- Opportunity Type -->
             <div class="field dropdown">
-                <select asp-for="Type"
-                        asp-items="Html.GetEnumSelectList<OpportunityType>()"
-                        required>
+                <select asp-for="Type" asp-items="Html.GetEnumSelectList<OpportunityType>()" required>
                     <option value="">اختر نوع الفرصة</option>
                 </select>
-                <img src="~/images/lets-icons_arrow-drop-down.svg"
-                     class="custom-dropdown-arrow" />
+                <img src="~/images/lets-icons_arrow-drop-down.svg" class="custom-dropdown-arrow" />
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
 
             <!-- Available Countries -->
             <div class="field">
-                <textarea asp-for="AvailableCountries" rows="1" placeholder=" دول الفرصة (افصل بينها بفاصلة) " style="height: 56px;" required ></textarea>
-                <span asp-validation-for="AvailableCountries" class="text-danger"></span>
+                <label>دول الفرصة</label>
+                <div class="country-checkboxes">
+                    @foreach (var country in Model.CountriesSelectList)
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox"
+                                   name="AvailableCountryIds"
+                                   value="@country.Value"
+                                   id="country_@country.Value"
+                                   @(Model.AvailableCountryIds.Contains(int.Parse(country.Value)) ? "checked" : "") />
+                            <label class="form-check-label" for="country_@country.Value">
+                                @country.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+                <span asp-validation-for="AvailableCountryIds" class="text-danger"></span>
             </div>
-
-            <!-- Eligibility Criteria -->
-            <div class="field">
-                <textarea asp-for="EligibilityCriteria" rows="2" placeholder="حدد معايير أهلية الفرصة" required></textarea>
-                <span asp-validation-for="EligibilityCriteria" class="text-danger"></span>
-            </div>
-
-
-            <!-- Description -->
-            <div class="field">
-                <textarea asp-for="Description" rows="3" placeholder="وصف الفرصة" required></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-
-            <!-- Benefits -->
-            <div class="field">
-                <textarea asp-for="Benefits" rows="2" placeholder="الفوائد"required></textarea>
-                <span asp-validation-for="Benefits" class="text-danger"></span>
-            </div>
-          
 
             <!-- Apply Link -->
             <div class="field">
+                <label>لينك التقديم</label>
+
                 <input asp-for="ApplyLink" placeholder="رابط التقديم" required />
                 <span asp-validation-for="ApplyLink" class="text-danger"></span>
             </div>
 
-             <!-- Detial -->
-            <div class="field">
-                <h3 class="discription"> تفاصيل الفرصة </h3>
-
-                <!-- Quill editor -->
-                <div id="editorAr" style="height: 376px;"></div>
-
-                <!-- Hidden input bound to Model -->
-                <input type="hidden" asp-for="Details" id="detial" />
-
-                <span asp-validation-for="Details" class="text-danger"></span>
-            </div>
-
-          
             <!-- Actions -->
             <div class="actions">
                 <button type="submit" class="btn-primary">حفظ وإضافة</button>
-                 @if (User.IsInRole("Organization"))
+                @if (User.IsInRole("Organization"))
                 {
-                 <a asp-action="OrgOpportunities" class="btn-outline">إلغاء</a>
-                }else{
+                    <a asp-action="OrgOpportunities" class="btn-outline">إلغاء</a>
+                }
+                else
+                {
                     <a asp-action="Index" class="btn-outline">إلغاء</a>
-
                 }
             </div>
 
         </form>
     </div>
 
-    <!-- Decorative panel -->
     <div class="side-panel">
         <div class="side-bg"></div>
         <div class="side-illustration">
             <img src="~/images/contact_illustration.svg" alt="">
         </div>
     </div>
-
 </div>
+
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 
 @section Scripts {
-
     <partial name="_ValidationScriptsPartial" />
-    
-}
-<script>
-    // Initialize Quill editor
-    var quillAr = new Quill('#editorAr', {
-        theme: 'snow',
-        placeholder: 'اكتب التفاصيل هنا...',
-        modules: {
-            toolbar: [
-                [{ header: [1, 2, false] }],
-                ['bold', 'italic', 'underline'],
-                ['link', 'image'],
-                [{ list: 'ordered' }, { list: 'bullet' }],
-                ['clean']
-            ]
-        }
-    });
 
-    // On form submit, set the hidden input value to the Quill editor content
-    document.getElementById('createForm').addEventListener('submit', function () {
-        document.getElementById('detial').value = quillAr.root.innerHTML;
-    });
-</script>
+    <script>
+        // =================== Initialize Quill Editors ===================
+        var quillAr = new Quill('#editorAr', { theme: 'snow', placeholder: 'اكتب التفاصيل هنا...' });
+        var quillEn = new Quill('#editorEn', { theme: 'snow', placeholder: 'Write the details here...' });
+        var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: 'Écrivez les détails ici...' });
+
+                // =================== Display Uploaded Image ===================
+        const imageInput = document.getElementById('imageInput');
+        const previewImg = document.getElementById('previewImg');
+
+        imageInput.addEventListener('change', function(){
+            if(this.files && this.files[0]){
+                const reader = new FileReader();
+                reader.onload = function(e){
+                    previewImg.src = e.target.result; // رابط الصورة
+                    previewImg.style.display = 'block'; // إظهارها
+                }
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                previewImg.src = '#';
+                previewImg.style.display = 'none';
+            }
+        });
+
+        // =================== Form Submit Validation ===================
+        const form = document.getElementById('createForm');
+        form.addEventListener('submit', function(e){
+            // 1️⃣ Copy Quill content to hidden inputs
+            document.getElementById('detailAr').value = quillAr.root.innerHTML.trim();
+            document.getElementById('detailEn').value = quillEn.root.innerHTML.trim();
+            document.getElementById('detailFr').value = quillFr.root.innerHTML.trim();
+
+            // 2️⃣ Check all required inputs in the active tab
+            var activeTabPane = document.querySelector('.tab-pane.active');
+            var requiredFields = activeTabPane.querySelectorAll('[required]');
+            var allFilled = true;
+
+            requiredFields.forEach(function(field){
+                if(field.type === 'checkbox' || field.type === 'radio'){
+                    // تجاهل checkboxes/radios
+                } else if(!field.value.trim()){
+                    allFilled = false;
+                }
+            });
+
+            // 3️⃣ Check Quill editor content
+            if(activeTabPane.id === 'arabic' && quillAr.getText().trim() === '') allFilled = false;
+            if(activeTabPane.id === 'english' && quillEn.getText().trim() === '') allFilled = false;
+            if(activeTabPane.id === 'french' && quillFr.getText().trim() === '') allFilled = false;
+
+            if(!allFilled){
+                e.preventDefault();
+                alert('الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال أو الحفظ!');
+            }
+        });
+
+        // =================== Prevent Tab Change if Required Fields Empty ===================
+        var tabLinks = document.querySelectorAll('#languageTabs a');
+        tabLinks.forEach(function(link){
+            link.addEventListener('show.bs.tab', function(e){
+                var activeTabPane = document.querySelector('.tab-pane.active');
+                var requiredFields = activeTabPane.querySelectorAll('[required]');
+                var allFilled = true;
+
+                requiredFields.forEach(function(field){
+                    if(field.type === 'checkbox' || field.type === 'radio'){
+                        // تجاهل checkboxes/radios
+                    } else if(!field.value.trim()){
+                        allFilled = false;
+                    }
+                });
+
+                // التحقق من Quill Editor
+                if(activeTabPane.id === 'arabic' && quillAr.getText().trim() === '') allFilled = false;
+                if(activeTabPane.id === 'english' && quillEn.getText().trim() === '') allFilled = false;
+                if(activeTabPane.id === 'french' && quillFr.getText().trim() === '') allFilled = false;
+
+                if(!allFilled){
+                    e.preventDefault(); // يمنع تغيير التاب
+                    alert('الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال!');
+                }
+            });
+        });
+    </script>
+}

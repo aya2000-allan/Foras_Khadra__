@@ -4,6 +4,12 @@
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
+@{
+    ViewBag.Title = "فرص منظمتك";
+    var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+}
+
 <div class="row mt-4">
     <!-- المحتوى الرئيسي -->
     <div class="col-md-9">
@@ -96,9 +102,34 @@
                                             <span>لا توجد صورة</span>
                                         }
                                     </td>
-                                    <td>@opp.Title</td>
-                                    <td>@opp.Description</td>
-                                    <td>@opp.AvailableCountries</td>
+                                    @{
+                                        string title = lang switch
+                                        {
+                                            "en" => opp.TitleEn,
+                                            "fr" => opp.TitleFr,
+                                            _ => opp.TitleAr
+                                        };
+                                    }
+                                    <td>@title</td>
+                                    @{
+                                        string description = lang switch
+                                        {
+                                            "en" => opp.DescriptionEn,
+                                            "fr" => opp.DescriptionFr,
+                                            _ => opp.DescriptionAr
+                                        };
+                                    }
+                                    <td>@description</td>
+                                    <td>
+                                        @if (opp.AvailableCountryNames != null && opp.AvailableCountryNames.Any())
+                                        {
+                                            @string.Join(", ", opp.AvailableCountryNames)
+                                        }
+                                        else
+                                        {
+                                            <span>لا توجد دول محددة</span>
+                                        }
+                                    </td>
                                     <td>@opp.Type.ToString()</td>
                                     <td>@opp.PublishDate.ToString("yyyy-MM-dd HH:mm")</td>
                                     <td class="checkbox-cell">

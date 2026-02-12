@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Foras_Khadra.Migrations
 {
     /// <inheritdoc />
@@ -83,6 +85,21 @@ namespace Foras_Khadra.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Countries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NameFr = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Countries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -219,16 +236,25 @@ namespace Foras_Khadra.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TitleAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TitleEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TitleFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PublishDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PublishedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Details = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AvailableCountries = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EligibilityCriteria = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Benefits = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DescriptionAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DescriptionEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DescriptionFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DetailsAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DetailsEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DetailsFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EligibilityCriteriaAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EligibilityCriteriaEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EligibilityCriteriaFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BenefitsAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BenefitsEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BenefitsFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplyLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -275,6 +301,30 @@ namespace Foras_Khadra.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CountryOpportunity",
+                columns: table => new
+                {
+                    AvailableCountriesId = table.Column<int>(type: "int", nullable: false),
+                    OpportunitiesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CountryOpportunity", x => new { x.AvailableCountriesId, x.OpportunitiesId });
+                    table.ForeignKey(
+                        name: "FK_CountryOpportunity_Countries_AvailableCountriesId",
+                        column: x => x.AvailableCountriesId,
+                        principalTable: "Countries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CountryOpportunity_Opportunities_OpportunitiesId",
+                        column: x => x.OpportunitiesId,
+                        principalTable: "Opportunities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ReelsRequests",
                 columns: table => new
                 {
@@ -309,6 +359,35 @@ namespace Foras_Khadra.Migrations
                         principalTable: "Organizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "Id", "NameAr", "NameEn", "NameFr" },
+                values: new object[,]
+                {
+                    { 1, "فلسطين", "Palestine", "Palestine" },
+                    { 2, "الأردن", "Jordan", "Jordanie" },
+                    { 3, "سوريا", "Syria", "Syrie" },
+                    { 4, "لبنان", "Lebanon", "Liban" },
+                    { 5, "العراق", "Iraq", "Irak" },
+                    { 6, "السعودية", "Saudi Arabia", "Arabie saoudite" },
+                    { 7, "الكويت", "Kuwait", "Koweït" },
+                    { 8, "قطر", "Qatar", "Qatar" },
+                    { 9, "البحرين", "Bahrain", "Bahreïn" },
+                    { 10, "الإمارات العربية المتحدة", "United Arab Emirates", "Émirats arabes unis" },
+                    { 11, "عُمان", "Oman", "Oman" },
+                    { 12, "اليمن", "Yemen", "Yémen" },
+                    { 13, "مصر", "Egypt", "Égypte" },
+                    { 14, "السودان", "Sudan", "Soudan" },
+                    { 15, "ليبيا", "Libya", "Libye" },
+                    { 16, "تونس", "Tunisia", "Tunisie" },
+                    { 17, "الجزائر", "Algeria", "Algérie" },
+                    { 18, "المغرب", "Morocco", "Maroc" },
+                    { 19, "موريتانيا", "Mauritania", "Mauritanie" },
+                    { 20, "جيبوتي", "Djibouti", "Djibouti" },
+                    { 21, "الصومال", "Somalia", "Somalie" },
+                    { 22, "جزر القمر", "Comoros", "Comores" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -349,6 +428,11 @@ namespace Foras_Khadra.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CountryOpportunity_OpportunitiesId",
+                table: "CountryOpportunity",
+                column: "OpportunitiesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Opportunities_CreatedByUserId",
@@ -398,6 +482,9 @@ namespace Foras_Khadra.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CountryOpportunity");
+
+            migrationBuilder.DropTable(
                 name: "ReelsRequests");
 
             migrationBuilder.DropTable(
@@ -405,6 +492,9 @@ namespace Foras_Khadra.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Countries");
 
             migrationBuilder.DropTable(
                 name: "Opportunities");

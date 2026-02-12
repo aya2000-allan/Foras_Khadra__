@@ -216,13 +216,13 @@
         box-shadow: 0 0 0 .2rem rgba(43, 160, 82, .15) !important;
     }
 
-    /* Eye button */
-    .has-icon .auth-control{
-        padding-left:44px; /* because RTL, icon on left */
+    /* Eye button with RTL/LTR support */
+    .auth-input.has-icon .auth-control{
+        padding-left:44px;
+        padding-right:14px;
     }
     .auth-eye{
         position:absolute;
-        left:10px;
         top:50%;
         transform:translateY(-50%);
         border:0;
@@ -230,6 +230,25 @@
         color:#8aa496;
         padding:6px;
         cursor:pointer;
+    }
+
+    /* عربي: الأيقونة يسار، إنجليزي/فرنسي: الأيقونة يمين */
+    .auth-page[dir="rtl"] .auth-input.has-icon .auth-control{
+        padding-left:44px;
+        padding-right:14px;
+    }
+    .auth-page[dir="rtl"] .auth-eye{
+        left:10px;
+        right:auto;
+    }
+
+    .auth-page[dir="ltr"] .auth-input.has-icon .auth-control{
+        padding-right:44px;
+        padding-left:14px;
+    }
+    .auth-page[dir="ltr"] .auth-eye{
+        right:10px;
+        left:auto;
     }
 
     .auth-row .form-check-label{

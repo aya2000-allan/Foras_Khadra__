@@ -4,7 +4,9 @@ using Foras_Khadra.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Foras_Khadra.Controllers
 {
@@ -41,6 +43,7 @@ namespace Foras_Khadra.Controllers
 
         public IActionResult ReelsRequestsDashboard(string status = null)
         {
+            var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             var requests = _context.ReelsRequests
                 .Include(r => r.Organization)
                 .Include(r => r.Opportunity)
@@ -48,7 +51,9 @@ namespace Foras_Khadra.Controllers
                 {
                     Id = r.Id,
                     OpportunityId = r.OpportunityId,
-                    OpportunityTitle = r.Opportunity.Title,
+                    OpportunityTitle = lang == "en" ? r.Opportunity.TitleEn :
+                               lang == "fr" ? r.Opportunity.TitleFr :
+                               r.Opportunity.TitleAr,
                     OpportunityType = r.Opportunity.Type,
                     OrganizationName = r.Organization.Name,
                     RequestDate = r.RequestDate,

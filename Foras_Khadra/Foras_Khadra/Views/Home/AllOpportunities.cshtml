@@ -1,11 +1,16 @@
 ﻿@model Foras_Khadra.Models.AllOpportunitiesViewModel
 @using Foras_Khadra.Helpers
 @using Microsoft.AspNetCore.Mvc.Rendering
-
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"];
+    var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+}
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <link rel="stylesheet" href="~/css/all-opportunities.css" />
-
 
 
 <div class="page-wrapper container">
@@ -14,7 +19,7 @@
             <div class="header-logo">
                 <img src="/images/about_us_leaf.svg" alt="Logo" />
             </div>
-            <h1 class="header-title">جميع الفرص</h1>
+            <h1 class="header-title">@Localizer["all_opportunities"]</h1>
         </div>
         <div class="header-left">
             @* Temporarly unimplemented *@
@@ -29,50 +34,56 @@
         <div class="filter-window shadow" id="filterWindow">
             <div class="filter-window-header">
                 <span class="sort-by-label">
-                    عرض حسب
+                    @Localizer["sort_by"]
                     <i class="bi bi-caret-up-fill" style="font-size: 0.7rem; color: #B6C7B9;"></i>
                 </span>
-                <a href="@Url.Action("AllOpportunities", "Home")" class="reset-link">إعادة ضبط</a>
+                <a href="@Url.Action("AllOpportunities", "Home")" class="reset-link">@Localizer["reset"]</a>
             </div>
 
             <form method="get">
                 <div class="filter-option-item active" id="typeOptionTrigger">
-                    <span>نوع الفرصة</span>
+                    <span>
+                        @(lang switch
+                        {
+                            "en" => "Opportunity Type",
+                            "fr" => "Type d'opportunité",
+                            _ => "نوع الفرصة"
+                        })
+                    </span>
                     <i class="bi bi-caret-left-fill"></i>
                 </div>
-
                 
                 <div class="filter-option-item" id="countryOptionTrigger">
-                    <span>الدولة</span>
+                    <span> @Localizer["country"]</span>
                     <i class="bi bi-caret-left-fill"></i>
                 </div>
 
                 <div class="sub-filter-menu shadow" id="countrySubMenu">
                     <div class="p-2">
-                        <label class="form-label mb-2" style="font-size: 0.9rem; color: #666;">أدخل اسم الدولة</label>
+                        <label class="form-label mb-2" style="font-size: 0.9rem; color: #666;">@Localizer["enter_country_name"]</label>
                         <input type="text" name="country" class="form-control border-1 shadow-sm"
-                               placeholder="السودان" value="@Model.SelectedCountry" id="countryInput"
+                               placeholder=" @Localizer["PS"]" value="@Model.SelectedCountry" id="countryInput"
                                style="font-size: 0.9rem; direction: rtl;">
                     </div>
                     <div class="sub-menu-footer mt-3">
-                        <button type="button" class="btn-cancel-sub" id="cancelCountrySub">إلغاء</button>
-                        <button type="submit" class="btn-search-sub">بحث</button>
+                        <button type="button" class="btn-cancel-sub" id="cancelCountrySub">@Localizer["cancel"]</button>
+                        <button type="submit" class="btn-search-sub"> @Localizer["search"]</button>
                     </div>
                 </div>
 
                 <div class="sub-filter-menu shadow" id="typeSubMenu">
-                    <div class="checkbox-list">
-                    
-                        @foreach (var item in Model.TypeSelectList)
-                        {
-                            <label class="checkbox-item">
-                                <input type="checkbox" name="type" value="@item.Value" @(item.Selected ? "checked" : "")> @item.Text
-                            </label>
-                        }
-                    </div>
+                    @foreach (var item in Model.TypeSelectList)
+                    {
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="type" value="@item.Value" @(item.Selected ? "checked" : "")>
+                            @(Enum.Parse<OpportunityType>(item.Value).GetDisplayName(lang))
+                        </label>
+                    }
+
+
                     <div class="sub-menu-footer">
-                        <button type="button" class="btn-cancel-sub" id="cancelSub">إلغاء</button>
-                        <button type="submit" class="btn-search-sub">بحث</button>
+                        <button type="button" class="btn-cancel-sub" id="cancelSub">@Localizer["cancel"]</button>
+                        <button type="submit" class="btn-search-sub">@Localizer["search"]</button>
                     </div>
                 </div>
             </form>
@@ -83,8 +94,15 @@
         @if (!Model.Opportunities.Any())
         {
             <div class="col-12 text-center py-5">
-                <p class="text-muted">لا توجد فرص حالياً تطابق بحثك.</p>
-            </div>
+                <p class="text-muted">
+                    @(lang switch
+                    {
+                        "en" => "No opportunities match your search currently!",
+                        "fr" => "Aucune opportunité ne correspond à votre recherche pour le moment !",
+                        _ => "لا توجد فرص حالياً تطابق بحثك!"
+                    })
+            </p>
+        </div>
         }
         else{
             @foreach (var opp in Model.Opportunities)
@@ -93,15 +111,41 @@
                     <div class="opp-card shadow-sm">
                         @if (!string.IsNullOrEmpty(opp.ImagePath))
                         {
-                            <img src="@opp.ImagePath" class="opp-image" alt="@opp.Title">
+                            string title = lang switch
+                            {
+                                "en" => opp.TitleEn,
+                                "fr" => opp.TitleFr,
+                                _ => opp.TitleAr
+                            };
+                            <img src="@opp.ImagePath" class="opp-image" alt="@title">
                         }
                         <div class="opp-category-row">
-                            <span class="type-tag">@opp.Type.GetDisplayName()</span>
-                            <span class="category-tag">@opp.AvailableCountries</span>
+                            <span class="type-tag">@opp.Type.GetDisplayName(lang)</span>
+                            <span class="category-tag">@opp.AvailableCountriesNames</span>
                         </div>
-                        <h3 class="opp-title">@opp.Title</h3>
-                        <p class="opp-description">@opp.Description</p>
-                        <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">عرض التفاصيل</a>
+                        @{
+                            string title1 = lang switch
+                            {
+                                "en" => opp.TitleEn,
+                                "fr" => opp.TitleFr,
+                                _ => opp.TitleAr
+                            };
+                        }
+                        <h3 class="opp-title">@title1</h3>
+
+                        @{
+                            string description = lang switch
+                            {
+                                "en" => opp.DescriptionEn,
+                                "fr" => opp.DescriptionFr,
+                                _ => opp.DescriptionAr
+                            };
+                        }
+                        <p class="opp-description">@description</p>
+
+
+
+                        <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">@Localizer["view_details"] </a>
                     </div>
                 </div>
             }
@@ -109,7 +153,7 @@
     </div>
     <div class="pagination-container mt-5 mb-5">
         <div class="next-page-prompt">
-            <a href="#" id="nextPrompt">انتقل إلى الصفحة التالية</a>
+            <a href="#" id="nextPrompt">@Localizer["next_page"]</a>
         </div>
 
         <div class="pagination-controls" id="paginationControls">

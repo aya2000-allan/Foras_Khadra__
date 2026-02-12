@@ -117,73 +117,142 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Country" xml:space="preserve">
-    <value>الدولة</value>
+  <data name="AccountTypeInd" xml:space="preserve">
+    <value>حساب فردي</value>
   </data>
-  <data name="EditMyCard" xml:space="preserve">
-    <value>تعديل بطاقتي الشخصية</value>
+  <data name="AccountTypeOrg" xml:space="preserve">
+    <value>حساب منظمة</value>
   </data>
-  <data name="Email" xml:space="preserve">
+  <data name="BackBtn" xml:space="preserve">
+    <value>رجوع</value>
+  </data>
+  <data name="ConfirmPasswordLabel" xml:space="preserve">
+    <value>تأكيد كلمة المرور</value>
+  </data>
+  <data name="ConfirmPasswordPlaceholder" xml:space="preserve">
+    <value>أعد إدخال كلمة المرور</value>
+  </data>
+  <data name="ContactEmailLabel" xml:space="preserve">
     <value>البريد الإلكتروني</value>
   </data>
-  <data name="FirstName" xml:space="preserve">
-    <value>الاسم الأول</value>
+  <data name="ContactEmailPlaceholder" xml:space="preserve">
+    <value>بريد جهة الاتصال</value>
   </data>
-  <data name="Interests" xml:space="preserve">
-    <value>الاهتمامات</value>
+  <data name="ContactNameLabel" xml:space="preserve">
+    <value>جهة الاتصال</value>
   </data>
-  <data name="LastName" xml:space="preserve">
-    <value>اسم العائلة</value>
+  <data name="ContactNamePlaceholder" xml:space="preserve">
+    <value>اسم الشخص المسؤول</value>
   </data>
-  <data name="Nationality" xml:space="preserve">
-    <value>الجنسية</value>
+  <data name="CountryLabel" xml:space="preserve">
+    <value>الدولة</value>
   </data>
-  <data name="PageTitle" xml:space="preserve">
-    <value>حسابي</value>
-  </data>
-  <data name="CardSettings" xml:space="preserve">
-    <value> بطاقتي الشخصية</value>
-  </data>
-  <data name="ProfileView" xml:space="preserve">
-    <value>عرض بطاقتي الشخصية</value>
-  </data>
-  <data name="SaveChanges" xml:space="preserve">
-    <value>حفظ التعديلات</value>
-  </data>
-  <data name="SelectCountry" xml:space="preserve">
+  <data name="CountryPlaceholder" xml:space="preserve">
     <value>اختر الدولة</value>
   </data>
-  <data name="SelectNationality" xml:space="preserve">
-    <value>اختر الجنسية</value>
+  <data name="CreateAccountBtn" xml:space="preserve">
+    <value>إنشاء الحساب</value>
   </data>
-  <data name="SuccessMessage" xml:space="preserve">
-    <value>تم حفظ التعديلات بنجاح</value>
+  <data name="LocationLabel" xml:space="preserve">
+    <value>الموقع</value>
   </data>
-  <data name="ViewMyCard" xml:space="preserve">
-    <value>بطاقتي الشخصية</value>
+  <data name="LocationPlaceholder" xml:space="preserve">
+    <value>اكتب موقع المنظمة</value>
   </data>
-  <data name="competitions" xml:space="preserve">
-    <value>المسابقات</value>
+  <data name="NextBtn" xml:space="preserve">
+    <value>التالي</value>
   </data>
-  <data name="conferences" xml:space="preserve">
-    <value>المؤتمرات</value>
+  <data name="OkBtn" xml:space="preserve">
+    <value>حسنا</value>
   </data>
-  <data name="fellowships" xml:space="preserve">
-    <value>الزمالات</value>
+  <data name="OrgNameLabel" xml:space="preserve">
+    <value>اسم المنظمة</value>
   </data>
-  <data name="volunteer_opportunities" xml:space="preserve">
-    <value>فرص التطوع</value>
+  <data name="OrgNamePlaceholder" xml:space="preserve">
+    <value>اكتب اسم المنظمة</value>
   </data>
-  <data name="jobs" xml:space="preserve">
-    <value>الوظائف</value>
+  <data name="PageTitle" xml:space="preserve">
+    <value>تسجيل حساب المنظمة</value>
   </data>
-  <data name="grants" xml:space="preserve">
-    <value>المنح</value>
+  <data name="PasswordLabel" xml:space="preserve">
+    <value>كلمة المرور</value>
   </data>
-  <data name="training_pportunities" xml:space="preserve">
-    <value>فرص التدريب</value>
+  <data name="PasswordPlaceholder" xml:space="preserve">
+    <value>أدخل كلمة المرور</value>
   </data>
-  <data name="FullName" xml:space="preserve">
-    <value>الاسم الكامل</value>
+  <data name="PhoneNumberLabel" xml:space="preserve">
+    <value>رقم الهاتف</value>
+  </data>
+  <data name="PhoneNumberPlaceholder" xml:space="preserve">
+    <value>رقم هاتف المنظمة</value>
+  </data>
+  <data name="Progress25" xml:space="preserve">
+    <value>تم إنجاز %25</value>
+  </data>
+  <data name="Progress50" xml:space="preserve">
+    <value>تم إنجاز %50</value>
+  </data>
+  <data name="Progress75" xml:space="preserve">
+    <value>تم إنجاز %75</value>
+  </data>
+  <data name="Progress100" xml:space="preserve">
+    <value>تم إنجاز %100</value>
+  </data>
+  <data name="ProgressLabelAr" xml:space="preserve">
+    <value>تم إنجاز</value>
+  </data>
+  <data name="SectorLabel" xml:space="preserve">
+    <value>اسم القطاع</value>
+  </data>
+  <data name="SectorPlaceholder" xml:space="preserve">
+    <value>اكتب اسم القطاع</value>
+  </data>
+  <data name="Step1Title" xml:space="preserve">
+    <value>حدد نوع الحساب الخاص بك</value>
+  </data>
+  <data name="Step2Title" xml:space="preserve">
+    <value>معلومات المنظمة</value>
+  </data>
+  <data name="Step3Title" xml:space="preserve">
+    <value>الدولة والموقع</value>
+  </data>
+  <data name="Step4Title" xml:space="preserve">
+    <value>معلومات التواصل</value>
+  </data>
+  <data name="StepperStep1" xml:space="preserve">
+    <value>نوع الحساب</value>
+  </data>
+  <data name="StepperStep2" xml:space="preserve">
+    <value>معلومات المنظمة</value>
+  </data>
+  <data name="StepperStep3" xml:space="preserve">
+    <value>الدولة والموقع</value>
+  </data>
+  <data name="StepperStep4" xml:space="preserve">
+    <value>معلومات التواصل</value>
+  </data>
+  <data name="Subtitle" xml:space="preserve">
+    <value>أدخل معلومات منظمتك على خطوات بسيطة لإكمال إنشاء الحساب</value>
+  </data>
+  <data name="SwalFillAllFields" xml:space="preserve">
+    <value>يرجى ملء جميع الحقول المطلوبة</value>
+  </data>
+  <data name="SwalFillLocation" xml:space="preserve">
+    <value>أكمل بيانات الموقع</value>
+  </data>
+  <data name="SwalFillOrgData" xml:space="preserve">
+    <value>أكمل بيانات المنظمة</value>
+  </data>
+  <data name="SwalPasswordMismatch" xml:space="preserve">
+    <value>كلمة المرور غير متطابقة</value>
+  </data>
+  <data name="SwalSelectType" xml:space="preserve">
+    <value>اختار نوع الحساب</value>
+  </data>
+  <data name="WebsiteLabel" xml:space="preserve">
+    <value>الموقع الإلكتروني (اختياري)</value>
+  </data>
+  <data name="WebsitePlaceholder" xml:space="preserve">
+    <value>https://example.com</value>
   </data>
 </root>

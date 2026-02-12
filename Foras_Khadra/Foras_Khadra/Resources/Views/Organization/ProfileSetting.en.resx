@@ -117,73 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Country" xml:space="preserve">
-    <value>الدولة</value>
+  <data name="btn_save" xml:space="preserve">
+    <value>Save Changes</value>
   </data>
-  <data name="EditMyCard" xml:space="preserve">
-    <value>تعديل بطاقتي الشخصية</value>
+  <data name="edit_org_card" xml:space="preserve">
+    <value>Edit My Organization Card</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>البريد الإلكتروني</value>
+  <data name="edit_section_country_location" xml:space="preserve">
+    <value>Country and Location</value>
   </data>
-  <data name="FirstName" xml:space="preserve">
-    <value>الاسم الأول</value>
+  <data name="edit_section_org_info" xml:space="preserve">
+    <value>Organization Information</value>
   </data>
-  <data name="Interests" xml:space="preserve">
-    <value>الاهتمامات</value>
+  <data name="edit_section_personal_info" xml:space="preserve">
+    <value>Personal Information</value>
   </data>
-  <data name="LastName" xml:space="preserve">
-    <value>اسم العائلة</value>
+  <data name="org_contact_name_label" xml:space="preserve">
+    <value>Contact Name</value>
   </data>
-  <data name="Nationality" xml:space="preserve">
-    <value>الجنسية</value>
+  <data name="org_country_label" xml:space="preserve">
+    <value>Country</value>
   </data>
-  <data name="PageTitle" xml:space="preserve">
-    <value>حسابي</value>
+  <data name="org_email_label" xml:space="preserve">
+    <value>Email</value>
   </data>
-  <data name="CardSettings" xml:space="preserve">
-    <value> بطاقتي الشخصية</value>
+  <data name="org_id_card_title" xml:space="preserve">
+    <value>My Organization Card</value>
   </data>
-  <data name="ProfileView" xml:space="preserve">
-    <value>عرض بطاقتي الشخصية</value>
+  <data name="org_location_label" xml:space="preserve">
+    <value>Location</value>
   </data>
-  <data name="SaveChanges" xml:space="preserve">
-    <value>حفظ التعديلات</value>
+  <data name="org_name_label" xml:space="preserve">
+    <value>Organization Name</value>
   </data>
-  <data name="SelectCountry" xml:space="preserve">
-    <value>اختر الدولة</value>
+  <data name="org_phone_label" xml:space="preserve">
+    <value>Phone Number</value>
   </data>
-  <data name="SelectNationality" xml:space="preserve">
-    <value>اختر الجنسية</value>
+  <data name="org_sector_label" xml:space="preserve">
+    <value>Sector</value>
   </data>
-  <data name="SuccessMessage" xml:space="preserve">
-    <value>تم حفظ التعديلات بنجاح</value>
+  <data name="org_website_label" xml:space="preserve">
+    <value>Website</value>
   </data>
-  <data name="ViewMyCard" xml:space="preserve">
-    <value>بطاقتي الشخصية</value>
+  <data name="profile_title" xml:space="preserve">
+    <value>Account Settings</value>
   </data>
-  <data name="competitions" xml:space="preserve">
-    <value>المسابقات</value>
-  </data>
-  <data name="conferences" xml:space="preserve">
-    <value>المؤتمرات</value>
-  </data>
-  <data name="fellowships" xml:space="preserve">
-    <value>الزمالات</value>
-  </data>
-  <data name="volunteer_opportunities" xml:space="preserve">
-    <value>فرص التطوع</value>
-  </data>
-  <data name="jobs" xml:space="preserve">
-    <value>الوظائف</value>
-  </data>
-  <data name="grants" xml:space="preserve">
-    <value>المنح</value>
-  </data>
-  <data name="training_pportunities" xml:space="preserve">
-    <value>فرص التدريب</value>
-  </data>
-  <data name="FullName" xml:space="preserve">
-    <value>الاسم الكامل</value>
+  <data name="view_org_card" xml:space="preserve">
+    <value>View My Organization Card</value>
   </data>
 </root>

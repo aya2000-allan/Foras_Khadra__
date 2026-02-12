@@ -117,73 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Country" xml:space="preserve">
-    <value>الدولة</value>
+  <data name="الزمالات" xml:space="preserve">
+    <value>Fellowships</value>
   </data>
-  <data name="EditMyCard" xml:space="preserve">
-    <value>تعديل بطاقتي الشخصية</value>
+  <data name="المؤتمرات" xml:space="preserve">
+    <value>Conférences</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>البريد الإلكتروني</value>
+  <data name="المسابقات" xml:space="preserve">
+    <value>Concours</value>
   </data>
-  <data name="FirstName" xml:space="preserve">
-    <value>الاسم الأول</value>
+  <data name="المنح_الدراسية" xml:space="preserve">
+    <value>Bourses d'études</value>
   </data>
-  <data name="Interests" xml:space="preserve">
-    <value>الاهتمامات</value>
+  <data name="الوظائف" xml:space="preserve">
+    <value>Emplois</value>
   </data>
-  <data name="LastName" xml:space="preserve">
-    <value>اسم العائلة</value>
+  <data name="تاريخ النشر" xml:space="preserve">
+    <value>Date de publication</value>
   </data>
-  <data name="Nationality" xml:space="preserve">
-    <value>الجنسية</value>
+  <data name="رابط التقديم" xml:space="preserve">
+    <value>Lien pour postuler</value>
   </data>
-  <data name="PageTitle" xml:space="preserve">
-    <value>حسابي</value>
+  <data name="عرض التفاصيل" xml:space="preserve">
+    <value>Voir les détails</value>
   </data>
-  <data name="CardSettings" xml:space="preserve">
-    <value> بطاقتي الشخصية</value>
+  <data name="فرص_التدريب" xml:space="preserve">
+    <value>Opportunités de formation</value>
   </data>
-  <data name="ProfileView" xml:space="preserve">
-    <value>عرض بطاقتي الشخصية</value>
+  <data name="فرص_التطوع" xml:space="preserve">
+    <value>Opportunités de bénévolat</value>
   </data>
-  <data name="SaveChanges" xml:space="preserve">
-    <value>حفظ التعديلات</value>
-  </data>
-  <data name="SelectCountry" xml:space="preserve">
-    <value>اختر الدولة</value>
-  </data>
-  <data name="SelectNationality" xml:space="preserve">
-    <value>اختر الجنسية</value>
-  </data>
-  <data name="SuccessMessage" xml:space="preserve">
-    <value>تم حفظ التعديلات بنجاح</value>
-  </data>
-  <data name="ViewMyCard" xml:space="preserve">
-    <value>بطاقتي الشخصية</value>
-  </data>
-  <data name="competitions" xml:space="preserve">
-    <value>المسابقات</value>
-  </data>
-  <data name="conferences" xml:space="preserve">
-    <value>المؤتمرات</value>
-  </data>
-  <data name="fellowships" xml:space="preserve">
-    <value>الزمالات</value>
-  </data>
-  <data name="volunteer_opportunities" xml:space="preserve">
-    <value>فرص التطوع</value>
-  </data>
-  <data name="jobs" xml:space="preserve">
-    <value>الوظائف</value>
-  </data>
-  <data name="grants" xml:space="preserve">
-    <value>المنح</value>
-  </data>
-  <data name="training_pportunities" xml:space="preserve">
-    <value>فرص التدريب</value>
-  </data>
-  <data name="FullName" xml:space="preserve">
-    <value>الاسم الكامل</value>
+  <data name="نشرت بواسطة" xml:space="preserve">
+    <value>Publié par</value>
   </data>
 </root>
