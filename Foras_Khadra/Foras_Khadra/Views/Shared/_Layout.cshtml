@@ -365,6 +365,9 @@
 }
 
 
+.footer-container{
+    padding-top: 10%;
+}
     /* =========================
        FOOTER RESPONSIVE
     ========================= */
@@ -375,18 +378,17 @@
             align-items: center;
             gap: 28px;
             text-align: center;
+            padding-top: 15%;
+
         }
         .footer-left { width: 100%; display: flex; flex-direction: column; align-items: center; }
 
         .footer-links {
             width: 100%;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 18px;
-            justify-items: center;
+           
         }
 
-        .footer-column { width: 100%; max-width: 420px; }
+        .footer-column {  max-width: 420px; }
         .footer-logo { width: 100%; display: flex; justify-content: center; }
         .footer-logo img { max-width: 180px; height: auto; }
 
@@ -397,7 +399,7 @@
     /* =========================
        DESKTOP FOOTER FIX (4 columns)
     ========================= */
-    @@media (min-width: 993px) {
+    @@media (min-width: 1400px) {
         .footer-container{
             display: flex !important;
             align-items: center !important;
@@ -413,7 +415,6 @@
         }
 
         .footer-column{
-            width: 100% !important;
             max-width: none !important;
         }
 
@@ -490,9 +491,9 @@
                             <button class="nav-btn" type="button" onclick="toggleDropdown('loginMenu', event)">
                                 @Localizer["Login"]
                             </button>
-                            <div class="dropdown-list" id="loginMenu">
-                                <a asp-controller="Account" asp-action="Login" data-close-menu>@Localizer["Individual"]</a>
-                                <a asp-controller="Organization" asp-action="Login" data-close-menu>@Localizer["Organization"]</a>
+                            <div class="dropdown-list" id="loginMenu" >
+                                <a asp-controller="Account" asp-action="Login" style="justify-content: center !important;" data-close-menu>@Localizer["Individual"]</a>
+                                <a asp-controller="Organization" asp-action="Login" style="justify-content: center !important;" data-close-menu>@Localizer["Organization"]</a>
                             </div>
                         </div>
 
