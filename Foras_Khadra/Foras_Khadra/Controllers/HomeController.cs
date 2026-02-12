@@ -96,26 +96,23 @@ namespace Foras_Khadra.Controllers
         // ================= الفرص حسب النوع مع فلترة الدولة =================
 
         // ================= الفرص حسب النوع مع فلترة الدولة =================
-        private IActionResult GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType type, string country, string typeName)
+        private IActionResult GetOpportunitiesByType(OpportunityType type, string country, string typeName)
         {
-            // جلب كل الفرص من قاعدة البيانات حسب النوع
-            var opportunities = _context.Opportunities
-                                        .Where(o => o.Type == type)
-                                        .ToList(); // ⚡ جلب للذاكرة لتسهيل الفلترة النصية
+            var query = _context.Opportunities
+                                .Include(o => o.AvailableCountries)
+                                .Where(o => o.Type == type);
 
             if (!string.IsNullOrEmpty(country))
             {
-                // الفلترة في الذاكرة حسب الدولة
-                opportunities = opportunities
-                    .Where(o => !string.IsNullOrEmpty(o.AvailableCountries) &&
-                                o.AvailableCountries
-                                  .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                  .Select(c => c.Trim())
-                                  .Contains(country.Trim(), StringComparer.OrdinalIgnoreCase))
-                    .ToList();
+                query = query.Where(o =>
+                    o.AvailableCountries.Any(c =>
+                        c.NameEn == country ||
+                        c.NameAr == country ||
+                        c.NameFr == country));
             }
 
-            // إنشاء الموديل لعرضه في الفيو
+            var opportunities = query.ToList();
+
             var model = new AllOpportunitiesViewModel
             {
                 Opportunities = opportunities,
@@ -165,48 +162,44 @@ namespace Foras_Khadra.Controllers
         // ================= صفحة كل الفرص العامة =================
         public IActionResult AllOpportunities(string country, string type)
         {
-            // جلب كل الفرص أولاً
-            var allOpportunities = _context.Opportunities.ToList();
+            var query = _context.Opportunities
+                                .Include(o => o.AvailableCountries)
+                                .AsQueryable();
 
-            // فلترة حسب النوع
-            if (!string.IsNullOrEmpty(type) && Enum.TryParse<Foras_Khadra.Models.OpportunityType>(type, out var parsedType))
+            if (!string.IsNullOrEmpty(type) &&
+                Enum.TryParse<OpportunityType>(type, out var parsedType))
             {
-                allOpportunities = allOpportunities
-                    .Where(o => o.Type == parsedType)
-                    .ToList();
+                query = query.Where(o => o.Type == parsedType);
             }
 
-            // فلترة حسب الدولة
             if (!string.IsNullOrEmpty(country))
             {
-                allOpportunities = allOpportunities
-                    .Where(o => !string.IsNullOrEmpty(o.AvailableCountries) &&
-                                o.AvailableCountries
-                                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                    .Select(c => c.Trim())
-                                    .Contains(country.Trim(), StringComparer.OrdinalIgnoreCase))
-                    .ToList();
+                query = query.Where(o =>
+                    o.AvailableCountries.Any(c =>
+                        c.NameEn == country ||
+                        c.NameAr == country ||
+                        c.NameFr == country));
             }
 
-            // توليد قائمة الدول للفلتر
-            var countries = allOpportunities
-                .SelectMany(o => o.AvailableCountries
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(c => c.Trim()))
-                .Distinct()
-                .OrderBy(c => c)
-                .ToList();
+            var allOpportunities = query.ToList();
 
-            // إنشاء الموديل
+            var countries = _context.Countries
+                                    .OrderBy(c => c.NameAr)
+                                    .Select(c => c.NameAr)
+                                    .ToList();
+
             var model = new AllOpportunitiesViewModel
             {
                 Opportunities = allOpportunities,
                 SelectedCountry = country,
-                SelectedType = string.IsNullOrEmpty(type) ? null : Enum.Parse<Foras_Khadra.Models.OpportunityType>(type),
+                SelectedType = string.IsNullOrEmpty(type)
+                                ? null
+                                : Enum.Parse<OpportunityType>(type),
                 Countries = countries
             };
 
             return View(model);
         }
+
     }
 }

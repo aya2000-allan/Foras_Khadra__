@@ -2,8 +2,16 @@
 @model Foras_Khadra.Models.Opportunity
 
 @{
-    ViewData["Title"] = Model.Title;
+    var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    string pageTitle = lang switch
+    {
+        "en" => Model.TitleEn,
+        "fr" => Model.TitleFr,
+        _ => Model.TitleAr
+    };
+    ViewData["Title"] = pageTitle;
 }
+
 
 <link href="~/css/opportunity-deatails.css" rel="stylesheet" />
 <div class="opp-container">
@@ -24,7 +32,18 @@
                     <a asp-controller="Home" asp-action="AllOpportunities" style="text-decoration:none" ><span style="transform: scaleY(-1);color:#F99D27">↪</span></a>
                 }
             </div>
-            <span>@Model.Title</span>
+            @{
+                string title = lang switch
+                {
+                    "en" => Model.TitleEn,
+                    "fr" => Model.TitleFr,
+                    _ => Model.TitleAr
+                };
+            }
+            <span>@title</span>
+
+
+
         </div>
         @if (!string.IsNullOrEmpty(Model.ApplyLink))
         {
@@ -63,7 +82,17 @@
                 <span class="info-value">@Model.AvailableCountries</span>
 
                 <span class="info-label">الوصف</span>
-                <span class="info-value"> @Model.Description</span>
+                @{
+                    string description = lang switch
+                    {
+                        "en" => Model.DescriptionEn,
+                        "fr" => Model.DescriptionFr,
+                        _ => Model.DescriptionAr
+                    };
+                }
+                <span class="info-value">@description</span>
+
+
             </div>
             
         </div>
@@ -81,13 +110,42 @@
 
     <div class="details-card">
         <div class="section-title">التفاصيل</div>
-        <div class="section-content">@Model.Details</div>
+        @{
+            string details = lang switch
+            {
+                "en" => Model.DetailsEn,
+                "fr" => Model.DetailsFr,
+                _ => Model.DetailsAr
+            };
+        }
+        <div class="section-content">@details</div>
+
+
+
 
         <div class="section-title">معايير القبول</div>
-        <div class="section-content">@Model.EligibilityCriteria</div>
+        @{
+            string eligibilitycriteria = lang switch
+            {
+                "en" => Model.EligibilityCriteriaEn,
+                "fr" => Model.EligibilityCriteriaFr,
+                _ => Model.EligibilityCriteriaAr
+            };
+        }
+        <div class="section-content">@eligibilitycriteria</div>
+       
 
         <div class="section-title">مميزات الفرصة</div>
-        <div class="section-content">@Model.Benefits</div>
+        @{
+            string benefits = lang switch
+            {
+                "en" => Model.BenefitsEn,
+                "fr" => Model.BenefitsFr,
+                _ => Model.BenefitsAr
+            };
+        }
+        <div class="section-content">@benefits</div>
+       
     </div>
 
    

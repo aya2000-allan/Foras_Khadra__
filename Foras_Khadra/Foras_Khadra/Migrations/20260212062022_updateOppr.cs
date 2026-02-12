@@ -5,7 +5,7 @@
 namespace Foras_Khadra.Migrations
 {
     /// <inheritdoc />
-    public partial class updateRegOrg : Migration
+    public partial class updateOppr : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -83,7 +83,7 @@
                             <div class="opp-img-container">
                                 <img src="@(string.IsNullOrEmpty(opp.ImagePath) ? "/images/default.jpg" : opp.ImagePath)" alt="Opp Image" />
                             </div>
-                            <span class="opp-title-text">@opp.Title</span>
+                            <span class="opp-title-text">@opp.TitleAr</span>
                         </div>
 
                          <div class="info-col">
@@ -104,7 +104,7 @@
                              <form method="post" >
                                 <button type="button"
                                         class="action-icon delete-btn"
-                                        onclick="openDeleteModal('@opp.Id', '@opp.Title')">
+                                        onclick="openDeleteModal('@opp.Id', '@opp.TitleAr')">
                                     <i class="bi bi-trash-fill"></i>
                                 </button>                           
                              </form>

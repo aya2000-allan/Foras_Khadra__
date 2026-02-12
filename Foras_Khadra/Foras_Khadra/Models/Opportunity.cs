@@ -9,7 +9,13 @@ namespace Foras_Khadra.Models
         public int Id { get; set; }
 
         [Required]
-        public string Title { get; set; }
+        public string TitleAr { get; set; }
+
+        [Required]
+        public string TitleEn { get; set; }
+
+        [Required]
+        public string TitleFr { get; set; }
 
         public string ImagePath { get; set; } // اختياري بعد الإنشاء
 
@@ -21,16 +27,41 @@ namespace Foras_Khadra.Models
         public OpportunityType Type { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public string DescriptionAr { get; set; }
 
-        public string Details { get; set; }
+        [Required]
+        public string DescriptionEn { get; set; }
+        [Required]
+        public string DescriptionFr { get; set; }
 
-        public string AvailableCountries { get; set; }
 
-        public string EligibilityCriteria { get; set; }
+        [Required]
+        public string DetailsAr { get; set; }
 
-        public string Benefits { get; set; }
 
+        [Required]
+        public string DetailsEn { get; set; }
+
+
+        [Required]
+        public string DetailsFr { get; set; }
+
+        [Required]
+        public virtual ICollection<Country> AvailableCountries { get; set; }
+
+        [Required]
+        public string EligibilityCriteriaAr { get; set; }
+
+        [Required]
+        public string EligibilityCriteriaEn { get; set; }
+        [Required]
+        public string EligibilityCriteriaFr { get; set; }
+        [Required]
+        public string BenefitsAr { get; set; }
+        [Required]
+        public string BenefitsEn { get; set; }
+        [Required]
+        public string BenefitsFr { get; set; }
         [Required]
         public string ApplyLink { get; set; }
 
@@ -47,6 +78,24 @@ namespace Foras_Khadra.Models
 
         public virtual ICollection<ReelsRequest> ReelsRequests { get; set; }
 
+        [NotMapped]
+        public string AvailableCountriesNames
+        {
+            get
+            {
+                var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+                if (AvailableCountries == null || !AvailableCountries.Any())
+                    return string.Empty;
+
+                return string.Join(", ", AvailableCountries.Select(c => lang switch
+                {
+                    "en" => c.NameEn,
+                    "fr" => c.NameFr,
+                    _ => c.NameAr
+                }));
+            }
+        }
 
     }
 }

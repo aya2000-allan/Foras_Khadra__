@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foras_Khadra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260207095259_UpdateIntersets")]
-    partial class UpdateIntersets
+    [Migration("20260212051551_updateOpp")]
+    partial class updateOpp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace Foras_Khadra.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CountryOpportunity", b =>
+                {
+                    b.Property<int>("AvailableCountriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OpportunitiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AvailableCountriesId", "OpportunitiesId");
+
+                    b.HasIndex("OpportunitiesId");
+
+                    b.ToTable("CountryOpportunity");
+                });
 
             modelBuilder.Entity("Foras_Khadra.Models.ApplicationUser", b =>
                 {
@@ -184,6 +199,187 @@ namespace Foras_Khadra.Migrations
                     b.ToTable("Articles");
                 });
 
+            modelBuilder.Entity("Foras_Khadra.Models.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameFr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            NameAr = "فلسطين",
+                            NameEn = "Palestine",
+                            NameFr = "Palestine"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            NameAr = "الأردن",
+                            NameEn = "Jordan",
+                            NameFr = "Jordanie"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            NameAr = "سوريا",
+                            NameEn = "Syria",
+                            NameFr = "Syrie"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            NameAr = "لبنان",
+                            NameEn = "Lebanon",
+                            NameFr = "Liban"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            NameAr = "العراق",
+                            NameEn = "Iraq",
+                            NameFr = "Irak"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            NameAr = "السعودية",
+                            NameEn = "Saudi Arabia",
+                            NameFr = "Arabie saoudite"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            NameAr = "الكويت",
+                            NameEn = "Kuwait",
+                            NameFr = "Koweït"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            NameAr = "قطر",
+                            NameEn = "Qatar",
+                            NameFr = "Qatar"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            NameAr = "البحرين",
+                            NameEn = "Bahrain",
+                            NameFr = "Bahreïn"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            NameAr = "الإمارات العربية المتحدة",
+                            NameEn = "United Arab Emirates",
+                            NameFr = "Émirats arabes unis"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            NameAr = "عُمان",
+                            NameEn = "Oman",
+                            NameFr = "Oman"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            NameAr = "اليمن",
+                            NameEn = "Yemen",
+                            NameFr = "Yémen"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            NameAr = "مصر",
+                            NameEn = "Egypt",
+                            NameFr = "Égypte"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            NameAr = "السودان",
+                            NameEn = "Sudan",
+                            NameFr = "Soudan"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            NameAr = "ليبيا",
+                            NameEn = "Libya",
+                            NameFr = "Libye"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            NameAr = "تونس",
+                            NameEn = "Tunisia",
+                            NameFr = "Tunisie"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            NameAr = "الجزائر",
+                            NameEn = "Algeria",
+                            NameFr = "Algérie"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            NameAr = "المغرب",
+                            NameEn = "Morocco",
+                            NameFr = "Maroc"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            NameAr = "موريتانيا",
+                            NameEn = "Mauritania",
+                            NameFr = "Mauritanie"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            NameAr = "جيبوتي",
+                            NameEn = "Djibouti",
+                            NameFr = "Djibouti"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            NameAr = "الصومال",
+                            NameEn = "Somalia",
+                            NameFr = "Somalie"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            NameAr = "جزر القمر",
+                            NameEn = "Comoros",
+                            NameFr = "Comores"
+                        });
+                });
+
             modelBuilder.Entity("Foras_Khadra.Models.Opportunity", b =>
                 {
                     b.Property<int>("Id")
@@ -196,11 +392,15 @@ namespace Foras_Khadra.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("AvailableCountries")
+                    b.Property<string>("BenefitsAr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Benefits")
+                    b.Property<string>("BenefitsEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BenefitsFr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -208,15 +408,39 @@ namespace Foras_Khadra.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("DescriptionAr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Details")
+                    b.Property<string>("DescriptionEn")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EligibilityCriteria")
+                    b.Property<string>("DescriptionFr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsFr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EligibilityCriteriaAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EligibilityCriteriaEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EligibilityCriteriaFr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -231,7 +455,15 @@ namespace Foras_Khadra.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("TitleAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleFr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -532,6 +764,21 @@ namespace Foras_Khadra.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("CountryOpportunity", b =>
+                {
+                    b.HasOne("Foras_Khadra.Models.Country", null)
+                        .WithMany()
+                        .HasForeignKey("AvailableCountriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Foras_Khadra.Models.Opportunity", null)
+                        .WithMany()
+                        .HasForeignKey("OpportunitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Foras_Khadra.Models.Opportunity", b =>
