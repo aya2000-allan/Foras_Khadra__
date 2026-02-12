@@ -141,15 +141,20 @@ namespace Foras_Khadra.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var opp = await _context.Opportunities.FindAsync(id);
+            var opp = await _context.Opportunities
+                .Include(o => o.AvailableCountries) // مهم لتجنب null
+                .FirstOrDefaultAsync(o => o.Id == id);
+
             if (opp == null) return NotFound();
 
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null) return RedirectToAction("Login", "Account");
 
-            // تحقق أن المستخدم هو منشئ الفرصة أو Admin
             if (opp.CreatedByUserId != currentUser.Id && !await _userManager.IsInRoleAsync(currentUser, "Admin"))
                 return Forbid();
+
+            // جلب كل الدول
+            var countries = await _context.Countries.ToListAsync();
 
             var model = new OpportunityEditVM
             {
@@ -165,7 +170,13 @@ namespace Foras_Khadra.Controllers
                 DetailsAr = opp.DetailsAr,
                 DetailsEn = opp.DetailsEn,
                 DetailsFr = opp.DetailsFr,
-                AvailableCountryIds = opp.AvailableCountries.Select(c => c.Id).ToList(),
+                AvailableCountryIds = opp.AvailableCountries?.Select(c => c.Id).ToList() ?? new List<int>(),
+                CountriesSelectList = countries.Select(c => new SelectListItem
+                {
+                    Text = c.NameAr,
+                    Value = c.Id.ToString(),
+                    Selected = opp.AvailableCountries?.Any(ac => ac.Id == c.Id) ?? false
+                }).ToList(),
                 BenefitsAr = opp.BenefitsAr,
                 BenefitsEn = opp.BenefitsEn,
                 BenefitsFr = opp.BenefitsFr,
@@ -179,11 +190,14 @@ namespace Foras_Khadra.Controllers
             return View(model);
         }
 
+
         [Authorize(Roles = "Admin,Organization")]
         [HttpPost]
         public async Task<IActionResult> Edit(OpportunityEditVM model)
         {
-            var old = await _context.Opportunities.FindAsync(model.Id);
+            var old = await _context.Opportunities
+                .Include(o => o.AvailableCountries)
+                .FirstOrDefaultAsync(o => o.Id == model.Id);
             if (old == null) return NotFound();
 
             var currentUser = await _userManager.GetUserAsync(User);
@@ -213,10 +227,21 @@ namespace Foras_Khadra.Controllers
             old.DetailsAr = model.DetailsAr ?? old.DetailsAr;
             old.DetailsEn = model.DetailsEn ?? old.DetailsEn;
             old.DetailsFr = model.DetailsFr ?? old.DetailsFr;
-            if (model.AvailableCountryIds?.Count > 0)
-                old.AvailableCountries = await _context.Countries
-                                            .Where(c => model.AvailableCountryIds.Contains(c.Id))
-                                            .ToListAsync();
+            if (model.AvailableCountryIds != null)
+            {
+                // إزالة كل الدول القديمة
+                old.AvailableCountries.Clear();
+
+                // جلب الدول الجديدة من قاعدة البيانات
+                var selectedCountries = await _context.Countries
+                    .Where(c => model.AvailableCountryIds.Contains(c.Id))
+                    .ToListAsync();
+
+                foreach (var country in selectedCountries)
+                {
+                    old.AvailableCountries.Add(country);
+                }
+            }
             old.EligibilityCriteriaAr = model.EligibilityCriteriaAr ?? old.EligibilityCriteriaAr;
             old.EligibilityCriteriaEn = model.EligibilityCriteriaEn ?? old.EligibilityCriteriaEn;
             old.EligibilityCriteriaFr = model.EligibilityCriteriaFr ?? old.EligibilityCriteriaFr;
