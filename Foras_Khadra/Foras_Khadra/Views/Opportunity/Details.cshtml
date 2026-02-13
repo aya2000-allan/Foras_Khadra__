@@ -5,7 +5,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["PageTitle"];
+
     var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     string pageTitle = lang switch
     {
@@ -80,11 +80,11 @@
         {
             if (User.IsInRole("Admin") || User.IsInRole("User") || User.IsInRole("Organization"))
             {
-                <a href="@Model.ApplyLink" target="_blank" class="apply-button">قدم الآن</a>
+                <a href="@Model.ApplyLink" target="_blank" class="apply-button">@Localizer["ApplyNow"]</a>
             }
             else if (!User.Identity.IsAuthenticated)
             {
-                <a href="javascript:void(0);" class="apply-button" id="guestApply">قدم الآن</a>
+                <a href="javascript:void(0);" class="apply-button" id="guestApply">@Localizer["ApplyNow"]</a>
             }
         }
 
@@ -94,13 +94,13 @@
     <div class="main-card">
         <div class="card-info-content">
             <div class="info-grid">
-                <span class="info-label">تاريخ النشر</span>
+                <span class="info-label">@Localizer["PublishDate"]</span>
                 <span class="info-value">@Model.PublishDate.ToShortDateString()</span>
 
-                <span class="info-label">@Localizer["نوع الفرصة"]</span>
+                <span class="info-label">@Localizer["OpportunityType"]</span>
                 <span class="info-value">@Model.Type.GetDisplayName(lang)</span>
                 
-                <span class="info-label">الناشر</span>
+                <span class="info-label">@Localizer["Publisher"]</span>
                 <span class="info-value">
                     @{
                         string publisherText;
@@ -128,7 +128,7 @@
                     }
                 </span>
 
-                <span class="info-label">الدول المتاحة</span>
+                <span class="info-label">@Localizer["AvailableCountries"]</span>
                 <span class="info-value">
                     @string.Join(", ", Model.AvailableCountries.Select(c =>
                     lang switch
@@ -139,7 +139,7 @@
                     }
                                         ))
                 </span>
-                <span class="info-label">الوصف</span>
+                <span class="info-label">@Localizer["Description"]</span>
                 @{
                     string description = lang switch
                     {
@@ -167,7 +167,7 @@
     </div>
 
     <div class="details-card">
-        <div class="section-title">التفاصيل</div>
+        <div class="section-title">@Localizer["Details"]</div>
         @{
             string details = lang switch
             {
@@ -181,7 +181,7 @@
 
 
 
-        <div class="section-title">معايير القبول</div>
+        <div class="section-title">@Localizer["EligibilityCriteria"]</div>
         @{
             string eligibilitycriteria = lang switch
             {
@@ -193,7 +193,7 @@
         <div class="section-content">@Html.Raw(eligibilitycriteria)</div>
 
 
-        <div class="section-title">مميزات الفرصة</div>
+        <div class="section-title">@Localizer["Benefits"]</div>
         @{
             string benefits = lang switch
             {
