@@ -1,4 +1,4 @@
-﻿@model Foras_Khadra.Models.OpportunityCreateVM
+@model Foras_Khadra.Models.OpportunityCreateVM
 @using Foras_Khadra.Models
 @{
     ViewData["Title"] = "إضافة فرصة جديدة";
@@ -10,7 +10,7 @@
     <h2 class="page-title">إضافة فرصة جديدة</h2>
     @if (!User.IsInRole("Organization"))
     {
-        <a asp-controller="Admin" asp-action="Index" class="btn-back-dashboard">العودة للوحة التحكم</a>
+        <a asp-controller="Opportunity" asp-action="Index" class="btn-back-dashboard">العودة للوحة التحكم</a>
     }
 </div>
 
@@ -140,7 +140,8 @@
                        name="PublishedBy"
                        value="@(User.Identity.Name.Contains("@") ? "Admin" : User.Identity.Name)"
                        readonly
-                       class="published-by-box" />
+                       class="published-by-box"
+                       style="background: #bbcfbe7d;" />
                 <span asp-validation-for="PublishedBy" class="text-danger"></span>
             </div>
 
@@ -211,6 +212,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         // =================== Initialize Quill Editors ===================
@@ -261,10 +263,33 @@
             if(activeTabPane.id === 'arabic' && quillAr.getText().trim() === '') allFilled = false;
             if(activeTabPane.id === 'english' && quillEn.getText().trim() === '') allFilled = false;
             if(activeTabPane.id === 'french' && quillFr.getText().trim() === '') allFilled = false;
-
+            
             if(!allFilled){
                 e.preventDefault();
-                alert('الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال أو الحفظ!');
+                Swal.fire({
+                    title: 'تنبيه',
+                    html: 'الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال أو الحفظ!',
+                    icon: 'warning',
+                    confirmButtonText: 'حسناً',
+                    customClass: {
+                        popup: 'custom-swal-popup',
+                        title: 'custom-swal-title',
+                        htmlContainer: 'custom-swal-text',
+                        confirmButton: 'custom-swal-confirm',
+                        closeButton: 'custom-swal-close'
+                    },
+                    showCloseButton: true,
+                    buttonsStyling: false,
+                    didOpen: () => {
+                        const popup = Swal.getPopup();
+                        popup.style.border = '1px solid #C77E1F';
+                        popup.style.borderRadius = '16px';
+                        popup.style.paddingBottom = '25px';
+                        popup.style.paddingTop = '20px';
+                        popup.style.width='740px';
+                        popup.style.direction = 'rtl';
+                    }
+                });
             }
         });
 
@@ -291,9 +316,98 @@
 
                 if(!allFilled){
                     e.preventDefault(); // يمنع تغيير التاب
-                    alert('الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال!');
+                    Swal.fire({
+                        title: 'تنبيه',
+                        html: 'الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال!',
+                        icon: 'warning',
+                        confirmButtonText: 'حسناً',
+                        customClass: {
+                            popup: 'custom-swal-popup',
+                            title: 'custom-swal-title',
+                            htmlContainer: 'custom-swal-text',
+                            confirmButton: 'custom-swal-confirm',
+                            closeButton: 'custom-swal-close'
+                        },
+                        showCloseButton: true,
+                        buttonsStyling: false,
+                        didOpen: () => {
+                            const popup = Swal.getPopup();
+                            popup.style.border = '1px solid #C77E1F';
+                            popup.style.borderRadius = '16px';
+                            popup.style.paddingBottom = '25px';
+                            popup.style.paddingTop = '20px';
+                            popup.style.width='740px';
+                            popup.style.direction = 'rtl';
+                        }
+                    });
                 }
             });
         });
     </script>
+
+    <style>
+        .custom-swal-title {
+            color: #333;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .custom-swal-text {
+            color: #666;
+            font-size: 20px;
+        }
+
+        .custom-swal-confirm {
+            background-color: #F99D27;
+            color: white;
+            border: none;
+            padding: 14px 45px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 8px;
+            width: 200px;
+            height: 65px;
+            border-radius: 16px;
+        }
+        
+        .custom-swal-confirm:hover {
+            background-color: #e88d1a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3);
+        }
+        
+        .custom-swal-cancel {
+            background-color: white;
+            color: #F99D27;
+            border: 2px solid #F99D27;
+            padding: 14px 45px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 8px;
+            width: 200px;
+            height: 65px;
+            border-radius: 16px;
+        }
+        
+        .custom-swal-cancel:hover {
+            background-color: #FFF5E6;
+            transform: translateY(-2px);
+        }
+        
+        .custom-swal-close {
+            color: #999;
+            font-size: 28px;
+            position: relative;
+            left: auto !important;
+            right: -93% !important;
+        }
+        
+        .custom-swal-close:hover {
+            color: #F99D27;
+        }
+    </style>
 }

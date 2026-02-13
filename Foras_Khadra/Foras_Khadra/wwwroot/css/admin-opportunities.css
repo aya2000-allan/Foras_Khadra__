@@ -217,7 +217,7 @@
   text-align: center;
   position: relative;
   direction: rtl;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
 }
 
 /* Close button */
@@ -283,4 +283,8 @@
   padding: 14px 65px;
   border-radius: 22px;
   cursor: pointer;
+}
+
+a:hover {
+  color: #25652c;
 }

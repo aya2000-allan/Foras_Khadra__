@@ -325,3 +325,7 @@
 .page-link-num {
   cursor: pointer;
 }
+
+a:hover {
+  color: var(--primary-green);
+}

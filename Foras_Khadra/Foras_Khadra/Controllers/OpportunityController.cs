@@ -292,6 +292,7 @@ namespace Foras_Khadra.Controllers
         }
 
         // ================= DETAILS =================
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {

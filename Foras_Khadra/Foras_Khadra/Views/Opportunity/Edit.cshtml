@@ -13,7 +13,7 @@
     <h2 class="page-title"> تعديل الفرصة </h2>
     @if (!User.IsInRole("Organization"))
     {
-        <a asp-controller="Admin" asp-action="Index" class="btn-back-dashboard">
+        <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
             العودة للوحة التحكم
         </a>
     }
@@ -72,7 +72,7 @@
 
             <!-- PublishedBy -->
             <div class="field">
-                <input asp-for="PublishedBy" readonly value="@Model.PublishedBy" placeholder="نشر بواسطة" class="published-by-box" />
+                <input asp-for="PublishedBy" readonly value="@Model.PublishedBy" placeholder="نشر بواسطة" class="published-by-box" style="background: #bbcfbe7d;"  />
                 <span asp-validation-for="PublishedBy" class="text-danger"></span>
             </div>
 
@@ -179,6 +179,12 @@
             </div>
 
         </form>
+    </div>
+     <div class="side-panel">
+        <div class="side-bg"></div>
+        <div class="side-illustration">
+            <img src="~/images/contact_illustration.svg" alt="">
+        </div>
     </div>
 </div>
 
