@@ -41,26 +41,108 @@
             transform: scale(1.1); /* تكبير بسيط */
             cursor: default;
         }
+
+    .section-title {
+        text-align: inherit;
+    }
+    /* ===== اتجاه الصفحة ===== */
+
+    .opp-container[dir="rtl"] {
+        direction: rtl;
+        text-align: right;
+    }
+
+    .opp-container[dir="ltr"] {
+        direction: ltr;
+        text-align: left;
+    }
+
+    /* ===== سهم الرجوع احترافي ونهائي ===== */
+
+    .back-link {
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .back-arrow {
+        color: #F99D27;
+        font-size: 22px;
+        display: inline-block;
+        transition: transform 0.2s ease;
+    }
+
+   
+   
+    .opp-container[dir="rtl"] .verify-badge-circle {
+        margin-right: 6px;
+        margin-left: 0;
+    }
+
+    .opp-container[dir="ltr"] .verify-badge-circle {
+        margin-left: 6px;
+        margin-right: 0;
+    }
+    /* ===== سهم الرجوع حسب اللغة ===== */
+
+    
+
+    /* أيقونة السهم */
+    .back-icon {
+        transition: transform 0.2s ease;
+    }
+
+    .back-link {
+        text-decoration: none;
+        color: #F99D27;
+        font-size: 22px;
+        display: inline-flex;
+        align-items: center;
+    }
+    .ltr-content {
+        text-align: left;
+        direction: ltr;
+    }
+
+    .rtl-label {
+        text-align: right;
+        direction: rtl;
+    }
+
+    .ltr-label {
+        text-align: left;
+        direction: ltr;
+    }
+
+    /* إنجليزي + فرنسي LTR → السهم يطلع لليمين */
+    .opp-container[dir="ltr"] .back-icon {
+        transform: scaleX(-1);
+    }
+
+    
 </style>
 
 
 <link href="~/css/opportunity-deatails.css" rel="stylesheet" />
-<div class="opp-container">
+@{
+    var isRtl = lang == "ar";
+    var dir = isRtl ? "rtl" : "ltr";
+}
+<div class="opp-container" dir="@dir">
     <div class="opp-header">
         <div class="opp-title">
-            
             <div class="btn-back-container">
                 @if (User.IsInRole("Admin"))
                 {
-                    <a asp-controller="Opportunity" asp-action="Index" style="text-decoration:none"><span style="color:#F99D27">↪</span></a>
+                    <a asp-controller="Opportunity" asp-action="Index" class="back-link"><span class="back-arrow">↪</span></a>
                 }
                 else if (User.IsInRole("Organization"))
                 {
-                    <a asp-controller="Opportunity" asp-action="OrgOpportunities" style="text-decoration:none"><span style="transform: scaleY(-1);color:#F99D27">↪</span></a>
+                    <a asp-controller="Opportunity" asp-action="OrgOpportunities" class="back-link"><span class="back-arrow">↪</span></a>
                 }
                 else
                 {
-                    <a asp-controller="Home" asp-action="AllOpportunities" style="text-decoration:none"><span style="transform: scaleY(-1);color:#F99D27">↪</span></a>
+                    <a asp-controller="Home" asp-action="AllOpportunities" class="back-link"><span class="back-arrow">↪</span></a>
                 }
             </div>
             @{
@@ -167,7 +249,7 @@
     </div>
 
     <div class="details-card">
-        <div class="section-title">@Localizer["Details"]</div>
+        <div class="section-title @(lang == "ar" ? "rtl-label" : "ltr-label")">@Localizer["Details"]</div>
         @{
             string details = lang switch
             {
@@ -175,13 +257,11 @@
                 "fr" => Model.DetailsFr,
                 _ => Model.DetailsAr
             };
+            string detailsClass = (lang == "en" || lang == "fr") ? "section-content ltr-content" : "section-content";
         }
-        <div class="section-content">@Html.Raw(details)</div>
+        <div class="@detailsClass">@Html.Raw(details)</div>
 
-
-
-
-        <div class="section-title">@Localizer["EligibilityCriteria"]</div>
+        <div class="section-title @(lang == "ar" ? "rtl-label" : "ltr-label")">@Localizer["EligibilityCriteria"]</div>
         @{
             string eligibilitycriteria = lang switch
             {
@@ -189,11 +269,11 @@
                 "fr" => Model.EligibilityCriteriaFr,
                 _ => Model.EligibilityCriteriaAr
             };
+            string eligibilityClass = (lang == "en" || lang == "fr") ? "section-content ltr-content" : "section-content";
         }
-        <div class="section-content">@Html.Raw(eligibilitycriteria)</div>
+        <div class="@eligibilityClass">@Html.Raw(eligibilitycriteria)</div>
 
-
-        <div class="section-title">@Localizer["Benefits"]</div>
+        <div class="section-title @(lang == "ar" ? "rtl-label" : "ltr-label")">@Localizer["Benefits"]</div>
         @{
             string benefits = lang switch
             {
@@ -201,8 +281,9 @@
                 "fr" => Model.BenefitsFr,
                 _ => Model.BenefitsAr
             };
+            string benefitsClass = (lang == "en" || lang == "fr") ? "section-content ltr-content" : "section-content";
         }
-        <div class="section-content">@Html.Raw(benefits)</div>
+        <div class="@benefitsClass">@Html.Raw(benefits)</div>
     </div>
 
    
