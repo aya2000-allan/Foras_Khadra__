@@ -134,11 +134,11 @@
             </div>
 
             <!-- Published By -->
+            <!-- Published By -->
             <div class="field">
                 <label>نشر بواسطة</label>
                 <input type="text"
-                       name="PublishedBy"
-                       value="@(User.Identity.Name.Contains("@") ? "Admin" : User.Identity.Name)"
+                       asp-for="PublishedBy"
                        readonly
                        class="published-by-box"
                        style="background: #bbcfbe7d;" />
@@ -220,7 +220,7 @@
         var quillEn = new Quill('#editorEn', { theme: 'snow', placeholder: 'Write the details here...' });
         var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: 'Écrivez les détails ici...' });
 
-                // =================== Display Uploaded Image ===================
+        // =================== Display Uploaded Image ===================
         const imageInput = document.getElementById('imageInput');
         const previewImg = document.getElementById('previewImg');
 
@@ -228,67 +228,47 @@
             if(this.files && this.files[0]){
                 const reader = new FileReader();
                 reader.onload = function(e){
-                    previewImg.src = e.target.result; // رابط الصورة
-                    previewImg.style.display = 'block'; // إظهارها
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
                 }
                 reader.readAsDataURL(this.files[0]);
-            } else {
-                previewImg.src = '#';
-                previewImg.style.display = 'none';
             }
         });
+
+        // =================== Copy Quill Content to Hidden Inputs ===================
+        function copyQuillToHidden() {
+            document.getElementById('detailAr').value = quillAr.root.innerHTML.trim();
+            document.getElementById('detailEn').value = quillEn.root.innerHTML.trim();
+            document.getElementById('detailFr').value = quillFr.root.innerHTML.trim();
+        }
 
         // =================== Form Submit Validation ===================
         const form = document.getElementById('createForm');
         form.addEventListener('submit', function(e){
-            // 1️⃣ Copy Quill content to hidden inputs
-            document.getElementById('detailAr').value = quillAr.root.innerHTML.trim();
-            document.getElementById('detailEn').value = quillEn.root.innerHTML.trim();
-            document.getElementById('detailFr').value = quillFr.root.innerHTML.trim();
+            copyQuillToHidden();
 
-            // 2️⃣ Check all required inputs in the active tab
             var activeTabPane = document.querySelector('.tab-pane.active');
             var requiredFields = activeTabPane.querySelectorAll('[required]');
             var allFilled = true;
 
             requiredFields.forEach(function(field){
-                if(field.type === 'checkbox' || field.type === 'radio'){
-                    // تجاهل checkboxes/radios
-                } else if(!field.value.trim()){
-                    allFilled = false;
+                if(field.type !== 'checkbox' && field.type !== 'radio'){
+                    if(!field.value.trim()) allFilled = false;
                 }
             });
 
-            // 3️⃣ Check Quill editor content
+            // تحقق من محرر Quill
             if(activeTabPane.id === 'arabic' && quillAr.getText().trim() === '') allFilled = false;
             if(activeTabPane.id === 'english' && quillEn.getText().trim() === '') allFilled = false;
             if(activeTabPane.id === 'french' && quillFr.getText().trim() === '') allFilled = false;
-            
+
             if(!allFilled){
-                e.preventDefault();
+                e.preventDefault(); // يمنع إرسال الفورم
                 Swal.fire({
                     title: 'تنبيه',
-                    html: 'الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال أو الحفظ!',
+                    html: 'الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب!',
                     icon: 'warning',
                     confirmButtonText: 'حسناً',
-                    customClass: {
-                        popup: 'custom-swal-popup',
-                        title: 'custom-swal-title',
-                        htmlContainer: 'custom-swal-text',
-                        confirmButton: 'custom-swal-confirm',
-                        closeButton: 'custom-swal-close'
-                    },
-                    showCloseButton: true,
-                    buttonsStyling: false,
-                    didOpen: () => {
-                        const popup = Swal.getPopup();
-                        popup.style.border = '1px solid #C77E1F';
-                        popup.style.borderRadius = '16px';
-                        popup.style.paddingBottom = '25px';
-                        popup.style.paddingTop = '20px';
-                        popup.style.width='740px';
-                        popup.style.direction = 'rtl';
-                    }
                 });
             }
         });
@@ -297,19 +277,18 @@
         var tabLinks = document.querySelectorAll('#languageTabs a');
         tabLinks.forEach(function(link){
             link.addEventListener('show.bs.tab', function(e){
+                copyQuillToHidden();
+
                 var activeTabPane = document.querySelector('.tab-pane.active');
                 var requiredFields = activeTabPane.querySelectorAll('[required]');
                 var allFilled = true;
 
                 requiredFields.forEach(function(field){
-                    if(field.type === 'checkbox' || field.type === 'radio'){
-                        // تجاهل checkboxes/radios
-                    } else if(!field.value.trim()){
-                        allFilled = false;
+                    if(field.type !== 'checkbox' && field.type !== 'radio'){
+                        if(!field.value.trim()) allFilled = false;
                     }
                 });
 
-                // التحقق من Quill Editor
                 if(activeTabPane.id === 'arabic' && quillAr.getText().trim() === '') allFilled = false;
                 if(activeTabPane.id === 'english' && quillEn.getText().trim() === '') allFilled = false;
                 if(activeTabPane.id === 'french' && quillFr.getText().trim() === '') allFilled = false;
@@ -321,29 +300,12 @@
                         html: 'الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال!',
                         icon: 'warning',
                         confirmButtonText: 'حسناً',
-                        customClass: {
-                            popup: 'custom-swal-popup',
-                            title: 'custom-swal-title',
-                            htmlContainer: 'custom-swal-text',
-                            confirmButton: 'custom-swal-confirm',
-                            closeButton: 'custom-swal-close'
-                        },
-                        showCloseButton: true,
-                        buttonsStyling: false,
-                        didOpen: () => {
-                            const popup = Swal.getPopup();
-                            popup.style.border = '1px solid #C77E1F';
-                            popup.style.borderRadius = '16px';
-                            popup.style.paddingBottom = '25px';
-                            popup.style.paddingTop = '20px';
-                            popup.style.width='740px';
-                            popup.style.direction = 'rtl';
-                        }
                     });
                 }
             });
         });
     </script>
+}
 
     <style>
         .custom-swal-title {

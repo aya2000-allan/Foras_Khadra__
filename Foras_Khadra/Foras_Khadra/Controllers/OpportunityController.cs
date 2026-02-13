@@ -303,7 +303,7 @@ namespace Foras_Khadra.Controllers
             if (opp == null) return NotFound();
 
             var creator = await _userManager.FindByIdAsync(opp.CreatedByUserId);
-            bool isAdminPublisher = creator != null && await _userManager.IsInRoleAsync(creator, "Admin");
+            opp.IsPublishedByAdmin = creator != null && await _userManager.IsInRoleAsync(creator, "Admin");
 
             return View(opp);
         }
@@ -349,7 +349,7 @@ namespace Foras_Khadra.Controllers
                         DescriptionAr = o.DescriptionAr,
                         DescriptionEn = o.DescriptionEn,
                         DescriptionFr = o.DescriptionFr,
-                        AvailableCountryNames = o.AvailableCountries.Select(c => c.NameAr).ToList(),
+                        AvailableCountryNames = o.AvailableCountries?.Select(c => c.NameAr).ToList() ?? new List<string>(),
                         Type = o.Type,
                         PublishDate = o.PublishDate,
                         ImagePath = o.ImagePath,

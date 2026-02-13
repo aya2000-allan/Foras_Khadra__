@@ -1,7 +1,11 @@
 ﻿@using System.Globalization
 @model Foras_Khadra.Models.Opportunity
-
+@using Foras_Khadra.Helpers
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
+    ViewData["Title"] = Localizer["PageTitle"];
     var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     string pageTitle = lang switch
     {
@@ -11,6 +15,33 @@
     };
     ViewData["Title"] = pageTitle;
 }
+
+<style>
+    /* ===== دائرة التوثيق ===== */
+    .verify-badge-circle {
+        display: inline-flex; /* لتوسيط المحتوى داخل الدائرة */
+        justify-content: center;
+        align-items: center;
+        width: 22px; /* حجم الدائرة */
+        height: 22px;
+        background-color: #28a745; /* أخضر توثيق */
+        color: white; /* لون العلامة داخل الدائرة */
+        border-radius: 50%; /* يجعلها دائرة */
+        font-size: 14px; /* حجم علامة الصح */
+        font-weight: bold;
+        margin-left: 6px; /* مسافة بين النص والدائرة */
+        vertical-align: middle; /* يرفع الدائرة لمستوى النص */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* ظل خفيف لإبراز الدائرة */
+        transition: all 0.2s ease; /* تأثير عند التحويم لو حبيت تضيف hover */
+    }
+
+        /* تأثير عند التحويم على الدائرة */
+        .verify-badge-circle:hover {
+            background-color: #218838; /* أخضر أغمق عند hover */
+            transform: scale(1.1); /* تكبير بسيط */
+            cursor: default;
+        }
+</style>
 
 
 <link href="~/css/opportunity-deatails.css" rel="stylesheet" />
@@ -66,21 +97,48 @@
                 <span class="info-label">تاريخ النشر</span>
                 <span class="info-value">@Model.PublishDate.ToShortDateString()</span>
 
-                <span class="info-label">نوع الفرصة</span>
-                <span class="info-value">@Model.Type</span>
-
-                <span class="info-label">نشر بواسطة</span>
+                <span class="info-label">@Localizer["نوع الفرصة"]</span>
+                <span class="info-value">@Model.Type.GetDisplayName(lang)</span>
+                
+                <span class="info-label">الناشر</span>
                 <span class="info-value">
-                    @(Model.IsPublishedByAdmin ? "الأدمن" : Model.PublishedBy)
+                    @{
+                        string publisherText;
+
+                        if (Model.IsPublishedByAdmin)
+                        {
+                            // الفرصة موثقة إداريا
+                            publisherText = lang switch
+                            {
+                                "ar" => "فرص خضراء",
+                                _ => "Foras Khadra"
+                            };
+                        }
+                        else
+                        {
+                            // الفرصة منشورة من المنظمة نفسها
+                            publisherText = Model.PublishedBy;
+                        }
+                    }
+                    @publisherText
+
                     @if (Model.IsPublishedByAdmin)
                     {
-                        <span class="verify-badge" title="موثق إداري">✔</span>
+                        <span class="verify-badge-circle" title="موثق إداري">✔</span>
                     }
                 </span>
 
                 <span class="info-label">الدول المتاحة</span>
-                <span class="info-value">@Model.AvailableCountries</span>
-
+                <span class="info-value">
+                    @string.Join(", ", Model.AvailableCountries.Select(c =>
+                    lang switch
+                    {
+                        "en" => c.NameEn,
+                        "fr" => c.NameFr,
+                        _ => c.NameAr
+                    }
+                                        ))
+                </span>
                 <span class="info-label">الوصف</span>
                 @{
                     string description = lang switch
@@ -118,7 +176,7 @@
                 _ => Model.DetailsAr
             };
         }
-        <div class="section-content">@details</div>
+        <div class="section-content">@Html.Raw(details)</div>
 
 
 
@@ -132,8 +190,8 @@
                 _ => Model.EligibilityCriteriaAr
             };
         }
-        <div class="section-content">@eligibilitycriteria</div>
-       
+        <div class="section-content">@Html.Raw(eligibilitycriteria)</div>
+
 
         <div class="section-title">مميزات الفرصة</div>
         @{
@@ -144,8 +202,7 @@
                 _ => Model.BenefitsAr
             };
         }
-        <div class="section-content">@benefits</div>
-       
+        <div class="section-content">@Html.Raw(benefits)</div>
     </div>
 
    
