@@ -479,11 +479,17 @@
         <div class="edit-grid">
 
             <div>
+                 <label asp-for="Name" class="form-label">
+        @Localizer["org_name_label"]
+    </label>
                 <input asp-for="Name" class="form-control profile-input"  />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div>
+                   <label asp-for="Sector" class="form-label">
+        @Localizer["org_sector_label"]
+    </label>
                 <input asp-for="Sector" class="form-control profile-input"  />
                 <span asp-validation-for="Sector" class="text-danger"></span>
             </div>
