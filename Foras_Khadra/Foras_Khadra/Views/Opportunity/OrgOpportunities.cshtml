@@ -23,7 +23,7 @@
 
                 @if (!Model.Opportunities.Any())
                 {
-                    <p>لا توجد فرص حالياً.</p>
+                    <p>لا توجد فرص حالياً!!</p>
                 }
                 else
                 {
@@ -121,16 +121,25 @@
                                     }
                                     <td>@description</td>
                                     <td>
-                                        @if (opp.AvailableCountryNames != null && opp.AvailableCountryNames.Any())
+                                        @if (opp.AvailableCountries != null && opp.AvailableCountries.Any())
                                         {
-                                            @string.Join(", ", opp.AvailableCountryNames)
+                                            var countryNames = opp.AvailableCountries.Select(c =>
+                                            lang switch
+                                            {
+                                                "en" => c.NameEn,
+                                                "fr" => c.NameFr,
+                                                _ => c.NameAr
+                                            });
+
+                                            @string.Join(", ", countryNames)
                                         }
                                         else
                                         {
                                             <span>لا توجد دول محددة</span>
                                         }
                                     </td>
-                                    <td>@opp.Type.ToString()</td>
+
+                                    <td>@opp.Type.GetDisplayName(lang)</td>
                                     <td>@opp.PublishDate.ToString("yyyy-MM-dd HH:mm")</td>
                                     <td class="checkbox-cell">
                                         @if (showCheckbox)

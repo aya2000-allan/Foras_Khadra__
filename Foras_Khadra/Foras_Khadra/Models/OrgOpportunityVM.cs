@@ -9,7 +9,7 @@
         public string DescriptionAr { get; set; }
         public string DescriptionEn { get; set; }
         public string DescriptionFr { get; set; }
-        public List<string> AvailableCountryNames { get; set; }
+        public List<Country> AvailableCountries { get; set; } = new List<Country>();
         public OpportunityType Type { get; set; }
         public DateTime PublishDate { get; set; }
         public string ImagePath { get; set; }
