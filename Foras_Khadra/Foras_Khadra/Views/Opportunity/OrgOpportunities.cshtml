@@ -3,11 +3,18 @@
 @using Foras_Khadra.Models
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Foras_Khadra.Helpers
 
+@inject IViewLocalizer Localizer
 @{
-    ViewBag.Title = "فرص منظمتك";
+    ViewData["Title"] = Localizer["pageTitle"];
+    Layout = "_Layout";
     var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
 }
+
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -229,27 +236,27 @@ h2 { font-weight:800; color:#2f6b3c; }
 <div class="container mt-4">
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>قائمة فرص منظمتك</h2>
-    <a asp-action="Create" class="btn btn-add-opportunity">+ إضافة فرصة جديدة</a>
+        <h2>@Localizer["heading"]  </h2>
+        <a asp-action="Create" class="btn btn-add-opportunity">@Localizer["btnAddOpportunity"]    </a>
 </div>
 <div class="table-separator"></div>
 
 @if (!Model.Opportunities.Any())
 {
-    <div class="alert alert-info">لا توجد فرص حالياً</div>
+        <div class="alert alert-info">  @Localizer["noOpportunities"] </div>
 }
 else
 {
 <table class="table align-middle org-table">
 <thead>
-<tr>
-<th>الصورة</th>
-<th>العنوان</th>
-<th>الوصف</th>
-<th>الدولة</th>
-<th>النوع</th>
-<th>التاريخ</th>
-<th>الحالة</th>
+                <tr>
+                    <th></th>
+                    <th>@Localizer["thTitle"]</th>
+                    <th>@Localizer["thDescription"]</th>
+                    <th>@Localizer["thCountry"]</th>
+                    <th>@Localizer["thType"]</th>
+                    <th>@Localizer["thDate"]</th>
+                    <th>@Localizer["thStatus"]</th>
 <th></th>
 </tr>
 </thead>
@@ -342,7 +349,7 @@ else
     if (opp.IsReelsRejected)
     {
 <div class="reels-rejected-tooltip">
-    <span class="badge bg-danger rejected-badge">مرفوض</span>
+                                        <span class="badge bg-danger rejected-badge">@Localizer["badgeRejected"]</span>
 
     @if (!string.IsNullOrWhiteSpace(opp.RejectionReason))
     {
@@ -356,20 +363,20 @@ else
     }
     else if (opp.IsReelsCompleted)
     {
-        <span class="badge bg-success">تم الانتهاء</span>
+                                    <span class="badge bg-success">@Localizer["badgeCompleted"] </span>
     }
     else if (opp.IsReelsInProgress)
     {
-        <span class="badge bg-info">جاري العمل</span>
+                                    <span class="badge bg-info">@Localizer["badgeInProgress"] </span>
     }
     else
     {
-        <span class="badge bg-warning">قيد الانتظار</span>
+                                    <span class="badge bg-warning">@Localizer["badgePending"] </span>
     }
 }
 else
 {
-    <span class="text-muted">لم يتم الطلب</span>
+                                <span class="text-muted"> @Localizer["notRequested"] </span>
 }
 </td>
 
