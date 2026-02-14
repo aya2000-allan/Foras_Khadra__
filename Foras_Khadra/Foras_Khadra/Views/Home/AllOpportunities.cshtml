@@ -121,7 +121,23 @@
                         }
                         <div class="opp-category-row">
                             <span class="type-tag">@opp.Type.GetDisplayName(lang)</span>
-                            <span class="category-tag">@opp.AvailableCountriesNames</span>
+                            @if (!string.IsNullOrWhiteSpace(opp.AvailableCountriesNames))
+                            {
+                                var allCountries = opp.AvailableCountriesNames
+                                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(c => c.Trim())
+                                    .ToList();
+
+                                var text = string.Join(", ", allCountries.Take(2));
+
+                                if (allCountries.Count > 2)
+                                {
+                                    text += "...";
+                                }
+
+                                <span class="category-tag">@text</span>
+                            }
+                            
                         </div>
                         @{
                             string title1 = lang switch

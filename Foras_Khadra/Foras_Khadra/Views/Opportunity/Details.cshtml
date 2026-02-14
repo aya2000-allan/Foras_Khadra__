@@ -24,7 +24,7 @@
         align-items: center;
         width: 22px; /* حجم الدائرة */
         height: 22px;
-        background-color: #28a745; /* أخضر توثيق */
+        background-color: #F99D27;
         color: white; /* لون العلامة داخل الدائرة */
         border-radius: 50%; /* يجعلها دائرة */
         font-size: 14px; /* حجم علامة الصح */
@@ -37,7 +37,7 @@
 
         /* تأثير عند التحويم على الدائرة */
         .verify-badge-circle:hover {
-            background-color: #218838; /* أخضر أغمق عند hover */
+            background-color: #e08a1c;
             transform: scale(1.1); /* تكبير بسيط */
             cursor: default;
         }
@@ -72,7 +72,10 @@
         transition: transform 0.2s ease;
     }
 
-   
+    html[dir="ltr"] .back-arrow {
+        transform: rotate(180deg);
+    }
+    
    
     .opp-container[dir="rtl"] .verify-badge-circle {
         margin-right: 6px;
