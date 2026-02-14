@@ -433,7 +433,9 @@
 
 
         .dropdown-list a, .dropdown-list button.dropdown-btn {
-            justify-content:center !important
+            justify-content:center !important;
+            text-align: center;
+
         }
     
 </style>
@@ -472,7 +474,7 @@
                             <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" data-close-menu>@Localizer["AllOpportunities"]</a>
                             <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Competitions" data-close-menu>@Localizer["Competitions"]</a>
                             <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Conferences" data-close-menu>@Localizer["Conferences"]</a>
-                            <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Volunteering" data-close-menu>@Localizer["VolunteeringOpportunities"]</a>
+                            <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Volunteering" data-close-menu>@((Localizer["VolunteeringOpportunities"].Value ?? "").Trim())</a>
                             <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Jobs" data-close-menu>@Localizer["Jobs"]</a>
                             <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Scholarships" data-close-menu>@Localizer["Scholarships"]</a>
                             <a asp-controller="@opportunitiesController" asp-action="@opportunitiesAction" asp-route-type="Fellowships" data-close-menu>@Localizer["Fellowships"]</a>
