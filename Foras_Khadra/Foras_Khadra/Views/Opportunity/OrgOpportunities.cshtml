@@ -143,6 +143,87 @@ h2 { font-weight:800; color:#2f6b3c; }
   font-weight: 800 !important;
   min-width: 140px;
 }
+/* ===== Rejected Hover Design ===== */
+.reels-rejected{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.rejected-badge{
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rejected-reason{
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+
+  background: transparent; 
+  background-color: #d32f2f;      
+  color: #fff;                 
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* عند الهوفر يظهر */
+.reels-rejected:hover .rejected-reason{
+  display: block;
+}
+/* ===== Rejected Tooltip (Popup on Hover) ===== */
+.reels-rejected-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.reels-rejected-tooltip .rejected-tooltip-box {
+  position: absolute;
+  bottom: 120%;              /* فوق البادج */
+  right: 50%;
+  transform: translateX(50%);
+  
+  background: #fff;
+  color: #d32f2f;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+/* السهم الصغير تحت البوب اب */
+.reels-rejected-tooltip .rejected-tooltip-box::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 50%;
+  transform: translateX(50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* يظهر عند الهوفر */
+.reels-rejected-tooltip:hover .rejected-tooltip-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(50%) translateY(-4px);
+}
+
+
 </style>
 
 <div class="container mt-4">
@@ -260,9 +341,18 @@ else
 {
     if (opp.IsReelsRejected)
     {
-        <span class="badge bg-danger">مرفوض</span>
-        <br />
-        <small>@opp.RejectionReason</small>
+<div class="reels-rejected-tooltip">
+    <span class="badge bg-danger rejected-badge">مرفوض</span>
+
+    @if (!string.IsNullOrWhiteSpace(opp.RejectionReason))
+    {
+        <div class="rejected-tooltip-box">
+            @opp.RejectionReason
+        </div>
+    }
+</div>
+
+
     }
     else if (opp.IsReelsCompleted)
     {
