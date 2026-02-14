@@ -117,11 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddOpportunityTitle" xml:space="preserve">
-    <value>إضافة فرصة جديدة</value>
-  </data>
-  <data name="AlertTitle" xml:space="preserve">
-    <value>تنبيه</value>
+  <data name="EditOpportunityTitle" xml:space="preserve">
+    <value>تعديل الفرصة </value>
   </data>
   <data name="ApplyLinkLabel" xml:space="preserve">
     <value>رابط التقديم</value>
@@ -150,17 +147,8 @@
   <data name="EnglishTab" xml:space="preserve">
     <value>إنجليزي</value>
   </data>
-  <data name="FillBeforeSwitch" xml:space="preserve">
-    <value>الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال!</value>
-  </data>
-  <data name="FillRequiredFields" xml:space="preserve">
-    <value>الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب!</value>
-  </data>
   <data name="FrenchTab" xml:space="preserve">
     <value>فرنسي</value>
-  </data>
-  <data name="OkButton" xml:space="preserve">
-    <value>حسناً</value>
   </data>
   <data name="OpportunityCountries" xml:space="preserve">
     <value>دول الفرصة</value>
@@ -177,23 +165,20 @@
   <data name="OpportunityTitleAr" xml:space="preserve">
     <value>عنوان الفرصة</value>
   </data>
-  <data name="OpportunityType" xml:space="preserve">
-    <value>نوع الفرصة</value>
-  </data>
   <data name="PublishedBy" xml:space="preserve">
     <value>نشر بواسطة</value>
   </data>
   <data name="SaveAndAdd" xml:space="preserve">
     <value>حفظ وإضافة</value>
   </data>
-  <data name="SelectOpportunityType" xml:space="preserve">
-    <value>اختر نوع الفرصة</value>
+  <data name="OpportunityType" xml:space="preserve">
+    <value> نوع الفرصة</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>إضافة فرصة</value>
+    <value>تعديل فرصة</value>
   </data>
-  <data name="UploadOpportunityImage" xml:space="preserve">
-    <value>رفع صورة الفرصة</value>
+  <data name="EditOpportunityImage" xml:space="preserve">
+    <value>تعديل صورة الفرصة</value>
   </data>
   <data name="WriteBenefitsAr" xml:space="preserve">
     <value>أكتب الفوائد هنا...</value>
@@ -206,5 +191,17 @@
   </data>
   <data name="WriteEligibilityAr" xml:space="preserve">
     <value>أكتب معايير الأهلية هنا...</value>
+  </data>
+  <data name="DeleteImage" xml:space="preserve">
+    <value>حذف الصورة</value>
+  </data>
+  <data name="NewOpportunityImage" xml:space="preserve">
+    <value>صورة الفرصة الجديدة</value>
+  </data>
+  <data name="RemoveImage" xml:space="preserve">
+    <value>إزالة الصورة</value>
+  </data>
+  <data name="SelectOpportunityType" xml:space="preserve">
+    <value>اختر نوع الفرصة</value>
   </data>
 </root>

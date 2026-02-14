@@ -60,6 +60,53 @@
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
 
+            <!-- Published By -->
+            <div class="field">
+                <label> @Localizer["PublishedBy"] </label>
+                <input type="text"
+                       asp-for="PublishedBy"
+                       readonly
+                       class="published-by-box"
+                       style="background: #bbcfbe7d;" />
+                <span asp-validation-for="PublishedBy" class="text-danger"></span>
+            </div>
+
+            <!-- Opportunity Type -->
+            <label for="Type">@Localizer["OpportunityType"] </label>
+
+            <div class="field dropdown">
+                <select asp-for="Type" class="form-select">
+                    <option value="">@Localizer["SelectOpportunityType"]</option>
+
+                    @foreach (var item in Enum.GetValues(typeof(OpportunityType)).Cast<OpportunityType>())
+                    {
+                        <option value="@item">@item.GetDisplayName(culture)</option>
+                    }
+                </select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <!-- Available Countries -->
+            <div class="field">
+                <label>@Localizer["OpportunityCountries"]</label>
+                <div class="countries-checkboxes-grid">
+                    @foreach (var country in Model.CountriesSelectList)
+                    {
+                        <div class="country-checkbox-item">
+                            <input class="country-checkbox-input"
+                                   type="checkbox"
+                                   name="AvailableCountryIds"
+                                   value="@country.Value"
+                                   id="country_@country.Value"
+                                   @(Model.AvailableCountryIds.Contains(int.Parse(country.Value)) ? "checked" : "") />
+                            <label class="country-checkbox-label" for="country_@country.Value">
+                                @country.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+                <span asp-validation-for="AvailableCountryIds" class="text-danger"></span>
+            </div>
 
             <!-- Tabs -->
            
@@ -171,50 +218,9 @@
                 </div>
             </div>
 
-            <!-- Published By -->
-            <div class="field">
-                <label> @Localizer["PublishedBy"] </label>
-                <input type="text"
-                       asp-for="PublishedBy"
-                       readonly
-                       class="published-by-box"
-                       style="background: #bbcfbe7d;" />
-                <span asp-validation-for="PublishedBy" class="text-danger"></span>
-            </div>
+            
 
-            <!-- Opportunity Type -->
-            <div class="field dropdown">
-                <select asp-for="Type" class="form-select">
-                    @foreach (var item in Enum.GetValues(typeof(OpportunityType)).Cast<OpportunityType>())
-                    {
-                        <option value="@item">@item.GetDisplayName(culture)</option>
-                    }
-                </select>
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
-
-           <!-- Available Countries -->
-            <div class="field">
-                <label>@Localizer["OpportunityCountries"]</label>
-                <div class="countries-checkboxes-grid">
-                    @foreach (var country in Model.CountriesSelectList)
-                    {
-                        <div class="country-checkbox-item">
-                            <input class="country-checkbox-input"
-                                   type="checkbox"
-                                   name="AvailableCountryIds"
-                                   value="@country.Value"
-                                   id="country_@country.Value"
-                                   @(Model.AvailableCountryIds.Contains(int.Parse(country.Value)) ? "checked" : "") />
-                            <label class="country-checkbox-label" for="country_@country.Value">
-                                @country.Text
-                            </label>
-                        </div>
-                    }
-                </div>
-                <span asp-validation-for="AvailableCountryIds" class="text-danger"></span>
-            </div>
-
+            
             <!-- Apply Link -->
             <div class="field">
                 <label>@Localizer["ApplyLinkLabel"]</label>

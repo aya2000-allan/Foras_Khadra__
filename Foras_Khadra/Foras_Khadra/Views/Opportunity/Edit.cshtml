@@ -1,7 +1,15 @@
 ﻿@model Foras_Khadra.Models.OpportunityEditVM
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Foras_Khadra.Helpers
 
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "تعديل الفرصة";
+    ViewData["Title"] = Localizer["Title"];
+    Layout = "_Layout";
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+
 }
 
 <link rel="stylesheet" href="~/css/opportunity-create.css" />
@@ -10,11 +18,11 @@
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet" />
 
 <div class="header">
-    <h2 class="page-title"> تعديل الفرصة </h2>
+    <h2 class="page-title"> @Localizer["EditOpportunityTitle"] </h2>
     @if (!User.IsInRole("Organization"))
     {
         <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
-            العودة للوحة التحكم
+            @Localizer["BackToDashboard"]
         </a>
     }
 
@@ -28,13 +36,13 @@
             <!-- Tabs -->
             <ul class="nav nav-tabs" id="languageTabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="arabic-tab" data-bs-toggle="tab" href="#tabAr" role="tab">عربي</a>
+                    <a class="nav-link active" id="arabic-tab" data-bs-toggle="tab" href="#tabAr" role="tab">@Localizer["ArabicTab"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="english-tab" data-bs-toggle="tab" href="#tabEn" role="tab">English</a>
+                    <a class="nav-link" id="english-tab" data-bs-toggle="tab" href="#tabEn" role="tab">@Localizer["EnglishTab"]</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="french-tab" data-bs-toggle="tab" href="#tabFr" role="tab">Français</a>
+                    <a class="nav-link" id="french-tab" data-bs-toggle="tab" href="#tabFr" role="tab">@Localizer["FrenchTab"]</a>
                 </li>
             </ul>
             
@@ -42,14 +50,14 @@
 
             <!-- Image upload with preview -->
             <div class="upload-box">
-                <h3 class="discription">رفع صورة الفرصة</h3>
+                <h3 class="discription">@Localizer["EditOpportunityImage"]</h3>
                 
                 <!-- Current Image Preview (from database) -->
                 @if (!string.IsNullOrEmpty(Model.ImagePath))
                 {
                     <div class="current-image-preview" id="currentImagePreview" style="display:flex; align-items:center; gap:12px; margin-bottom:12px; background-color:#EEF1F7; justify-content:space-between; border-radius:26px; padding:12px;">
-                        <img src="@Model.ImagePath" alt="صورة الفرصة" style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
-                        <button type="button" id="deleteImageBtn" title="حذف الصورة" style="height:40px; width:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.5rem; border:1px solid #ff383c; color:#ff383c; background:none; cursor:pointer;">
+                        <img src="@Model.ImagePath" alt="@Localizer["OpportunityImageAlt"] " style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
+                        <button type="button" id="deleteImageBtn" title="@Localizer["DeleteImage"] " style="height:40px; width:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.5rem; border:1px solid #ff383c; color:#ff383c; background:none; cursor:pointer;">
                             <i class="bi bi-trash-fill"></i>
                         </button>
                     </div>
@@ -57,8 +65,8 @@
                 
                 <!-- New Image Preview (for newly uploaded images) -->
                 <div id="newImagePreviewContainer" class="current-image-preview" style="display:none; align-items:center; gap:12px; margin-bottom:12px; background-color:#EEF1F7; justify-content:space-between; border-radius:26px; padding:12px;">
-                    <img id="newPreviewImg" src="#" alt="صورة الفرصة الجديدة" style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
-                    <button type="button" id="removeNewImageBtn" title="إزالة الصورة" style="height:40px; width:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.5rem; border:1px solid #ff383c; color:#ff383c; background:none; cursor:pointer;">
+                    <img id="newPreviewImg" src="#" alt="@Localizer["NewOpportunityImage"]  " style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
+                    <button type="button" id="removeNewImageBtn" title="@Localizer["RemoveImage"] " style="height:40px; width:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.5rem; border:1px solid #ff383c; color:#ff383c; background:none; cursor:pointer;">
                         <i class="bi bi-trash-fill"></i>
                     </button>
                 </div>
@@ -66,7 +74,7 @@
                 <label class="upload-area" id="uploadArea">
                     <input asp-for="Image" id="ImageInput" type="file" hidden accept="image/jpeg, image/png" />
                     <div class="upload-icon"><img src="~/images/upload-icon.svg" alt=""></div>
-                    <p class="dragText">Drag & drop files or Browse</p>
+                    <p class="dragText">@Localizer["DragDropText"]</p>
                     <small>JPEG, PNG</small>
                 </label>
                 <input type="hidden" name="RemoveImage" id="RemoveImage" value="false" />
@@ -75,37 +83,51 @@
 
             <!-- PublishedBy -->
             <div class="field">
-                <label for="PublishedBy">نشر بواسطة</label>
+                <label for="PublishedBy">@Localizer["PublishedBy"] </label>
                 <input asp-for="PublishedBy" readonly value="@Model.PublishedBy" placeholder="نشر بواسطة" class="published-by-box" style="background: #bbcfbe7d;"  />
                 <span asp-validation-for="PublishedBy" class="text-danger"></span>
             </div>
 
             <!-- Type -->
+            <label for="Type">@Localizer["OpportunityType"] </label>
+
             <div class="field dropdown">
-                <select asp-for="Type" asp-items="Html.GetEnumSelectList<OpportunityType>()" required>
-                    <option value="">اختر نوع الفرصة</option>
+
+                @{
+                    var opportunityTypes = Enum.GetValues(typeof(OpportunityType))
+                    .Cast<OpportunityType>()
+                    .Select(t => new SelectListItem
+                    {
+                        Value = t.ToString(),
+                        Text = t.GetDisplayName(culture),
+                        Selected = Model.Type == t
+                    }).ToList();
+                }
+                <select asp-for="Type" asp-items="opportunityTypes" required>
+                    <option value="">@Localizer["SelectOpportunityType"]</option>
                 </select>
-                <img src="~/images/lets-icons_arrow-drop-down.svg" class="custom-dropdown-arrow" />
+
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
 
             <div class="field">
-                <label class="form-label">دول الفرصة</label>
+                <label class="form-label">@Localizer["OpportunityCountries"] </label>
                 <div class="countries-checkboxes-grid">
                     @foreach (var country in Model.CountriesSelectList)
                     {
                         <div class="country-checkbox-item">
                             <input class="country-checkbox-input"
-                                type="checkbox"
-                                name="AvailableCountryIds"
-                                value="@country.Value"
-                                id="country_@country.Value"
-                                @(country.Selected ? "checked" : "") />
+                                   type="checkbox"
+                                   name="AvailableCountryIds"
+                                   value="@country.Value"
+                                   id="country_@country.Value"
+                                   @(Model.AvailableCountryIds.Contains(int.Parse(country.Value)) ? "checked" : "") />
                             <label class="country-checkbox-label" for="country_@country.Value">
-                                @country.Text
+                                @country.Text  <!-- هنا اسم الدولة حسب اللغة -->
                             </label>
                         </div>
                     }
+
                 </div>
                 <span asp-validation-for="AvailableCountryIds" class="text-danger"></span>
             </div>
@@ -114,34 +136,35 @@
                 <!-- Arabic -->
                 <div class="tab-pane fade show active" id="tabAr" role="tabpanel">
                     <div class="field">
-                        <label for="TitleAr">عنوان الفرصة</label>
-                        <input asp-for="TitleAr" placeholder="عنوان الفرصة" required />
+                        <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitleAr"]" required />
                         <span asp-validation-for="TitleAr" class="text-danger"></span>
                     </div>
                     
                     <div class="field">
-                        <label for="editorEligibilityAr">معايير أهلية الفرصة</label>
+                        <label for="editorEligibilityAr">@Localizer["EligibilityCriteria"]  </label>
                         <div id="editorEligibilityAr" style="height: 150px;"></div>
                         <input type="hidden" asp-for="EligibilityCriteriaAr" id="eligibilityAr" required />
                         <span asp-validation-for="EligibilityCriteriaAr" class="text-danger"></span>
                     </div>
 
                     <div class="field">
-                        <label for="editorDescriptionAr">وصف الفرصة</label>
-                        <div id="editorDescriptionAr" style="height: 180px;"></div>
-                        <input type="hidden" asp-for="DescriptionAr" id="descriptionAr" required />
-                        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
-                    </div>
-
-                    <div class="field">
-                        <label for="editorBenefitsAr">الفوائد</label>
+                        <label for="editorBenefitsAr">@Localizer["Benefits"]</label>
                         <div id="editorBenefitsAr" style="height: 150px;"></div>
                         <input type="hidden" asp-for="BenefitsAr" id="benefitsAr" required />
                         <span asp-validation-for="BenefitsAr" class="text-danger"></span>
                     </div>
 
                     <div class="field">
-                        <label for="editorAr">تفاصيل الفرصة</label>
+                        <label for="editorDescriptionAr">@Localizer["OpportunityDescription"] </label>
+                        <div id="editorDescriptionAr" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionAr" id="descriptionAr" required />
+                        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                    </div>
+
+                    
+
+                    <div class="field">
+                        <label for="editorAr">@Localizer["OpportunityDetails"] </label>
                         <div id="editorAr" style="height: 200px;"></div>
                         <input type="hidden" asp-for="DetailsAr" id="detailsAr" />
                         <span asp-validation-for="DetailsAr" class="text-danger"></span>
@@ -151,34 +174,37 @@
                 <!-- English -->
                 <div class="tab-pane fade" id="tabEn" role="tabpanel">
                     <div class="field">
-                        <label for="TitleEn">Opportunity Title</label>
-                        <input asp-for="TitleEn" placeholder="Opportunity Title" required />
+                        <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitleAr"]" required />
                         <span asp-validation-for="TitleEn" class="text-danger"></span>
                     </div>
                     
                     <div class="field">
-                        <label for="editorEligibilityEn">Eligibility Criteria</label>
+                        <label for="editorEligibilityEn"> @Localizer["EligibilityCriteria"]</label>
                         <div id="editorEligibilityEn" style="height: 150px;"></div>
                         <input type="hidden" asp-for="EligibilityCriteriaEn" id="eligibilityEn" required />
                         <span asp-validation-for="EligibilityCriteriaEn" class="text-danger"></span>
                     </div>
 
                     <div class="field">
-                        <label for="editorDescriptionEn">Opportunity Description</label>
-                        <div id="editorDescriptionEn" style="height: 180px;"></div>
-                        <input type="hidden" asp-for="DescriptionEn" id="descriptionEn" required />
-                        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
-                    </div>
-
-                    <div class="field">
-                        <label for="editorBenefitsEn">Benefits</label>
+                        <label for="editorBenefitsEn">@Localizer["Benefits"]</label>
                         <div id="editorBenefitsEn" style="height: 150px;"></div>
                         <input type="hidden" asp-for="BenefitsEn" id="benefitsEn" required />
                         <span asp-validation-for="BenefitsEn" class="text-danger"></span>
                     </div>
 
                     <div class="field">
-                        <label for="editorEn">Opportunity Details</label>
+                        <label for="editorDescriptionEn"> @Localizer["OpportunityDescription"]</label>
+                        <div id="editorDescriptionEn" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionEn" id="descriptionEn" required />
+                        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+                    </div>
+
+                    
+
+                    <div class="field">
+                        <label for="editorEn">
+                            @Localizer["OpportunityDetails"]
+                        </label>
                         <div id="editorEn" style="height: 200px;"></div>
                         <input type="hidden" asp-for="DetailsEn" id="detailsEn" />
                         <span asp-validation-for="DetailsEn" class="text-danger"></span>
@@ -188,34 +214,35 @@
                 <!-- French -->
                 <div class="tab-pane fade" id="tabFr" role="tabpanel">
                     <div class="field">
-                        <label for="TitleFr">Titre de l'opportunité</label>
-                        <input asp-for="TitleFr" placeholder="Titre de l'opportunité" required />
+                        <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitleAr"]" required />
                         <span asp-validation-for="TitleFr" class="text-danger"></span>
                     </div>
                     
                     <div class="field">
-                        <label for="editorEligibilityFr">Critères d'éligibilité</label>
+                        <label for="editorEligibilityFr">@Localizer["EligibilityCriteria"]</label>
                         <div id="editorEligibilityFr" style="height: 150px;"></div>
                         <input type="hidden" asp-for="EligibilityCriteriaFr" id="eligibilityFr" required />
                         <span asp-validation-for="EligibilityCriteriaFr" class="text-danger"></span>
                     </div>
 
                     <div class="field">
-                        <label for="editorDescriptionFr">Description de l'opportunité</label>
-                        <div id="editorDescriptionFr" style="height: 180px;"></div>
-                        <input type="hidden" asp-for="DescriptionFr" id="descriptionFr" required />
-                        <span asp-validation-for="DescriptionFr" class="text-danger"></span>
-                    </div>
-
-                    <div class="field">
-                        <label for="editorBenefitsFr">Avantages</label>
+                        <label for="editorBenefitsFr">@Localizer["Benefits"]</label>
                         <div id="editorBenefitsFr" style="height: 150px;"></div>
                         <input type="hidden" asp-for="BenefitsFr" id="benefitsFr" required />
                         <span asp-validation-for="BenefitsFr" class="text-danger"></span>
                     </div>
 
                     <div class="field">
-                        <label for="editorFr">Détails de l'opportunité</label>
+                        <label for="editorDescriptionFr">@Localizer["OpportunityDescription"]</label>
+                        <div id="editorDescriptionFr" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionFr" id="descriptionFr" required />
+                        <span asp-validation-for="DescriptionFr" class="text-danger"></span>
+                    </div>
+
+                    
+
+                    <div class="field">
+                        <label for="editorFr">@Localizer["OpportunityDetails"]</label>
                         <div id="editorFr" style="height: 200px;"></div>
                         <input type="hidden" asp-for="DetailsFr" id="detailsFr" />
                         <span asp-validation-for="DetailsFr" class="text-danger"></span>
@@ -225,21 +252,21 @@
 
             <!-- Apply Link -->
             <div class="field mt-3">
-                <label for="ApplyLink">رابط التقديم</label>
-                <input asp-for="ApplyLink" placeholder="رابط التقديم" required />
+                <label for="ApplyLink">@Localizer["ApplyLinkLabel"] </label>
+                <input asp-for="ApplyLink" placeholder="@Localizer["ApplyLinkPlaceholder"] " required />
                 <span asp-validation-for="ApplyLink" class="text-danger"></span>
             </div>
 
             <!-- Actions -->
             <div class="actions mt-3">
-                <button type="submit" class="btn-primary">حفظ التعديلات</button>
+                <button type="submit" class="btn-primary">@Localizer["SaveAndAdd"] </button>
                 @if (User.IsInRole("Organization"))
                 {
-                    <a asp-action="OrgOpportunities" class="btn-outline">إلغاء</a>
+                    <a asp-action="OrgOpportunities" class="btn-outline">@Localizer["Cancel"]</a>
                 }
                 else
                 {
-                    <a asp-action="Index" class="btn-outline">إلغاء</a>
+                    <a asp-action="Index" class="btn-outline">@Localizer["Cancel"]</a>
                 }
             </div>
 
@@ -262,24 +289,33 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+         // ================= Localization Strings =================
+        var writeEligibility = "@Localizer["WriteEligibilityAr"].Value";
+        var writeBenefits = "@Localizer["WriteBenefitsAr"].Value";
+        var writeDescription = "@Localizer["WriteDescriptionAr"].Value";
+        var writeDetails = "@Localizer["WriteDetailsAr"].Value";
+
+
         // =================== Initialize All Quill Editors ===================
+
         // Arabic Editors
-        var quillEligibilityAr = new Quill('#editorEligibilityAr', { theme: 'snow', placeholder: 'اكتب معايير الأهلية هنا...' });
-        var quillDescriptionAr = new Quill('#editorDescriptionAr', { theme: 'snow', placeholder: 'اكتب وصف الفرصة هنا...' });
-        var quillBenefitsAr = new Quill('#editorBenefitsAr', { theme: 'snow', placeholder: 'اكتب الفوائد هنا...' });
-        var quillAr = new Quill('#editorAr', { theme: 'snow', placeholder: 'اكتب التفاصيل هنا...' });
+        var quillEligibilityAr = new Quill('#editorEligibilityAr', { theme: 'snow', placeholder: writeEligibility });
+        var quillBenefitsAr = new Quill('#editorBenefitsAr', { theme: 'snow', placeholder: writeBenefits });
+        var quillDescriptionAr = new Quill('#editorDescriptionAr', { theme: 'snow', placeholder: writeDescription });
+        var quillAr = new Quill('#editorAr', { theme: 'snow', placeholder: writeDetails });
 
         // English Editors
-        var quillEligibilityEn = new Quill('#editorEligibilityEn', { theme: 'snow', placeholder: 'Write eligibility criteria here...' });
-        var quillDescriptionEn = new Quill('#editorDescriptionEn', { theme: 'snow', placeholder: 'Write opportunity description here...' });
-        var quillBenefitsEn = new Quill('#editorBenefitsEn', { theme: 'snow', placeholder: 'Write benefits here...' });
-        var quillEn = new Quill('#editorEn', { theme: 'snow', placeholder: 'Write details here...' });
+        var quillEligibilityEn = new Quill('#editorEligibilityEn', { theme: 'snow', placeholder: writeEligibility });
+        var quillBenefitsEn = new Quill('#editorBenefitsEn', { theme: 'snow', placeholder: writeBenefits });
+        var quillDescriptionEn = new Quill('#editorDescriptionEn', { theme: 'snow', placeholder: writeDescription });
+        var quillEn = new Quill('#editorEn', { theme: 'snow', placeholder: writeDetails });
 
         // French Editors
-        var quillEligibilityFr = new Quill('#editorEligibilityFr', { theme: 'snow', placeholder: 'Écrivez les critères d\'éligibilité ici...' });
-        var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow', placeholder: 'Écrivez la description de l\'opportunité ici...' });
-        var quillBenefitsFr = new Quill('#editorBenefitsFr', { theme: 'snow', placeholder: 'Écrivez les avantages ici...' });
-        var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: 'Écrivez les détails ici...' });
+        var quillEligibilityFr = new Quill('#editorEligibilityFr', { theme: 'snow', placeholder: writeEligibility });
+        var quillBenefitsFr = new Quill('#editorBenefitsFr', { theme: 'snow', placeholder: writeBenefits });
+        var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow', placeholder: writeDescription });
+        var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: writeDetails });
+
 
         // =================== Load Existing Content ===================
         // Arabic

@@ -60,8 +60,10 @@ public async Task<IActionResult> Create()
                     "fr" => c.NameFr,
                     _ => c.NameAr
                 },
-                Value = c.Id.ToString()
+                Value = c.Id.ToString(),
+                Selected = model.AvailableCountryIds?.Contains(c.Id) ?? false
             }).ToList();
+
 
             var currentUser = await _userManager.GetUserAsync(User);
 
@@ -78,80 +80,110 @@ public async Task<IActionResult> Create()
             return View(model);
         }
 
-        [Authorize(Roles = "Admin,Organization")]
         [HttpPost]
-        public async Task<IActionResult> Create(OpportunityCreateVM model)
+        [Authorize(Roles = "Admin,Organization")]
+        public async Task<IActionResult> Edit(OpportunityEditVM model)
         {
-            // إذا كان النموذج غير صالح، أعيدي ملء قائمة الدول
+            // أولاً تحقق من صحة الموديل
             if (!ModelState.IsValid)
             {
                 var countries = await _context.Countries.ToListAsync();
+                var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
                 model.CountriesSelectList = countries.Select(c => new SelectListItem
                 {
-                    Text = c.NameAr,
-                    Value = c.Id.ToString()
+                    Text = culture switch
+                    {
+                        "en" => c.NameEn,
+                        "fr" => c.NameFr,
+                        _ => c.NameAr
+                    },
+                    Value = c.Id.ToString(),
+                    Selected = model.AvailableCountryIds?.Contains(c.Id) ?? false
                 }).ToList();
 
                 return View(model);
             }
 
-            string imagePath = null;
+            // جلب المستخدم الحالي
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return RedirectToAction("Login", "Account");
+
+            var org = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == currentUser.Id);
+
+            // جلب الفرصة الحالية بدل إنشاء واحدة جديدة
+            var opportunity = await _context.Opportunities
+                .Include(o => o.AvailableCountries)
+                .FirstOrDefaultAsync(o => o.Id == model.Id);
+
+            if (opportunity == null) return NotFound();
+
+            if (opportunity.CreatedByUserId != currentUser.Id && !await _userManager.IsInRoleAsync(currentUser, "Admin"))
+                return Forbid();
+
+            // تحديث الحقول
+            opportunity.TitleAr = model.TitleAr;
+            opportunity.TitleEn = model.TitleEn;
+            opportunity.TitleFr = model.TitleFr;
+            opportunity.DescriptionAr = model.DescriptionAr;
+            opportunity.DescriptionEn = model.DescriptionEn;
+            opportunity.DescriptionFr = model.DescriptionFr;
+            opportunity.DetailsAr = model.DetailsAr;
+            opportunity.DetailsEn = model.DetailsEn;
+            opportunity.DetailsFr = model.DetailsFr;
+            opportunity.EligibilityCriteriaAr = model.EligibilityCriteriaAr;
+            opportunity.EligibilityCriteriaEn = model.EligibilityCriteriaEn;
+            opportunity.EligibilityCriteriaFr = model.EligibilityCriteriaFr;
+            opportunity.BenefitsAr = model.BenefitsAr;
+            opportunity.BenefitsEn = model.BenefitsEn;
+            opportunity.BenefitsFr = model.BenefitsFr;
+            opportunity.ApplyLink = model.ApplyLink;
+            opportunity.Type = model.Type.Value;
+
+            // تحديث الصورة فقط إذا تم رفعها
             if (model.Image != null)
             {
                 var fileName = Guid.NewGuid() + Path.GetExtension(model.Image.FileName);
                 var path = Path.Combine(_env.WebRootPath, "uploads/opportunities", fileName);
                 using var stream = new FileStream(path, FileMode.Create);
                 await model.Image.CopyToAsync(stream);
-                imagePath = "/uploads/opportunities/" + fileName;
+                opportunity.ImagePath = "/uploads/opportunities/" + fileName;
             }
 
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null) return RedirectToAction("Login", "Account");
-
-            var org = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == currentUser.Id);
-
-            var opportunity = new Opportunity
+            // تحديث الدول المتاحة
+            if (model.AvailableCountryIds != null)
             {
-                TitleAr = model.TitleAr,
-                TitleEn = model.TitleEn,
-                TitleFr = model.TitleFr,
-                DescriptionAr = model.DescriptionAr,
-                DescriptionEn = model.DescriptionEn,
-                DescriptionFr = model.DescriptionFr,
-                DetailsAr = model.DetailsAr,
-                DetailsEn = model.DetailsEn,
-                DetailsFr = model.DetailsFr,
-                AvailableCountries = await _context.Countries
-                            .Where(c => model.AvailableCountryIds.Contains(c.Id))
-                            .ToListAsync(),
-                EligibilityCriteriaAr = model.EligibilityCriteriaAr,
-                EligibilityCriteriaEn = model.EligibilityCriteriaEn,
-                EligibilityCriteriaFr = model.EligibilityCriteriaFr,
-                BenefitsAr = model.BenefitsAr,
-                BenefitsEn = model.BenefitsEn,
-                BenefitsFr = model.BenefitsFr,
-                ApplyLink = model.ApplyLink,
-                ImagePath = imagePath,
-                PublishedBy = org != null ? org.Name : "Admin",
-                Type = model.Type.Value,
-                CreatedByUserId = currentUser.Id,
-                IsPublishedByAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin"),
-                IsPublishedByOrganization = await _userManager.IsInRoleAsync(currentUser, "Organization")
-            };
+                opportunity.AvailableCountries = await _context.Countries
+                    .Where(c => model.AvailableCountryIds.Contains(c.Id))
+                    .ToListAsync();
+            }
+            else
+            {
+                opportunity.AvailableCountries = new List<Country>();
+            }
 
-            _context.Opportunities.Add(opportunity);
+            // تحديث من نشر
+            opportunity.PublishedBy = org != null ? org.Name : "Admin";
+            opportunity.IsPublishedByAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+            opportunity.IsPublishedByOrganization = await _userManager.IsInRoleAsync(currentUser, "Organization");
+
+            // حفظ التغييرات
+            _context.Opportunities.Update(opportunity);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(await _userManager.IsInRoleAsync(currentUser, "Admin") ? "Index" : "OrgOpportunities");
+            // إعادة التوجيه حسب الدور
+            bool isAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
+            return RedirectToAction(isAdmin ? "Index" : "OrgOpportunities");
         }
 
-        // ================= EDIT =================
+
+        // ================= EDIT GET =================
         [Authorize(Roles = "Admin,Organization")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var opp = await _context.Opportunities
-                .Include(o => o.AvailableCountries) // مهم لتجنب null
+                .Include(o => o.AvailableCountries)
                 .FirstOrDefaultAsync(o => o.Id == id);
 
             if (opp == null) return NotFound();
@@ -162,8 +194,8 @@ public async Task<IActionResult> Create()
             if (opp.CreatedByUserId != currentUser.Id && !await _userManager.IsInRoleAsync(currentUser, "Admin"))
                 return Forbid();
 
-            // جلب كل الدول
             var countries = await _context.Countries.ToListAsync();
+            var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
 
             var model = new OpportunityEditVM
             {
@@ -182,7 +214,12 @@ public async Task<IActionResult> Create()
                 AvailableCountryIds = opp.AvailableCountries?.Select(c => c.Id).ToList() ?? new List<int>(),
                 CountriesSelectList = countries.Select(c => new SelectListItem
                 {
-                    Text = c.NameAr,
+                    Text = culture switch
+                    {
+                        "en" => c.NameEn,
+                        "fr" => c.NameFr,
+                        _ => c.NameAr
+                    },
                     Value = c.Id.ToString(),
                     Selected = opp.AvailableCountries?.Any(ac => ac.Id == c.Id) ?? false
                 }).ToList(),
@@ -200,86 +237,7 @@ public async Task<IActionResult> Create()
         }
 
 
-        [Authorize(Roles = "Admin,Organization")]
-        [HttpPost]
-        public async Task<IActionResult> Edit(OpportunityEditVM model)
-        {
-            var old = await _context.Opportunities
-                .Include(o => o.AvailableCountries)
-                .FirstOrDefaultAsync(o => o.Id == model.Id);
-            if (old == null) return NotFound();
 
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null) return RedirectToAction("Login", "Account");
-
-            // تحقق من حقوق التعديل
-            if (old.CreatedByUserId != currentUser.Id && !await _userManager.IsInRoleAsync(currentUser, "Admin"))
-                return Forbid();
-
-            if (model.Image != null)
-            {
-                var fileName = Guid.NewGuid() + Path.GetExtension(model.Image.FileName);
-                var path = Path.Combine(_env.WebRootPath, "uploads/opportunities", fileName);
-                using var stream = new FileStream(path, FileMode.Create);
-                await model.Image.CopyToAsync(stream);
-                old.ImagePath = "/uploads/opportunities/" + fileName;
-            }
-
-            old.TitleAr = model.TitleAr ?? old.TitleAr;
-            old.TitleEn = model.TitleEn ?? old.TitleEn;
-            old.TitleFr = model.TitleFr ?? old.TitleFr;
-            old.PublishedBy = model.PublishedBy ?? old.PublishedBy;
-            old.Type = model.Type ?? old.Type;
-            old.DescriptionAr = model.DescriptionAr ?? old.DescriptionAr;
-            old.DescriptionEn = model.DescriptionEn ?? old.DescriptionEn;
-            old.DescriptionFr = model.DescriptionFr ?? old.DescriptionFr;
-            old.DetailsAr = model.DetailsAr ?? old.DetailsAr;
-            old.DetailsEn = model.DetailsEn ?? old.DetailsEn;
-            old.DetailsFr = model.DetailsFr ?? old.DetailsFr;
-            if (model.AvailableCountryIds != null)
-            {
-                // إزالة كل الدول القديمة
-                old.AvailableCountries.Clear();
-
-                // جلب الدول الجديدة من قاعدة البيانات
-                var selectedCountries = await _context.Countries
-                    .Where(c => model.AvailableCountryIds.Contains(c.Id))
-                    .ToListAsync();
-
-                foreach (var country in selectedCountries)
-                {
-                    old.AvailableCountries.Add(country);
-                }
-            }
-            old.EligibilityCriteriaAr = model.EligibilityCriteriaAr ?? old.EligibilityCriteriaAr;
-            old.EligibilityCriteriaEn = model.EligibilityCriteriaEn ?? old.EligibilityCriteriaEn;
-            old.EligibilityCriteriaFr = model.EligibilityCriteriaFr ?? old.EligibilityCriteriaFr;
-            old.BenefitsAr = model.BenefitsAr ?? old.BenefitsAr;
-            old.BenefitsEn = model.BenefitsEn ?? old.BenefitsEn;
-            old.BenefitsFr = model.BenefitsFr ?? old.BenefitsFr;
-            old.ApplyLink = model.ApplyLink ?? old.ApplyLink;
-
-            // تحديث حالة الريلز إذا موجود
-            var orgCurrent = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == currentUser.Id);
-            if (orgCurrent != null)
-            {
-                var reelsRequest = await _context.ReelsRequests
-                    .FirstOrDefaultAsync(r => r.OpportunityId == old.Id && r.OrganizationId == orgCurrent.Id);
-
-                if (reelsRequest != null && reelsRequest.IsRejected)
-                {
-                    reelsRequest.IsRejected = false;
-                    reelsRequest.RejectionReason = null;
-                    reelsRequest.IsCompleted = false;
-                    reelsRequest.IsInProgress = false;
-                    reelsRequest.RequestDate = DateTime.Now;
-                }
-            }
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(await _userManager.IsInRoleAsync(currentUser, "Admin") ? "Index" : "OrgOpportunities");
-        }
 
         // ================= DELETE =================
         [Authorize(Roles = "Admin,Organization")]

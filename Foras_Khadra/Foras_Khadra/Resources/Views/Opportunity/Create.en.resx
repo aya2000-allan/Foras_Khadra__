@@ -177,6 +177,9 @@
   <data name="OpportunityTitleAr" xml:space="preserve">
     <value>Opportunity Title</value>
   </data>
+  <data name="OpportunityType" xml:space="preserve">
+    <value>Opportunity Type</value>
+  </data>
   <data name="PublishedBy" xml:space="preserve">
     <value>Published By</value>
   </data>
