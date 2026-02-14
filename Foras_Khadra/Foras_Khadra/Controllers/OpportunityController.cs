@@ -10,6 +10,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static Azure.Core.HttpHeader;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Foras_Khadra.Controllers
 {
@@ -40,17 +42,24 @@ namespace Foras_Khadra.Controllers
         }
 
         // ================= CREATE =================
-        [Authorize(Roles = "Admin,Organization")]
-        [HttpGet]
-        public async Task<IActionResult> Create()
+[HttpGet]
+[Authorize(Roles = "Admin,Organization")]
+public async Task<IActionResult> Create()
         {
             var model = new OpportunityCreateVM();
-
-            // جلب الدول من الـ Database
             var countries = await _context.Countries.ToListAsync();
+
+            // احصل على لغة الموقع الحالية
+            var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
             model.CountriesSelectList = countries.Select(c => new SelectListItem
             {
-                Text = c.NameAr,    // يمكن التبديل لـ NameEn أو NameFr حسب لغة الموقع
+                Text = culture switch
+                {
+                    "en" => c.NameEn,
+                    "fr" => c.NameFr,
+                    _ => c.NameAr
+                },
                 Value = c.Id.ToString()
             }).ToList();
 
