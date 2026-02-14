@@ -1,7 +1,7 @@
 ﻿body {
-  margin: 0;
-  font-family: "Cairo", sans-serif;
-  background-color: #f4f9f5;
+  margin: 0 !important;
+  font-family: "Cairo", sans-serif !important;
+  background-color: #f4f9f5 !important;
 }
 
 /* ====== شريط العنوان الأساسي ====== */

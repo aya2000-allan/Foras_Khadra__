@@ -42,6 +42,9 @@
   color: white;
 }
 
+html[dir="ltr"] .header-logo img {
+  transform: scaleX(-1);
+}
 .header-title {
   color: var(--primary-green);
   font-weight: 700;

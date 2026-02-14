@@ -17,28 +17,6 @@
 <div class="page-wrapper">
     <div class="form-panel">
         <form id="createForm" asp-action="Create" method="post" enctype="multipart/form-data">
-
-            <!-- Image -->
-            <div class="upload-box">
-                <h3 class="discription">رفع صورة الفرصة</h3>
-                <label class="upload-area">
-                    <input asp-for="Image" type="file" required hidden id="imageInput" />
-                    <div class="upload-icon">
-                        <img src="~/images/upload-icon.svg" alt="">
-                    </div>
-                    <p class="dragText">Drag & drop files or Browse</p>
-                    <small>JPEG, PNG</small>
-                </label>
-                <span asp-validation-for="Image" class="text-danger"></span>
-
-                <!-- Image Preview -->
-                <div class="image-preview mt-2">
-                    <img id="previewImg" src="#" alt="صورة الفرصة" style="display:none; max-width:200px; max-height:200px;" />
-                </div>
-            </div>
-
-
-            <!-- Tabs -->
             <ul class="nav nav-tabs" id="languageTabs" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="arabic-tab" data-bs-toggle="tab" href="#arabic" role="tab">عربي</a>
@@ -50,6 +28,32 @@
                     <a class="nav-link" id="french-tab" data-bs-toggle="tab" href="#french" role="tab">Français</a>
                 </li>
             </ul>
+            <!-- Image -->
+            <!-- Image upload -->
+            <div class="upload-box">
+                <h3 class="discription">رفع صورة الفرصة</h3>
+                
+                <div id="imagePreviewContainer" class="current-image-preview" style="display:none; align-items:center; gap:12px; margin-bottom:12px; background-color:#EEF1F7; justify-content:space-between; border-radius:26px; padding:12px;">
+                    <img id="previewImg" src="#" alt="صورة الفرصة" style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
+                    <div id="previewInfo" style="display:flex; align-items:center; gap:6px; font-weight:600;">
+                        <span id="previewName"></span>
+                        <span style="color:green; font-size:20px;">✅</span>
+                    </div>
+                </div>
+                
+                <label class="upload-area" id="uploadArea">
+                    <input asp-for="Image" id="imageInput" type="file" hidden accept="image/jpeg, image/png" />
+                    <div class="upload-icon"><img src="~/images/upload-icon.svg" alt=""></div>
+                    <p class="dragText">Drag & drop files or Browse</p>
+                    <small>JPEG, PNG</small>
+                </label>
+                <input type="hidden" name="RemoveImage" id="RemoveImage" value="false" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+
+            <!-- Tabs -->
+           
 
             <div class="tab-content mt-3">
                 <!-- Arabic Tab -->
@@ -59,15 +63,21 @@
                         <span asp-validation-for="TitleAr" class="text-danger"></span>
                     </div>
                     <div class="field">
-                        <textarea asp-for="EligibilityCriteriaAr" rows="2" placeholder="حدد معايير أهلية الفرصة" required></textarea>
+                        <h3 class="discription">معايير أهلية الفرصة</h3>
+                        <div id="editorEligibilityAr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="EligibilityCriteriaAr" id="eligibilityAr" required />
                         <span asp-validation-for="EligibilityCriteriaAr" class="text-danger"></span>
                     </div>
                     <div class="field">
-                        <textarea asp-for="BenefitsAr" rows="2" placeholder="الفوائد" required></textarea>
+                        <h3 class="discription">الفوائد</h3>
+                        <div id="editorBenefitsAr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="BenefitsAr" id="benefitsAr" required />
                         <span asp-validation-for="BenefitsAr" class="text-danger"></span>
                     </div>
                     <div class="field">
-                        <textarea asp-for="DescriptionAr" rows="3" placeholder="وصف الفرصة" required></textarea>
+                        <h3 class="discription">وصف الفرصة</h3>
+                        <div id="editorDescriptionAr" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionAr" id="descriptionAr" required />
                         <span asp-validation-for="DescriptionAr" class="text-danger"></span>
                     </div>
                     <div class="field">
@@ -75,7 +85,6 @@
                         <!-- Arabic -->
                         <div id="editorAr" style="height: 250px;"></div>
                         <input type="hidden" asp-for="DetailsAr" id="detailAr" required />
-
                         <span asp-validation-for="DetailsAr" class="text-danger"></span>
                     </div>
                 </div>
@@ -87,15 +96,21 @@
                         <span asp-validation-for="TitleEn" class="text-danger"></span>
                     </div>
                     <div class="field">
-                        <textarea asp-for="EligibilityCriteriaEn" rows="2" placeholder="Eligibility Criteria" required></textarea>
+                        <h3 class="discription">Eligibility Criteria</h3>
+                        <div id="editorEligibilityEn" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="EligibilityCriteriaEn" id="eligibilityEn" required />
                         <span asp-validation-for="EligibilityCriteriaEn" class="text-danger"></span>
                     </div>
                     <div class="field">
-                        <textarea asp-for="BenefitsEn" rows="2" placeholder="Benefits" required></textarea>
+                        <h3 class="discription">Benefits</h3>
+                        <div id="editorBenefitsEn" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="BenefitsEn" id="benefitsEn" required />
                         <span asp-validation-for="BenefitsEn" class="text-danger"></span>
                     </div>
                     <div class="field">
-                        <textarea asp-for="DescriptionEn" rows="3" placeholder="Opportunity Description" required></textarea>
+                        <h3 class="discription">Opportunity Description</h3>
+                        <div id="editorDescriptionEn" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionEn" id="descriptionEn" required />
                         <span asp-validation-for="DescriptionEn" class="text-danger"></span>
                     </div>
                     <div class="field">
@@ -113,15 +128,21 @@
                         <span asp-validation-for="TitleFr" class="text-danger"></span>
                     </div>
                     <div class="field">
-                        <textarea asp-for="EligibilityCriteriaFr" rows="2" placeholder="Critères d'éligibilité" required></textarea>
+                        <h3 class="discription">Critères d'éligibilité</h3>
+                        <div id="editorEligibilityFr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="EligibilityCriteriaFr" id="eligibilityFr" required />
                         <span asp-validation-for="EligibilityCriteriaFr" class="text-danger"></span>
                     </div>
                     <div class="field">
-                        <textarea asp-for="BenefitsFr" rows="2" placeholder="Avantages" required></textarea>
+                        <h3 class="discription">Avantages</h3>
+                        <div id="editorBenefitsFr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="BenefitsFr" id="benefitsFr" required />
                         <span asp-validation-for="BenefitsFr" class="text-danger"></span>
                     </div>
                     <div class="field">
-                        <textarea asp-for="DescriptionFr" rows="3" placeholder="Description de l'opportunité" required></textarea>
+                        <h3 class="discription">Description de l'opportunité</h3>
+                        <div id="editorDescriptionFr" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionFr" id="descriptionFr" required />
                         <span asp-validation-for="DescriptionFr" class="text-danger"></span>
                     </div>
                     <div class="field">
@@ -133,7 +154,6 @@
                 </div>
             </div>
 
-            <!-- Published By -->
             <!-- Published By -->
             <div class="field">
                 <label>نشر بواسطة</label>
@@ -154,19 +174,20 @@
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
 
-            <!-- Available Countries -->
+           <!-- Available Countries -->
             <div class="field">
                 <label>دول الفرصة</label>
-                <div class="country-checkboxes">
+                <div class="countries-checkboxes-grid">
                     @foreach (var country in Model.CountriesSelectList)
                     {
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox"
-                                   name="AvailableCountryIds"
-                                   value="@country.Value"
-                                   id="country_@country.Value"
-                                   @(Model.AvailableCountryIds.Contains(int.Parse(country.Value)) ? "checked" : "") />
-                            <label class="form-check-label" for="country_@country.Value">
+                        <div class="country-checkbox-item">
+                            <input class="country-checkbox-input" 
+                                type="checkbox"
+                                name="AvailableCountryIds"
+                                value="@country.Value"
+                                id="country_@country.Value"
+                                @(Model.AvailableCountryIds.Contains(int.Parse(country.Value)) ? "checked" : "") />
+                            <label class="country-checkbox-label" for="country_@country.Value">
                                 @country.Text
                             </label>
                         </div>
@@ -215,37 +236,75 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        // =================== Initialize Quill Editors ===================
+        // =================== Initialize All Quill Editors ===================
+        // Arabic Editors
+        var quillEligibilityAr = new Quill('#editorEligibilityAr', { theme: 'snow', placeholder: 'اكتب معايير الأهلية هنا...' });
+        var quillBenefitsAr = new Quill('#editorBenefitsAr', { theme: 'snow', placeholder: 'اكتب الفوائد هنا...' });
+        var quillDescriptionAr = new Quill('#editorDescriptionAr', { theme: 'snow', placeholder: 'اكتب وصف الفرصة هنا...' });
         var quillAr = new Quill('#editorAr', { theme: 'snow', placeholder: 'اكتب التفاصيل هنا...' });
+
+        // English Editors
+        var quillEligibilityEn = new Quill('#editorEligibilityEn', { theme: 'snow', placeholder: 'Write eligibility criteria here...' });
+        var quillBenefitsEn = new Quill('#editorBenefitsEn', { theme: 'snow', placeholder: 'Write benefits here...' });
+        var quillDescriptionEn = new Quill('#editorDescriptionEn', { theme: 'snow', placeholder: 'Write opportunity description here...' });
         var quillEn = new Quill('#editorEn', { theme: 'snow', placeholder: 'Write the details here...' });
+
+        // French Editors
+        var quillEligibilityFr = new Quill('#editorEligibilityFr', { theme: 'snow', placeholder: 'Écrivez les critères d\'éligibilité ici...' });
+        var quillBenefitsFr = new Quill('#editorBenefitsFr', { theme: 'snow', placeholder: 'Écrivez les avantages ici...' });
+        var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow', placeholder: 'Écrivez la description de l\'opportunité ici...' });
         var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: 'Écrivez les détails ici...' });
 
-        // =================== Display Uploaded Image ===================
-        const imageInput = document.getElementById('imageInput');
-        const previewImg = document.getElementById('previewImg');
+        
 
-        imageInput.addEventListener('change', function(){
-            if(this.files && this.files[0]){
-                const reader = new FileReader();
-                reader.onload = function(e){
-                    previewImg.src = e.target.result;
-                    previewImg.style.display = 'block';
+
+// =================== Image Preview Functionality ===================
+            const imageInput = document.getElementById('imageInput');
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const previewImg = document.getElementById('previewImg');
+
+           imageInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        previewImg.src = e.target.result;
+                        previewContainer.style.display = 'flex';
+                        
+                        // Show file name
+                        document.getElementById('previewName').textContent = imageInput.files[0].name;
+                    }
+                    
+                    reader.readAsDataURL(this.files[0]);
                 }
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
+            });
 
-        // =================== Copy Quill Content to Hidden Inputs ===================
-        function copyQuillToHidden() {
+           
+        // =================== Copy All Quill Content to Hidden Inputs ===================
+        function copyAllQuillToHidden() {
+            // Arabic
+            document.getElementById('eligibilityAr').value = quillEligibilityAr.root.innerHTML.trim();
+            document.getElementById('benefitsAr').value = quillBenefitsAr.root.innerHTML.trim();
+            document.getElementById('descriptionAr').value = quillDescriptionAr.root.innerHTML.trim();
             document.getElementById('detailAr').value = quillAr.root.innerHTML.trim();
+            
+            // English
+            document.getElementById('eligibilityEn').value = quillEligibilityEn.root.innerHTML.trim();
+            document.getElementById('benefitsEn').value = quillBenefitsEn.root.innerHTML.trim();
+            document.getElementById('descriptionEn').value = quillDescriptionEn.root.innerHTML.trim();
             document.getElementById('detailEn').value = quillEn.root.innerHTML.trim();
+            
+            // French
+            document.getElementById('eligibilityFr').value = quillEligibilityFr.root.innerHTML.trim();
+            document.getElementById('benefitsFr').value = quillBenefitsFr.root.innerHTML.trim();
+            document.getElementById('descriptionFr').value = quillDescriptionFr.root.innerHTML.trim();
             document.getElementById('detailFr').value = quillFr.root.innerHTML.trim();
         }
 
         // =================== Form Submit Validation ===================
         const form = document.getElementById('createForm');
         form.addEventListener('submit', function(e){
-            copyQuillToHidden();
+            copyAllQuillToHidden();
 
             var activeTabPane = document.querySelector('.tab-pane.active');
             var requiredFields = activeTabPane.querySelectorAll('[required]');
@@ -257,10 +316,25 @@
                 }
             });
 
-            // تحقق من محرر Quill
-            if(activeTabPane.id === 'arabic' && quillAr.getText().trim() === '') allFilled = false;
-            if(activeTabPane.id === 'english' && quillEn.getText().trim() === '') allFilled = false;
-            if(activeTabPane.id === 'french' && quillFr.getText().trim() === '') allFilled = false;
+            // Check all Quill editors in active tab
+            if(activeTabPane.id === 'arabic') {
+                if(quillEligibilityAr.getText().trim() === '') allFilled = false;
+                if(quillBenefitsAr.getText().trim() === '') allFilled = false;
+                if(quillDescriptionAr.getText().trim() === '') allFilled = false;
+                if(quillAr.getText().trim() === '') allFilled = false;
+            }
+            if(activeTabPane.id === 'english') {
+                if(quillEligibilityEn.getText().trim() === '') allFilled = false;
+                if(quillBenefitsEn.getText().trim() === '') allFilled = false;
+                if(quillDescriptionEn.getText().trim() === '') allFilled = false;
+                if(quillEn.getText().trim() === '') allFilled = false;
+            }
+            if(activeTabPane.id === 'french') {
+                if(quillEligibilityFr.getText().trim() === '') allFilled = false;
+                if(quillBenefitsFr.getText().trim() === '') allFilled = false;
+                if(quillDescriptionFr.getText().trim() === '') allFilled = false;
+                if(quillFr.getText().trim() === '') allFilled = false;
+            }
 
             if(!allFilled){
                 e.preventDefault(); // يمنع إرسال الفورم
@@ -277,7 +351,7 @@
         var tabLinks = document.querySelectorAll('#languageTabs a');
         tabLinks.forEach(function(link){
             link.addEventListener('show.bs.tab', function(e){
-                copyQuillToHidden();
+                copyAllQuillToHidden();
 
                 var activeTabPane = document.querySelector('.tab-pane.active');
                 var requiredFields = activeTabPane.querySelectorAll('[required]');
@@ -289,9 +363,25 @@
                     }
                 });
 
-                if(activeTabPane.id === 'arabic' && quillAr.getText().trim() === '') allFilled = false;
-                if(activeTabPane.id === 'english' && quillEn.getText().trim() === '') allFilled = false;
-                if(activeTabPane.id === 'french' && quillFr.getText().trim() === '') allFilled = false;
+                // Check all Quill editors in active tab
+                if(activeTabPane.id === 'arabic') {
+                    if(quillEligibilityAr.getText().trim() === '') allFilled = false;
+                    if(quillBenefitsAr.getText().trim() === '') allFilled = false;
+                    if(quillDescriptionAr.getText().trim() === '') allFilled = false;
+                    if(quillAr.getText().trim() === '') allFilled = false;
+                }
+                if(activeTabPane.id === 'english') {
+                    if(quillEligibilityEn.getText().trim() === '') allFilled = false;
+                    if(quillBenefitsEn.getText().trim() === '') allFilled = false;
+                    if(quillDescriptionEn.getText().trim() === '') allFilled = false;
+                    if(quillEn.getText().trim() === '') allFilled = false;
+                }
+                if(activeTabPane.id === 'french') {
+                    if(quillEligibilityFr.getText().trim() === '') allFilled = false;
+                    if(quillBenefitsFr.getText().trim() === '') allFilled = false;
+                    if(quillDescriptionFr.getText().trim() === '') allFilled = false;
+                    if(quillFr.getText().trim() === '') allFilled = false;
+                }
 
                 if(!allFilled){
                     e.preventDefault(); // يمنع تغيير التاب

@@ -221,6 +221,78 @@
   }
 }
 
+/* ================= Tabs Styling (Exact UI like image) ================= */
+
+.nav-tabs {
+  display: flex;
+  background: #eef3ee;
+  border-radius: 14px;
+  padding: 6px;
+  border: none;
+  justify-content: space-between;
+  gap: 3px;
+}
+
+.nav-tabs .nav-item {
+  flex: 1;
+}
+
+.nav-tabs .nav-link {
+  width: 100%;
+  text-align: center;
+  border: none !important;
+  border-radius: 10px;
+  background: transparent;
+  color: #2f2f2f;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 12px 0;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  background: rgba(187, 207, 190, 0.35);
+}
+
+.nav-tabs .nav-link.active {
+  background: #bbcfbe !important;
+  color: #1f3d23;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Remove Bootstrap bottom border */
+.nav-tabs {
+  border-bottom: none;
+}
+
+/* contries checkbox */
+.countries-checkboxes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px 16px;
+  margin-top: 8px;
+}
+
+.country-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.country-checkbox-input {
+  width: 18px !important;
+  height: 18px !important;
+  margin: 0;
+  cursor: pointer;
+}
+
+.country-checkbox-label {
+  font-size: 15px;
+  cursor: pointer;
+  margin: 0;
+}
 a:hover {
   color: #25652c;
 }
