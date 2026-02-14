@@ -362,12 +362,20 @@
 
             if(!allFilled){
                 e.preventDefault();
-                Swal.fire({
-                    title: alertTitle,
-                    html: fillRequiredMsg,
-                    icon: 'warning',
-                    confirmButtonText: okText,
-                });
+               Swal.fire({
+    title: alertTitle,
+    html: fillRequiredMsg,
+    icon: 'warning',
+    confirmButtonText: okText,
+    buttonsStyling: false,
+    customClass: {
+        popup: 'custom-swal',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-swal-confirm'
+    }
+});
+
             }
         });
 
@@ -390,12 +398,20 @@
 
                 if(!allFilled){
                     e.preventDefault();
-                    Swal.fire({
-                        title: alertTitle,
-                        html: fillBeforeSwitchMsg,
-                        icon: 'warning',
-                        confirmButtonText: okText,
-                    });
+                   Swal.fire({
+    title: alertTitle,
+    html: fillBeforeSwitchMsg,
+    icon: 'warning',
+    confirmButtonText: okText,
+    buttonsStyling: false,
+    customClass: {
+        popup: 'custom-swal',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-swal-confirm'
+    }
+});
+
                 }
             });
         });
@@ -468,4 +484,48 @@
         .custom-swal-close:hover {
             color: #F99D27;
         }
+        /* ===== Swal Design  ===== */
+.swal2-popup.custom-swal {
+  border-radius: 18px !important;
+  padding: 26px 28px 22px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12) !important;
+  font-family: inherit;
+  width: 560px !important;
+  max-width: calc(100% - 24px) !important;
+}
+
+.swal2-title.custom-swal-title {
+  color: #333 !important;
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  margin-bottom: 6px !important;
+}
+
+.swal2-html-container.custom-swal-text {
+  color: #666 !important;
+  font-size: 18px !important;
+  line-height: 1.7 !important;
+}
+
+.swal2-confirm.custom-swal-confirm {
+  background-color: #F99D27 !important;
+  color: white !important;
+  border: none !important;
+  padding: 14px 45px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  width: 200px !important;
+  height: 65px !important;
+  border-radius: 16px !important;
+}
+
+
+.swal2-confirm.custom-swal-confirm:hover {
+  background-color: #e88d1a !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3) !important;
+}
+
     </style>
