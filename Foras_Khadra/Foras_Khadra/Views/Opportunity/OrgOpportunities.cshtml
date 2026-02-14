@@ -7,434 +7,523 @@
 @{
     ViewBag.Title = "فرص منظمتك";
     var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-
 }
 
-<div class="row mt-4">
-    <!-- المحتوى الرئيسي -->
-    <div class="col-md-9">
-        <div class="tab-content" id="v-pills-tabContent">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-            <!-- تاب عرض الفرص -->
-            <div class="tab-pane fade show active" id="v-pills-list" role="tabpanel">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h2 class="mb-0">فرص منظمتك</h2>
-                </div>
+<style>
+body { background:#f4f8f4; }
+h2 { font-weight:800; color:#2f6b3c; }
 
-                @if (!Model.Opportunities.Any())
-                {
-                    <p>لا توجد فرص حالياً!!</p>
-                }
-                else
-                {
-                    <table class="table table-bordered table-striped align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>الصورة</th>
-                                <th>العنوان</th>
-                                <th>الوصف</th>
-                                <th>الدولة</th>
-                                <th>النوع</th>
-                                <th>تاريخ النشر</th>
-                                <th>إنشاء ريلز</th>
-                                <th>حالة الطلب</th>
-                                <th>إجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var opp in Model.Opportunities)
-                            {
-                                var nowUtc = DateTime.UtcNow;
-                                var createdUtc = opp.PublishDate.ToUniversalTime();
-                                var diffMinutes = (nowUtc - createdUtc).TotalMinutes;
+.org-table { border-collapse: separate; border-spacing: 0 14px; }
 
-                                var canEdit = diffMinutes <= 24 * 60;   // 24 ساعة
-                                var canDelete = diffMinutes <= 48 * 60; // 48 ساعة
+.org-table thead th {
+    border:none;
+    background:transparent;
+    color:#112D14;
+    font-weight:700;
+    font-size:14px;
+}
 
-                                var isCompletedOrInProgress = opp.IsReelsCompleted || opp.IsReelsInProgress;
-                                var isRejected = opp.IsReelsRejected;
-                                var isPending = opp.HasRequestedReels && !opp.IsReelsCompleted && !opp.IsReelsInProgress && !opp.IsReelsRejected;
+.org-table tbody tr {
+    background:#fff;
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
+    border-radius:16px;
+}
 
-                                bool editCan = false;
-                                bool deleteCan = false;
-                                bool reelsCheckboxDisabled = false;
+.org-table tbody td {
+    border:none;
+    padding:18px 12px;
+    vertical-align:middle;
+}
 
-                                // المنطق الجديد
-                                if (!opp.HasRequestedReels) // لم يتم طلب الرييلز
-                                {
-                                    editCan = canEdit;
-                                    deleteCan = canDelete;
-                                    reelsCheckboxDisabled = false;
-                                }
-                                else if (isRejected)
-                                {
-                                    // لو الفرصة مرفوضة: checkbox يظهر فقط إذا يمكن تعديل الفرصة
-                                    editCan = canEdit; // true إذا تم تعديل الفرصة خلال 24 ساعة
-                                    deleteCan = false;
-                                    reelsCheckboxDisabled = !editCan; // لو ما ينعدل يبقى مخفي
-                                }
-                                else if (isPending)
-                                {
-                                    editCan = canEdit;
-                                    deleteCan = canDelete;
-                                    reelsCheckboxDisabled = false;
-                                }
-                                else if (isCompletedOrInProgress)
-                                {
-                                    editCan = false;
-                                    deleteCan = false;
-                                    reelsCheckboxDisabled = true;
-                                }
+.org-table img { border-radius:12px; }
 
-                                // checkbox يظهر فقط إذا الفرصة لم ترفض
-                                bool showCheckbox = !opp.IsReelsRejected;
+.badge {
+    padding:6px 14px;
+    font-size:12px;
+    border-radius:20px;
+}
 
-                                <tr id="row-@opp.Id">
-                                    <td style="width:80px;">
-                                        @if (!string.IsNullOrEmpty(opp.ImagePath))
-                                        {
-                                            <img src="@opp.ImagePath"
-                                                 alt="صورة الفرصة"
-                                                 style="width:70px; height:70px; object-fit:cover; border-radius:5px;" />
-                                        }
-                                        else
-                                        {
-                                            <span>لا توجد صورة</span>
-                                        }
-                                    </td>
-                                    @{
-                                        string title = lang switch
-                                        {
-                                            "en" => opp.TitleEn,
-                                            "fr" => opp.TitleFr,
-                                            _ => opp.TitleAr
-                                        };
-                                    }
-                                    <td>@title</td>
-                                    @{
-                                        string description = lang switch
-                                        {
-                                            "en" => opp.DescriptionEn,
-                                            "fr" => opp.DescriptionFr,
-                                            _ => opp.DescriptionAr
-                                        };
-                                    }
-                                    <td>@description</td>
-                                    <td>
-                                        @if (opp.AvailableCountries != null && opp.AvailableCountries.Any())
-                                        {
-                                            var countryNames = opp.AvailableCountries.Select(c =>
-                                            lang switch
-                                            {
-                                                "en" => c.NameEn,
-                                                "fr" => c.NameFr,
-                                                _ => c.NameAr
-                                            });
+.badge.bg-warning { background:#f9a825 !important; color:#fff; }
+.badge.bg-success { background:#2e7d32 !important; }
+.badge.bg-danger  { background:#d32f2f !important; }
+.badge.bg-info    { background:#0288d1 !important; }
 
-                                            @string.Join(", ", countryNames)
-                                        }
-                                        else
-                                        {
-                                            <span>لا توجد دول محددة</span>
-                                        }
-                                    </td>
+.org-actions .btn {
+    border-radius:50%;
+    width:38px;
+    height:38px;
+    padding:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 4px;
+}
 
-                                    <td>@opp.Type.GetDisplayName(lang)</td>
-                                    <td>@opp.PublishDate.ToString("yyyy-MM-dd HH:mm")</td>
-                                    <td class="checkbox-cell">
-                                        @if (showCheckbox)
-                                        {
-                                            var isChecked = opp.HasRequestedReels && !opp.IsReelsRejected;
-                                            <input type="checkbox"
-                                                   @(isChecked ? "checked" : "")
-                                                   @(reelsCheckboxDisabled ? "disabled" : "")
-                                                   onchange="confirmReels(@opp.Id, this, '@opp.PublishDate.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")')" />
-                                        }
-                                    </td>
+.org-actions .btn-primary { background:#2e7d32; border:none; }
+.org-actions .btn-warning { background:#f9a825; border:none; color:#fff; }
+.org-actions .btn-danger  { background:#d32f2f; border:none; }
+.org-actions .btn-success { background:#2e7d32; border:none; }
+.org-actions .btn-info    { background:#0288d1; border:none; color:#fff; }
 
-                                    <td class="reels-status">
-                                        @if (opp.HasRequestedReels)
-                                        {
-                                            if (opp.IsReelsRejected)
-                                            {
-                                                <span class="badge bg-danger">مرفوض</span>
-                                                <br />
-                                                <small class="text-muted">السبب: @opp.RejectionReason</small>
-                                            }
-                                            else if (opp.IsReelsCompleted)
-                                            {
-                                                <span class="badge bg-success">تم الانتهاء</span>
-                                            }
-                                            else if (opp.IsReelsInProgress)
-                                            {
-                                                <span class="badge bg-info">جاري العمل عليها</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge bg-warning">قيد الانتظار</span>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted">لم يتم الطلب</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-primary btn-sm"
-                                           href="@Url.Action("Details", "Opportunity", new { id = opp.Id })">
-                                            عرض
-                                        </a>
+.description-cell {
+    max-width:300px;
+    white-space:normal;
+    word-break:break-word;
+    line-height:1.6;
+}
 
-                                        <button class="btn btn-warning btn-sm"
-                                                onclick="handleEdit(@opp.Id, '@editCan.ToString().ToLower()')"
-                                                @(editCan ? "" : "disabled")>
-                                            تعديل
-                                        </button>
+.table-separator {
+    border-top: 1px solid #E5E5E5;
+    margin-bottom: 20px;
+}
 
-                                        <button class="btn btn-danger btn-sm"
-                                                onclick="handleDelete(@opp.Id, '@deleteCan.ToString().ToLower()')"
-                                                @(deleteCan ? "" : "disabled")>
-                                            حذف
-                                        </button>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                }
-            </div>
+.btn-add-opportunity {
+    background: #F99D27; 
+    border: none;
+    color: #fff;
+}
+.btn-add-opportunity:hover {
+    background: #F57C00;
+    color: #fff;
+}
 
-            <!-- تاب إنشاء فرصة -->
-            <div class="tab-pane fade" id="v-pills-create" role="tabpanel">
-                <h2>إنشاء فرصة جديدة</h2>
-                <form asp-controller="Opportunity" asp-action="Create" method="post" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label>اسم المنظمة</label>
-                        <input type="text" name="PublishedBy" class="form-control" value="@Model.OrganizationName" readonly />
-                    </div>
+@@media (max-width: 768px) {
+    .org-table thead { display: none; }
+    .org-table tbody tr { display: block; margin-bottom: 15px; }
+    .org-table tbody td { display: flex; justify-content: space-between; padding: 10px; }
+    .description-cell { max-width: 100%; }
+}
 
-                    <div class="mb-3">
-                        <label>العنوان</label>
-                        <input type="text" name="Title" class="form-control" required />
-                    </div>
+/* ===== SweetAlert Styles ===== */
+.swal2-popup.custom-swal {
+  border-radius: 18px !important;
+  padding: 22px 24px 18px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12) !important;
+  font-family: inherit;
+  direction: rtl;
+  width: 560px !important;
+  max-width: calc(100% - 24px) !important;
+}
 
-                    <div class="mb-3">
-                        <label>الوصف</label>
-                        <textarea name="Description" class="form-control" rows="3" required></textarea>
-                    </div>
+.swal2-title.custom-swal-title {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  font-size: 20px !important;
+  margin-top: 6px !important;
+}
 
-                    <div class="mb-3">
-                        <label>التفاصيل</label>
-                        <textarea name="Details" class="form-control" rows="3" required></textarea>
-                    </div>
+.swal2-html-container.custom-swal-text {
+  color: #2e7d32 !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  margin-top: 4px !important;
+}
 
-                    <div class="mb-3">
-                        <label>الدولة/البلدان المتاحة</label>
-                        <textarea name="AvailableCountries" class="form-control" rows="2" required></textarea>
-                    </div>
+.swal2-icon { display:none !important; }
 
-                    <div class="mb-3">
-                        <label>معايير الأهلية</label>
-                        <textarea name="EligibilityCriteria" class="form-control" rows="2" required></textarea>
-                    </div>
+.swal2-confirm.custom-swal-confirm {
+  background:#F99D27 !important;
+  color:#fff !important;
+  border: 2px solid #F99D27 !important;
+  border-radius: 12px !important;
+  padding: 10px 34px !important;
+  font-weight: 800 !important;
+  min-width: 140px;
+}
 
-                    <div class="mb-3">
-                        <label>الفوائد</label>
-                        <textarea name="Benefits" class="form-control" rows="2" required></textarea>
-                    </div>
+.swal2-cancel.custom-swal-cancel {
+  background: transparent !important;
+  color:#F99D27 !important;
+  border: 2px solid #F99D27 !important;
+  border-radius: 12px !important;
+  padding: 10px 34px !important;
+  font-weight: 800 !important;
+  min-width: 140px;
+}
+/* ===== Rejected Hover Design ===== */
+.reels-rejected{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
 
-                    <div class="mb-3">
-                        <label>الصورة (اختياري)</label>
-                        <input type="file" name="Image" class="form-control" />
-                    </div>
+.rejected-badge{
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
 
-                    <div class="mb-3">
-                        <label>رابط التقديم</label>
-                        <input type="url" name="ApplyLink" class="form-control" required />
-                    </div>
+.rejected-reason{
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
 
-                    <div class="mb-3">
-                        <label>النوع</label>
-                        <select name="Type" class="form-control" required>
-                            <option value="">-- اختر النوع --</option>
-                            @foreach (OpportunityType type in Enum.GetValues(typeof(OpportunityType)))
-                            {
-                                <option value="@type">@type.ToString()</option>
-                            }
-                        </select>
-                    </div>
+  background: transparent; 
+  background-color: #d32f2f;      
+  color: #fff;                 
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
 
-                    <button type="submit" class="btn btn-success">إنشاء الفرصة</button>
-                </form>
-            </div>
+/* عند الهوفر يظهر */
+.reels-rejected:hover .rejected-reason{
+  display: block;
+}
+/* ===== Rejected Tooltip (Popup on Hover) ===== */
+.reels-rejected-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.reels-rejected-tooltip .rejected-tooltip-box {
+  position: absolute;
+  bottom: 120%;              /* فوق البادج */
+  right: 50%;
+  transform: translateX(50%);
+  
+  background: #fff;
+  color: #d32f2f;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+/* السهم الصغير تحت البوب اب */
+.reels-rejected-tooltip .rejected-tooltip-box::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 50%;
+  transform: translateX(50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* يظهر عند الهوفر */
+.reels-rejected-tooltip:hover .rejected-tooltip-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(50%) translateY(-4px);
+}
+
+
+</style>
+
+<div class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>قائمة فرص منظمتك</h2>
+    <a asp-action="Create" class="btn btn-add-opportunity">+ إضافة فرصة جديدة</a>
+</div>
+<div class="table-separator"></div>
+
+@if (!Model.Opportunities.Any())
+{
+    <div class="alert alert-info">لا توجد فرص حالياً</div>
+}
+else
+{
+<table class="table align-middle org-table">
+<thead>
+<tr>
+<th>الصورة</th>
+<th>العنوان</th>
+<th>الوصف</th>
+<th>الدولة</th>
+<th>النوع</th>
+<th>التاريخ</th>
+<th>الحالة</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+@foreach (var opp in Model.Opportunities)
+{
+    var nowUtc = DateTime.UtcNow;
+    var createdUtc = opp.PublishDate.ToUniversalTime();
+    var diffMinutes = (nowUtc - createdUtc).TotalMinutes;
+
+    var canEdit = diffMinutes <= 24 * 60;
+    var canDelete = diffMinutes <= 48 * 60;
+
+    var isCompletedOrInProgress = opp.IsReelsCompleted || opp.IsReelsInProgress;
+    var isRejected = opp.IsReelsRejected;
+    var isPending = opp.HasRequestedReels && !opp.IsReelsCompleted && !opp.IsReelsInProgress && !opp.IsReelsRejected;
+
+    bool editCan = false;
+    bool deleteCan = false;
+    bool reelsDisabled = false;
+
+    if (!opp.HasRequestedReels)
+    {
+        editCan = canEdit;
+        deleteCan = canDelete;
+    }
+    else if (isRejected)
+    {
+        editCan = canEdit;
+        deleteCan = false;
+        reelsDisabled = !editCan;
+    }
+    else if (isPending)
+    {
+        editCan = canEdit;
+        deleteCan = canDelete;
+    }
+    else if (isCompletedOrInProgress)
+    {
+        editCan = false;
+        deleteCan = false;
+        reelsDisabled = true;
+    }
+
+    string title = lang switch
+    {
+        "en" => opp.TitleEn,
+        "fr" => opp.TitleFr,
+        _ => opp.TitleAr
+    };
+
+    string description = lang switch
+    {
+        "en" => opp.DescriptionEn,
+        "fr" => opp.DescriptionFr,
+        _ => opp.DescriptionAr
+    };
+
+<tr id="row-@opp.Id" data-opp-title="@title">
+<td style="width:80px;">
+@if (!string.IsNullOrEmpty(opp.ImagePath))
+{
+    <img src="@opp.ImagePath" style="width:70px;height:70px;object-fit:cover;" />
+}
+</td>
+
+<td>@title</td>
+<td class="description-cell">@Html.Raw(description)</td>
+
+<td>
+@if (opp.AvailableCountries != null && opp.AvailableCountries.Any())
+{
+    var countryNames = opp.AvailableCountries.Select(c => lang switch
+    {
+        "en" => c.NameEn,
+        "fr" => c.NameFr,
+        _ => c.NameAr
+    });
+    @string.Join(", ", countryNames)
+}
+</td>
+
+<td>@opp.Type.GetDisplayName(lang)</td>
+<td>@opp.PublishDate.ToString("yyyy-MM-dd")</td>
+
+<td class="reels-status">
+@if (opp.HasRequestedReels)
+{
+    if (opp.IsReelsRejected)
+    {
+<div class="reels-rejected-tooltip">
+    <span class="badge bg-danger rejected-badge">مرفوض</span>
+
+    @if (!string.IsNullOrWhiteSpace(opp.RejectionReason))
+    {
+        <div class="rejected-tooltip-box">
+            @opp.RejectionReason
         </div>
-    </div>
-
-    <!-- التاب الجانبي -->
-    <div class="col-md-3">
-        <div class="nav flex-column nav-pills ms-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <button class="nav-link active" id="v-pills-list-tab" data-bs-toggle="pill" data-bs-target="#v-pills-list" type="button" role="tab"> <a asp-action="OrgOpportunities" class="btn btn-primary">عرض الفرص</a></button>
-            <button class="nav-link" id="v-pills-create-tab" data-bs-toggle="pill" data-bs-target="#v-pills-create" type="button" role="tab"> <a asp-action="Create" class="btn btn-primary">إنشاء فرصة جديدة</a></button>
-        </div>
-    </div>
+    }
 </div>
 
-<input type="hidden" id="RequestVerificationToken" value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestToken" />
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    }
+    else if (opp.IsReelsCompleted)
+    {
+        <span class="badge bg-success">تم الانتهاء</span>
+    }
+    else if (opp.IsReelsInProgress)
+    {
+        <span class="badge bg-info">جاري العمل</span>
+    }
+    else
+    {
+        <span class="badge bg-warning">قيد الانتظار</span>
+    }
+}
+else
+{
+    <span class="text-muted">لم يتم الطلب</span>
+}
+</td>
+
+<td class="org-actions">
+<a class="btn btn-primary" href="@Url.Action("Details", "Opportunity", new { id = opp.Id })">
+    <i class="bi bi-eye"></i>
+</a>
+
+<button class="btn btn-warning"
+        onclick="handleEdit(@opp.Id, @editCan.ToString().ToLower())"
+        @(editCan ? "" : "disabled")>
+    <i class="bi bi-pencil"></i>
+</button>
+
+<button class="btn @(opp.HasRequestedReels && !opp.IsReelsRejected ? "btn-warning" : "btn-success")"
+        title="طلب ريل"
+        onclick="toggleReels(@opp.Id, @((opp.HasRequestedReels && !opp.IsReelsRejected).ToString().ToLower()))"
+        @(reelsDisabled ? "disabled" : "")>
+    <i class="bi bi-camera-reels"></i>
+</button>
+
+<button class="btn btn-danger"
+        onclick="handleDelete(@opp.Id, @deleteCan.ToString().ToLower())"
+        @(deleteCan ? "" : "disabled")>
+    <i class="bi bi-trash"></i>
+</button>
+</td>
+</tr>
+}
+</tbody>
+</table>
+}
+
+</div>
+
+<input type="hidden" id="RequestVerificationToken"
+value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestToken" />
+
 <script>
-    function handleEdit(id, canEdit) {
-        if (canEdit !== 'true') {
-            Swal.fire({
-                icon: 'warning',
-                title: 'غير مسموح بالتعديل',
-                text: 'لقد مر أكثر من 24 ساعة منذ إنشاء هذه الفرصة.'
-            });
-            return;
-        }
-        window.location.href = '/Opportunity/Edit/' + id;
+const SwalConfirmUI = Swal.mixin({
+  customClass: {
+    popup: 'custom-swal',
+    title: 'custom-swal-title',
+    htmlContainer: 'custom-swal-text',
+    confirmButton: 'custom-swal-confirm',
+    cancelButton: 'custom-swal-cancel'
+  },
+  buttonsStyling: false,
+  showCloseButton: true,
+  reverseButtons: true,
+  imageUrl: '@Url.Content("~/images/Group.svg")',
+  imageWidth: 90,
+  imageHeight: 90,
+  imageAlt: ''
+});
+
+function getOppTitle(id) {
+  const row = document.getElementById('row-' + id);
+  return row?.dataset?.oppTitle || '';
+}
+
+/* Swal نجاح */
+function showSuccess(message) {
+  return Swal.fire({
+    icon: 'success',
+    title: message,
+    confirmButtonText: 'موافق',
+    customClass: {
+      popup: 'custom-swal',
+      title: 'custom-swal-title',
+      confirmButton: 'custom-swal-confirm'
+    },
+    buttonsStyling: false
+  });
+}
+
+function handleEdit(id, canEdit) {
+    if (!canEdit) {
+        Swal.fire({ icon:'warning', title:'غير مسموح', text:'مر أكثر من 24 ساعة.' });
+        return;
+    }
+    window.location.href = '/Opportunity/Edit/' + id;
+}
+
+function handleDelete(id, canDelete) {
+    if (!canDelete) {
+        Swal.fire({ icon:'warning', title:'غير مسموح', text:'مر أكثر من 48 ساعة.' });
+        return;
     }
 
-    function handleDelete(id, canDelete) {
-        if (canDelete !== 'true') {
-            Swal.fire({
-                icon: 'warning',
-                title: 'غير مسموح بالحذف',
-                text: 'لقد مر أكثر من 48 ساعة منذ إنشاء هذه الفرصة.'
-            });
-            return;
-        }
+    const oppTitle = getOppTitle(id);
 
-        Swal.fire({
-            title: 'هل أنت متأكد من الحذف؟',
-            text: "لن تتمكن من التراجع عن هذا الإجراء!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'نعم، احذفها!',
-            cancelButtonText: 'إلغاء'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const token = document.getElementById('RequestVerificationToken').value;
-                fetch('/Opportunity/Delete/' + id, {
-                    method: 'POST',
-                    headers: { 'RequestVerificationToken': token }
-                })
-                .then(() => {
-                    Swal.fire('تم الحذف!', 'تم حذف الفرصة بنجاح.', 'success')
-                        .then(() => location.reload());
-                });
-            }
-        });
-    }
-
-    async function confirmReels(opportunityId, checkbox, publishDate) {
-        const checked = checkbox.checked;
-        const created = new Date(publishDate); // الآن تستخدم UTC Z
-
-        const now = new Date();
-        const diffMs = now.getTime() - created.getTime();
-        const hoursSinceCreation = diffMs / (1000 * 60 * 60);
-
-        if (hoursSinceCreation > 24) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'غير مسموح بتغيير الطلب',
-                text: 'لقد مر أكثر من 24 ساعة على إنشاء الفرصة، لا يمكنك تعديل حالة الرييلز الآن.'
-            });
-            checkbox.checked = !checked;
-            return;
-        }
-
-        if (checkbox.disabled) return;
-
-        const result = await Swal.fire({
-            title: 'هل أنت متأكد؟',
-            text: checked
-                ? "هل تريد إرسال طلب الرييلز لهذه الفرصة؟"
-                : "هل تريد إلغاء طلب الرييلز لهذه الفرصة؟",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'نعم',
-            cancelButtonText: 'لا'
-        });
-
-        if (result.isConfirmed) {
-            const nowFinal = new Date();
-            const hoursSinceCreationFinal = (nowFinal - created) / (1000 * 60 * 60);
-            if (hoursSinceCreationFinal > 24) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'غير مسموح بتغيير الطلب',
-                    text: 'لقد مر أكثر من 24 ساعة على إنشاء الفرصة، لا يمكن تعديل حالة الرييلز الآن.'
-                });
-                checkbox.checked = !checked;
-                return;
-            }
-            toggleReels(opportunityId, checked, checkbox);
-        } else {
-            checkbox.checked = !checked;
-        }
-    }
-
-    async function toggleReels(opportunityId, requestReels, checkbox) {
-        try {
+    SwalConfirmUI.fire({
+        title:'هل تريد تأكيد حذف هذه الفرصة؟',
+        html: oppTitle ? oppTitle : '',
+        showCancelButton:true,
+        confirmButtonText:'تأكيد',
+        cancelButtonText:'تراجع'
+    }).then((result)=>{
+        if(result.isConfirmed){
             const token = document.getElementById('RequestVerificationToken').value;
-            const response = await fetch('/Opportunity/ToggleReelsRequest/' + opportunityId, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': token
-                },
-                body: JSON.stringify({ RequestReels: requestReels })
+            fetch('/Opportunity/Delete/' + id, {
+                method:'POST',
+                headers:{ 'RequestVerificationToken': token }
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('error');
+                return showSuccess('تم حذف الفرصة بنجاح!');
+            })
+            .then(() => location.reload())
+            .catch(() => {
+                Swal.fire({ icon:'error', title:'خطأ', text:'حدث خطأ أثناء تنفيذ العملية' });
             });
-
-            if (!response.ok) throw new Error('حدث خطأ أثناء إرسال الطلب.');
-
-            const row = checkbox.closest('tr');
-            const statusCell = row.querySelector('.reels-status');
-
-            if (requestReels) {
-                statusCell.innerHTML = '<span class="badge bg-warning">قيد الانتظار</span>';
-            } else {
-                checkbox.checked = false;
-                statusCell.innerHTML = '<span class="text-muted">لم يتم الطلب</span>';
-            }
-
-            Swal.fire({
-                icon: 'success',
-                title: requestReels ? 'تم إرسال الطلب!' : 'تم إلغاء الطلب!',
-                timer: 1500,
-                showConfirmButton: false
-            });
-
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'خطأ',
-                text: error.message
-            });
-            checkbox.checked = !requestReels;
         }
-    }
+    });
+}
 
-    function showCompletedAlert() {
-        Swal.fire({
-            icon: 'info',
-            title: 'تم اكتمال طلبك',
-            text: 'بإمكانك مشاهدة طلبك على صفحات التواصل الاجتماعي الخاصة بنا',
-            confirmButtonText: 'حسناً'
-        });
-    }
+async function toggleReels(id, hasRequest) {
 
-        function updateCheckboxAfterEdit(oppId, isRejected) {
-        const checkboxCell = document.querySelector(`#row-${oppId} .checkbox-cell`);
-        if(isRejected){
-            checkboxCell.innerHTML = ''; // يختفي
-        } else {
-            checkboxCell.innerHTML = `<input type="checkbox" onchange="confirmReels(${oppId}, this)" />`;
-        }
-    }
+    const oppTitle = getOppTitle(id);
 
+    const result = await SwalConfirmUI.fire({
+        title: hasRequest
+            ? 'هل تريد التراجع عن طلب ريل لهذه الفرصة؟'
+            : 'هل تريد تأكيد طلب ريل لهذه الفرصة؟',
+        html: oppTitle ? oppTitle : '',
+        showCancelButton:true,
+        confirmButtonText:'تأكيد',
+        cancelButtonText:'تراجع'
+    });
+
+    if (!result.isConfirmed) return;
+
+    const token = document.getElementById('RequestVerificationToken').value;
+
+    fetch('/Opportunity/ToggleReelsRequest/' + id, {
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json',
+            'RequestVerificationToken': token
+        },
+        body: JSON.stringify({ RequestReels: !hasRequest })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error('error');
+        return showSuccess(
+            !hasRequest
+                ? 'تم إرسال طلب إنشاء ريل للفرصة بنجاح!'
+                : 'تم التراجع عن طلب الريل بنجاح!'
+        );
+    })
+    .then(() => location.reload())
+    .catch(() => {
+        Swal.fire({ icon:'error', title:'خطأ', text:'حدث خطأ أثناء تنفيذ العملية' });
+    });
+}
 </script>
