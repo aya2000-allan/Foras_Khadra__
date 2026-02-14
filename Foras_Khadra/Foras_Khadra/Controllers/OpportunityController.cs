@@ -303,7 +303,7 @@ namespace Foras_Khadra.Controllers
             if (opp == null) return NotFound();
 
             var creator = await _userManager.FindByIdAsync(opp.CreatedByUserId);
-            bool isAdminPublisher = creator != null && await _userManager.IsInRoleAsync(creator, "Admin");
+            opp.IsPublishedByAdmin = creator != null && await _userManager.IsInRoleAsync(creator, "Admin");
 
             return View(opp);
         }
@@ -329,8 +329,9 @@ namespace Foras_Khadra.Controllers
 
             var org = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == user.Id);
             var opportunities = await _context.Opportunities
-                .Where(o => o.CreatedByUserId == user.Id)
-                .ToListAsync();
+    .Where(o => o.CreatedByUserId == user.Id)
+    .Include(o => o.AvailableCountries) 
+    .ToListAsync();
 
             var model = new OrgOpportunityPageVM
             {
@@ -349,7 +350,7 @@ namespace Foras_Khadra.Controllers
                         DescriptionAr = o.DescriptionAr,
                         DescriptionEn = o.DescriptionEn,
                         DescriptionFr = o.DescriptionFr,
-                        AvailableCountryNames = o.AvailableCountries.Select(c => c.NameAr).ToList(),
+                        AvailableCountries = o.AvailableCountries?.ToList() ?? new List<Country>(),
                         Type = o.Type,
                         PublishDate = o.PublishDate,
                         ImagePath = o.ImagePath,
