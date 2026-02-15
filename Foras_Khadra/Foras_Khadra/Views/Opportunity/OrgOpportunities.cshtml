@@ -149,6 +149,11 @@ h2 { font-weight:800; color:#2f6b3c; }
   padding: 10px 34px !important;
   font-weight: 800 !important;
   min-width: 140px;
+  margin-right: 20px !important;
+}
+
+.swal2-popup.custom-swal .swal2-actions {
+  gap: 20px !important;
 }
 /* ===== Rejected Hover Design ===== */
 .reels-rejected{
@@ -230,6 +235,62 @@ h2 { font-weight:800; color:#2f6b3c; }
   transform: translateX(50%) translateY(-4px);
 }
 
+/* ===== Countries Tooltip Styles ===== */
+.countries-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.countries-more {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.countries-tooltip {
+  position: absolute;
+  bottom: 120%;
+  right: 50%;
+  transform: translateX(50%);
+  
+  background: #fff;
+  color: #112D14;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: normal;
+  max-width: 250px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  text-align: right;
+  line-height: 1.6;
+}
+
+.countries-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 50%;
+  transform: translateX(50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.countries-more:hover .countries-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(50%) translateY(-4px);
+}
 
 </style>
 
@@ -335,8 +396,23 @@ else
         "en" => c.NameEn,
         "fr" => c.NameFr,
         _ => c.NameAr
-    });
-    @string.Join(", ", countryNames)
+    }).ToList();
+    
+    var displayedCountries = countryNames.Take(3).ToList();
+    var remainingCountries = countryNames.Skip(3).ToList();
+    
+    <div class="countries-container">
+        @string.Join(", ", displayedCountries)
+        @if (remainingCountries.Any())
+        {
+            <span class="countries-more">
+                ...
+                <div class="countries-tooltip">
+                    @string.Join(", ", remainingCountries)
+                </div>
+            </span>
+        }
+    </div>
 }
 </td>
 
