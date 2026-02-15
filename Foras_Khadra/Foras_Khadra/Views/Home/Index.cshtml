@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["Title"];
+    ViewData["Title"] = Localizer["TitlePage"];
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
 
@@ -280,11 +280,13 @@
         <!-- Right: Text and search -->
         <div class="col-lg-5 custom-col-full" style="padding:27px 0 ;">
             <h2 class=" mb-3 main-header">
-                منصة فرص خضراء
+                @Localizer["Title"]
             </h2>
-            <h4 class="mb-4" style="color:var(--textColor); font-size:40px;font-weight:500; font-stretch: expanded;">من وإلى شباب عربي</h4>
+            <h4 class="mb-4" style="color:var(--textColor); font-size:40px;font-weight:500; font-stretch: expanded;"> @Localizer["SubTitle"]   </h4>
             <p class="mb-4 responsive-text" style="font-size:20px;font-weight:350; text-align:justify;max-width:443px">
-                هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة. لقد تم توليد هذا النص من مولد النص العربي، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.
+                @Localizer["Description1"]<br /><br />
+                @Localizer["Description2"]<br /><br />
+                @Localizer["Description3"]
             </p>
            
         </div>
