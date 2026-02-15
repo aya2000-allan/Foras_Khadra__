@@ -117,25 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Description" xml:space="preserve">
-    <value>An Arab platform connecting the youth of the Arab world with local and global environmental and climate opportunities and grants, using clear language and reliable content, focusing on fair access and capacity building. The platform aims to break language and guidance barriers and turn opportunities into tangible, actionable paths.</value>
+  <data name="BoardOfDirectors" xml:space="preserve">
+    <value>Conseil d’Administration</value>
   </data>
-  <data name="LatestArticles" xml:space="preserve">
-    <value>Latest Articles</value>
+  <data name="HonoraryMembers" xml:space="preserve">
+    <value>Membres Honoraires</value>
   </data>
-  <data name="ReadMore" xml:space="preserve">
-    <value>Read More</value>
+  <data name="HR" xml:space="preserve">
+    <value>Ressources Humaines</value>
   </data>
-  <data name="SubTitle" xml:space="preserve">
-    <value>From and to the youth of the Arab world</value>
+  <data name="LocalTeams" xml:space="preserve">
+    <value>Équipes Locales</value>
   </data>
-  <data name="Title" xml:space="preserve">
-    <value>Foras Khadra Platform</value>
+  <data name="Opportunities" xml:space="preserve">
+    <value>Opportunités</value>
   </data>
-  <data name="TitlePage" xml:space="preserve">
-    <value>Home Page</value>
+  <data name="PublicRelations" xml:space="preserve">
+    <value>Relations Publiques</value>
   </data>
-  <data name="ViewAll" xml:space="preserve">
-    <value>View All</value>
+  <data name="SocialMedia" xml:space="preserve">
+    <value>Médias Sociaux</value>
+  </data>
+  <data name="Technology" xml:space="preserve">
+    <value>Technologie</value>
   </data>
 </root>

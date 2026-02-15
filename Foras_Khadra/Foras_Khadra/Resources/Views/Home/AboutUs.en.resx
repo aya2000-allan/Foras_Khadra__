@@ -124,7 +124,13 @@
     <value>Who are we?</value>
   </data>
   <data name="GoalsTitle" xml:space="preserve">
-    <value>Our Goals</value>
+    <value>Our Mission</value>
+  </data>
+  <data name="SubGoals" xml:space="preserve">
+    <value>Empowering Arab youth to actively participate in environmental and climate action by ensuring fair access to opportunities and building strategic partnerships with national, regional, and international institutions, ensuring that productive Arab youth are connected to the right opportunities and can fully benefit from them.</value>
+  </data>
+  <data name="SubVision" xml:space="preserve">
+    <value>Foras Khadra aims to be the leading Arab platform shaping the landscape of environmental and climate opportunities and grants at both local and international levels, serving as a hub for knowledge exchange, partnership building, and capacity enhancement, contributing to active and impactful Arab participation in global environmental and climate transformation.</value>
   </data>
   <data name="VisionTitle" xml:space="preserve">
     <value>Our Vision</value>

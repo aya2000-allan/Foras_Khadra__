@@ -64,6 +64,11 @@ namespace Foras_Khadra.Models
         Technology,
         HR,
         SocialMedia,
-        Marketing,
+        BoardOfDirectors,
+        HonoraryMembers,
+        Opportunities,
+        PublicRelations,
+        LocalTeams,
+
     }
 }

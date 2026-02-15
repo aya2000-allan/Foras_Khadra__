@@ -124,7 +124,13 @@
     <value>Biz kimiz?</value>
   </data>
   <data name="GoalsTitle" xml:space="preserve">
-    <value>Hedeflerimiz</value>
+    <value>Notre Mission</value>
+  </data>
+  <data name="SubGoals" xml:space="preserve">
+    <value>Permettre aux jeunes Arabes de participer activement aux actions environnementales et climatiques en garantissant un accès équitable aux opportunités et en construisant des partenariats stratégiques avec des institutions nationales, régionales et internationales, assurant que les jeunes Arabes productifs soient connectés aux bonnes opportunités et en tirent pleinement parti.</value>
+  </data>
+  <data name="SubVision" xml:space="preserve">
+    <value>Foras Khadra vise à être la plateforme arabe de référence qui façonne le paysage des opportunités et bourses environnementales et climatiques aux niveaux local et international, servant de hub pour l’échange de connaissances, le développement de partenariats et le renforcement des capacités, contribuant à une participation arabe active et influente dans la transformation environnementale et climatique mondiale.</value>
   </data>
   <data name="VisionTitle" xml:space="preserve">
     <value>Vizyonumuz</value>
