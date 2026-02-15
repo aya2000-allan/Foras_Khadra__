@@ -174,8 +174,11 @@
   <data name="OpportunityImageAlt" xml:space="preserve">
     <value>Opportunity Image</value>
   </data>
-  <data name="OpportunityTitleAr" xml:space="preserve">
+  <data name="OpportunityTitle" xml:space="preserve">
     <value>Opportunity Title</value>
+  </data>
+  <data name="OpportunityTitleAr" xml:space="preserve">
+    <value>Enter Opportunity Title</value>
   </data>
   <data name="OpportunityType" xml:space="preserve">
     <value>Opportunity Type</value>
@@ -195,16 +198,16 @@
   <data name="UploadOpportunityImage" xml:space="preserve">
     <value>Upload Opportunity Image</value>
   </data>
-  <data name="WriteBenefitsAr" xml:space="preserve">
+  <data name="WriteBenefits" xml:space="preserve">
     <value>Write benefits here...</value>
   </data>
-  <data name="WriteDescriptionAr" xml:space="preserve">
+  <data name="WriteDescription" xml:space="preserve">
     <value>Write opportunity description here...</value>
   </data>
-  <data name="WriteDetailsAr" xml:space="preserve">
+  <data name="WriteDetails" xml:space="preserve">
     <value>Write the details here...</value>
   </data>
-  <data name="WriteEligibilityAr" xml:space="preserve">
+  <data name="WriteEligibility" xml:space="preserve">
     <value>Write eligibility criteria here...</value>
   </data>
 </root>
