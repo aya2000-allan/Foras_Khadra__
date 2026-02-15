@@ -77,6 +77,10 @@ html[dir="ltr"] .header-logo img {
   z-index: 1050;
   display: none;
 }
+html[dir="ltr"] .filter-window {
+  left: auto;
+  right: 0;
+}
 
 /* This positions the sub-menu relative to the main filter window */
 .sub-filter-menu {

@@ -16,6 +16,9 @@
   margin-right: 22px;
 }
 
+html[dir="ltr"] .side-panel {
+  transform: scaleX(-1);
+}
 .side-bg {
   background: #bbcfbe;
   height: 54%;
@@ -135,6 +138,13 @@
   font-size: 16px;
   outline: none;
   color: #8c8c8c;
+}
+
+.field input,
+.field select,
+.field textarea,
+.field.dropdown {
+  margin-top: 10px;
 }
 
 .dropdown.field select {
