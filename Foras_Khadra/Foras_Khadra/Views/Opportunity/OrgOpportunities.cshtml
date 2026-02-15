@@ -398,8 +398,8 @@ else
         _ => c.NameAr
     }).ToList();
     
-    var displayedCountries = countryNames.Take(3).ToList();
-    var remainingCountries = countryNames.Skip(3).ToList();
+    var displayedCountries = countryNames.Take(2).ToList();
+    var remainingCountries = countryNames.Skip(2).ToList();
     
     <div class="countries-container">
         @string.Join(", ", displayedCountries)
