@@ -1,4 +1,4 @@
-﻿@model Foras_Khadra.Models.OpportunityEditVM
+@model Foras_Khadra.Models.OpportunityEditVM
 @using System.Globalization;
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Foras_Khadra.Helpers
@@ -9,14 +9,22 @@
     Layout = "_Layout";
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
-
 }
 
 <link rel="stylesheet" href="~/css/opportunity-create.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet" />
-
+<style>
+/* اتجاه اليسار لتبويب الإنجليزي والفرنسي - يتفوق على كل القواعد */
+#tabEn .field input, #tabEn .field select, #tabEn .field textarea,
+#tabEn .field label, #tabEn .field .discription, #tabEn .field h3,
+#tabFr .field input, #tabFr .field select, #tabFr .field textarea,
+#tabFr .field label, #tabFr .field .discription, #tabFr .field h3 {
+  direction: ltr !important; text-align: left !important;
+}
+#tabEn .ql-editor, #tabFr .ql-editor { direction: ltr !important; text-align: left !important; }
+</style>
 <div class="header">
     <h2 class="page-title"> @Localizer["EditOpportunityTitle"] </h2>
     @if (!User.IsInRole("Organization"))
@@ -134,15 +142,15 @@
             
             <div class="tab-content mt-3">
                 <!-- Arabic -->
-                <div class="tab-pane fade show active" id="tabAr" role="tabpanel">
+                <div class="tab-pane fade show active" id="tabAr" role="tabpanel" dir="rtl">
                     <div class="field">
-                        <label for="TitleAr">@Localizer["OpportunityTitleAr"] </label>
-                        <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <label for="TitleAr">@Localizer["OpportunityTitle"]</label>
+                        <input asp-for="TitleAr"  required />
                         <span asp-validation-for="TitleAr" class="text-danger"></span>
                     </div>
                     
                     <div class="field">
-                        <label for="editorEligibilityAr">@Localizer["EligibilityCriteria"]  </label>
+                        <label for="editorEligibilityAr">@Localizer["EligibilityCriteria"]</label>
                         <div id="editorEligibilityAr" style="height: 150px;"></div>
                         <input type="hidden" asp-for="EligibilityCriteriaAr" id="eligibilityAr" required />
                         <span asp-validation-for="EligibilityCriteriaAr" class="text-danger"></span>
@@ -156,7 +164,7 @@
                     </div>
 
                     <div class="field">
-                        <label for="editorDescriptionAr">@Localizer["OpportunityDescription"] </label>
+                        <label for="editorDescriptionAr">@Localizer["OpportunityDescription"]</label>
                         <div id="editorDescriptionAr" style="height: 180px;"></div>
                         <input type="hidden" asp-for="DescriptionAr" id="descriptionAr" required />
                         <span asp-validation-for="DescriptionAr" class="text-danger"></span>
@@ -165,7 +173,7 @@
                     
 
                     <div class="field">
-                        <label for="editorAr">@Localizer["OpportunityDetails"] </label>
+                        <label for="editorAr">@Localizer["OpportunityDetails"]</label>
                         <div id="editorAr" style="height: 200px;"></div>
                         <input type="hidden" asp-for="DetailsAr" id="detailsAr" />
                         <span asp-validation-for="DetailsAr" class="text-danger"></span>
@@ -173,15 +181,15 @@
                 </div>
 
                 <!-- English -->
-                <div class="tab-pane fade" id="tabEn" role="tabpanel">
+                <div class="tab-pane fade" id="tabEn" role="tabpanel" dir="ltr">
                     <div class="field">
-                        <label for="TitleEn">@Localizer["OpportunityTitleEn"] </label>
-                        <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <label for="TitleEn">@Localizer["OpportunityTitle"]</label>
+                        <input asp-for="TitleEn" required />
                         <span asp-validation-for="TitleEn" class="text-danger"></span>
                     </div>
                     
                     <div class="field">
-                        <label for="editorEligibilityEn"> @Localizer["EligibilityCriteria"]</label>
+                        <label for="editorEligibilityEn">@Localizer["EligibilityCriteria"]</label>
                         <div id="editorEligibilityEn" style="height: 150px;"></div>
                         <input type="hidden" asp-for="EligibilityCriteriaEn" id="eligibilityEn" required />
                         <span asp-validation-for="EligibilityCriteriaEn" class="text-danger"></span>
@@ -195,7 +203,7 @@
                     </div>
 
                     <div class="field">
-                        <label for="editorDescriptionEn"> @Localizer["OpportunityDescription"]</label>
+                        <label for="editorDescriptionEn">@Localizer["OpportunityDescription"]</label>
                         <div id="editorDescriptionEn" style="height: 180px;"></div>
                         <input type="hidden" asp-for="DescriptionEn" id="descriptionEn" required />
                         <span asp-validation-for="DescriptionEn" class="text-danger"></span>
@@ -204,9 +212,7 @@
                     
 
                     <div class="field">
-                        <label for="editorEn">
-                            @Localizer["OpportunityDetails"]
-                        </label>
+                        <label for="editorEn">@Localizer["OpportunityDetails"]</label>
                         <div id="editorEn" style="height: 200px;"></div>
                         <input type="hidden" asp-for="DetailsEn" id="detailsEn" />
                         <span asp-validation-for="DetailsEn" class="text-danger"></span>
@@ -214,10 +220,10 @@
                 </div>
 
                 <!-- French -->
-                <div class="tab-pane fade" id="tabFr" role="tabpanel">
+                <div class="tab-pane fade" id="tabFr" role="tabpanel" dir="ltr">
                     <div class="field">
-                        <label for="TitleFr">@Localizer["OpportunityTitleFr"] </label>
-                        <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <label for="TitleFr">@Localizer["OpportunityTitle"]</label>
+                        <input asp-for="TitleFr" required />
                         <span asp-validation-for="TitleFr" class="text-danger"></span>
                     </div>
                     
@@ -292,52 +298,98 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-         // ================= Localization Strings =================
-        var writeEligibility = "@Localizer["WriteEligibilityAr"].Value";
-        var writeBenefits = "@Localizer["WriteBenefitsAr"].Value";
-        var writeDescription = "@Localizer["WriteDescriptionAr"].Value";
-        var writeDetails = "@Localizer["WriteDetailsAr"].Value";
-
-
-        // =================== Initialize All Quill Editors ===================
-
+        // ================= Localization Strings =================
+                // =================== Initialize All Quill Editors ===================
         // Arabic Editors
-        var quillEligibilityAr = new Quill('#editorEligibilityAr', { theme: 'snow', placeholder: writeEligibility });
-        var quillBenefitsAr = new Quill('#editorBenefitsAr', { theme: 'snow', placeholder: writeBenefits });
-        var quillDescriptionAr = new Quill('#editorDescriptionAr', { theme: 'snow', placeholder: writeDescription });
-        var quillAr = new Quill('#editorAr', { theme: 'snow', placeholder: writeDetails });
+        var quillEligibilityAr = new Quill('#editorEligibilityAr', { theme: 'snow' });
+        var quillBenefitsAr    = new Quill('#editorBenefitsAr', { theme: 'snow' });
+        var quillDescriptionAr = new Quill('#editorDescriptionAr', { theme: 'snow' });
+        var quillAr            = new Quill('#editorAr', { theme: 'snow' });
 
         // English Editors
-        var quillEligibilityEn = new Quill('#editorEligibilityEn', { theme: 'snow', placeholder: writeEligibility });
-        var quillBenefitsEn = new Quill('#editorBenefitsEn', { theme: 'snow', placeholder: writeBenefits });
-        var quillDescriptionEn = new Quill('#editorDescriptionEn', { theme: 'snow', placeholder: writeDescription });
-        var quillEn = new Quill('#editorEn', { theme: 'snow', placeholder: writeDetails });
+        var quillEligibilityEn = new Quill('#editorEligibilityEn', { theme: 'snow' });
+        var quillBenefitsEn    = new Quill('#editorBenefitsEn', { theme: 'snow' });
+        var quillDescriptionEn = new Quill('#editorDescriptionEn', { theme: 'snow' });
+        var quillEn            = new Quill('#editorEn', { theme: 'snow' });
 
         // French Editors
-        var quillEligibilityFr = new Quill('#editorEligibilityFr', { theme: 'snow', placeholder: writeEligibility });
-        var quillBenefitsFr = new Quill('#editorBenefitsFr', { theme: 'snow', placeholder: writeBenefits });
-        var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow', placeholder: writeDescription });
-        var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: writeDetails });
+        var quillEligibilityFr = new Quill('#editorEligibilityFr', { theme: 'snow' });
+        var quillBenefitsFr    = new Quill('#editorBenefitsFr', { theme: 'snow' });
+        var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow' });
+        var quillFr            = new Quill('#editorFr', { theme: 'snow' });
 
+        // =================== تطبيق اتجاه النص حسب التبويب ===================
+        function applyTabDirection(tabId) {
+            var pane = document.getElementById(tabId);
+            if (!pane) return;
+            var isLtr = tabId === 'tabEn' || tabId === 'tabFr';
+            var dir = isLtr ? 'ltr' : 'rtl';
+            var align = isLtr ? 'left' : 'right';
+            pane.setAttribute('dir', dir);
+            pane.querySelectorAll('.field input, .field select, .field textarea, .field label, .field .discription, .field h3').forEach(function(el) {
+                el.style.setProperty('direction', dir, 'important');
+                el.style.setProperty('text-align', align, 'important');
+            });
+            pane.querySelectorAll('.ql-editor').forEach(function(el) {
+                el.style.setProperty('direction', dir, 'important');
+                el.style.setProperty('text-align', align, 'important');
+            });
+        }
+        function initTabDirection() {
+            document.querySelectorAll('#languageTabs a[data-bs-toggle="tab"]').forEach(function(tab) {
+                tab.addEventListener('shown.bs.tab', function(e) {
+                    var link = e.currentTarget || e.target.closest('a');
+                    if (link) {
+                        var href = link.getAttribute('href') || '';
+                        var targetId = href.replace('#', '');
+                        if (targetId) applyTabDirection(targetId);
+                    }
+                });
+            });
+            var activeLink = document.querySelector('#languageTabs .nav-link.active');
+            if (activeLink) {
+                var href = activeLink.getAttribute('href') || '';
+                var targetId = href.replace('#', '');
+                if (targetId) applyTabDirection(targetId);
+            }
+            ['tabEn', 'tabFr'].forEach(function(id) {
+                var p = document.getElementById(id);
+                if (p) applyTabDirection(id);
+            });
+        }
+        initTabDirection();
 
-        // =================== Load Existing Content ===================
+        // =================== Load Existing Data from Model into Editors and Hidden Inputs ===================
         // Arabic
-        quillEligibilityAr.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.EligibilityCriteriaAr ?? "")));
-        quillDescriptionAr.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DescriptionAr ?? "")));
-        quillBenefitsAr.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.BenefitsAr ?? "")));
-        quillAr.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DetailsAr ?? "")));
-        
+        quillEligibilityAr.root.innerHTML = '@Html.Raw(Model.EligibilityCriteriaAr ?? "")';
+        quillBenefitsAr.root.innerHTML    = '@Html.Raw(Model.BenefitsAr ?? "")';
+        quillDescriptionAr.root.innerHTML = '@Html.Raw(Model.DescriptionAr ?? "")';
+        quillAr.root.innerHTML            = '@Html.Raw(Model.DetailsAr ?? "")';
+        document.getElementById('eligibilityAr').value = quillEligibilityAr.root.innerHTML;
+        document.getElementById('benefitsAr').value    = quillBenefitsAr.root.innerHTML;
+        document.getElementById('descriptionAr').value = quillDescriptionAr.root.innerHTML;
+        document.getElementById('detailsAr').value     = quillAr.root.innerHTML;
+
         // English
-        quillEligibilityEn.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.EligibilityCriteriaEn ?? "")));
-        quillDescriptionEn.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DescriptionEn ?? "")));
-        quillBenefitsEn.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.BenefitsEn ?? "")));
-        quillEn.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DetailsEn ?? "")));
-        
+        quillEligibilityEn.root.innerHTML = '@Html.Raw(Model.EligibilityCriteriaEn ?? "")';
+        quillBenefitsEn.root.innerHTML    = '@Html.Raw(Model.BenefitsEn ?? "")';
+        quillDescriptionEn.root.innerHTML = '@Html.Raw(Model.DescriptionEn ?? "")';
+        quillEn.root.innerHTML            = '@Html.Raw(Model.DetailsEn ?? "")';
+        document.getElementById('eligibilityEn').value = quillEligibilityEn.root.innerHTML;
+        document.getElementById('benefitsEn').value    = quillBenefitsEn.root.innerHTML;
+        document.getElementById('descriptionEn').value = quillDescriptionEn.root.innerHTML;
+        document.getElementById('detailsEn').value     = quillEn.root.innerHTML;
+
         // French
-        quillEligibilityFr.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.EligibilityCriteriaFr ?? "")));
-        quillDescriptionFr.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DescriptionFr ?? "")));
-        quillBenefitsFr.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.BenefitsFr ?? "")));
-        quillFr.clipboard.dangerouslyPasteHTML(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DetailsFr ?? "")));
+        quillEligibilityFr.root.innerHTML = '@Html.Raw(Model.EligibilityCriteriaFr ?? "")';
+        quillBenefitsFr.root.innerHTML    = '@Html.Raw(Model.BenefitsFr ?? "")';
+        quillDescriptionFr.root.innerHTML = '@Html.Raw(Model.DescriptionFr ?? "")';
+        quillFr.root.innerHTML            = '@Html.Raw(Model.DetailsFr ?? "")';
+        document.getElementById('eligibilityFr').value = quillEligibilityFr.root.innerHTML;
+        document.getElementById('benefitsFr').value    = quillBenefitsFr.root.innerHTML;
+        document.getElementById('descriptionFr').value = quillDescriptionFr.root.innerHTML;
+        document.getElementById('detailsFr').value     = quillFr.root.innerHTML;
+
 
         // =================== Image Preview Functionality ===================
         const imageInput = document.getElementById('ImageInput');
@@ -349,60 +401,32 @@
         const deleteImageBtn = document.getElementById('deleteImageBtn');
         const removeImageHidden = document.getElementById('RemoveImage');
 
-        // Handle new image upload
         imageInput.addEventListener('change', function() {
             if (this.files && this.files[0]) {
                 const reader = new FileReader();
-                
                 reader.onload = function(e) {
-                    // Hide current image preview if exists
-                    if (currentImagePreview) {
-                        currentImagePreview.style.display = 'none';
-                    }
-                    
-                    // Show new image preview
+                    if (currentImagePreview) currentImagePreview.style.display = 'none';
                     newPreviewImg.src = e.target.result;
                     newImagePreviewContainer.style.display = 'flex';
-                    
-                    // Don't set RemoveImage yet - we'll handle on submit
                 }
-                
                 reader.readAsDataURL(this.files[0]);
             }
         });
 
-        // Remove newly uploaded image
         if (removeNewImageBtn) {
             removeNewImageBtn.addEventListener('click', function() {
-                // Clear file input
                 imageInput.value = '';
-                
-                // Hide new preview
                 newImagePreviewContainer.style.display = 'none';
-                
-                // Show current image preview if it exists
-                if (currentImagePreview) {
-                    currentImagePreview.style.display = 'flex';
-                }
-                
-                // Show upload area
+                if (currentImagePreview) currentImagePreview.style.display = 'flex';
                 uploadArea.style.display = 'block';
-                
-                // Don't set RemoveImage here because we're keeping the original
                 removeImageHidden.value = 'false';
             });
         }
 
-        // Delete existing image
         if (deleteImageBtn) {
             deleteImageBtn.addEventListener('click', function() {
-                // Hide current image preview
-                currentImagePreview.style.display = 'none';
-                
-                // Show upload area
+                if (currentImagePreview) currentImagePreview.style.display = 'none';
                 uploadArea.style.display = 'block';
-                
-                // Mark for removal
                 removeImageHidden.value = 'true';
             });
         }
@@ -414,13 +438,11 @@
             document.getElementById('descriptionAr').value = quillDescriptionAr.root.innerHTML.trim();
             document.getElementById('benefitsAr').value = quillBenefitsAr.root.innerHTML.trim();
             document.getElementById('detailsAr').value = quillAr.root.innerHTML.trim();
-            
             // English
             document.getElementById('eligibilityEn').value = quillEligibilityEn.root.innerHTML.trim();
             document.getElementById('descriptionEn').value = quillDescriptionEn.root.innerHTML.trim();
             document.getElementById('benefitsEn').value = quillBenefitsEn.root.innerHTML.trim();
             document.getElementById('detailsEn').value = quillEn.root.innerHTML.trim();
-            
             // French
             document.getElementById('eligibilityFr').value = quillEligibilityFr.root.innerHTML.trim();
             document.getElementById('descriptionFr').value = quillDescriptionFr.root.innerHTML.trim();
@@ -432,18 +454,14 @@
         const form = document.getElementById('editForm');
         form.addEventListener('submit', function(e){
             copyAllQuillToHidden();
-
             var activeTabPane = document.querySelector('.tab-pane.active');
             var requiredFields = activeTabPane.querySelectorAll('[required]');
             var allFilled = true;
-
             requiredFields.forEach(function(field){
                 if(field.type !== 'checkbox' && field.type !== 'radio'){
                     if(!field.value.trim()) allFilled = false;
                 }
             });
-
-            // Check all Quill editors in active tab
             if(activeTabPane.id === 'tabAr') {
                 if(quillEligibilityAr.getText().trim() === '') allFilled = false;
                 if(quillDescriptionAr.getText().trim() === '') allFilled = false;
@@ -462,7 +480,6 @@
                 if(quillBenefitsFr.getText().trim() === '') allFilled = false;
                 if(quillFr.getText().trim() === '') allFilled = false;
             }
-
             if(!allFilled){
                 e.preventDefault();
                 Swal.fire({
@@ -479,18 +496,14 @@
         tabLinks.forEach(function(link){
             link.addEventListener('show.bs.tab', function(e){
                 copyAllQuillToHidden();
-
                 var activeTabPane = document.querySelector('.tab-pane.active');
                 var requiredFields = activeTabPane.querySelectorAll('[required]');
                 var allFilled = true;
-
                 requiredFields.forEach(function(field){
                     if(field.type !== 'checkbox' && field.type !== 'radio'){
                         if(!field.value.trim()) allFilled = false;
                     }
                 });
-
-                // Check all Quill editors in active tab
                 if(activeTabPane.id === 'tabAr') {
                     if(quillEligibilityAr.getText().trim() === '') allFilled = false;
                     if(quillDescriptionAr.getText().trim() === '') allFilled = false;
@@ -509,7 +522,6 @@
                     if(quillBenefitsFr.getText().trim() === '') allFilled = false;
                     if(quillFr.getText().trim() === '') allFilled = false;
                 }
-
                 if(!allFilled){
                     e.preventDefault();
                     Swal.fire({
@@ -522,4 +534,6 @@
             });
         });
     </script>
+
+
 }

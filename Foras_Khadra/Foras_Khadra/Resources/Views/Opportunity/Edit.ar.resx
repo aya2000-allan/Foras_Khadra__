@@ -162,7 +162,10 @@
   <data name="OpportunityImageAlt" xml:space="preserve">
     <value>صورة الفرصة</value>
   </data>
-  <data name="OpportunityTitleAr" xml:space="preserve">
+  <data name="SubOpportunityTitle" xml:space="preserve">
+    <value>أدخل عنوان الفرصة</value>
+  </data>
+  <data name="OpportunityTitle" xml:space="preserve">
     <value>عنوان الفرصة</value>
   </data>
   <data name="PublishedBy" xml:space="preserve">
@@ -180,16 +183,16 @@
   <data name="EditOpportunityImage" xml:space="preserve">
     <value>تعديل صورة الفرصة</value>
   </data>
-  <data name="WriteBenefitsAr" xml:space="preserve">
+  <data name="WriteBenefits" xml:space="preserve">
     <value>أكتب الفوائد هنا...</value>
   </data>
-  <data name="WriteDescriptionAr" xml:space="preserve">
+  <data name="WriteDescription" xml:space="preserve">
     <value>أكتب وصف الفرصة هنا...</value>
   </data>
-  <data name="WriteDetailsAr" xml:space="preserve">
+  <data name="WriteDetails" xml:space="preserve">
     <value>أكتب التفاصيل هنا...</value>
   </data>
-  <data name="WriteEligibilityAr" xml:space="preserve">
+  <data name="WriteEligibility" xml:space="preserve">
     <value>أكتب معايير الأهلية هنا...</value>
   </data>
   <data name="DeleteImage" xml:space="preserve">

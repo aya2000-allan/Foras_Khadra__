@@ -26,10 +26,19 @@ namespace Foras_Khadra.Controllers
                 .AsNoTracking()
                 .ToList();
 
+            var latestOpportunities = _context.Opportunities
+    .OrderByDescending(o => o.PublishDate)
+    .Take(9)
+    .AsNoTracking()
+    .ToList();
+
+
             var model = new HomeViewModel
             {
-                LatestArticles = latestArticles
+                LatestArticles = latestArticles,
+                LatestOpportunities = latestOpportunities
             };
+
 
             return View(model);
         }

@@ -174,8 +174,11 @@
   <data name="OpportunityImageAlt" xml:space="preserve">
     <value>Image de l'opportunité</value>
   </data>
-  <data name="OpportunityTitleAr" xml:space="preserve">
+  <data name="OpportunityTitle" xml:space="preserve">
     <value>Titre de l'opportunité</value>
+  </data>
+  <data name="OpportunityTitleAr" xml:space="preserve">
+    <value>Saisir le titre de l’opportunité</value>
   </data>
   <data name="OpportunityType" xml:space="preserve">
     <value>Type d’opportunité</value>
@@ -195,16 +198,16 @@
   <data name="UploadOpportunityImage" xml:space="preserve">
     <value>Télécharger l'image de l'opportunité</value>
   </data>
-  <data name="WriteBenefitsAr" xml:space="preserve">
+  <data name="WriteBenefits" xml:space="preserve">
     <value>Écrivez les avantages ici...</value>
   </data>
-  <data name="WriteDescriptionAr" xml:space="preserve">
+  <data name="WriteDescription" xml:space="preserve">
     <value>Écrivez la description de l'opportunité ici...</value>
   </data>
-  <data name="WriteDetailsAr" xml:space="preserve">
+  <data name="WriteDetails" xml:space="preserve">
     <value>Écrivez les détails ici...</value>
   </data>
-  <data name="WriteEligibilityAr" xml:space="preserve">
+  <data name="WriteEligibility" xml:space="preserve">
     <value>Écrivez les critères d'éligibilité ici...</value>
   </data>
 </root>

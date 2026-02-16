@@ -157,7 +157,10 @@
                                 _ => opp.DescriptionAr
                             };
                         }
-                        <p class="opp-description">@description</p>
+                        @{
+                            var plainDescription = System.Text.RegularExpressions.Regex.Replace(description, "<.*?>", "");
+                        }
+                        <p class="opp-description">@plainDescription</p>
 
 
 

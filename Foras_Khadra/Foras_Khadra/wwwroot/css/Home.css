@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
 
 * {
     font-family: 'Cairo', sans-serif;
@@ -205,25 +205,41 @@ background: var(--orange);
 /* ===== VISION & GOALS ===== */
 .vision-goals {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     gap: 70px;
     padding: 50px 60px;
-    direction: ltr; /* نحمي من RTL لخبطة */
 }
 
-/* نخلي النص عربي */
+/* عربي: الرؤية يمين، الأهداف يسار */
+.vision-goals[dir="rtl"] {
+    flex-direction: row-reverse;
+}
+
+/* إنجليزي/فرنسي: الرؤية يسار، الأهداف يمين */
+.vision-goals[dir="ltr"] {
+    flex-direction: row;
+}
+
 .vg-box {
-    direction: rtl;
     width: 50%;
 }
 
+.vision-goals[dir="rtl"] .vg-box {
+    direction: rtl;
+    text-align: right;
+}
+
+.vision-goals[dir="ltr"] .vg-box {
+    direction: ltr;
+    text-align: left;
+}
+
 .vg-box.vision {
-    order: 1; /* اليسار */
+    order: 1;
 }
 
 .vg-box.goals {
-    order: 2; /* اليمين */
+    order: 2;
 }
 
 
@@ -256,8 +272,15 @@ background: var(--orange);
     font-size: 16px;
     font-weight: 500;
     color: #000000;
-    text-align: justify;
     text-justify: inter-word;
+}
+
+.vision-goals[dir="rtl"] .vg-box p {
+    text-align: right;
+}
+
+.vision-goals[dir="ltr"] .vg-box p {
+    text-align: left;
 }
 
 /* ===== TEAMS ===== */

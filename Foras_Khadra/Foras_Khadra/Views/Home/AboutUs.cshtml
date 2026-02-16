@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Foras_Khadra.Models.TeamMember>
+@model IEnumerable<Foras_Khadra.Models.TeamMember>
 @using Foras_Khadra.Helpers
 @using Microsoft.AspNetCore.Localization;
 @using Microsoft.Extensions.Options;
@@ -10,7 +10,7 @@
     var isFirstGroup = true;
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
-    ViewData["Title"] = Localizer["ContactHeader"];
+    ViewData["Title"] = Localizer["AboutUsTitle"];
 
 }
 
@@ -29,7 +29,7 @@
 </section>
 
 <!-- ===== VISION & GOALS ===== -->
-<section class="vision-goals">
+<section class="vision-goals" dir="@dir">
 
         <!-- الرؤية -->
         <div class="vg-box vision">
@@ -39,12 +39,7 @@
             </div>
 
             <p>
-                نحن مجموعة من الشباب من الوطن العربي الذين التقينا في المؤتمرات العالمية،
-                وقررنا أن نبدأ مشروعنا لدعم الشباب في وطننا العربي على إيجاد الفرص
-                والمشاركة على الصعيد الدولي.
-                <br /><br />
-                إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة
-                عدد الفقرات كما تريد، النص لن يبدو مقسماً ولا يحوي أخطاء لغوية.
+            @Localizer["SubVision"]
             </p>
         </div>
 
@@ -56,12 +51,7 @@
             </div>
 
             <p>
-                دعم الشباب العربي للوصول إلى المؤتمرات العالمية،
-                وبناء شبكة علاقات دولية، وتطوير المهارات القيادية.
-                <br /><br />
-                مولد النص العربى مفيد لمصممي المواقع على وجه الخصوص،
-                حيث يحتاج العميل في كثير من الأحيان أن يطلع على صورة
-                حقيقية لتصميم الموقع.
+            @Localizer["SubGoals"]
             </p>
         </div>
 
@@ -78,11 +68,21 @@
 
                 <div class="group-card">
 
-                    <h2 class="team-title">@group.Key</h2>
+                    <h2 class="team-title"> @DepartmentTranslator.TranslateName(group.Key, culture)</h2>
 
 
                     <div class="group-bio">
-                        <p>إذا كنت تحتاج إلى عدد أكبر من الفقرات يتيح لك مولد النص العربى زيادة عدد الفقرات كما تريد، النص لن يبدو مقسما ولا يحوي أخطاء لغوية، مولد </p>
+                        @{
+                            var desc = DepartmentTranslator.TranslateDesc(group.Key, culture);
+
+                            var firstSentence = desc.Contains(".") ? desc.Split('.')[0] + "." : desc;
+                            var rest = desc.Contains(".") ? desc.Substring(firstSentence.Length) : "";
+                        }
+
+                        <p>
+                            <strong>@firstSentence</strong>@rest
+                        </p>
+
                     </div>
                 </div>
                 @foreach (var member in group.OrderByDescending(m => m.Membership))

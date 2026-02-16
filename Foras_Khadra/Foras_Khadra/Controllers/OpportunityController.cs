@@ -82,6 +82,82 @@ public async Task<IActionResult> Create()
 
         [HttpPost]
         [Authorize(Roles = "Admin,Organization")]
+        public async Task<IActionResult> Create(OpportunityCreateVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                // إعادة ملء قائمة الدول حسب لغة الموقع
+                var countries = await _context.Countries.ToListAsync();
+                var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+                model.CountriesSelectList = countries.Select(c => new SelectListItem
+                {
+                    Text = culture switch
+                    {
+                        "en" => c.NameEn,
+                        "fr" => c.NameFr,
+                        _ => c.NameAr
+                    },
+                    Value = c.Id.ToString(),
+                    Selected = model.AvailableCountryIds?.Contains(c.Id) ?? false
+                }).ToList();
+
+                return View(model);
+            }
+
+            string imagePath = null;
+            if (model.Image != null)
+            {
+                var fileName = Guid.NewGuid() + Path.GetExtension(model.Image.FileName);
+                var path = Path.Combine(_env.WebRootPath, "uploads/opportunities", fileName);
+                using var stream = new FileStream(path, FileMode.Create);
+                await model.Image.CopyToAsync(stream);
+                imagePath = "/uploads/opportunities/" + fileName;
+            }
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return RedirectToAction("Login", "Account");
+
+            var org = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == currentUser.Id);
+
+            var opportunity = new Opportunity
+            {
+                TitleAr = model.TitleAr,
+                TitleEn = model.TitleEn,
+                TitleFr = model.TitleFr,
+                DescriptionAr = model.DescriptionAr,
+                DescriptionEn = model.DescriptionEn,
+                DescriptionFr = model.DescriptionFr,
+                DetailsAr = model.DetailsAr,
+                DetailsEn = model.DetailsEn,
+                DetailsFr = model.DetailsFr,
+                AvailableCountries = model.AvailableCountryIds != null
+                    ? await _context.Countries
+                        .Where(c => model.AvailableCountryIds.Contains(c.Id))
+                        .ToListAsync()
+                    : new List<Country>(),
+                EligibilityCriteriaAr = model.EligibilityCriteriaAr,
+                EligibilityCriteriaEn = model.EligibilityCriteriaEn,
+                EligibilityCriteriaFr = model.EligibilityCriteriaFr,
+                BenefitsAr = model.BenefitsAr,
+                BenefitsEn = model.BenefitsEn,
+                BenefitsFr = model.BenefitsFr,
+                ApplyLink = model.ApplyLink,
+                ImagePath = imagePath,
+                PublishedBy = org != null ? org.Name : "Admin",
+                Type = model.Type.Value,
+                CreatedByUserId = currentUser.Id,
+                IsPublishedByAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin"),
+                IsPublishedByOrganization = await _userManager.IsInRoleAsync(currentUser, "Organization")
+            };
+
+            _context.Opportunities.Add(opportunity);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(await _userManager.IsInRoleAsync(currentUser, "Admin") ? "Index" : "OrgOpportunities");
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin,Organization")]
         public async Task<IActionResult> Edit(OpportunityEditVM model)
         {
             // أولاً تحقق من صحة الموديل
@@ -167,6 +243,17 @@ public async Task<IActionResult> Create()
             opportunity.IsPublishedByAdmin = await _userManager.IsInRoleAsync(currentUser, "Admin");
             opportunity.IsPublishedByOrganization = await _userManager.IsInRoleAsync(currentUser, "Organization");
 
+            var existingRequest = await _context.ReelsRequests
+    .FirstOrDefaultAsync(r => r.OpportunityId == opportunity.Id);
+
+            if (existingRequest != null && existingRequest.IsRejected)
+            {
+                existingRequest.IsRejected = false;
+                existingRequest.IsCompleted = false;
+                existingRequest.IsInProgress = false;
+                existingRequest.RejectionReason = null;
+                existingRequest.RequestDate = DateTime.Now; // ترجع Pending تلقائياً
+            }
             // حفظ التغييرات
             _context.Opportunities.Update(opportunity);
             await _context.SaveChangesAsync();
@@ -377,5 +464,7 @@ public async Task<IActionResult> Create()
         {
             public bool RequestReels { get; set; }
         }
+
+
     }
 }

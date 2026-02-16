@@ -5,7 +5,7 @@
 namespace Foras_Khadra.Migrations
 {
     /// <inheritdoc />
-    public partial class last : Migration
+    public partial class lastUp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

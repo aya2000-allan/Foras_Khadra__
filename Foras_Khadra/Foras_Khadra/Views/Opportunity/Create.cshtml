@@ -14,6 +14,16 @@
 }
 
 <link rel="stylesheet" href="~/css/opportunity-create.css" />
+<style>
+/* اتجاه اليسار لتبويب الإنجليزي والفرنسي - يتفوق على كل القواعد */
+#english .field input, #english .field select, #english .field textarea,
+#english .field label, #english .field .discription, #english .field h3,
+#french .field input, #french .field select, #french .field textarea,
+#french .field label, #french .field .discription, #french .field h3 {
+  direction: ltr !important; text-align: left !important;
+}
+#english .ql-editor, #french .ql-editor { direction: ltr !important; text-align: left !important; }
+</style>
 
 <div class="header">
     <h2 class="page-title">@Localizer["AddOpportunityTitle"]</h2>
@@ -28,22 +38,28 @@
         <form id="createForm" asp-action="Create" method="post" enctype="multipart/form-data">
             <ul class="nav nav-tabs" id="languageTabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="arabic-tab" data-bs-toggle="tab" href="#arabic" role="tab">@Localizer["ArabicTab"]</a>
+                    <a class="nav-link active" id="arabic-tab" data-bs-toggle="tab" href="#arabic" role="tab">
+                        @Localizer["ArabicTab"] <span style="color:red">*</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="english-tab" data-bs-toggle="tab" href="#english" role="tab">@Localizer["EnglishTab"]</a>
+                    <a class="nav-link" id="english-tab" data-bs-toggle="tab" href="#english" role="tab">
+                        @Localizer["EnglishTab"] <span style="color:red">*</span>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="french-tab" data-bs-toggle="tab" href="#french" role="tab">@Localizer["FrenchTab"]</a>
+                    <a class="nav-link" id="french-tab" data-bs-toggle="tab" href="#french" role="tab">
+                        @Localizer["FrenchTab"] <span style="color:red">*</span>
+                    </a>
                 </li>
             </ul>
             <!-- Image -->
             <!-- Image upload -->
             <div class="upload-box">
-                <h3 class="discription">@Localizer["UploadOpportunityImage"]</h3>
+                <h3 class="discription">@Localizer["UploadOpportunityImage"] <span style="color:red">*</span></h3>
                 
                 <div id="imagePreviewContainer" class="current-image-preview" style="display:none; align-items:center; gap:12px; margin-bottom:12px; background-color:#EEF1F7; justify-content:space-between; border-radius:26px; padding:12px;">
-                    <img id="previewImg" src="#" alt="@Localizer["OpportunityImageAlt"]" style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
+                    <img id="previewImg" src="#" alt="@Localizer["OpportunityImageAlt"]"  style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
                     <div id="previewInfo" style="display:flex; align-items:center; gap:6px; font-weight:600;">
                         <span id="previewName"></span>
                         <span style="color:green; font-size:20px;">✅</span>
@@ -52,8 +68,8 @@
                 
                 <label class="upload-area" id="uploadArea">
                     <input asp-for="Image" id="imageInput" type="file" hidden accept="image/jpeg, image/png" />
-                    <div class="upload-icon"><img src="~/images/upload-icon.svg" alt=""></div>
-                    <p class="dragText">@Localizer["DragDropText"]</p>
+                    <div  class="upload-icon"><img src="~/images/upload-icon.svg" alt=""></div>
+                    <p  class="dragText">@Localizer["DragDropText"] </p>
                     <small>JPEG, PNG</small>
                 </label>
                 <input type="hidden" name="RemoveImage" id="RemoveImage" value="false" />
@@ -72,10 +88,10 @@
             </div>
 
             <!-- Opportunity Type -->
-            <label for="Type">@Localizer["OpportunityType"] </label>
+            <label for="Type">@Localizer["OpportunityType"] <span style="color:red">*</span></label>
 
             <div class="field dropdown">
-                <select asp-for="Type" class="form-select">
+                <select asp-for="Type" class="form-select" >
                     <option value="">@Localizer["SelectOpportunityType"]</option>
 
                     @foreach (var item in Enum.GetValues(typeof(OpportunityType)).Cast<OpportunityType>())
@@ -83,12 +99,11 @@
                         <option value="@item">@item.GetDisplayName(culture)</option>
                     }
                 </select>
-                <span asp-validation-for="Type" class="text-danger"></span>
             </div>
 
             <!-- Available Countries -->
             <div class="field">
-                <label>@Localizer["OpportunityCountries"]</label>
+                <label>@Localizer["OpportunityCountries"] <span style="color:red">*</span></label>
                 <div class="countries-checkboxes-grid">
                     @foreach (var country in Model.CountriesSelectList)
                     {
@@ -113,10 +128,10 @@
 
             <div class="tab-content mt-3">
                 <!-- Arabic Tab -->
-                <div class="tab-pane fade show active" id="arabic" role="tabpanel">
+                <div class="tab-pane fade show active" id="arabic" role="tabpanel" dir="rtl">
                     <div class="field">
-                        <label for="TitleAr">@Localizer["OpportunityTitleAr"] </label>
-                        <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <label for="TitleAr">@Localizer["OpportunityTitle"] </label>
+                        <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitle"]" required />
                         <span asp-validation-for="TitleAr" class="text-danger"></span>
                     </div>
                     <div class="field">
@@ -147,10 +162,10 @@
                 </div>
 
                 <!-- English Tab -->
-                <div class="tab-pane fade" id="english" role="tabpanel">
+                <div class="tab-pane fade" id="english" role="tabpanel" dir="ltr">
                     <div class="field">
-                        <label for="TitleEn">@Localizer["OpportunityTitleEn"] </label>
-                        <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <label for="TitleEn">@Localizer["OpportunityTitle"] </label>
+                        <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitle"]" required />
                         <span asp-validation-for="TitleEn" class="text-danger"></span>
                     </div>
                     <div class="field">
@@ -188,10 +203,10 @@
                 </div>
 
                 <!-- French Tab -->
-                <div class="tab-pane fade" id="french" role="tabpanel">
+                <div class="tab-pane fade" id="french" role="tabpanel" dir="ltr">
                     <div class="field">
-                        <label for="TitleFr">@Localizer["OpportunityTitleFr"] </label>
-                        <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <label for="TitleFr">@Localizer["OpportunityTitle"] </label>
+                        <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitle"]" required />
                         <span asp-validation-for="TitleFr" class="text-danger"></span>
                     </div>
                     <div class="field">
@@ -226,10 +241,9 @@
             
             <!-- Apply Link -->
             <div class="field">
-                <label>@Localizer["ApplyLinkLabel"]</label>
+                <label>@Localizer["ApplyLinkLabel"] <span style="color:red">*</span></label>
 
-                <input asp-for="ApplyLink" placeholder="@Localizer["ApplyLinkPlaceholder"]" required />
-                <span asp-validation-for="ApplyLink" class="text-danger"></span>
+                <input  asp-for="ApplyLink" placeholder="@Localizer["ApplyLinkPlaceholder"]" required />
             </div>
 
             <!-- Actions -->
@@ -264,57 +278,82 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-                // ================= Localization Strings =================
-        var writeEligibility = "@Localizer["WriteEligibilityAr"].Value";
-        var writeBenefits = "@Localizer["WriteBenefitsAr"].Value";
-        var writeDescription = "@Localizer["WriteDescriptionAr"].Value";
-        var writeDetails = "@Localizer["WriteDetailsAr"].Value";
+               // ================= Localization Strings =================
+        var writeEligibility = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["WriteEligibility"].Value));
+        var writeBenefits = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["WriteBenefits"].Value));
+        var writeDescription = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["WriteDescription"].Value));
+        var writeDetails = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["WriteDetails"].Value));
 
-        var alertTitle = "@Localizer["AlertTitle"]";
-        var fillRequiredMsg = "@Localizer["FillRequiredFields"]";
-        var fillBeforeSwitchMsg = "@Localizer["FillBeforeSwitch"]";
-        var okText = "@Localizer["OkButton"]";
+        var alertTitle = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["AlertTitle"].Value));
+        var fillRequiredMsg = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["FillRequiredFields"].Value));
+        var fillBeforeSwitchMsg = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["FillBeforeSwitch"].Value));
+        var okText = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["OkButton"].Value));
 
         // =================== Initialize All Quill Editors ===================
-
-        // Arabic Editors
         var quillEligibilityAr = new Quill('#editorEligibilityAr', { theme: 'snow', placeholder: writeEligibility });
         var quillBenefitsAr = new Quill('#editorBenefitsAr', { theme: 'snow', placeholder: writeBenefits });
         var quillDescriptionAr = new Quill('#editorDescriptionAr', { theme: 'snow', placeholder: writeDescription });
         var quillAr = new Quill('#editorAr', { theme: 'snow', placeholder: writeDetails });
 
-        // English Editors
         var quillEligibilityEn = new Quill('#editorEligibilityEn', { theme: 'snow', placeholder: writeEligibility });
         var quillBenefitsEn = new Quill('#editorBenefitsEn', { theme: 'snow', placeholder: writeBenefits });
         var quillDescriptionEn = new Quill('#editorDescriptionEn', { theme: 'snow', placeholder: writeDescription });
         var quillEn = new Quill('#editorEn', { theme: 'snow', placeholder: writeDetails });
 
-        // French Editors
         var quillEligibilityFr = new Quill('#editorEligibilityFr', { theme: 'snow', placeholder: writeEligibility });
         var quillBenefitsFr = new Quill('#editorBenefitsFr', { theme: 'snow', placeholder: writeBenefits });
         var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow', placeholder: writeDescription });
         var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: writeDetails });
 
-
-        // =================== Image Preview ===================
-        const imageInput = document.getElementById('imageInput');
-        const previewContainer = document.getElementById('imagePreviewContainer');
-        const previewImg = document.getElementById('previewImg');
-
-        imageInput.addEventListener('change', function() {
-            if (this.files && this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    previewContainer.style.display = 'flex';
-                    document.getElementById('previewName').textContent = imageInput.files[0].name;
-                }
-                reader.readAsDataURL(this.files[0]);
+        // =================== تطبيق اتجاه النص حسب التبويب ===================
+        function applyTabDirection(tabId) {
+            var pane = document.getElementById(tabId);
+            if (!pane) return;
+            var isLtr = tabId === 'english' || tabId === 'french';
+            var dir = isLtr ? 'ltr' : 'rtl';
+            var align = isLtr ? 'left' : 'right';
+            pane.setAttribute('dir', dir);
+            pane.querySelectorAll('.field input, .field select, .field textarea, .field label, .field .discription, .field h3').forEach(function(el) {
+                el.style.setProperty('direction', dir, 'important');
+                el.style.setProperty('text-align', align, 'important');
+            });
+            pane.querySelectorAll('.ql-editor').forEach(function(el) {
+                el.style.setProperty('direction', dir, 'important');
+                el.style.setProperty('text-align', align, 'important');
+            });
+        }
+        function initTabDirection() {
+            document.querySelectorAll('#languageTabs a[data-bs-toggle="tab"]').forEach(function(tab) {
+                tab.addEventListener('shown.bs.tab', function(e) {
+                    var link = e.currentTarget || e.target.closest('a');
+                    if (link) {
+                        var href = link.getAttribute('href') || '';
+                        var targetId = href.replace('#', '');
+                        if (targetId) applyTabDirection(targetId);
+                    }
+                });
+            });
+            var activeLink = document.querySelector('#languageTabs .nav-link.active');
+            if (activeLink) {
+                var href = activeLink.getAttribute('href') || '';
+                var targetId = href.replace('#', '');
+                if (targetId) applyTabDirection(targetId);
             }
-        });
+            ['english', 'french'].forEach(function(id) {
+                var p = document.getElementById(id);
+                if (p) applyTabDirection(id);
+            });
+        }
+        initTabDirection();
 
+        // =================== Variables ===================
+        const form = document.getElementById('createForm');
+        const saveButton = document.querySelector('.btn-primary');
+        const tabLinks = document.querySelectorAll('#languageTabs a');
+        const tabsOrder = ['arabic','english','french'];
+        const completedTabs = { arabic: false, english: false, french: false };
 
-        // =================== Copy All Quill Content ===================
+        // =================== Helper Functions ===================
         function copyAllQuillToHidden() {
             document.getElementById('eligibilityAr').value = quillEligibilityAr.root.innerHTML.trim();
             document.getElementById('benefitsAr').value = quillBenefitsAr.root.innerHTML.trim();
@@ -332,100 +371,176 @@
             document.getElementById('detailFr').value = quillFr.root.innerHTML.trim();
         }
 
-
-        // =================== Form Submit Validation ===================
-        const form = document.getElementById('createForm');
-        form.addEventListener('submit', function(e){
-            copyAllQuillToHidden();
-
-            var activeTabPane = document.querySelector('.tab-pane.active');
-            var requiredFields = activeTabPane.querySelectorAll('[required]');
-            var allFilled = true;
-
-            requiredFields.forEach(function(field){
-                if(field.type !== 'checkbox' && field.type !== 'radio'){
+        function isTabCompleted(tabPane) {
+            let allFilled = true;
+            tabPane.querySelectorAll('[required]').forEach(field => {
+                if(field.type !== 'checkbox' && field.type !== 'radio') {
                     if(!field.value.trim()) allFilled = false;
                 }
             });
 
-            if(activeTabPane.id === 'arabic') {
-                if(quillEligibilityAr.getText().trim() === '') allFilled = false;
-                if(quillBenefitsAr.getText().trim() === '') allFilled = false;
-                if(quillDescriptionAr.getText().trim() === '') allFilled = false;
-                if(quillAr.getText().trim() === '') allFilled = false;
-            }
+            if(tabPane.id === 'arabic') allFilled = allFilled &&
+                quillEligibilityAr.getText().trim() &&
+                quillBenefitsAr.getText().trim() &&
+                quillDescriptionAr.getText().trim() &&
+                quillAr.getText().trim();
+            if(tabPane.id === 'english') allFilled = allFilled &&
+                quillEligibilityEn.getText().trim() &&
+                quillBenefitsEn.getText().trim() &&
+                quillDescriptionEn.getText().trim() &&
+                quillEn.getText().trim();
+            if(tabPane.id === 'french') allFilled = allFilled &&
+                quillEligibilityFr.getText().trim() &&
+                quillBenefitsFr.getText().trim() &&
+                quillDescriptionFr.getText().trim() &&
+                quillFr.getText().trim();
 
-            if(activeTabPane.id === 'english') {
-                if(quillEligibilityEn.getText().trim() === '') allFilled = false;
-                if(quillBenefitsEn.getText().trim() === '') allFilled = false;
-                if(quillDescriptionEn.getText().trim() === '') allFilled = false;
-                if(quillEn.getText().trim() === '') allFilled = false;
-            }
+            return !!allFilled;
+        }
 
-            if(activeTabPane.id === 'french') {
-                if(quillEligibilityFr.getText().trim() === '') allFilled = false;
-                if(quillBenefitsFr.getText().trim() === '') allFilled = false;
-                if(quillDescriptionFr.getText().trim() === '') allFilled = false;
-                if(quillFr.getText().trim() === '') allFilled = false;
-            }
+        function areNonTabFieldsFilled() {
+            const imageInput = document.getElementById('imageInput');
+            const hasImage = imageInput && imageInput.files.length > 0;
 
-            if(!allFilled){
-                e.preventDefault();
-               Swal.fire({
-    title: alertTitle,
-    html: fillRequiredMsg,
-    icon: 'warning',
-    confirmButtonText: okText,
-    buttonsStyling: false,
-    customClass: {
-        popup: 'custom-swal',
-        title: 'custom-swal-title',
-        htmlContainer: 'custom-swal-text',
-        confirmButton: 'custom-swal-confirm'
-    }
-});
+            const typeSelect = document.querySelector('select[name="Type"]');
+            const hasType = typeSelect && typeSelect.value.trim() !== "";
 
-            }
+            const applyLink = document.querySelector('input[name="ApplyLink"]');
+            const hasLink = applyLink && applyLink.value.trim() !== "";
+
+            const countryCheckboxes = document.querySelectorAll('input[name="AvailableCountryIds"]:checked');
+            const hasCountries = countryCheckboxes && countryCheckboxes.length > 0;
+
+            return hasImage && hasType && hasLink && hasCountries;
+        }
+
+        function updateTabCompletion(tabId) {
+            const tabPane = document.getElementById(tabId);
+            completedTabs[tabId] = isTabCompleted(tabPane);
+            updateSaveButtonState();
+        }
+
+        function updateSaveButtonState() {
+            const allTabsFilled = tabsOrder.every(tabId => completedTabs[tabId]);
+            const nonTabFieldsFilled = areNonTabFieldsFilled();
+            saveButton.disabled = !(allTabsFilled && nonTabFieldsFilled);
+        }
+
+        // =================== Event Listeners ===================
+        // Quill editors
+        const quillEditors = [
+            quillEligibilityAr, quillBenefitsAr, quillDescriptionAr, quillAr,
+            quillEligibilityEn, quillBenefitsEn, quillDescriptionEn, quillEn,
+            quillEligibilityFr, quillBenefitsFr, quillDescriptionFr, quillFr
+        ];
+
+        quillEditors.forEach(q => q.on('text-change', () => {
+            tabsOrder.forEach(tabId => updateTabCompletion(tabId));
+        }));
+
+        // Regular fields inside tabs
+        tabsOrder.forEach(tabId => {
+            const tabPane = document.getElementById(tabId);
+            tabPane.addEventListener('input', () => updateTabCompletion(tabId));
         });
 
-
-        // =================== Prevent Tab Change ===================
-        var tabLinks = document.querySelectorAll('#languageTabs a');
-        tabLinks.forEach(function(link){
-            link.addEventListener('show.bs.tab', function(e){
+        // Tabs switching
+        tabLinks.forEach(link => {
+            link.addEventListener('show.bs.tab', e => {
                 copyAllQuillToHidden();
+                const currentTabPane = document.querySelector('.tab-pane.active');
+                updateTabCompletion(currentTabPane.id);
 
-                var activeTabPane = document.querySelector('.tab-pane.active');
-                var requiredFields = activeTabPane.querySelectorAll('[required]');
-                var allFilled = true;
+                const targetTabId = e.target.getAttribute('href').substring(1);
+                const currentIndex = tabsOrder.indexOf(currentTabPane.id);
+                const targetIndex = tabsOrder.indexOf(targetTabId);
 
-                requiredFields.forEach(function(field){
-                    if(field.type !== 'checkbox' && field.type !== 'radio'){
-                        if(!field.value.trim()) allFilled = false;
-                    }
-                });
-
-                if(!allFilled){
+                if(targetIndex > currentIndex && !completedTabs[currentTabPane.id]) {
                     e.preventDefault();
-                   Swal.fire({
-    title: alertTitle,
-    html: fillBeforeSwitchMsg,
-    icon: 'warning',
-    confirmButtonText: okText,
-    buttonsStyling: false,
-    customClass: {
-        popup: 'custom-swal',
-        title: 'custom-swal-title',
-        htmlContainer: 'custom-swal-text',
-        confirmButton: 'custom-swal-confirm'
-    }
-});
-
+                    Swal.fire({
+                        title: alertTitle,
+                        html: fillBeforeSwitchMsg,
+                        icon: 'warning',
+                        confirmButtonText: okText,
+                        buttonsStyling: false,
+                        customClass: {
+                            popup: 'custom-swal',
+                            title: 'custom-swal-title',
+                            htmlContainer: 'custom-swal-text',
+                            confirmButton: 'custom-swal-confirm'
+                        }
+                    });
                 }
             });
         });
 
+        // Non-tab fields
+        const nonTabFields = ['imageInput','ApplyLink'];
+        nonTabFields.forEach(id => {
+            const el = document.getElementById(id);
+            if(el){
+                el.addEventListener('input', updateSaveButtonState);
+                el.addEventListener('change', updateSaveButtonState);
+            }
+        });
+
+        // Countries checkboxes
+        document.querySelectorAll('input[name="AvailableCountryIds"]').forEach(chk => {
+            chk.addEventListener('change', updateSaveButtonState);
+        });
+
+        // Form submit
+        form.addEventListener('submit', function(e){
+            copyAllQuillToHidden();
+            tabsOrder.forEach(tabId => updateTabCompletion(tabId));
+
+            let allTabsFilled = tabsOrder.every(tabId => completedTabs[tabId]);
+            let nonTabFieldsFilled = areNonTabFieldsFilled();
+
+            if(!(allTabsFilled && nonTabFieldsFilled)){
+                e.preventDefault();
+                Swal.fire({
+                    title: alertTitle,
+                    html: fillRequiredMsg,
+                    icon: 'warning',
+                    confirmButtonText: okText,
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'custom-swal',
+                        title: 'custom-swal-title',
+                        htmlContainer: 'custom-swal-text',
+                        confirmButton: 'custom-swal-confirm'
+                    }
+                });
+            }
+        });
+
+        // Initial check
+        tabsOrder.forEach(tabId => updateTabCompletion(tabId));
+        updateSaveButtonState();
+
+                const imageInput = document.getElementById('imageInput');
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const previewImg = document.getElementById('previewImg');
+        const previewName = document.getElementById('previewName');
+
+        imageInput.addEventListener('change', function(){
+            const file = this.files[0];
+            if(file){
+                const reader = new FileReader();
+                reader.onload = function(e){
+                    previewImg.src = e.target.result;
+                    previewContainer.style.display = 'flex';
+                    previewName.textContent = file.name;
+                }
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        });
     </script>
+
+
 
 }
 
@@ -481,7 +596,27 @@
             background-color: #FFF5E6;
             transform: translateY(-2px);
         }
-        
+    /* زر الحفظ */
+    .btn-primary {
+        background-color: #F99D27; /* اللون عند التفعيل */
+        color: white;
+        border: none;
+        padding: 14px 45px;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        /* حالة الزر معطل */
+        .btn-primary:disabled {
+            background-color: #ccc; /* رمادي فاتح */
+            color: #fff;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
         .custom-swal-close {
             color: #999;
             font-size: 28px;
@@ -536,5 +671,6 @@
   transform: translateY(-2px) !important;
   box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3) !important;
 }
+
 
     </style>

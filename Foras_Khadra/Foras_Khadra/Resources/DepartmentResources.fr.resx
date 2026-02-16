@@ -117,97 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddOpportunityTitle" xml:space="preserve">
-    <value>إضافة فرصة جديدة</value>
+  <data name="BoardOfDirectors" xml:space="preserve">
+    <value>Conseil d’Administration</value>
   </data>
-  <data name="AlertTitle" xml:space="preserve">
-    <value>تنبيه</value>
+  <data name="HonoraryMembers" xml:space="preserve">
+    <value>Membres Honoraires</value>
   </data>
-  <data name="ApplyLinkLabel" xml:space="preserve">
-    <value>رابط التقديم</value>
+  <data name="HR" xml:space="preserve">
+    <value>Ressources Humaines</value>
   </data>
-  <data name="ApplyLinkPlaceholder" xml:space="preserve">
-    <value>أضف رابط التقديم</value>
+  <data name="LocalTeams" xml:space="preserve">
+    <value>Équipes Locales</value>
   </data>
-  <data name="ArabicTab" xml:space="preserve">
-    <value>عربي</value>
+  <data name="Opportunities" xml:space="preserve">
+    <value>Opportunités</value>
   </data>
-  <data name="BackToDashboard" xml:space="preserve">
-    <value>العودة للوحة التحكم</value>
+  <data name="PublicRelations" xml:space="preserve">
+    <value>Relations Publiques</value>
   </data>
-  <data name="Benefits" xml:space="preserve">
-    <value>الفوائد</value>
+  <data name="SocialMedia" xml:space="preserve">
+    <value>Médias Sociaux</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>إلغاء</value>
-  </data>
-  <data name="DragDropText" xml:space="preserve">
-    <value>اسحب وأفلت الملفات أو تصفح</value>
-  </data>
-  <data name="EligibilityCriteria" xml:space="preserve">
-    <value>معايير أهلية الفرصة</value>
-  </data>
-  <data name="EnglishTab" xml:space="preserve">
-    <value>إنجليزي</value>
-  </data>
-  <data name="FillBeforeSwitch" xml:space="preserve">
-    <value>الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال!</value>
-  </data>
-  <data name="FillRequiredFields" xml:space="preserve">
-    <value>الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب!</value>
-  </data>
-  <data name="FrenchTab" xml:space="preserve">
-    <value>فرنسي</value>
-  </data>
-  <data name="OkButton" xml:space="preserve">
-    <value>حسناً</value>
-  </data>
-  <data name="OpportunityCountries" xml:space="preserve">
-    <value>دول الفرصة</value>
-  </data>
-  <data name="OpportunityDescription" xml:space="preserve">
-    <value>وصف الفرصة</value>
-  </data>
-  <data name="OpportunityDetails" xml:space="preserve">
-    <value>تفاصيل الفرصة</value>
-  </data>
-  <data name="OpportunityImageAlt" xml:space="preserve">
-    <value>صورة الفرصة</value>
-  </data>
-  <data name="OpportunityTitle" xml:space="preserve">
-    <value>عنوان الفرصة</value>
-  </data>
-  <data name="OpportunityTitleAr" xml:space="preserve">
-    <value>ادخل عنوان الفرصة</value>
-  </data>
-  <data name="OpportunityType" xml:space="preserve">
-    <value>نوع الفرصة</value>
-  </data>
-  <data name="PublishedBy" xml:space="preserve">
-    <value>نشر بواسطة</value>
-  </data>
-  <data name="SaveAndAdd" xml:space="preserve">
-    <value>حفظ وإضافة</value>
-  </data>
-  <data name="SelectOpportunityType" xml:space="preserve">
-    <value>اختر نوع الفرصة</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>إضافة فرصة</value>
-  </data>
-  <data name="UploadOpportunityImage" xml:space="preserve">
-    <value>رفع صورة الفرصة</value>
-  </data>
-  <data name="WriteBenefits" xml:space="preserve">
-    <value>أكتب الفوائد هنا...</value>
-  </data>
-  <data name="WriteDescription" xml:space="preserve">
-    <value>أكتب وصف الفرصة هنا...</value>
-  </data>
-  <data name="WriteDetails" xml:space="preserve">
-    <value>أكتب التفاصيل هنا...</value>
-  </data>
-  <data name="WriteEligibility" xml:space="preserve">
-    <value>أكتب معايير الأهلية هنا...</value>
+  <data name="Technology" xml:space="preserve">
+    <value>Technologie</value>
   </data>
 </root>

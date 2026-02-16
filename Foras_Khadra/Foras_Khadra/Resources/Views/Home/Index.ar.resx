@@ -117,13 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Description" xml:space="preserve">
+    <value>منصة عربية تربط شباب الوطن العربي بالفرص والمنح البيئية والمناخية محلياً وعالمياً، بلغة واضحة ومحتوى موثوق، وتركز على الوصول العادل وبناء القدرات. تهدف المنصة لكسر الحواجز اللغوية والتوجيهية وتحويل الفرص إلى مسارات فعلية قابلة للتقديم.</value>
+  </data>
   <data name="LatestArticles" xml:space="preserve">
-    <value>آخر المقالات</value>
+    <value>أحدث المقالات</value>
+  </data>
+  <data name="LatestOpportunities" xml:space="preserve">
+    <value>أحدث الفرص</value>
   </data>
   <data name="ReadMore" xml:space="preserve">
     <value>اقرأ المزيد</value>
   </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>من وإلى شباب الوطن العربي</value>
+  </data>
   <data name="Title" xml:space="preserve">
+    <value>منصة فرص خضراء</value>
+  </data>
+  <data name="TitlePage" xml:space="preserve">
     <value>الصفحة الرئيسية</value>
   </data>
   <data name="ViewAll" xml:space="preserve">

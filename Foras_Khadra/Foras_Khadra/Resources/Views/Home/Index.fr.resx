@@ -117,13 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Description" xml:space="preserve">
+    <value>Une plateforme arabe qui connecte les jeunes du monde arabe aux opportunités et bourses environnementales et climatiques locales et mondiales, avec un langage clair et un contenu fiable, en se concentrant sur l'accès équitable et le renforcement des capacités. La plateforme vise à briser les barrières linguistiques et d'orientation et à transformer les opportunités en parcours concrets et exploitables.</value>
+  </data>
   <data name="LatestArticles" xml:space="preserve">
     <value>Derniers articles</value>
+  </data>
+  <data name="LatestOpportunities" xml:space="preserve">
+    <value>Dernières opportunités</value>
   </data>
   <data name="ReadMore" xml:space="preserve">
     <value>Lire la suite</value>
   </data>
+  <data name="SubTitle" xml:space="preserve">
+    <value>De et vers la jeunesse du monde arabe</value>
+  </data>
   <data name="Title" xml:space="preserve">
+    <value>Plateforme Foras Khadra</value>
+  </data>
+  <data name="TitlePage" xml:space="preserve">
     <value>Page d'accueil</value>
   </data>
   <data name="ViewAll" xml:space="preserve">

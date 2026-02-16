@@ -1,4 +1,4 @@
-﻿@model Foras_Khadra.Models.OrgOpportunityPageVM
+@model Foras_Khadra.Models.OrgOpportunityPageVM
 @using Foras_Khadra.Helpers
 @using Foras_Khadra.Models
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
@@ -110,9 +110,13 @@ h2 { font-weight:800; color:#2f6b3c; }
   padding: 22px 24px 18px !important;
   box-shadow: 0 10px 30px rgba(0,0,0,.12) !important;
   font-family: inherit;
-  direction: rtl;
   width: 560px !important;
   max-width: calc(100% - 24px) !important;
+}
+.swal2-popup.custom-swal.swal-rtl { direction: rtl; }
+.swal2-popup.custom-swal.swal-ltr { direction: ltr; }
+.reels-requested {
+    opacity: 0.45;
 }
 
 .swal2-title.custom-swal-title {
@@ -129,7 +133,8 @@ h2 { font-weight:800; color:#2f6b3c; }
   margin-top: 4px !important;
 }
 
-.swal2-icon { display:none !important; }
+/* إخفاء الأيقونة فقط للنوافذ التأكيدية - نافذة النجاح تعرض أيقونة ✓ */
+.swal2-popup.custom-swal:not(.swal-success) .swal2-icon { display: none !important; }
 
 .swal2-confirm.custom-swal-confirm {
   background:#F99D27 !important;
@@ -292,6 +297,51 @@ h2 { font-weight:800; color:#2f6b3c; }
   transform: translateX(50%) translateY(-4px);
 }
 
+/* ===== Edit/Delete Disabled Buttons Hover Tooltip ===== */
+.btn-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.btn-tooltip-wrapper .btn-tooltip-box {
+  position: absolute;
+  bottom: 120%;
+  right: 50%;
+  transform: translateX(50%);
+
+  background: #fff;
+  color: #d32f2f;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  pointer-events: none;
+  text-align: center;
+}
+
+.btn-tooltip-wrapper .btn-tooltip-box::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 50%;
+  transform: translateX(50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.btn-tooltip-wrapper:hover .btn-tooltip-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(50%) translateY(-4px);
+}
 </style>
 
 <div class="container mt-4">
@@ -345,12 +395,12 @@ else
         editCan = canEdit;
         deleteCan = canDelete;
     }
-    else if (isRejected)
-    {
-        editCan = canEdit;
-        deleteCan = false;
-        reelsDisabled = !editCan;
-    }
+                    else if (isRejected)
+                    {
+                        editCan = true;        
+                        deleteCan = false;
+                        reelsDisabled = true;  
+                    }
     else if (isPending)
     {
         editCan = canEdit;
@@ -461,24 +511,46 @@ else
     <i class="bi bi-eye"></i>
 </a>
 
+@if (editCan)
+{
 <button class="btn btn-warning"
-        onclick="handleEdit(@opp.Id, @editCan.ToString().ToLower())"
-        @(editCan ? "" : "disabled")>
+        onclick="handleEdit(@opp.Id, true)">
     <i class="bi bi-pencil"></i>
 </button>
+}
+else
+{
+<span class="btn-tooltip-wrapper">
+    <button class="btn btn-warning" disabled>
+        <i class="bi bi-pencil"></i>
+    </button>
+    <div class="btn-tooltip-box">@Localizer["swalOver24h"]</div>
+</span>
+}
 
-<button class="btn @(opp.HasRequestedReels && !opp.IsReelsRejected ? "btn-warning" : "btn-success")"
-        title="طلب ريل"
+                            <button class="btn btn-success @(opp.HasRequestedReels && !opp.IsReelsRejected ? "reels-requested" : "")"
+                                    title="طلب ريل"
         onclick="toggleReels(@opp.Id, @((opp.HasRequestedReels && !opp.IsReelsRejected).ToString().ToLower()))"
         @(reelsDisabled ? "disabled" : "")>
     <i class="bi bi-camera-reels"></i>
 </button>
 
+@if (deleteCan)
+{
 <button class="btn btn-danger"
-        onclick="handleDelete(@opp.Id, @deleteCan.ToString().ToLower())"
-        @(deleteCan ? "" : "disabled")>
+        onclick="handleDelete(@opp.Id, true)">
     <i class="bi bi-trash"></i>
 </button>
+}
+else
+{
+<span class="btn-tooltip-wrapper">
+    <button class="btn btn-danger" disabled>
+        <i class="bi bi-trash"></i>
+    </button>
+    <div class="btn-tooltip-box">@Localizer["swalOver48h"]</div>
+</span>
+}
 </td>
 </tr>
 }
@@ -492,121 +564,167 @@ else
 value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestToken" />
 
 <script>
-const SwalConfirmUI = Swal.mixin({
-  customClass: {
-    popup: 'custom-swal',
-    title: 'custom-swal-title',
-    htmlContainer: 'custom-swal-text',
-    confirmButton: 'custom-swal-confirm',
-    cancelButton: 'custom-swal-cancel'
-  },
-  buttonsStyling: false,
-  showCloseButton: true,
-  reverseButtons: true,
-  imageUrl: '@Url.Content("~/images/Group.svg")',
-  imageWidth: 90,
-  imageHeight: 90,
-  imageAlt: ''
-});
+    const lang = '@lang'; // 'ar', 'en', 'fr'
+    const swalDir = lang === 'ar' ? 'rtl' : 'ltr';
 
-function getOppTitle(id) {
-  const row = document.getElementById('row-' + id);
-  return row?.dataset?.oppTitle || '';
-}
-
-/* Swal نجاح */
-function showSuccess(message) {
-  return Swal.fire({
-    icon: 'success',
-    title: message,
-    confirmButtonText: 'موافق',
-    customClass: {
-      popup: 'custom-swal',
-      title: 'custom-swal-title',
-      confirmButton: 'custom-swal-confirm'
-    },
-    buttonsStyling: false
-  });
-}
-
-function handleEdit(id, canEdit) {
-    if (!canEdit) {
-        Swal.fire({ icon:'warning', title:'غير مسموح', text:'مر أكثر من 24 ساعة.' });
-        return;
-    }
-    window.location.href = '/Opportunity/Edit/' + id;
-}
-
-function handleDelete(id, canDelete) {
-    if (!canDelete) {
-        Swal.fire({ icon:'warning', title:'غير مسموح', text:'مر أكثر من 48 ساعة.' });
-        return;
-    }
-
-    const oppTitle = getOppTitle(id);
-
-    SwalConfirmUI.fire({
-        title:'هل تريد تأكيد حذف هذه الفرصة؟',
-        html: oppTitle ? oppTitle : '',
-        showCancelButton:true,
-        confirmButtonText:'تأكيد',
-        cancelButtonText:'تراجع'
-    }).then((result)=>{
-        if(result.isConfirmed){
-            const token = document.getElementById('RequestVerificationToken').value;
-            fetch('/Opportunity/Delete/' + id, {
-                method:'POST',
-                headers:{ 'RequestVerificationToken': token }
-            })
-            .then(res => {
-                if (!res.ok) throw new Error('error');
-                return showSuccess('تم حذف الفرصة بنجاح!');
-            })
-            .then(() => location.reload())
-            .catch(() => {
-                Swal.fire({ icon:'error', title:'خطأ', text:'حدث خطأ أثناء تنفيذ العملية' });
-            });
-        }
-    });
-}
-
-async function toggleReels(id, hasRequest) {
-
-    const oppTitle = getOppTitle(id);
-
-    const result = await SwalConfirmUI.fire({
-        title: hasRequest
-            ? 'هل تريد التراجع عن طلب ريل لهذه الفرصة؟'
-            : 'هل تريد تأكيد طلب ريل لهذه الفرصة؟',
-        html: oppTitle ? oppTitle : '',
-        showCancelButton:true,
-        confirmButtonText:'تأكيد',
-        cancelButtonText:'تراجع'
+    const SwalConfirmUI = Swal.mixin({
+      customClass: {
+        popup: 'custom-swal swal-' + swalDir,
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-swal-confirm',
+        cancelButton: 'custom-swal-cancel'
+      },
+      buttonsStyling: false,
+      showCloseButton: true,
+      reverseButtons: true,
+      imageUrl: '@Url.Content("~/images/Group.svg")',
+      imageWidth: 90,
+      imageHeight: 90,
+      imageAlt: ''
     });
 
-    if (!result.isConfirmed) return;
+    function getOppTitle(id) {
+      const row = document.getElementById('row-' + id);
+      return row?.dataset?.oppTitle || '';
+    }
 
-    const token = document.getElementById('RequestVerificationToken').value;
-
-    fetch('/Opportunity/ToggleReelsRequest/' + id, {
-        method:'POST',
-        headers:{
-            'Content-Type':'application/json',
-            'RequestVerificationToken': token
+    /* Swal نجاح مع أيقونة ✅ */
+    function showSuccess(message) {
+      return Swal.fire({
+        icon: 'success',
+        title: message,
+        confirmButtonText: lang==='ar'?'موافق':lang==='fr'?'OK':'OK',
+        customClass: {
+          popup: 'custom-swal swal-success swal-' + swalDir,
+          title: 'custom-swal-title',
+          confirmButton: 'custom-swal-confirm'
         },
-        body: JSON.stringify({ RequestReels: !hasRequest })
-    })
-    .then(res => {
-        if (!res.ok) throw new Error('error');
-        return showSuccess(
-            !hasRequest
-                ? 'تم إرسال طلب إنشاء ريل للفرصة بنجاح!'
-                : 'تم التراجع عن طلب الريل بنجاح!'
-        );
-    })
-    .then(() => location.reload())
-    .catch(() => {
-        Swal.fire({ icon:'error', title:'خطأ', text:'حدث خطأ أثناء تنفيذ العملية' });
+        buttonsStyling: false
+      });
+    }
+
+    function handleEdit(id, canEdit) {
+        if (!canEdit) {
+            Swal.fire({
+                icon:'warning',
+                title: lang==='ar'?'غير مسموح':lang==='fr'?'Non autorisé':'Not allowed',
+                text: lang==='ar'?'مر أكثر من 24 ساعة.':lang==='fr'?'Plus de 24 heures se sont écoulées.':'More than 24 hours have passed.',
+                customClass: { popup: 'custom-swal swal-' + swalDir }
+            });
+            return;
+        }
+        window.location.href = '/Opportunity/Edit/' + id;
+    }
+
+    function handleDelete(id, canDelete) {
+        if (!canDelete) {
+            Swal.fire({
+                icon:'warning',
+                title: lang==='ar'?'غير مسموح':lang==='fr'?'Non autorisé':'Not allowed',
+                text: lang==='ar'?'مر أكثر من 48 ساعة.':lang==='fr'?'Plus de 48 heures se sont écoulées.':'More than 48 hours have passed.',
+                customClass: { popup: 'custom-swal swal-' + swalDir }
+            });
+            return;
+        }
+
+        const oppTitle = getOppTitle(id);
+
+        SwalConfirmUI.fire({
+            title: lang==='ar'?'هل تريد تأكيد حذف هذه الفرصة؟':lang==='fr'?'Voulez-vous confirmer la suppression de cette opportunité ?':'Do you want to confirm deleting this opportunity?',
+            html: oppTitle ? oppTitle : '',
+            showCancelButton:true,
+            confirmButtonText: lang==='ar'?'تأكيد':lang==='fr'?'Confirmer':'Confirm',
+            cancelButtonText: lang==='ar'?'تراجع':lang==='fr'?'Annuler':'Cancel'
+        }).then((result)=>{
+            if(result.isConfirmed){
+                const token = document.getElementById('RequestVerificationToken').value;
+                fetch('/Opportunity/Delete/' + id, {
+                    method:'POST',
+                    headers:{ 'RequestVerificationToken': token }
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error('error');
+                    return showSuccess(lang==='ar'?'تم حذف الفرصة بنجاح!':lang==='fr'?'Opportunité supprimée avec succès !':'Opportunity deleted successfully!');
+                })
+                .then(() => location.reload())
+                .catch(() => {
+                    Swal.fire({
+                        icon:'error',
+                        title: lang==='ar'?'خطأ':lang==='fr'?'Erreur':'Error',
+                        text: lang==='ar'?'حدث خطأ أثناء تنفيذ العملية':lang==='fr'?'Une erreur est survenue lors de l\'opération':'An error occurred during the operation',
+                        customClass: { popup: 'custom-swal swal-' + swalDir }
+                    });
+                });
+            }
+        });
+    }
+
+    async function toggleReels(id, hasRequest) {
+
+        const oppTitle = getOppTitle(id);
+
+        const result = await SwalConfirmUI.fire({
+            title: hasRequest
+                ? (lang==='ar'?'هل تريد التراجع عن طلب ريل لهذه الفرصة؟':lang==='fr'?'Voulez-vous annuler la demande de reels pour cette opportunité ?':'Do you want to cancel the reels request for this opportunity?')
+                : (lang==='ar'?'هل تريد تأكيد طلب ريل لهذه الفرصة؟':lang==='fr'?'Voulez-vous confirmer la demande de reels pour cette opportunité ?':'Do you want to confirm a reels request for this opportunity?'),
+            html: oppTitle ? oppTitle : '',
+            showCancelButton:true,
+            confirmButtonText: lang==='ar'?'تأكيد':lang==='fr'?'Confirmer':'Confirm',
+            cancelButtonText: lang==='ar'?'تراجع':lang==='fr'?'Annuler':'Cancel'
+        });
+
+        if (!result.isConfirmed) return;
+
+        const token = document.getElementById('RequestVerificationToken').value;
+
+        fetch('/Opportunity/ToggleReelsRequest/' + id, {
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'RequestVerificationToken': token
+            },
+            body: JSON.stringify({ RequestReels: !hasRequest })
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('error');
+            return Swal.fire({
+                icon: 'success', // أيقونة نجاح ✅
+                title: !hasRequest
+                    ? (lang==='ar'?'تم إرسال طلب إنشاء ريل للفرصة بنجاح!':lang==='fr'?'La demande de reels a été envoyée avec succès !':'Reels request sent successfully!')
+                    : (lang==='ar'?'تم التراجع عن طلب الريل بنجاح!':lang==='fr'?'La demande de reels a été annulée avec succès !':'Reels request canceled successfully!'),
+                confirmButtonText: lang==='ar'?'موافق':lang==='fr'?'OK':'OK',
+                customClass: {
+                  popup: 'custom-swal swal-success swal-' + swalDir,
+                  title: 'custom-swal-title',
+                  confirmButton: 'custom-swal-confirm'
+                },
+                buttonsStyling: false
+            });
+        })
+        .then(() => location.reload())
+        .catch(() => {
+            Swal.fire({
+                icon:'error',
+                title: lang==='ar'?'خطأ':lang==='fr'?'Erreur':'Error',
+                text: lang==='ar'?'حدث خطأ أثناء تنفيذ العملية':lang==='fr'?'Une erreur est survenue lors de l\'opération':'An error occurred during the operation',
+                customClass: { popup: 'custom-swal swal-' + swalDir }
+            });
+        });
+    }
+
+       // إرسال طلب الريلز تلقائي بعد تعديل فرصة مرفوضة
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('tr[id^="row-"]').forEach(row => {
+            const id = row.id.split('-')[1];
+            const isRejected = row.dataset.isRejected === 'True';
+            const hasRequestedReels = row.dataset.hasRequestedReels === 'True';
+
+            if (isRejected && !hasRequestedReels) {
+                toggleReels(id, false);
+            }
+        });
     });
-}
+
 </script>
+
