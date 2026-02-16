@@ -146,6 +146,9 @@ html[dir="ltr"] .side-panel {
 .field.dropdown {
   margin-top: 10px;
 }
+.field .ql-toolbar.ql-snow {
+  margin-top: 5px;
+}
 
 .dropdown.field select {
   border: none;

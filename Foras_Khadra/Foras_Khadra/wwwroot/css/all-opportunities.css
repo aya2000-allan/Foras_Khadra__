@@ -96,6 +96,11 @@ html[dir="ltr"] .filter-window {
   padding: 15px;
 }
 
+html[dir="ltr"] .sub-filter-menu {
+  left: auto;
+  right: 102%; /* Pops out to the left side for LTR */
+}
+
 .filter-window-header {
   display: flex;
   justify-content: space-between;
