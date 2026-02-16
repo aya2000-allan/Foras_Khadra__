@@ -180,15 +180,16 @@ html[dir="ltr"] .page-title { text-align: left; }
   cursor: pointer;
 }
 
-.form-panel .btn-primary:hover {
+/* .form-panel .btn-primary:hover {
   color: #F99D27 !important;
   background: #fff !important;
   border: 2px solid #F99D27;
-}
+} */
 
 .form-panel .btn-primary:disabled {
-  background: #ccc !important;
-  color: #666 !important;
+  background-color: #F99D27;
+    opacity: 0.5; 
+    color:#fff;
   border: none;
 }
 
@@ -346,10 +347,21 @@ html[dir="rtl"] .form-panel .header {
   flex-direction: row-reverse;
 }
 
-/* LTR - ensure inputs align left */
+/* LTR - اتجاه النص والعناوين للإنجليزية والفرنسية */
 html[dir="ltr"] .form-panel input,
 html[dir="ltr"] .form-panel select,
 html[dir="ltr"] .form-panel textarea {
   direction: ltr;
+  text-align: left;
+}
+
+html[dir="ltr"] .form-panel .ql-editor {
+  direction: ltr;
+  text-align: left;
+}
+
+html[dir="ltr"] .form-panel .field label,
+html[dir="ltr"] .form-panel .discription,
+html[dir="ltr"] .form-panel label {
   text-align: left;
 }
