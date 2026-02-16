@@ -123,6 +123,9 @@
   <data name="LatestArticles" xml:space="preserve">
     <value>Latest Articles</value>
   </data>
+  <data name="LatestOpportunities" xml:space="preserve">
+    <value>Latest Opportunities</value>
+  </data>
   <data name="ReadMore" xml:space="preserve">
     <value>Read More</value>
   </data>

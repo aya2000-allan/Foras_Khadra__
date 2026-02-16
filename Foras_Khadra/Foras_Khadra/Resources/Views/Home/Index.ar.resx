@@ -121,7 +121,10 @@
     <value>منصة عربية تربط شباب الوطن العربي بالفرص والمنح البيئية والمناخية محلياً وعالمياً، بلغة واضحة ومحتوى موثوق، وتركز على الوصول العادل وبناء القدرات. تهدف المنصة لكسر الحواجز اللغوية والتوجيهية وتحويل الفرص إلى مسارات فعلية قابلة للتقديم.</value>
   </data>
   <data name="LatestArticles" xml:space="preserve">
-    <value>آخر المقالات</value>
+    <value>أحدث المقالات</value>
+  </data>
+  <data name="LatestOpportunities" xml:space="preserve">
+    <value>أحدث الفرص</value>
   </data>
   <data name="ReadMore" xml:space="preserve">
     <value>اقرأ المزيد</value>

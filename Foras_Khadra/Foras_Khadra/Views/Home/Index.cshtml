@@ -6,6 +6,7 @@
     ViewData["Title"] = Localizer["TitlePage"];
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
+    
 
 }
 
@@ -456,6 +457,95 @@
     </div>
 </section>
 
+<section class="latest-articles py-5" dir="@dir" style="background:#F6FBF7;">
+    <div class="container">
+
+        <!-- العنوان + زر عرض الكل -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center gap-2">
+                <span class="section-icon" aria-hidden="true">
+                    <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="27" cy="27" r="27" fill="#F99D27" />
+                        <path d="..." fill="white" />
+                    </svg>
+                </span>
+                <h2 class="section-title m-0" style="color:#25652C; font-weight: bold;">
+                    @Localizer["LatestOpportunities"]
+                </h2>
+            </div>
+
+            <!-- عرض الكل -->
+            <a href="~/Home/AllOpportunities"
+               class="view-all-btn"
+               style="color:#25652C; font-weight:bold; font-size:18px; display:flex; align-items:center; gap:6px;">
+                <iconify-icon icon="mdi:briefcase-outline" style="color:#25652C; font-size:18px;"></iconify-icon>
+                @Localizer["ViewAll"]
+            </a>
+        </div>
+
+        <!-- السلايدر (الكروت فقط) -->
+        <div class="swiper opportunitiesSwiper mb-4">
+            <div class="swiper-wrapper">
+
+                @foreach (var opp in Model.LatestOpportunities)
+                {
+                    var title = culture == "ar" ? opp.TitleAr
+                    : culture == "en" ? opp.TitleEn
+                    : opp.TitleFr;
+
+                    var desc = culture == "ar" ? opp.DescriptionAr
+                    : culture == "en" ? opp.DescriptionEn
+                    : opp.DescriptionFr;
+
+                    // تحديد اسم الناشر وعلامة التوثيق للأدمن
+                    var publisher = opp.PublishedBy.ToLower() == "admin"
+                    ? (culture == "ar" ? "فرص خضراء" : "Foras Khadra")
+                    : opp.PublishedBy;
+
+                    var showVerified = opp.PublishedBy.ToLower() == "admin";
+
+                    <div class="swiper-slide">
+                        <div class="article-card">
+                            <div class="article-img">
+                                <img src="@(!string.IsNullOrEmpty(opp.ImagePath) ? opp.ImagePath : "/images/default-opportunity.jpg")" alt="@title" />
+                            </div>
+
+                            <div class="article-body">
+                                <div class="article-meta">
+                                    <span class="meta-author">
+                                        @publisher
+                                        @if (showVerified)
+                                        {
+                                            <iconify-icon icon="mdi:check-decagram" style="color:#25652C; font-size:16px; margin-left:4px;"></iconify-icon>
+                                        }
+                                    </span>
+                                    <span class="meta-date">@opp.PublishDate.ToString("dd MMM yyyy")</span>
+                                </div>
+
+                                <h5 class="article-title">@title</h5>
+
+                                <p class="article-desc">
+                                    @(desc.Length > 120 ? desc.Substring(0, 120) + "..." : desc)
+                                </p>
+
+                                <a href="javascript:void(0);" class="read-more btn-read-more" data-opportunity-id="@opp.Id">
+                                    @Localizer["ReadMore"]
+                                    <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 opportunities-nav">
+            <div class="swiper-button-next custom-arrow"></div>
+            <div class="swiper-button-prev custom-arrow"></div>
+        </div>
+
+    </div>
+</section>
 
 <script>
     const container = document.getElementById("floatingShapes");
@@ -622,4 +712,25 @@
       }
     });
   });
+
+            new Swiper(".opportunitiesSwiper", {
+        slidesPerView: 3,
+        spaceBetween: 16,
+        loop: true,
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+        },
+        navigation: {
+            nextEl: ".opportunities-nav .swiper-button-next",
+            prevEl: ".opportunities-nav .swiper-button-prev",
+        },
+        breakpoints: {
+            0: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1200: { slidesPerView: 3 }
+        }
+    });
+
+
 </script>
