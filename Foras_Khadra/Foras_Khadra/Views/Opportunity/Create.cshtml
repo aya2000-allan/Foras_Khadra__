@@ -118,7 +118,7 @@
 
             <div class="tab-content mt-3">
                 <!-- Arabic Tab -->
-                <div class="tab-pane fade show active" id="arabic" role="tabpanel">
+                <div class="tab-pane fade show active" id="arabic" role="tabpanel" dir="rtl">
                     <div class="field">
                         <label for="TitleAr">@Localizer["OpportunityTitle"] </label>
                         <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitleAr"]" required />
@@ -152,7 +152,7 @@
                 </div>
 
                 <!-- English Tab -->
-                <div class="tab-pane fade" id="english" role="tabpanel">
+                <div class="tab-pane fade" id="english" role="tabpanel" dir="ltr">
                     <div class="field">
                         <label for="TitleEn">@Localizer["OpportunityTitle"] </label>
                         <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitleAr"]" required />
@@ -193,7 +193,7 @@
                 </div>
 
                 <!-- French Tab -->
-                <div class="tab-pane fade" id="french" role="tabpanel">
+                <div class="tab-pane fade" id="french" role="tabpanel" dir="ltr">
                     <div class="field">
                         <label for="TitleFr">@Localizer["OpportunityTitle"] </label>
                         <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitleAr"]" required />
