@@ -72,7 +72,17 @@
 
 
                     <div class="group-bio">
-                        <p>@DepartmentTranslator.TranslateDesc(group.Key, culture)</p>
+                        @{
+                            var desc = DepartmentTranslator.TranslateDesc(group.Key, culture);
+
+                            var firstSentence = desc.Contains(".") ? desc.Split('.')[0] + "." : desc;
+                            var rest = desc.Contains(".") ? desc.Substring(firstSentence.Length) : "";
+                        }
+
+                        <p>
+                            <strong>@firstSentence</strong>@rest
+                        </p>
+
                     </div>
                 </div>
                 @foreach (var member in group.OrderByDescending(m => m.Membership))
