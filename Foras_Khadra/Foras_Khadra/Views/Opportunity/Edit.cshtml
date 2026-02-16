@@ -137,7 +137,7 @@
                 <div class="tab-pane fade show active" id="tabAr" role="tabpanel" dir="rtl">
                     <div class="field">
                         <label for="TitleAr">@Localizer["OpportunityTitle"] </label>
-                        <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <input asp-for="TitleAr"  required />
                         <span asp-validation-for="TitleAr" class="text-danger"></span>
                     </div>
                     
@@ -176,7 +176,7 @@
                 <div class="tab-pane fade" id="tabEn" role="tabpanel" dir="ltr">
                     <div class="field">
                         <label for="TitleEn">@Localizer["OpportunityTitle"] </label>
-                        <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <input asp-for="TitleEn" required />
                         <span asp-validation-for="TitleEn" class="text-danger"></span>
                     </div>
                     
@@ -217,7 +217,7 @@
                 <div class="tab-pane fade" id="tabFr" role="tabpanel" dir="ltr">
                     <div class="field">
                         <label for="TitleFr">@Localizer["OpportunityTitle"] </label>
-                        <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <input asp-for="TitleFr" required />
                         <span asp-validation-for="TitleFr" class="text-danger"></span>
                     </div>
                     
@@ -293,67 +293,55 @@
 
     <script>
         // ================= Localization Strings =================
-        var placeholders = {
-            ar: {
-                eligibility: "اكتب معايير الأهلية...",
-                benefits: "اكتب الفوائد...",
-                description: "اكتب وصف الفرصة...",
-                details: "اكتب تفاصيل الفرصة..."
-            },
-            en: {
-                eligibility: "Write eligibility criteria...",
-                benefits: "Write benefits...",
-                description: "Write opportunity description...",
-                details: "Write opportunity details..."
-            },
-            fr: {
-                eligibility: "Écrire les critères d'éligibilité...",
-                benefits: "Écrire les avantages...",
-                description: "Écrire la description de l'opportunité...",
-                details: "Écrire les détails de l'opportunité..."
-            }
-        };
-
-        // لغة الصفحة الحالية
-        var currentCulture = '@culture'; // 'ar', 'en', 'fr'
-
-        // =================== Initialize All Quill Editors ===================
+                // =================== Initialize All Quill Editors ===================
         // Arabic Editors
-        var quillEligibilityAr = new Quill('#editorEligibilityAr', { theme: 'snow', placeholder: placeholders.ar.eligibility });
-        var quillBenefitsAr    = new Quill('#editorBenefitsAr', { theme: 'snow', placeholder: placeholders.ar.benefits });
-        var quillDescriptionAr = new Quill('#editorDescriptionAr', { theme: 'snow', placeholder: placeholders.ar.description });
-        var quillAr            = new Quill('#editorAr', { theme: 'snow', placeholder: placeholders.ar.details });
+        var quillEligibilityAr = new Quill('#editorEligibilityAr', { theme: 'snow' });
+        var quillBenefitsAr    = new Quill('#editorBenefitsAr', { theme: 'snow' });
+        var quillDescriptionAr = new Quill('#editorDescriptionAr', { theme: 'snow' });
+        var quillAr            = new Quill('#editorAr', { theme: 'snow' });
 
         // English Editors
-        var quillEligibilityEn = new Quill('#editorEligibilityEn', { theme: 'snow', placeholder: placeholders.en.eligibility });
-        var quillBenefitsEn    = new Quill('#editorBenefitsEn', { theme: 'snow', placeholder: placeholders.en.benefits });
-        var quillDescriptionEn = new Quill('#editorDescriptionEn', { theme: 'snow', placeholder: placeholders.en.description });
-        var quillEn            = new Quill('#editorEn', { theme: 'snow', placeholder: placeholders.en.details });
+        var quillEligibilityEn = new Quill('#editorEligibilityEn', { theme: 'snow' });
+        var quillBenefitsEn    = new Quill('#editorBenefitsEn', { theme: 'snow' });
+        var quillDescriptionEn = new Quill('#editorDescriptionEn', { theme: 'snow' });
+        var quillEn            = new Quill('#editorEn', { theme: 'snow' });
 
         // French Editors
-        var quillEligibilityFr = new Quill('#editorEligibilityFr', { theme: 'snow', placeholder: placeholders.fr.eligibility });
-        var quillBenefitsFr    = new Quill('#editorBenefitsFr', { theme: 'snow', placeholder: placeholders.fr.benefits });
-        var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow', placeholder: placeholders.fr.description });
-        var quillFr            = new Quill('#editorFr', { theme: 'snow', placeholder: placeholders.fr.details });
+        var quillEligibilityFr = new Quill('#editorEligibilityFr', { theme: 'snow' });
+        var quillBenefitsFr    = new Quill('#editorBenefitsFr', { theme: 'snow' });
+        var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow' });
+        var quillFr            = new Quill('#editorFr', { theme: 'snow' });
 
-        // =================== Load Existing Data from Model ===================
+        // =================== Load Existing Data from Model into Editors and Hidden Inputs ===================
         // Arabic
         quillEligibilityAr.root.innerHTML = '@Html.Raw(Model.EligibilityCriteriaAr ?? "")';
         quillBenefitsAr.root.innerHTML    = '@Html.Raw(Model.BenefitsAr ?? "")';
         quillDescriptionAr.root.innerHTML = '@Html.Raw(Model.DescriptionAr ?? "")';
         quillAr.root.innerHTML            = '@Html.Raw(Model.DetailsAr ?? "")';
+        document.getElementById('eligibilityAr').value = quillEligibilityAr.root.innerHTML;
+        document.getElementById('benefitsAr').value    = quillBenefitsAr.root.innerHTML;
+        document.getElementById('descriptionAr').value = quillDescriptionAr.root.innerHTML;
+        document.getElementById('detailsAr').value     = quillAr.root.innerHTML;
 
         // English
         quillEligibilityEn.root.innerHTML = '@Html.Raw(Model.EligibilityCriteriaEn ?? "")';
         quillBenefitsEn.root.innerHTML    = '@Html.Raw(Model.BenefitsEn ?? "")';
         quillDescriptionEn.root.innerHTML = '@Html.Raw(Model.DescriptionEn ?? "")';
         quillEn.root.innerHTML            = '@Html.Raw(Model.DetailsEn ?? "")';
+        document.getElementById('eligibilityEn').value = quillEligibilityEn.root.innerHTML;
+        document.getElementById('benefitsEn').value    = quillBenefitsEn.root.innerHTML;
+        document.getElementById('descriptionEn').value = quillDescriptionEn.root.innerHTML;
+        document.getElementById('detailsEn').value     = quillEn.root.innerHTML;
 
         // French
         quillEligibilityFr.root.innerHTML = '@Html.Raw(Model.EligibilityCriteriaFr ?? "")';
         quillBenefitsFr.root.innerHTML    = '@Html.Raw(Model.BenefitsFr ?? "")';
         quillDescriptionFr.root.innerHTML = '@Html.Raw(Model.DescriptionFr ?? "")';
         quillFr.root.innerHTML            = '@Html.Raw(Model.DetailsFr ?? "")';
+        document.getElementById('eligibilityFr').value = quillEligibilityFr.root.innerHTML;
+        document.getElementById('benefitsFr').value    = quillBenefitsFr.root.innerHTML;
+        document.getElementById('descriptionFr').value = quillDescriptionFr.root.innerHTML;
+        document.getElementById('detailsFr').value     = quillFr.root.innerHTML;
 
         // =================== Image Preview Functionality ===================
         const imageInput = document.getElementById('ImageInput');

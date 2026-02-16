@@ -162,7 +162,7 @@
   <data name="OpportunityImageAlt" xml:space="preserve">
     <value>Image de l'opportunité</value>
   </data>
-  <data name="OpportunityTitleAr" xml:space="preserve">
+  <data name="SubOpportunityTitle" xml:space="preserve">
     <value>Saisir le titre de l’opportunité</value>
   </data>
   <data name="OpportunityTitle" xml:space="preserve">
