@@ -187,10 +187,10 @@ html[dir="ltr"] .page-title { text-align: left; }
 } */
 
 .form-panel .btn-primary:disabled {
-  background-color: #F99D27;
-    opacity: 0.5; 
-    color:#fff;
+  background-color: #FAD7A0 !important;
+  color: #fff !important;
   border: none;
+  opacity: 1;
 }
 
 .btn-outline {
@@ -355,6 +355,69 @@ html[dir="ltr"] .form-panel textarea {
   text-align: left;
 }
 
+/* اتجاه النص حسب لغة التبويب - استخدام ID للتفوق على كل القواعد */
+/* Create: #arabic, #english, #french | Edit: #tabAr, #tabEn, #tabFr */
+
+/* تبويب الإنجليزي والفرنسي - العناوين والحقول على اليسار (Create + Edit) */
+#english .field input,
+#english .field select,
+#english .field textarea,
+#english .field label,
+#english .field .discription,
+#english .field h3.discription,
+#french .field input,
+#french .field select,
+#french .field textarea,
+#french .field label,
+#french .field .discription,
+#french .field h3.discription,
+#tabEn .field input,
+#tabEn .field select,
+#tabEn .field textarea,
+#tabEn .field label,
+#tabEn .field .discription,
+#tabEn .field h3.discription,
+#tabFr .field input,
+#tabFr .field select,
+#tabFr .field textarea,
+#tabFr .field label,
+#tabFr .field .discription,
+#tabFr .field h3.discription {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+#english .ql-editor,
+#french .ql-editor,
+#tabEn .ql-editor,
+#tabFr .ql-editor {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* تبويب العربي - RTL (Create + Edit) */
+#arabic .field input,
+#arabic .field select,
+#arabic .field textarea,
+#arabic .field label,
+#arabic .field .discription,
+#arabic .field h3.discription,
+#tabAr .field input,
+#tabAr .field select,
+#tabAr .field textarea,
+#tabAr .field label,
+#tabAr .field .discription,
+#tabAr .field h3.discription {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+#arabic .ql-editor,
+#tabAr .ql-editor {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
 html[dir="ltr"] .form-panel .ql-editor {
   direction: ltr;
   text-align: left;
@@ -365,3 +428,5 @@ html[dir="ltr"] .form-panel .discription,
 html[dir="ltr"] .form-panel label {
   text-align: left;
 }
+
+

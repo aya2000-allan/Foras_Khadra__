@@ -14,6 +14,16 @@
 }
 
 <link rel="stylesheet" href="~/css/opportunity-create.css" />
+<style>
+/* اتجاه اليسار لتبويب الإنجليزي والفرنسي - يتفوق على كل القواعد */
+#english .field input, #english .field select, #english .field textarea,
+#english .field label, #english .field .discription, #english .field h3,
+#french .field input, #french .field select, #french .field textarea,
+#french .field label, #french .field .discription, #french .field h3 {
+  direction: ltr !important; text-align: left !important;
+}
+#english .ql-editor, #french .ql-editor { direction: ltr !important; text-align: left !important; }
+</style>
 
 <div class="header">
     <h2 class="page-title">@Localizer["AddOpportunityTitle"]</h2>
@@ -294,6 +304,47 @@
         var quillBenefitsFr = new Quill('#editorBenefitsFr', { theme: 'snow', placeholder: writeBenefits });
         var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow', placeholder: writeDescription });
         var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: writeDetails });
+
+        // =================== تطبيق اتجاه النص حسب التبويب ===================
+        function applyTabDirection(tabId) {
+            var pane = document.getElementById(tabId);
+            if (!pane) return;
+            var isLtr = tabId === 'english' || tabId === 'french';
+            var dir = isLtr ? 'ltr' : 'rtl';
+            var align = isLtr ? 'left' : 'right';
+            pane.setAttribute('dir', dir);
+            pane.querySelectorAll('.field input, .field select, .field textarea, .field label, .field .discription, .field h3').forEach(function(el) {
+                el.style.setProperty('direction', dir, 'important');
+                el.style.setProperty('text-align', align, 'important');
+            });
+            pane.querySelectorAll('.ql-editor').forEach(function(el) {
+                el.style.setProperty('direction', dir, 'important');
+                el.style.setProperty('text-align', align, 'important');
+            });
+        }
+        function initTabDirection() {
+            document.querySelectorAll('#languageTabs a[data-bs-toggle="tab"]').forEach(function(tab) {
+                tab.addEventListener('shown.bs.tab', function(e) {
+                    var link = e.currentTarget || e.target.closest('a');
+                    if (link) {
+                        var href = link.getAttribute('href') || '';
+                        var targetId = href.replace('#', '');
+                        if (targetId) applyTabDirection(targetId);
+                    }
+                });
+            });
+            var activeLink = document.querySelector('#languageTabs .nav-link.active');
+            if (activeLink) {
+                var href = activeLink.getAttribute('href') || '';
+                var targetId = href.replace('#', '');
+                if (targetId) applyTabDirection(targetId);
+            }
+            ['english', 'french'].forEach(function(id) {
+                var p = document.getElementById(id);
+                if (p) applyTabDirection(id);
+            });
+        }
+        initTabDirection();
 
         // =================== Variables ===================
         const form = document.getElementById('createForm');
@@ -620,5 +671,6 @@
   transform: translateY(-2px) !important;
   box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3) !important;
 }
+
 
     </style>
