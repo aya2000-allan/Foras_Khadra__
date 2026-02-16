@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutUsDesc" xml:space="preserve">
-    <value>نحن مجموعة من الشباب من الوطن العربي الذين آمنوا بالمؤتمرات العالمية، وقررنا أن نبدأ مشروعنا لدعم الشباب في وطننا العربي على إيجاد الفرص والمشاركة على الصعيد الدولي.</value>
+    <value>نحن مجموعة من الشباب من الوطن العربي الذين آمنوا بالمؤتمرات العالمية، وقررنا أن نبدأ مشروعنا لدعم الشباب في وطننا العربي على إيجاد الفرص والمشاركة على الصعيد الدولي...</value>
   </data>
   <data name="AboutUsTitle" xml:space="preserve">
     <value>من نحن؟</value>

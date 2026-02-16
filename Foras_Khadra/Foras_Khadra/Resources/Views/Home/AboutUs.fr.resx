@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutUsDesc" xml:space="preserve">
-    <value>Nous sommes un groupe de jeunes issus du monde arabe qui croient en l’importance des conférences internationales. Nous avons décidé de lancer notre projet afin de soutenir les jeunes de notre région à trouver des opportunités et à participer au niveau international.</value>
+    <value>Nous sommes un groupe de jeunes issus du monde arabe qui croient en l’importance des conférences internationales. Nous avons décidé de lancer notre projet afin de soutenir les jeunes de notre région à trouver des opportunités et à participer au niveau international...</value>
   </data>
   <data name="AboutUsTitle" xml:space="preserve">
     <value>Biz kimiz?</value>
