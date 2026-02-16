@@ -6,6 +6,7 @@
     ViewData["Title"] = Localizer["TitlePage"];
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
+
     
 
 }
@@ -414,10 +415,14 @@
 
                          <div class="article-body">
 
-    <div class="article-meta">
-                                    <span class="meta-author">@author</span>
-        <span class="meta-date">@article.PublishDate.ToString("dd MMM yyyy")</span>
-    </div>
+                                <div class="article-meta">
+                                    <span class="meta-author">
+                                        @author
+                                        <iconify-icon icon="mdi:check-decagram" style="color:#25652C; font-size:16px; margin-left:4px;"></iconify-icon>
+                                    </span>
+                                    <span class="meta-date">@article.PublishDate.ToString("dd MMM yyyy")</span>
+                                </div>
+
 
     <h5 class="article-title">
                                     @title
@@ -643,77 +648,87 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-  const loginPopupImg = '@Url.Content("~/images/login-required.svg")'; // <-- غيّري اسم الملف
+    const loginPopupImg = '@Url.Content("~/images/login-required.svg")'; // صورة البوب اب
 
-  document.querySelectorAll(".btn-read-more").forEach(btn => {
-    btn.addEventListener("click", function () {
-
-      const isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
-      const culture = '@culture'; // ar / en / fr
-      const isRtl = (culture === "ar");
-
-      if (!isAuthenticated) {
-        const tMap = {
-          ar: {
-            title: "تسجيل الدخول مطلوب!",
-            text: "أنشئ حساب لتتمكن من التقديم، وإذا كان لديك حساب بالفعل\nسجل الدخول الآن",
-            login: "تسجيل الدخول",
-            register: "إنشاء حساب"
-          },
-          en: {
-            title: "Login required!",
-            text: "Create an account to apply. If you already have an account,\nlog in now.",
-            login: "Login",
-            register: "Create account"
-          },
-          fr: {
-            title: "Connexion requise !",
-            text: "Créez un compte pour postuler. Si vous avez déjà un compte,\nconnectez-vous.",
-            login: "Se connecter",
-            register: "Créer un compte"
-          }
-        };
-
-        const t = tMap[culture] || tMap.en;
-
-        Swal.fire({
-          customClass: { popup: 'foras-swal' },
-          showConfirmButton: false,
-          showCloseButton: true,
-          focusConfirm: false,
-          html: `
-            <div class="foras-login-card ${isRtl ? "rtl" : "ltr"}">
-              <img class="foras-img" src="${loginPopupImg}" alt="login">
-              <h3>${t.title}</h3>
-              <p>${t.text.replace(/\n/g, "<br/>")}</p>
-
-              <div class="foras-actions">
-                <button id="forasLoginBtn" class="foras-btn foras-btn-primary">${t.login}</button>
-                <button id="forasRegisterBtn" class="foras-btn">${t.register}</button>
-              </div>
-            </div>
-          `
-        });
-
-        // attach events بعد ما ينرسم
-        setTimeout(() => {
-          document.getElementById("forasLoginBtn")?.addEventListener("click", () => {
-            window.location.href = "/Account/Login";
-          });
-
-          document.getElementById("forasRegisterBtn")?.addEventListener("click", () => {
-            window.location.href = "/Account/RegisterUser";
-          });
-        }, 0);
-
-      } else {
+       document.querySelectorAll(".btn-read-more").forEach(btn => {
+      btn.addEventListener("click", function () {
         const articleId = btn.dataset.articleId;
-        window.location.href = '/Articles/Details/' + articleId;
-      }
-    });
-  });
+        const opportunityId = btn.dataset.opportunityId;
+        const culture = '@culture'; // ar / en / fr
+        const isRtl = (culture === "ar");
 
-            new Swiper(".opportunitiesSwiper", {
+        if (articleId) {
+          const isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+
+          if (!isAuthenticated) {
+            const tMap = {
+              ar: {
+                title: "تسجيل الدخول مطلوب!",
+                text: "أنشئ حساب لتتمكن من القراءة، وإذا كان لديك حساب بالفعل, سجل الدخول الآن...",
+                ok: "حسناً"
+              },
+              en: {
+                title: "Login required!",
+                text: "Create an account to read. If you already have an account, log in now...",
+                ok: "OK"
+              },
+              fr: {
+                title: "Connexion requise !",
+                text: "Créez un compte pour lire. Si vous avez déjà un compte, connectez-vous maintenant...",
+                ok: "OK"
+              }
+            };
+
+            const t = tMap[culture] || tMap.en;
+
+            Swal.fire({
+              customClass: { popup: 'foras-swal' },
+              showCloseButton: false,       // ❌ إزالة زر الإغلاق X
+              showCancelButton: false,      // ❌ إزالة أي أزرار إضافية
+              confirmButtonText: t.ok,      // زر واحد فقط "حسناً" / "OK"
+              title: t.title,
+              text: t.text,
+              html: `
+                <div class="foras-login-card ${isRtl ? "rtl" : "ltr"}">
+                  <img class="foras-img" src="${loginPopupImg}" alt="login">
+                  <h3>${t.title}</h3>
+                  <p>${t.text.replace(/\n/g, "<br/>")}</p>
+                </div>
+              `
+            });
+          } else {
+            window.location.href = '/Articles/Details/' + articleId;
+          }
+        } else if (opportunityId) {
+          // الفرص → فتح مباشر بدون popup
+          window.location.href = '/Opportunity/Details/' + opportunityId;
+        }
+      });
+    });
+       
+
+    // Swiper للأخبار
+    new Swiper(".articlesSwiper", {
+        slidesPerView: 9,
+        spaceBetween: 16,
+        loop: true,
+        autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+            0: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1200: { slidesPerView: 3 }
+        }
+    });
+
+    // Swiper للفرص
+    new Swiper(".opportunitiesSwiper", {
         slidesPerView: 3,
         spaceBetween: 16,
         loop: true,
@@ -731,6 +746,5 @@
             1200: { slidesPerView: 3 }
         }
     });
-
-
 </script>
+
