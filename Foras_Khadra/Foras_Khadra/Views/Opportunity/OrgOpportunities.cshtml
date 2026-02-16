@@ -110,10 +110,11 @@ h2 { font-weight:800; color:#2f6b3c; }
   padding: 22px 24px 18px !important;
   box-shadow: 0 10px 30px rgba(0,0,0,.12) !important;
   font-family: inherit;
-  direction: rtl;
   width: 560px !important;
   max-width: calc(100% - 24px) !important;
 }
+.swal2-popup.custom-swal.swal-rtl { direction: rtl; }
+.swal2-popup.custom-swal.swal-ltr { direction: ltr; }
 .reels-requested {
     opacity: 0.45;
 }
@@ -132,7 +133,8 @@ h2 { font-weight:800; color:#2f6b3c; }
   margin-top: 4px !important;
 }
 
-.swal2-icon { display:none !important; }
+/* إخفاء الأيقونة فقط للنوافذ التأكيدية - نافذة النجاح تعرض أيقونة ✓ */
+.swal2-popup.custom-swal:not(.swal-success) .swal2-icon { display: none !important; }
 
 .swal2-confirm.custom-swal-confirm {
   background:#F99D27 !important;
@@ -563,10 +565,11 @@ value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestTo
 
 <script>
     const lang = '@lang'; // 'ar', 'en', 'fr'
+    const swalDir = lang === 'ar' ? 'rtl' : 'ltr';
 
     const SwalConfirmUI = Swal.mixin({
       customClass: {
-        popup: 'custom-swal',
+        popup: 'custom-swal swal-' + swalDir,
         title: 'custom-swal-title',
         htmlContainer: 'custom-swal-text',
         confirmButton: 'custom-swal-confirm',
@@ -593,7 +596,7 @@ value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestTo
         title: message,
         confirmButtonText: lang==='ar'?'موافق':lang==='fr'?'OK':'OK',
         customClass: {
-          popup: 'custom-swal',
+          popup: 'custom-swal swal-success swal-' + swalDir,
           title: 'custom-swal-title',
           confirmButton: 'custom-swal-confirm'
         },
@@ -606,7 +609,8 @@ value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestTo
             Swal.fire({
                 icon:'warning',
                 title: lang==='ar'?'غير مسموح':lang==='fr'?'Non autorisé':'Not allowed',
-                text: lang==='ar'?'مر أكثر من 24 ساعة.':lang==='fr'?'Plus de 24 heures se sont écoulées.':'More than 24 hours have passed.'
+                text: lang==='ar'?'مر أكثر من 24 ساعة.':lang==='fr'?'Plus de 24 heures se sont écoulées.':'More than 24 hours have passed.',
+                customClass: { popup: 'custom-swal swal-' + swalDir }
             });
             return;
         }
@@ -618,7 +622,8 @@ value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestTo
             Swal.fire({
                 icon:'warning',
                 title: lang==='ar'?'غير مسموح':lang==='fr'?'Non autorisé':'Not allowed',
-                text: lang==='ar'?'مر أكثر من 48 ساعة.':lang==='fr'?'Plus de 48 heures se sont écoulées.':'More than 48 hours have passed.'
+                text: lang==='ar'?'مر أكثر من 48 ساعة.':lang==='fr'?'Plus de 48 heures se sont écoulées.':'More than 48 hours have passed.',
+                customClass: { popup: 'custom-swal swal-' + swalDir }
             });
             return;
         }
@@ -647,7 +652,8 @@ value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestTo
                     Swal.fire({
                         icon:'error',
                         title: lang==='ar'?'خطأ':lang==='fr'?'Erreur':'Error',
-                        text: lang==='ar'?'حدث خطأ أثناء تنفيذ العملية':lang==='fr'?'Une erreur est survenue lors de l\'opération':'An error occurred during the operation'
+                        text: lang==='ar'?'حدث خطأ أثناء تنفيذ العملية':lang==='fr'?'Une erreur est survenue lors de l\'opération':'An error occurred during the operation',
+                        customClass: { popup: 'custom-swal swal-' + swalDir }
                     });
                 });
             }
@@ -689,7 +695,7 @@ value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestTo
                     : (lang==='ar'?'تم التراجع عن طلب الريل بنجاح!':lang==='fr'?'La demande de reels a été annulée avec succès !':'Reels request canceled successfully!'),
                 confirmButtonText: lang==='ar'?'موافق':lang==='fr'?'OK':'OK',
                 customClass: {
-                  popup: 'custom-swal',
+                  popup: 'custom-swal swal-success swal-' + swalDir,
                   title: 'custom-swal-title',
                   confirmButton: 'custom-swal-confirm'
                 },
@@ -701,7 +707,8 @@ value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestTo
             Swal.fire({
                 icon:'error',
                 title: lang==='ar'?'خطأ':lang==='fr'?'Erreur':'Error',
-                text: lang==='ar'?'حدث خطأ أثناء تنفيذ العملية':lang==='fr'?'Une erreur est survenue lors de l\'opération':'An error occurred during the operation'
+                text: lang==='ar'?'حدث خطأ أثناء تنفيذ العملية':lang==='fr'?'Une erreur est survenue lors de l\'opération':'An error occurred during the operation',
+                customClass: { popup: 'custom-swal swal-' + swalDir }
             });
         });
     }

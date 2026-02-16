@@ -51,14 +51,15 @@ html[dir="ltr"] .side-panel {
   width: 245px;
   text-align: center;
 }
-/* Title */
+/* Title - RTL/LTR based on language */
 .page-title {
   color: #25652c;
-  text-align: right;
   margin: 44px 0;
   font-size: 36px;
   font-weight: 700;
 }
+html[dir="rtl"] .page-title { text-align: right; }
+html[dir="ltr"] .page-title { text-align: left; }
 
 /* Validation */
 .validation-summary {
@@ -167,22 +168,28 @@ html[dir="ltr"] .side-panel {
   height: 65px;
 }
 
-.btn-primary {
+.form-panel .btn-primary {
   flex: 4;
-  background: #f99d27;
+  background: #F99D27 !important;
   border: none;
   border-radius: 16px;
   padding: 12px;
-  color: #fff;
+  color: #fff !important;
   font-weight: 600;
   font-size: 24px;
   cursor: pointer;
 }
 
-.btn-primary:hover {
-  color: #f99d27;
-  background: #fff;
-  border: 2px solid #f99d27;
+.form-panel .btn-primary:hover {
+  color: #F99D27 !important;
+  background: #fff !important;
+  border: 2px solid #F99D27;
+}
+
+.form-panel .btn-primary:disabled {
+  background: #ccc !important;
+  color: #666 !important;
+  border: none;
 }
 
 .btn-outline {
@@ -305,4 +312,44 @@ html[dir="ltr"] .side-panel {
 }
 a:hover {
   color: #25652c;
+}
+
+/* ===== RTL Support for Arabic ===== */
+html[dir="rtl"] .form-panel input,
+html[dir="rtl"] .form-panel select,
+html[dir="rtl"] .form-panel textarea {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Quill editor RTL */
+html[dir="rtl"] .form-panel .ql-editor {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .form-panel .field label,
+html[dir="rtl"] .form-panel .discription,
+html[dir="rtl"] .form-panel label {
+  text-align: right;
+}
+
+html[dir="rtl"] .form-panel .upload-area {
+  text-align: center;
+}
+
+html[dir="rtl"] .form-panel .actions {
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .form-panel .header {
+  flex-direction: row-reverse;
+}
+
+/* LTR - ensure inputs align left */
+html[dir="ltr"] .form-panel input,
+html[dir="ltr"] .form-panel select,
+html[dir="ltr"] .form-panel textarea {
+  direction: ltr;
+  text-align: left;
 }

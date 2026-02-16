@@ -1,4 +1,4 @@
-﻿@using Microsoft.Extensions.Options;
+@using Microsoft.Extensions.Options;
 @using System.Globalization;
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
@@ -59,12 +59,13 @@
 
 /* التاريخ (يمين فوق) */
 .latest-articles .article-date{
-  align-self:flex-end;      /* يمين */
   font-size:12px;
   color:#f99d27;
   font-weight:700;
   display:inline-block;
 }
+.latest-articles[dir="rtl"] .article-date { align-self: flex-end; }
+.latest-articles[dir="ltr"] .article-date { align-self: flex-start; }
 
 /* العنوان */
 .latest-articles .article-title{
@@ -72,12 +73,13 @@
   font-weight:900;
   color:#1f1f1f;
   line-height:1.5;
-
   display:-webkit-box;
   -webkit-line-clamp:2;
   -webkit-box-orient:vertical;
   overflow:hidden;
 }
+.latest-articles[dir="rtl"] .article-title { text-align: right; }
+.latest-articles[dir="ltr"] .article-title { text-align: left; }
 
 /* الوصف */
 .latest-articles .article-desc{
@@ -85,16 +87,16 @@
   font-size:13px;
   color:#fff;
   line-height:1.75;
-
   display:-webkit-box;
   -webkit-line-clamp:3;
   -webkit-box-orient:vertical;
   overflow:hidden;
 }
+.latest-articles[dir="rtl"] .article-desc { text-align: right; }
+.latest-articles[dir="ltr"] .article-desc { text-align: left; }
 
 .latest-articles .read-more{
   margin-top:auto;
-  align-self:flex-end;   
   display:inline-flex;
   align-items:center;
   gap:8px;
@@ -103,6 +105,9 @@
   color: var(--green);
   text-decoration:none;
 }
+.latest-articles[dir="rtl"] .read-more { align-self: flex-end; }
+.latest-articles[dir="ltr"] .read-more { align-self: flex-start; }
+.latest-articles[dir="ltr"] .read-more iconify-icon { transform: scaleX(-1); }
 
 .latest-articles .read-more iconify-icon{
   font-size:18px;
@@ -124,12 +129,11 @@
   align-items:center;
   justify-content:space-between;
   width:100%;
-  direction: rtl;
   font-size:12px;
   font-weight:700;
-    flex-direction: row-reverse; 
-
 }
+.latest-articles[dir="rtl"] .article-meta { direction: rtl; flex-direction: row-reverse; }
+.latest-articles[dir="ltr"] .article-meta { direction: ltr; flex-direction: row; }
 
 .latest-articles .meta-author{
   color:#f99d27; 
@@ -265,12 +269,20 @@
 .home-hero-bg{
   background:#F6FBF7;
 }
+/* Hero: عربي = صور يسار | إنجليزي/فرنسي = صور يمين (ينعكسن) */
+.hero-rtl .hero-images-col { flex-direction: row-reverse; }
+.hero-ltr .hero-images-col { flex-direction: row; }
+.hero-rtl .hero-images-col .d-flex.transparent { flex-direction: row-reverse; }
+.hero-ltr .hero-images-col .d-flex.transparent { flex-direction: row; }
+/* اتجاه النص في الهيرو */
+.hero-rtl .custom-col-full { text-align: right; }
+.hero-ltr .custom-col-full { text-align: left; }
 
 
 
 </style>
-<!-- Main Container -->
-<div class="container-fluid py-5 rtl home-hero-bg" style="position:relative;margin:7% 0;">
+<!-- Main Container - RTL للعربي (نص يمين، صور يسار) | LTR للإنجليزي والفرنسي (نص يسار، صور يمين) -->
+<div class="container-fluid py-5 home-hero-bg hero-section hero-@dir" dir="@dir" style="position:relative;margin:7% 0;">
 
     <!-- Floating Circles -->
     <div class="floating-shapes" id="floatingShapes"></div>
@@ -283,15 +295,15 @@
                 @Localizer["Title"]
             </h2>
             <h4 class="mb-4" style="color:var(--textColor); font-size:40px;font-weight:500; font-stretch: expanded;"> @Localizer["SubTitle"]   </h4>
-            <p class="mb-4 responsive-text" style="font-size:20px;font-weight:350; text-align:justify;max-width:443px">
+            <p class="mb-4 responsive-text" style="font-size:20px;font-weight:350; text-align:justify; max-width:443px">
                 @Localizer["Description"]
                
             </p>
            
         </div>
 
-        <!-- Left: Images and colored blocks -->
-        <div class="d-flex  flex-row-reverse  justify-content-center align-items-start  col-lg-7  mb-4 mb-lg-0 position-relative custom-col-full" style="  background:var(--bg); ">
+        <!-- Images and colored blocks - ينعكس مع اللغة -->
+        <div class="d-flex hero-images-col justify-content-center align-items-start col-lg-7 mb-4 mb-lg-0 position-relative custom-col-full" style="background:var(--bg);">
            
             <!--Center: leaf icon -->
             <div class="position-absolute leaf d-flex justify-content-center align-items-center rounded-circle bg-orange text-white ">
@@ -334,7 +346,7 @@
 </div>
 
 
-<section class="latest-articles rtl py-5" style="background:#F6FBF7;">
+<section class="latest-articles py-5" dir="@dir" style="background:#F6FBF7;">
     <div class="container">
 
         <!-- العنوان + زر عرض الكل -->
