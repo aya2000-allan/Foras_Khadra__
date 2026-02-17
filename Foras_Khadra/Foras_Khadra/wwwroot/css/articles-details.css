@@ -468,3 +468,15 @@ html[dir="ltr"] .news-back-btn {
   position: relative;
   top: -1px;
 }
+
+
+/* قلب أيقونة sideblock في EN/FR فقط */
+html[dir="ltr"] .sideblock-icon svg{
+  transform: scaleX(-1);
+  transform-origin: center;
+}
+
+/* بالعربي (RTL) خليها طبيعية */
+html[dir="rtl"] .sideblock-icon svg{
+  transform: scaleX(1);
+}

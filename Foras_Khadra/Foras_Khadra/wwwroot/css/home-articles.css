@@ -470,3 +470,7 @@ html[dir="ltr"] .ra-more{
 .ra-more:hover .ra-more-icon i{
   color: #1a4421;
 }
+html[dir="ltr"] .readalso-list .ra-more-icon i{
+  transform: scaleX(-1);
+  transition: transform .2s ease;
+}
