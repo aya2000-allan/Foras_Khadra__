@@ -1,4 +1,5 @@
-.home-articles{ direction: rtl; }
+html[dir="rtl"] .home-articles { direction: rtl; }
+html[dir="ltr"] .home-articles { direction: ltr; }
 
 /* ===== section header (title + svg icon) ===== */
 .section-head{
@@ -350,4 +351,40 @@
 @media (max-width: 600px){
   .readalso-row{ flex-direction:column; }
   .ra-right{ justify-content:flex-end; }
+}
+
+
+
+/* ===== Direction per language ===== */
+html[dir="rtl"] .home-articles { direction: rtl; }
+html[dir="ltr"] .home-articles { direction: ltr; }
+
+/* ===== Section head (icon + title) ===== */
+.home-articles .section-head{
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+/* English/French (LTR): current order is correct (icon then title) */
+html[dir="ltr"] .home-articles .section-head{
+  justify-content: flex-start !important;
+  flex-direction: row !important;
+}
+
+/* Arabic (RTL): keep SAME order (icon then title) لكن على اليمين */
+html[dir="rtl"] .home-articles .section-head{
+  justify-content: flex-start !important;   /* يروحوا كلهم على اليمين */
+  flex-direction: row !important;         /* مهم: لا تستخدم row-reverse */
+}
+
+/* Title alignment */
+html[dir="ltr"] .home-articles .section-title{ text-align: left !important; }
+html[dir="rtl"] .home-articles .section-title{ text-align: right !important; }
+/* قلب الورقة داخل أيقونة الهيدر بالإنجليزي/الفرنسي فقط */
+html[dir="ltr"] .home-articles .section-icon svg path{
+  transform: scaleX(-1);
+  /* transform-box: fill-box; */
+  transform-origin: center;
 }

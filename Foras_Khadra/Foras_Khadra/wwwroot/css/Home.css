@@ -387,12 +387,19 @@ html[dir="ltr"] .footer-leaf {
   border-radius: 12px;
 }
 
-/* الحالة المفتوحة */
-.bio.open {
-  max-height: 500px; /* رقم كبير يكفي للنص */
-  opacity: 1;
-  transform: translateY(0);
+    /* الحالة المفتوحة */
+    .bio.open {
+        max-height: 500px; /* رقم كبير يكفي للنص */
+        opacity: 1;
+        transform: translateY(0);
+    }
+    /* قلب أيقونات الورقة بالإنجليزي/الفرنسي فقط (LTR) */
+html[dir="ltr"] .vision-goals img[src*="about_us_leaf"],
+html[dir="ltr"] .teams-section .footer-leaf {
+  transform: scaleX(-1);
+  transform-origin: center;
 }
+
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
