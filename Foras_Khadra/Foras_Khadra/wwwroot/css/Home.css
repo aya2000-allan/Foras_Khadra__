@@ -401,6 +401,13 @@ background: var(--orange);
         opacity: 1;
         transform: translateY(0);
     }
+    /* قلب أيقونات الورقة بالإنجليزي/الفرنسي فقط (LTR) */
+html[dir="ltr"] .vision-goals img[src*="about_us_leaf"],
+html[dir="ltr"] .teams-section .footer-leaf {
+  transform: scaleX(-1);
+  transform-origin: center;
+}
+
 
 
 /* ===== RESPONSIVE ===== */
