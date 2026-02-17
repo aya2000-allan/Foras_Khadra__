@@ -179,10 +179,13 @@ html[dir="ltr"] .home-articles { direction: ltr; }
 
 /* المحتوى يسار */
 .ra-body{
-    position: relative;
+  position: relative;
   flex: 1 1 auto;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
+
 
 .ra-tag{
   font-size: 12px;
@@ -247,16 +250,16 @@ html[dir="ltr"] .home-articles { direction: ltr; }
   color:#0C2710;
 }
 
-/* نخليها عاليسار */
+/* نخليها عاليسار
 .ra-more{
   float: left;
-}
+} */
 
 .ra-divider{
   height:1px;
   background: rgba(0,0,0,.08);
 }
-.ra-body{ text-align:right; }
+/* .ra-body{ text-align:right; } */
 
 .pagination-wrap{
   margin-top: 18px;
@@ -387,4 +390,83 @@ html[dir="ltr"] .home-articles .section-icon svg path{
   transform: scaleX(-1);
   /* transform-box: fill-box; */
   transform-origin: center;
+}
+/* ===== Force card title + date to the right in LTR (EN/FR) ===== */
+html[dir="ltr"] .home-articles .latest-info{
+  text-align: right !important;
+}
+
+html[dir="ltr"] .home-articles .latest-title,
+html[dir="ltr"] .home-articles .latest-date{
+  text-align: right !important;
+}/* ===== Read More alignment ===== */
+
+/* بالعربي (RTL): خليها حسب التصميم الحالي */
+html[dir="rtl"] .ra-more{
+  direction: rtl;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* بالإنجليزي/الفرنسي (LTR): خليها على اليمين */
+html[dir="ltr"] .ra-more{
+  direction: ltr;
+  justify-content: flex-end;   /* يزتها على اليمين */
+  text-align: right;
+}
+
+/* ===== Hover effect ===== */
+.ra-more{
+  display: inline-flex;
+  align-items: center;
+  /* gap: 8px; */
+  color: #25652C;
+  font-weight: 700;
+  text-decoration: none;
+  padding-top: 10PX;
+  transition: color .2s ease, transform .2s ease;
+}
+
+.ra-more:hover{
+  color: #F99D27;              /* يتغير اللون */
+  transform: translateX(-2px); /* حركة خفيفة */
+}
+
+/* حركة السهم عند الهوفر */
+.ra-more-icon i{
+  transition: transform .2s ease;
+}
+
+/* .ra-more:hover .ra-more-icon i{
+  transform: translateX(-4px);
+} */
+
+/* لأنك مستخدم fa-arrow-left: نقلبه بالـ LTR ليصير شكله منطقي */
+html[dir="ltr"] .ra-more-icon i{
+  transform: scaleX(-1);
+}
+
+/* ===== Read more position ===== */
+html[dir="rtl"] .ra-more{
+  align-self: flex-end;  /* بالـ RTL يكون يسار البلوك (زي وضعك الحالي) */
+  direction: rtl;
+}
+
+html[dir="ltr"] .ra-more{
+  align-self: flex-end;    /* بالـ LTR يصير عاليمين */
+  direction: ltr;
+}
+
+/* ===== Hover (بدون مسافة) ===== */
+.ra-more:hover{
+  text-decoration: underline;
+  color: #1a4421;
+}
+
+.ra-more:hover .ra-more-icon{
+  border-color: #1a4421;
+}
+
+.ra-more:hover .ra-more-icon i{
+  color: #1a4421;
 }
