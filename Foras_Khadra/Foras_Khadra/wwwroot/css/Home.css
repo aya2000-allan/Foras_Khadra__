@@ -364,6 +364,7 @@ background: var(--orange);
     font-size: 14px;
     margin-left: 9px;
     cursor: pointer;
+    padding-right: 10px;
 }
 
 .footer-title h4 {
@@ -421,6 +422,14 @@ html[dir="ltr"] .teams-section .footer-leaf {
         width: 100%;
     }
 }
+/* الدور (Role) - ضبط المسافة حسب اللغة */
+
+/* افتراضي (عربي RTL) خليها مثل ما هي */
+.news-article-page[dir="rtl"] .team-card-footer .role{
+  margin-left: 9px;   /* زي ما عندك */
+  margin-right: 0;
+}
+
 
 
 
