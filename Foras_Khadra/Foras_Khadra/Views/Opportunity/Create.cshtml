@@ -12,18 +12,64 @@
     var dir = culture == "ar" ? "rtl" : "ltr";
 
 }
+<style>
+
+.page-wrapper[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+.page-wrapper[dir="ltr"] {
+    direction: ltr;
+    text-align: left;
+}
+
+.page-wrapper[dir="rtl"] input,
+.page-wrapper[dir="rtl"] textarea,
+.page-wrapper[dir="rtl"] select,
+.page-wrapper[dir="rtl"] .ql-editor {
+    text-align: right !important;
+}
+
+.page-wrapper[dir="ltr"] input,
+.page-wrapper[dir="ltr"] textarea,
+.page-wrapper[dir="ltr"] select,
+.page-wrapper[dir="ltr"] .ql-editor {
+    text-align: left !important;
+}
+/* ===== Fix Quill Direction Fully ===== */
+
+.page-wrapper[dir="rtl"] .ql-container {
+    direction: rtl;
+}
+
+.page-wrapper[dir="rtl"] .ql-editor {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+.page-wrapper[dir="rtl"] .ql-toolbar {
+    direction: rtl;
+}
+
+.page-wrapper[dir="ltr"] .ql-container {
+    direction: ltr;
+}
+
+.page-wrapper[dir="ltr"] .ql-editor {
+    direction: ltr !important;
+    text-align: left !important;
+}
+
+.page-wrapper[dir="ltr"] .ql-toolbar {
+    direction: ltr;
+}
+
+ 
+
+</style>
 
 <link rel="stylesheet" href="~/css/opportunity-create.css" />
-<style>
-/* اتجاه اليسار لتبويب الإنجليزي والفرنسي - يتفوق على كل القواعد */
-#english .field input, #english .field select, #english .field textarea,
-#english .field label, #english .field .discription, #english .field h3,
-#french .field input, #french .field select, #french .field textarea,
-#french .field label, #french .field .discription, #french .field h3 {
-  direction: ltr !important; text-align: left !important;
-}
-#english .ql-editor, #french .ql-editor { direction: ltr !important; text-align: left !important; }
-</style>
 
 <div class="header">
     <h2 class="page-title">@Localizer["AddOpportunityTitle"]</h2>
@@ -33,7 +79,7 @@
     }
 </div>
 
-<div class="page-wrapper">
+<div class="page-wrapper" dir="@dir" lang="@culture">
     <div class="form-panel">
         <form id="createForm" asp-action="Create" method="post" enctype="multipart/form-data">
             <ul class="nav nav-tabs" id="languageTabs" role="tablist">
@@ -128,7 +174,7 @@
 
             <div class="tab-content mt-3">
                 <!-- Arabic Tab -->
-                <div class="tab-pane fade show active" id="arabic" role="tabpanel" dir="rtl">
+<div class="tab-pane fade show active"  role="tabpanel" dir="rtl">
                     <div class="field">
                         <label for="TitleAr">@Localizer["OpportunityTitle"] </label>
                         <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitle"]" required />
@@ -162,7 +208,7 @@
                 </div>
 
                 <!-- English Tab -->
-                <div class="tab-pane fade" id="english" role="tabpanel" dir="ltr">
+                <div class="tab-pane fade"  role="tabpanel" >
                     <div class="field">
                         <label for="TitleEn">@Localizer["OpportunityTitle"] </label>
                         <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitle"]" required />
@@ -203,7 +249,7 @@
                 </div>
 
                 <!-- French Tab -->
-                <div class="tab-pane fade" id="french" role="tabpanel" dir="ltr">
+                <div class="tab-pane fade"  role="tabpanel" >
                     <div class="field">
                         <label for="TitleFr">@Localizer["OpportunityTitle"] </label>
                         <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitle"]" required />
@@ -306,7 +352,7 @@
         var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: writeDetails });
 
         // =================== تطبيق اتجاه النص حسب التبويب ===================
-        function applyTabDirection(tabId) {
+        @* function applyTabDirection(tabId) {
             var pane = document.getElementById(tabId);
             if (!pane) return;
             var isLtr = tabId === 'english' || tabId === 'french';
@@ -344,7 +390,7 @@
                 if (p) applyTabDirection(id);
             });
         }
-        initTabDirection();
+        initTabDirection(); *@
 
         // =================== Variables ===================
         const form = document.getElementById('createForm');

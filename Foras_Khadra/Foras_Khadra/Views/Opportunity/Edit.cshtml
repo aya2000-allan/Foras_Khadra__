@@ -3,13 +3,55 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Foras_Khadra.Helpers
 
+
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Localizer["Title"];
     Layout = "_Layout";
-    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
 }
+<style>
+    /* Direction based on current culture */
+    .page-wrapper[dir="ltr"] {
+        direction: ltr;
+        text-align: left;
+    }
+
+    .page-wrapper[dir="rtl"] {
+        direction: rtl;
+        text-align: right;
+    }
+
+    /* Inputs + Labels */
+    .page-wrapper[dir="ltr"] .field input,
+    .page-wrapper[dir="ltr"] .field select,
+    .page-wrapper[dir="ltr"] .field textarea,
+    .page-wrapper[dir="ltr"] .field label {
+        direction: ltr !important;
+        text-align: left !important;
+    }
+
+    .page-wrapper[dir="rtl"] .field input,
+    .page-wrapper[dir="rtl"] .field select,
+    .page-wrapper[dir="rtl"] .field textarea,
+    .page-wrapper[dir="rtl"] .field label {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+
+    /* Quill Editor */
+    .page-wrapper[dir="ltr"] .ql-editor {
+        direction: ltr !important;
+        text-align: left !important;
+    }
+
+    .page-wrapper[dir="rtl"] .ql-editor {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+</style>
+
 
 <link rel="stylesheet" href="~/css/opportunity-create.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -37,7 +79,7 @@
    
 </div>
 
-<div class="page-wrapper">
+<div class="page-wrapper" dir="@dir" lang="@culture">
     <div class="form-panel">
         <form id="editForm" method="post" enctype="multipart/form-data" asp-action="Edit">
 
@@ -319,7 +361,7 @@
         var quillFr            = new Quill('#editorFr', { theme: 'snow' });
 
         // =================== تطبيق اتجاه النص حسب التبويب ===================
-        function applyTabDirection(tabId) {
+        @* function applyTabDirection(tabId) {
             var pane = document.getElementById(tabId);
             if (!pane) return;
             var isLtr = tabId === 'tabEn' || tabId === 'tabFr';
@@ -357,7 +399,7 @@
                 if (p) applyTabDirection(id);
             });
         }
-        initTabDirection();
+        initTabDirection(); *@
 
         // =================== Load Existing Data from Model into Editors and Hidden Inputs ===================
         // Arabic
