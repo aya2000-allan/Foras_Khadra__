@@ -263,5 +263,87 @@
             color: #fff;
             border-color: #f99d27;
         }
+        /* التصميم العام للـ popup */
+.swal-rtl-popup {
+    direction: rtl;
+    border-radius: 20px;
+    padding: 24px 28px;
+    width: 420px;
+    max-width: 90vw;
+    font-family: 'Cairo', sans-serif; /* خط جميل للـ Arabic */
+    text-align: center;
+    background: #F6FBF7;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* الصورة العلوية */
+.swal-img {
+    width: 90px;
+    margin-bottom: 16px;
+}
+
+/* عنوان البوب اب */
+.swal-title-text {
+    font-weight: 700;
+    font-size: 20px;
+    color: #1F1F1F;
+    margin-bottom: 12px;
+}
+
+/* حقل اسم المقالة */
+.swal-input {
+    border: none;
+    background: #fff3e0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #25652C;
+    text-align: center;
+    pointer-events: none; /* لمنع التعديل */
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* ترتيب الأزرار */
+.swal2-actions {
+    display: flex !important;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* الأزرار العامة */
+.swal-btn {
+    min-width: 130px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* زر الحذف */
+.swal-btn-danger {
+    background: #ff383c;
+    color: #fff;
+}
+
+.swal-btn-danger:hover {
+    background: #e02f31;
+}
+
+/* زر التراجع */
+.swal-btn-cancel {
+    background: #fff;
+    color: #f99d27;
+    border: 2px solid #f99d27;
+}
+
+.swal-btn-cancel:hover {
+    background: #f99d27;
+    color: #fff;
+}
+
     </style>
 }

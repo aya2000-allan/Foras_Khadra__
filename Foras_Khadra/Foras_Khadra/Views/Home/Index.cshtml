@@ -707,12 +707,14 @@
               showCloseButton: false,       // ❌ إزالة زر الإغلاق X
               showCancelButton: false,      // ❌ إزالة أي أزرار إضافية
               confirmButtonText: t.ok,      // زر واحد فقط "حسناً" / "OK"
+                  confirmButtonColor: '#F99D27',
+
               title: t.title,
               text: t.text,
               html: `
                 <div class="foras-login-card ${isRtl ? "rtl" : "ltr"}">
                   <img class="foras-img" src="${loginPopupImg}" alt="login">
-                  <h3>${t.title}</h3>
+                  @* <h3>${t.title}</h3> *@
                   <p>${t.text.replace(/\n/g, "<br/>")}</p>
                 </div>
               `
