@@ -61,15 +61,21 @@
                                                         Model.TitleFr)
                         </span>@if (!string.IsNullOrWhiteSpace(Model.Author) && Model.Author.Trim() == "فرص خضراء")
 {
-                            <span class="news-top-author @(Model.Author.Trim() == "فرص خضراء" ? "author-green" : "")">
-                                @(Model.Author.Trim() == "فرص خضراء"
-                                                            ? (culture == "ar" ? "فرص خضراء" : "Foras Khadra")
-                                                            : Model.Author)
+                            <span class="news-top-author">
+                                <span style="color:#FF8C00; font-weight:bold;">
+                                    @(Model.Author.Trim() == "فرص خضراء"
+                                                                    ? (culture == "ar" ? "فرص خضراء" : "Foras Khadra")
+                                                                    : Model.Author)
+                            </span>
+
                             @if (Model.Author.Trim() == "فرص خضراء")
                                 {
-                                    <i class="fa-solid fa-circle-check author-verified" aria-hidden="true"></i>
+                                    <iconify-icon icon="mdi:check-decagram"
+                                                  style="color:#25652C; font-size:35px; margin-right:6px; vertical-align:middle;">
+                                    </iconify-icon>
                                 }
                             </span>
+
 }
 else
 {
@@ -128,7 +134,7 @@ else
                                 </span>
                             </div>
 
-                            <!-- ✅ هنا التعديل: latest بدل readAlso -->
+                            <!--  هنا التعديل: latest بدل readAlso -->
                          <div class="sideblock-list readalso-grid">
 
     @foreach (var a in latest.Take(3))
