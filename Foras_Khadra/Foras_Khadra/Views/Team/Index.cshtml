@@ -46,54 +46,51 @@
         </div>
     </div>
 
-      
-        <div class="table-container mb-4">
-            <div class="table-responsive" style="overflow-x:visible;">
-                <table class="table articles-table">
-                    <thead>
-                        <tr class="text-muted">
-                            <th style="width:80px;"></th>
-                            <th class="text-center">الاسم</th>
-                            <th class="text-center">نوع العضوية</th>
-                            
-                        </tr>
-                    </thead>
-                    @foreach (var group in Model.GroupBy(m => m.Department)){
+    <div class="table-container mb-4">
+        <div class="table-responsive" style="overflow-x:visible;">
+            <table class="table articles-table">
+                <thead>
+                    <tr class="text-muted">
+                        <th style="width:80px;"></th>
+                        <th class="text-center">الاسم</th>
+                        <th class="text-center">نوع العضوية</th>
                         
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var group in Model.GroupBy(m => m.Department))
+                    {
+                        <tr>
+                            <td colspan="4" class="fw-bold text-dark" style="background:#f0f0f0;">
+                                <h3 class="mb-0">@group.Key</h3>
+                            </td>
+                        </tr>
 
-                    <tbody>
                         @foreach (var member in group.OrderByDescending(m => m.Membership))
                         {
-                          
                             <tr>
-                                
                                 <td>
-                                    <img src="@(string.IsNullOrEmpty(member.ImagePath)? "https://via.placeholder.com/50": member.ImagePath)"
+                                    <img src="@(string.IsNullOrEmpty(member.ImagePath) ? "https://via.placeholder.com/50" : member.ImagePath)"
                                          class="rounded"
                                          style="width:50px;height:50px;object-fit:cover;"
                                          alt="عضو" />
                                 </td>
-
                                 <td class="fw-bold text-dark text-center">@member.NameAr</td>
-                                <td class="text-muted  text-center ">@member.Membership</td>
-                                
+                                <td class="text-muted text-center">@member.Membership</td>
                                 <td>
                                     <div class="d-flex justify-content-end">
                                         <a asp-action="Details" asp-route-id="@member.Id" class="action-icon icon-view" title="عرض">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
-
                                         <a asp-action="Edit" asp-route-id="@member.Id" class="action-icon icon-edit" title="تعديل">
                                             <i class="fa-solid fa-pen"></i>
                                         </a>
-
                                         <button type="button"
                                                 class="action-icon icon-delete"
                                                 onclick="confirmDelete(@member.Id, '@member.NameAr')"
                                                 title="حذف">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
-
                                         <form id="deleteForm-@member.Id"
                                               asp-action="Delete"
                                               asp-route-id="@member.Id"
@@ -101,17 +98,17 @@
                                               class="d-none">
                                             @Html.AntiForgeryToken()
                                         </form>
-                                        
                                     </div>
                                 </td>
                             </tr>
                         }
-                    </tbody>
                     }
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
-    
+    </div>
+
+
 
 </div>
 
