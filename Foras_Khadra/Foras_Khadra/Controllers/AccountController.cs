@@ -164,21 +164,32 @@ namespace Foras_Khadra.Controllers
         private List<string> GetCountries(string culture = null)
         {
             culture ??= CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            return CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+
+            var countries = CultureInfo.GetCultures(CultureTypes.SpecificCultures)
                 .Select(c =>
                 {
                     try
                     {
                         var region = new RegionInfo(c.Name);
+                        // إذا أردنا التصفية حسب الرمز
+                        if (region.TwoLetterISORegionName == "IL") // إسرائيل فقط
+                            return null;
+
                         return culture == "ar" ? region.NativeName : region.EnglishName;
                     }
-                    catch { return null; }
+                    catch
+                    {
+                        return null;
+                    }
                 })
                 .Where(r => !string.IsNullOrEmpty(r))
                 .Distinct()
                 .OrderBy(r => r)
                 .ToList();
+
+            return countries;
         }
+
 
         // ===== مساعد لجلب الاهتمامات حسب اللغة =====
         private List<InterestItem> GetAvailableInterests(string culture)

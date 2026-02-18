@@ -51,9 +51,9 @@ namespace Foras_Khadra.Controllers
                         var region = new RegionInfo(c.Name);
                         string name = culture switch
                         {
-                            "ar" => region.NativeName,   // الاسم العربي/الاسم المحلي
-                            "fr" => region.EnglishName,  // الفرنسية حالياً تستخدم EnglishName
-                            _ => region.EnglishName      // افتراضي إنجليزي
+                            "ar" => region.NativeName,
+                            "fr" => region.EnglishName,
+                            _ => region.EnglishName
                         };
                         return new SelectListItem
                         {
@@ -71,6 +71,9 @@ namespace Foras_Khadra.Controllers
                 .DistinctBy(x => x.Value)
                 .OrderBy(x => x.Text)
                 .ToList();
+
+            // هنا نفلتر إسرائيل
+            countries = countries.Where(c => c.Value != "IL").ToList();
 
             return countries;
         }
