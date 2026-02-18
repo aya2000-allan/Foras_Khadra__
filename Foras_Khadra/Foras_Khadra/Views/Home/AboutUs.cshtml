@@ -85,7 +85,7 @@
 
                     </div>
                 </div>
-                @foreach (var member in group.OrderByDescending(m => m.Membership))
+                @foreach (var member in group.OrderBy(m => m.CreatedAt))
                 {
                     <div class="team-card">
 
@@ -94,18 +94,18 @@
                             <img src="@member.ImagePath" alt="@member.NameAr" class="member-img" />
                         }
 
-                        <div class="team-card-footer" onclick="toggleBio(@member.Id)">
-                            <div class="footer-title">
-                                <img src="~/images/team_leaf.svg" alt="Alternate Text" class="footer-leaf" />
+                    <div class="team-card-footer" onclick="toggleBio(@member.Id)">
+                        <div class="footer-title">
+                            <img src="~/images/team_leaf.svg" alt="Alternate Text" class="footer-leaf" />
                             <h4>
                                 @(culture == "ar" ? member.NameAr :
                                                             culture == "fr" ? member.NameFr :
                                                             member.NameEn)
                         </h4>
-                            </div>
+                    </div>
 
                             <span class="role">
-                                @MembershipTranslator.Translate(member.Membership, member.Gender, System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName)
+                                @MembershipTranslator.Translate(member.Membership, member.Gender, culture)
                             </span>
                         </div>
 
@@ -117,10 +117,9 @@
                                                 member.BioEn
                                                 )
                     </div>
-
-                        </div>
-                    </div>
-                }
+                </div>
+            </div>
+                        }
                 
             </div>
         </div>

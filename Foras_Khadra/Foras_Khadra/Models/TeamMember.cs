@@ -42,6 +42,9 @@ namespace Foras_Khadra.Models
 
         public GenderType Gender { get; set; }
 
+        [Display(Name = "تاريخ الإنضمام")]
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
 
     }
 

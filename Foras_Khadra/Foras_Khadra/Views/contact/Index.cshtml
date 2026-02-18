@@ -98,9 +98,7 @@
 
                 <input asp-for="Honeypot" type="text" style="display:none !important" autocomplete="off" tabindex="-1" />
 
-                <div class="mb-4 d-flex justify-content-center">
-                    <div class="g-recaptcha" data-sitekey="6LfyK2wrAAAAABkGk-KUioJI_FtA1Kv31qTJ6Le9"></div>
-                </div>
+                
 
                 <div class="text-end">
                     <button type="submit" class="btn btn-primary">@Localizer["SubmitButton"]</button>
@@ -130,7 +128,6 @@
 
     @section Scripts {
         <partial name="_ValidationScriptsPartial" />
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css" />
         <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
@@ -169,8 +166,7 @@
                 }
                 document.getElementById("Phone").value = iti.getNumber();
                 const formData = new FormData(form);
-                formData.append("g-recaptcha-response", grecaptcha.getResponse());
-
+            formData.append("g-recaptcha-response", "test");
                 fetch('@Url.Action("Index", "Contact")', { method: 'POST', body: formData })
                     .then(async response => {
                         const data = await response.text();
@@ -190,7 +186,6 @@
                             window.location.href = '@Url.Action("Index", "Home")';
                         });
                         form.reset();
-                        grecaptcha.reset();
                     })
                     .catch(err => {
                         console.log(err.message);

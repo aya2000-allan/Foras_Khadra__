@@ -12,62 +12,6 @@
     var dir = culture == "ar" ? "rtl" : "ltr";
 
 }
-<style>
-
-.page-wrapper[dir="rtl"] {
-    direction: rtl;
-    text-align: right;
-}
-
-.page-wrapper[dir="ltr"] {
-    direction: ltr;
-    text-align: left;
-}
-
-.page-wrapper[dir="rtl"] input,
-.page-wrapper[dir="rtl"] textarea,
-.page-wrapper[dir="rtl"] select,
-.page-wrapper[dir="rtl"] .ql-editor {
-    text-align: right !important;
-}
-
-.page-wrapper[dir="ltr"] input,
-.page-wrapper[dir="ltr"] textarea,
-.page-wrapper[dir="ltr"] select,
-.page-wrapper[dir="ltr"] .ql-editor {
-    text-align: left !important;
-}
-/* ===== Fix Quill Direction Fully ===== */
-
-.page-wrapper[dir="rtl"] .ql-container {
-    direction: rtl;
-}
-
-.page-wrapper[dir="rtl"] .ql-editor {
-    direction: rtl !important;
-    text-align: right !important;
-}
-
-.page-wrapper[dir="rtl"] .ql-toolbar {
-    direction: rtl;
-}
-
-.page-wrapper[dir="ltr"] .ql-container {
-    direction: ltr;
-}
-
-.page-wrapper[dir="ltr"] .ql-editor {
-    direction: ltr !important;
-    text-align: left !important;
-}
-
-.page-wrapper[dir="ltr"] .ql-toolbar {
-    direction: ltr;
-}
-
- 
-
-</style>
 
 <link rel="stylesheet" href="~/css/opportunity-create.css" />
 
@@ -79,7 +23,7 @@
     }
 </div>
 
-<div class="page-wrapper" dir="@dir" lang="@culture">
+<div class="page-wrapper">
     <div class="form-panel">
         <form id="createForm" asp-action="Create" method="post" enctype="multipart/form-data">
             <ul class="nav nav-tabs" id="languageTabs" role="tablist">
@@ -103,19 +47,19 @@
             <!-- Image upload -->
             <div class="upload-box">
                 <h3 class="discription">@Localizer["UploadOpportunityImage"] <span style="color:red">*</span></h3>
-                
+
                 <div id="imagePreviewContainer" class="current-image-preview" style="display:none; align-items:center; gap:12px; margin-bottom:12px; background-color:#EEF1F7; justify-content:space-between; border-radius:26px; padding:12px;">
-                    <img id="previewImg" src="#" alt="@Localizer["OpportunityImageAlt"]"  style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
+                    <img id="previewImg" src="#" alt="@Localizer["OpportunityImageAlt"]" style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
                     <div id="previewInfo" style="display:flex; align-items:center; gap:6px; font-weight:600;">
                         <span id="previewName"></span>
                         <span style="color:green; font-size:20px;">✅</span>
                     </div>
                 </div>
-                
+
                 <label class="upload-area" id="uploadArea">
                     <input asp-for="Image" id="imageInput" type="file" hidden accept="image/jpeg, image/png" />
-                    <div  class="upload-icon"><img src="~/images/upload-icon.svg" alt=""></div>
-                    <p  class="dragText">@Localizer["DragDropText"] </p>
+                    <div class="upload-icon"><img src="~/images/upload-icon.svg" alt=""></div>
+                    <p class="dragText">@Localizer["DragDropText"] </p>
                     <small>JPEG, PNG</small>
                 </label>
                 <input type="hidden" name="RemoveImage" id="RemoveImage" value="false" />
@@ -137,7 +81,7 @@
             <label for="Type">@Localizer["OpportunityType"] <span style="color:red">*</span></label>
 
             <div class="field dropdown">
-                <select asp-for="Type" class="form-select" >
+                <select asp-for="Type" class="form-select">
                     <option value="">@Localizer["SelectOpportunityType"]</option>
 
                     @foreach (var item in Enum.GetValues(typeof(OpportunityType)).Cast<OpportunityType>())
@@ -170,14 +114,14 @@
             </div>
 
             <!-- Tabs -->
-           
+
 
             <div class="tab-content mt-3">
                 <!-- Arabic Tab -->
-<div class="tab-pane fade show active"  role="tabpanel" dir="rtl">
+                <div class="tab-pane fade show active" id="arabic" role="tabpanel" dir="rtl">
                     <div class="field">
                         <label for="TitleAr">@Localizer["OpportunityTitle"] </label>
-                        <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitle"]" required />
+                        <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitleAr"]" required />
                         <span asp-validation-for="TitleAr" class="text-danger"></span>
                     </div>
                     <div class="field">
@@ -208,10 +152,10 @@
                 </div>
 
                 <!-- English Tab -->
-                <div class="tab-pane fade"  role="tabpanel" >
+                <div class="tab-pane fade" id="english" role="tabpanel" dir="ltr">
                     <div class="field">
                         <label for="TitleEn">@Localizer["OpportunityTitle"] </label>
-                        <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitle"]" required />
+                        <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitleAr"]" required />
                         <span asp-validation-for="TitleEn" class="text-danger"></span>
                     </div>
                     <div class="field">
@@ -249,10 +193,10 @@
                 </div>
 
                 <!-- French Tab -->
-                <div class="tab-pane fade"  role="tabpanel" >
+                <div class="tab-pane fade" id="french" role="tabpanel" dir="ltr">
                     <div class="field">
                         <label for="TitleFr">@Localizer["OpportunityTitle"] </label>
-                        <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitle"]" required />
+                        <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitleAr"]" required />
                         <span asp-validation-for="TitleFr" class="text-danger"></span>
                     </div>
                     <div class="field">
@@ -282,14 +226,14 @@
                 </div>
             </div>
 
-            
 
-            
+
+
             <!-- Apply Link -->
             <div class="field">
                 <label>@Localizer["ApplyLinkLabel"] <span style="color:red">*</span></label>
 
-                <input  asp-for="ApplyLink" placeholder="@Localizer["ApplyLinkPlaceholder"]" required />
+                <input asp-for="ApplyLink" placeholder="@Localizer["ApplyLinkPlaceholder"]" required />
             </div>
 
             <!-- Actions -->
@@ -350,47 +294,6 @@
         var quillBenefitsFr = new Quill('#editorBenefitsFr', { theme: 'snow', placeholder: writeBenefits });
         var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow', placeholder: writeDescription });
         var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: writeDetails });
-
-        // =================== تطبيق اتجاه النص حسب التبويب ===================
-        @* function applyTabDirection(tabId) {
-            var pane = document.getElementById(tabId);
-            if (!pane) return;
-            var isLtr = tabId === 'english' || tabId === 'french';
-            var dir = isLtr ? 'ltr' : 'rtl';
-            var align = isLtr ? 'left' : 'right';
-            pane.setAttribute('dir', dir);
-            pane.querySelectorAll('.field input, .field select, .field textarea, .field label, .field .discription, .field h3').forEach(function(el) {
-                el.style.setProperty('direction', dir, 'important');
-                el.style.setProperty('text-align', align, 'important');
-            });
-            pane.querySelectorAll('.ql-editor').forEach(function(el) {
-                el.style.setProperty('direction', dir, 'important');
-                el.style.setProperty('text-align', align, 'important');
-            });
-        }
-        function initTabDirection() {
-            document.querySelectorAll('#languageTabs a[data-bs-toggle="tab"]').forEach(function(tab) {
-                tab.addEventListener('shown.bs.tab', function(e) {
-                    var link = e.currentTarget || e.target.closest('a');
-                    if (link) {
-                        var href = link.getAttribute('href') || '';
-                        var targetId = href.replace('#', '');
-                        if (targetId) applyTabDirection(targetId);
-                    }
-                });
-            });
-            var activeLink = document.querySelector('#languageTabs .nav-link.active');
-            if (activeLink) {
-                var href = activeLink.getAttribute('href') || '';
-                var targetId = href.replace('#', '');
-                if (targetId) applyTabDirection(targetId);
-            }
-            ['english', 'french'].forEach(function(id) {
-                var p = document.getElementById(id);
-                if (p) applyTabDirection(id);
-            });
-        }
-        initTabDirection(); *@
 
         // =================== Variables ===================
         const form = document.getElementById('createForm');
@@ -590,54 +493,54 @@
 
 }
 
-    <style>
-        .custom-swal-title {
-            color: #333;
-            font-size: 24px;
-            font-weight: 700;
-        }
-        
-        .custom-swal-text {
-            color: #666;
-            font-size: 20px;
-        }
+<style>
+    .custom-swal-title {
+        color: #333;
+        font-size: 24px;
+        font-weight: 700;
+    }
 
-        .custom-swal-confirm {
-            background-color: #F99D27;
-            color: white;
-            border: none;
-            padding: 14px 45px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 0 8px;
-            width: 200px;
-            height: 65px;
-            border-radius: 16px;
-        }
-        
+    .custom-swal-text {
+        color: #666;
+        font-size: 20px;
+    }
+
+    .custom-swal-confirm {
+        background-color: #F99D27;
+        color: white;
+        border: none;
+        padding: 14px 45px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0 8px;
+        width: 200px;
+        height: 65px;
+        border-radius: 16px;
+    }
+
         .custom-swal-confirm:hover {
             background-color: #e88d1a;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3);
         }
-        
-        .custom-swal-cancel {
-            background-color: white;
-            color: #F99D27;
-            border: 2px solid #F99D27;
-            padding: 14px 45px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 0 8px;
-            width: 200px;
-            height: 65px;
-            border-radius: 16px;
-        }
-        
+
+    .custom-swal-cancel {
+        background-color: white;
+        color: #F99D27;
+        border: 2px solid #F99D27;
+        padding: 14px 45px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0 8px;
+        width: 200px;
+        height: 65px;
+        border-radius: 16px;
+    }
+
         .custom-swal-cancel:hover {
             background-color: #FFF5E6;
             transform: translateY(-2px);
@@ -663,60 +566,59 @@
             box-shadow: none;
         }
 
-        .custom-swal-close {
-            color: #999;
-            font-size: 28px;
-            position: relative;
-            left: auto !important;
-            right: -93% !important;
-        }
-        
+    .custom-swal-close {
+        color: #999;
+        font-size: 28px;
+        position: relative;
+        left: auto !important;
+        right: -93% !important;
+    }
+
         .custom-swal-close:hover {
             color: #F99D27;
         }
-        /* ===== Swal Design  ===== */
-.swal2-popup.custom-swal {
-  border-radius: 18px !important;
-  padding: 26px 28px 22px !important;
-  box-shadow: 0 10px 30px rgba(0,0,0,.12) !important;
-  font-family: inherit;
-  width: 560px !important;
-  max-width: calc(100% - 24px) !important;
-}
+    /* ===== Swal Design  ===== */
+    .swal2-popup.custom-swal {
+        border-radius: 18px !important;
+        padding: 26px 28px 22px !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,.12) !important;
+        font-family: inherit;
+        width: 560px !important;
+        max-width: calc(100% - 24px) !important;
+    }
 
-.swal2-title.custom-swal-title {
-  color: #333 !important;
-  font-size: 28px !important;
-  font-weight: 800 !important;
-  margin-bottom: 6px !important;
-}
+    .swal2-title.custom-swal-title {
+        color: #333 !important;
+        font-size: 28px !important;
+        font-weight: 800 !important;
+        margin-bottom: 6px !important;
+    }
 
-.swal2-html-container.custom-swal-text {
-  color: #666 !important;
-  font-size: 18px !important;
-  line-height: 1.7 !important;
-}
+    .swal2-html-container.custom-swal-text {
+        color: #666 !important;
+        font-size: 18px !important;
+        line-height: 1.7 !important;
+    }
 
-.swal2-confirm.custom-swal-confirm {
-  background-color: #F99D27 !important;
-  color: white !important;
-  border: none !important;
-  padding: 14px 45px !important;
-  font-size: 18px !important;
-  font-weight: 700 !important;
-  cursor: pointer !important;
-  transition: all 0.3s ease !important;
-  width: 200px !important;
-  height: 65px !important;
-  border-radius: 16px !important;
-}
-
-
-.swal2-confirm.custom-swal-confirm:hover {
-  background-color: #e88d1a !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3) !important;
-}
+    .swal2-confirm.custom-swal-confirm {
+        background-color: #F99D27 !important;
+        color: white !important;
+        border: none !important;
+        padding: 14px 45px !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        width: 200px !important;
+        height: 65px !important;
+        border-radius: 16px !important;
+    }
 
 
-    </style>
+        .swal2-confirm.custom-swal-confirm:hover {
+            background-color: #e88d1a !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3) !important;
+        }
+
+</style>

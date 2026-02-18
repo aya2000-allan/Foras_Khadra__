@@ -25,9 +25,9 @@ namespace Foras_Khadra.Controllers
             if (!string.IsNullOrEmpty(contact.Honeypot))
                 return Json(new { success = false, message = "Bot detected" });
 
-            var recaptchaToken = Request.Form["g-recaptcha-response"].FirstOrDefault();
-            if (string.IsNullOrEmpty(recaptchaToken))
-                return Json(new { success = false, message = "reCAPTCHA token is missing." });
+            // var recaptchaToken = Request.Form["g-recaptcha-response"].FirstOrDefault();
+            // if (string.IsNullOrEmpty(recaptchaToken))
+            //     return Json(new { success = false, message = "reCAPTCHA token is missing." });
 
             var phoneUtil = PhoneNumberUtil.GetInstance();
             try
