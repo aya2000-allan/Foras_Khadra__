@@ -400,12 +400,13 @@ html[dir="ltr"] .logo {
 
 /*footer style*/
 .custom-footer {
+  height: 513px;
   background-image: url("/images/footer.svg");
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: top center;
+  background-position: center;
   color: white;
-  padding: 210px 60px 10px 88px;
+  padding: 163px 60px 10px 88px;
   font-family: "Cairo", sans-serif;
 }
 
