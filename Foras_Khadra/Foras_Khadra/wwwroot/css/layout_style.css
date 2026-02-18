@@ -418,6 +418,7 @@ html[dir="ltr"] .logo {
   gap: 40px;
   max-width: 1300px;
   margin: 0 auto;
+  min-height: 440px;
 }
 
 .footer-left {
