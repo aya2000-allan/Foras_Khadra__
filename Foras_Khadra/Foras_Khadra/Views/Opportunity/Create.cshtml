@@ -526,6 +526,13 @@
             box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3);
         }
 
+    .page-wrapper[dir="rtl"] .discription {
+        text-align: right;
+    }
+
+    .page-wrapper[dir="ltr"] .discription {
+        text-align: left;
+    }
     .custom-swal-cancel {
         background-color: white;
         color: #F99D27;
@@ -626,16 +633,22 @@
 }
 
 .page-wrapper[dir="ltr"] #languageTabs .nav-link {
-  text-align: left;
-  display: flex;
+  text-align: center;
   justify-content: flex-start;
   align-items: center;
   gap: 6px;
 }
 
-/* لما الصفحة RTL (Arabic) */
-.page-wrapper[dir="rtl"] #languageTabs {
-  direction: rtl;
+    #languageTabs {
+        display: flex;
+        justify-content: center; /* هذا الحل */
+    }
+
+    .page-wrapper[dir="ltr"] #languageTabs,
+    .page-wrapper[dir="rtl"] #languageTabs {
+        display: flex;
+        justify-content: center;
+    }
 }
 
 .page-wrapper[dir="rtl"] #languageTabs .nav-link {

@@ -400,24 +400,25 @@ html[dir="ltr"] .logo {
 
 /*footer style*/
 .custom-footer {
-  height: 513px;
-  background-image: url("/images/footer.svg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  color: white;
-  padding: 163px 60px 10px 88px;
-  font-family: "Cairo", sans-serif;
+    min-height: 513px;
+    background-image: url("/images/footer.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    background-color: #25652c;
+    padding-bottom: 80px;
+    overflow: hidden;
 }
 
 .footer-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  flex-direction: row-reverse;
-  gap: 40px;
-  max-width: 1300px;
-  margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    gap: 40px;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding-bottom: 40px;
 }
 
 .footer-left {
@@ -503,12 +504,12 @@ html[dir="ltr"] .logo {
 }
 
 .footer-links {
-  display: flex;
-  gap: 40px;
-  flex: 2;
-  flex-wrap: wrap;
-  min-width: 300px;
-  padding-top: 8.5%;
+    display: flex;
+    gap: 40px;
+    flex: 2;
+    flex-wrap: wrap;
+    min-width: 300px;
+    padding-top: 60px;
 }
 
 .footer-column h4 {
@@ -540,10 +541,10 @@ html[dir="ltr"] .logo {
 }
 
 .footer-logo {
-  padding-top: 8.5%;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
+    padding-top: 60px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
 }
 
 .footer-logo img {
@@ -584,8 +585,8 @@ html[dir="ltr"] .logo {
 }
 
 @media (max-width: 1400px) {
-  .custom-footer {
-    height: fit-content;
-    background-position-x: left;
-  }
+    .custom-footer {
+        height: fit-content;
+        background-position: bottom center;
+    }
 }
