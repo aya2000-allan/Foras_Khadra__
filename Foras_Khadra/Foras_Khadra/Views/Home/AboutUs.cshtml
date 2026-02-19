@@ -15,119 +15,192 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <style>
-/* ===== Layout: column for admin + slider next to it ===== */
-.teams-section, .team-block {
-  width: 100%;
-}
+  /* ===== Layout: column (group-card) + slider next to it ===== */
+  .teams-section, .team-block { width: 100%; }
 
-.team-grid{
-  display: flex;
-  gap: 24px;
-  align-items: stretch;
-  width: 100%;
-}
-
-.group-card{
-  flex: 0 0 320px;   
-  max-width: 360px;
-}
-
-.team-swiper{
-  flex: 1 1 auto;
-  width: 100%;
-  min-width: 0;     
-  padding: 10px 0 36px;
-}
-
-.team-swiper .swiper-slide{
-  height: auto;
-}
-
-/* أزرار السلايدر */
-.team-swiper .swiper-button-next,
-.team-swiper .swiper-button-prev{
-  color: var(--green);
-}
-
-/* Pagination */
-.team-swiper .swiper-pagination-bullet{ opacity:.35; }
-.team-swiper .swiper-pagination-bullet-active{ opacity:1; }
-
-/* على الشاشات الصغيرة: خليه عمودي */
-@@media (max-width: 900px){
   .team-grid{
-    flex-direction: column;
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+    width: 100%;
   }
+
   .group-card{
-    max-width: 100%;
-    flex: none;
+    flex: 0 0 340px;
+    max-width: 380px;
+    background-color: #C6ECC9;
+    border-radius: 24px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 378px;
   }
-}
-/* الشبكة الأساسية: كولوم + سلايدر */
-.team-grid{
-  display: flex;
-  gap: 24px;
-  align-items: stretch;   /* خليهم نفس الارتفاع */
+
+  /* ===== Swiper takes remaining width ===== */
+  .team-swiper{
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 56px 38px; /* يمين/يسار للأسهم + تحت للـ pagination */
+    display: flex;
+    align-items: center;     /* توسيط عمودي */
+  }
+
+  .team-swiper .swiper-wrapper{ align-items: center; }
+  .team-swiper .swiper-slide{ height: auto; display:flex; justify-content:center; }
+
+  /* الأسهم بالنص */
+  .team-swiper .swiper-button-next,
+  .team-swiper .swiper-button-prev{
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--green);
+  }
+
+  .team-swiper .swiper-pagination{ bottom: 0px !important; }
+  .team-swiper .swiper-pagination-bullet{ opacity: .35; }
+  .team-swiper .swiper-pagination-bullet-active{ opacity: 1; }
+
+  /* ===== Card look inside slider (clean + balanced) ===== */
+  .team-card{
+    width: 100%;
+    max-width: 340px;      /* خلي الكرت مرتب داخل السلايدر */
+    border-radius: 18px;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  /* الصورة */
+  .team-card .member-img{
+    width: 100%;
+    height: 180px;         /* بدل 312 عشان ما يطلع الكرت طويل */
+    object-fit: cover;
+    display: block;
+  }
+
+  /* الفوتر */
+  .team-card-footer{
+    background: #2f8f4e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 0 0 18px 18px;
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+
+  .footer-title{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  /* صغّر الورقة لأنها كانت بتنفخ الكرت */
+  .footer-leaf{
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 0 !important;
+    flex: 0 0 22px;
+  }
+
+  .footer-title h4{
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.15;
+    @* font-weight: 800; *@
+    min-width: 0;
+    display: -webkit-box;
+    @* -webkit-line-clamp: 2;   /* سطرين */ *@
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .role{
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: .95;
+  }
+
+  /* RTL: خلي المحتوى يمشي مع الاتجاه */
+  [dir="rtl"] .team-card-footer{ direction: rtl; }
+  [dir="ltr"] .team-card-footer{ direction: ltr; }
+
+  @@media (max-width: 900px){
+    .team-grid{ flex-direction: column; }
+    .group-card{ max-width: 100%; flex: none; height: auto; }
+    .team-swiper{ padding: 10px 0 38px; }
+    .team-card{ max-width: 100%; }
+    .team-card .member-img{ height: 200px; }
+  }
+  .team-card .member-img{ height: 220px; }
+.team-card{ min-height: 320px; }
+.team-card-footer{
   width: 100%;
+  box-sizing: border-box;
+  padding: 16px 20px;   
 }
 
-.group-card{
-  flex: 0 0 340px;        /* عدّل العرض حسب ذوقك */
-  max-width: 380px;
+.footer-title{
+  flex: 1 1 auto;
+}
+
+.footer-title h4{
+  flex: 1 1 auto;
+}
+
+.role{
+  margin-left: 10px;
+}
+/* خلي الفوتر عمودي: الرول فوق والاسم تحته */
+.team-card-footer{
+  flex-direction: column;
+  align-items: flex-start;   /* لليسار أو لليمين حسب الاتجاه */
+  justify-content: center;
+  gap: 6px;
+}
+
+/* النص داخل الفوتر */
+.footer-text{
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
-}
-
-/* السلايدر ياخذ باقي المساحة */
-.team-swiper{
-  flex: 1 1 auto;
+  gap: 4px;
   width: 100%;
-  min-width: 0;           
-  padding: 10px 48px;     
-  align-items: center;    
-
-/* خلّي الـ wrapper يتوسّط */
-.team-swiper .swiper-wrapper{
-  align-items: center;    /* ✅ الكروت بالنص عموديًا */
 }
 
-/* السلايد نفسه */
-.team-swiper .swiper-slide{
-  height: auto;
-  display: flex;
-  justify-content: center;
+/* الرول فوق */
+.team-card-footer .role{
+  font-size: 14px;
+  font-weight: 800;
+  opacity: .9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  color: #F99D27;
 }
 
-/* الأسهم بالنص عموديًا */
-.team-swiper .swiper-button-next,
-.team-swiper .swiper-button-prev{
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--green);
-}
-
-/* Pagination تحت السلايدر */
-.team-swiper .swiper-pagination{
-  bottom: 0px !important;
-}
-
-/* على الشاشات الصغيرة: خليهم تحت بعض */
-@@media (max-width: 900px){
-  .team-grid{
-    flex-direction: column;
-  }
-  .group-card{
-    max-width: 100%;
-    flex: none;
-  }
-  .team-swiper{
-    padding: 10px 0 36px;
-  }
+.team-card-footer .member-name{
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.15;
+  font-weight: 400;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;   
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 
 </style>
+
 
 <!-- ===== HERO ===== -->
 <section class="about-hero">
@@ -174,19 +247,19 @@
               }
 
               <div class="team-card-footer" onclick="toggleBio(@member.Id)">
-                <div class="footer-title">
-                  <img src="~/images/team_leaf.svg" alt="leaf" class="footer-leaf" />
-                  <h4>
-                    @(culture == "ar" ? member.NameAr :
-                      culture == "fr" ? member.NameFr :
-                      member.NameEn)
-                  </h4>
-                </div>
+  <div class="footer-text">
+    <span class="role">
+      @MembershipTranslator.Translate(member.Membership, member.Gender, culture)
+    </span>
 
-                <span class="role">
-                  @MembershipTranslator.Translate(member.Membership, member.Gender, culture)
-                </span>
-              </div>
+    <h4 class="member-name">
+      @(culture == "ar" ? member.NameAr :
+        culture == "fr" ? member.NameFr :
+        member.NameEn)
+    </h4>
+  </div>
+</div>
+
 
               <div id="bio-@member.Id" class="bio" style="background-image:url(@member.ImagePath)">
                 <div class="bio-overlay">
@@ -249,7 +322,7 @@ document.addEventListener("DOMContentLoaded", function(){
         480:  { slidesPerView: 1 },
         640:  { slidesPerView: 2 },
         900:  { slidesPerView: 3 },
-        1200: { slidesPerView: 4 } // 4 سلايدات + شوي
+        1200: { slidesPerView: 4.2 } // 4 سلايدات + شوي
         // إذا بدك 4 بالزبط: 1200: { slidesPerView: 4 }
       }
     });
