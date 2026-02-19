@@ -412,13 +412,13 @@ html[dir="ltr"] .form-panel textarea {
 #tabAr .field .discription,
 #tabAr .field h3.discription {
   direction: rtl !important;
-  text-align: right !important;
+  /* text-align: right !important; */
 }
 
 #arabic .ql-editor,
 #tabAr .ql-editor {
   direction: rtl !important;
-  text-align: right !important;
+  /* text-align: right !important; */
 }
 
 html[dir="ltr"] .form-panel .ql-editor {
@@ -433,3 +433,9 @@ html[dir="ltr"] .form-panel label {
 }
 
 
+/* لما الصفحة LTR، خلي Label تبع TitleAr يروح عالشمال */
+html[dir="ltr"] #arabic label[for="TitleAr"] {
+  direction: ltr !important;
+  text-align: left !important;
+  display: block;
+}

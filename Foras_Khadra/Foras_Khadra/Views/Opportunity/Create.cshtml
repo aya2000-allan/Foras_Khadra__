@@ -23,7 +23,7 @@
     }
 </div>
 
-<div class="page-wrapper">
+<div class="page-wrapper" dir="@dir">
     <div class="form-panel">
         <form id="createForm" asp-action="Create" method="post" enctype="multipart/form-data">
             <ul class="nav nav-tabs" id="languageTabs" role="tablist">
@@ -620,5 +620,30 @@
             transform: translateY(-2px) !important;
             box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3) !important;
         }
+/* لما الصفحة LTR (English/French) */
+.page-wrapper[dir="ltr"] #languageTabs {
+  direction: ltr;
+}
+
+.page-wrapper[dir="ltr"] #languageTabs .nav-link {
+  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+}
+
+/* لما الصفحة RTL (Arabic) */
+.page-wrapper[dir="rtl"] #languageTabs {
+  direction: rtl;
+}
+
+.page-wrapper[dir="rtl"] #languageTabs .nav-link {
+  text-align: right;
+  display: flex;
+  justify-content: flex-start; /* أو flex-end إذا بدكهم يلتصقوا يمين */
+  align-items: center;
+  gap: 6px;
+}
 
 </style>
