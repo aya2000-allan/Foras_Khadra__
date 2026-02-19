@@ -14,6 +14,11 @@
         _ => Model.TitleAr
     };
     ViewData["Title"] = pageTitle;
+
+
+    var isExpired = Model.EndDate.Date < DateTime.Now.Date;
+
+
 }
 
 <style>
@@ -161,7 +166,7 @@
 
 
         </div>
-        @if (!string.IsNullOrEmpty(Model.ApplyLink))
+        @if (!string.IsNullOrEmpty(Model.ApplyLink) && !isExpired)
         {
             if (User.IsInRole("Admin") || User.IsInRole("User") || User.IsInRole("Organization"))
             {
@@ -181,6 +186,13 @@
             <div class="info-grid">
                 <span class="info-label">@Localizer["PublishDate"]</span>
                 <span class="info-value">@Model.PublishDate.ToShortDateString()</span>
+
+                <span class="info-label">@Localizer["Deadline"]</span>
+                <span class="info-value">
+                    <span class="deadline-label @(isExpired ? "deadline-expired" : "deadline-active")">
+                        @Model.EndDate.ToShortDateString()
+                    </span>
+                </span>
 
                 <span class="info-label">@Localizer["OpportunityType"]</span>
                 <span class="info-value">@Model.Type.GetDisplayName(lang)</span>
@@ -402,6 +414,23 @@
         
         .custom-swal-close:hover {
             color: #F99D27;
+        }
+
+        .deadline-label {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .deadline-active {
+            background-color: #25652C; /* أخضر */
+        }
+
+        .deadline-expired {
+            background-color: #dc3545; /* أحمر */
         }
     </style>
 }

@@ -144,6 +144,7 @@ public async Task<IActionResult> Create()
                 BenefitsFr = model.BenefitsFr,
                 ApplyLink = model.ApplyLink,
                 ImagePath = imagePath,
+                EndDate = model.EndDate,
                 PublishedBy = org != null ? org.Name : "Admin",
                 Type = model.Type.Value,
                 CreatedByUserId = currentUser.Id,
@@ -215,6 +216,7 @@ public async Task<IActionResult> Create()
             opportunity.BenefitsFr = model.BenefitsFr;
             opportunity.ApplyLink = model.ApplyLink;
             opportunity.Type = model.Type.Value;
+            opportunity.EndDate = model.EndDate;
 
             // تحديث الصورة فقط إذا تم رفعها
             if (model.Image != null)
@@ -298,6 +300,7 @@ public async Task<IActionResult> Create()
                 DetailsAr = opp.DetailsAr,
                 DetailsEn = opp.DetailsEn,
                 DetailsFr = opp.DetailsFr,
+                EndDate = opp.EndDate,
                 AvailableCountryIds = opp.AvailableCountries?.Select(c => c.Id).ToList() ?? new List<int>(),
                 CountriesSelectList = countries.Select(c => new SelectListItem
                 {

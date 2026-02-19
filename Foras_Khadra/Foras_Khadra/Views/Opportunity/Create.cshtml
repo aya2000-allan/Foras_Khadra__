@@ -113,6 +113,13 @@
                 <span asp-validation-for="AvailableCountryIds" class="text-danger"></span>
             </div>
 
+            <!-- Deadline -->
+            <div class="field">
+                <label>@Localizer["Deadline"] <span style="color:red">*</span></label>
+                <input asp-for="EndDate" type="date" class="form-control" required />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
             <!-- Tabs -->
 
 
@@ -487,6 +494,19 @@
                 previewContainer.style.display = 'none';
             }
         });
+
+
+                // الحصول على عنصر التاريخ
+        const endDateInput = document.querySelector('input[name="EndDate"]');
+
+        // تعيين التاريخ الحالي تلقائياً بصيغة YYYY-MM-DD
+        const today = new Date();
+        const yyyy = today.getFullYear(); // السنة كاملة
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // الشهر مع تصفير الرقم
+        const dd = String(today.getDate()).padStart(2, '0'); // اليوم مع تصفير الرقم
+
+        endDateInput.value = `${yyyy}-${mm}-${dd}`; // صيغة مقبولة من input[type=date]
+    
     </script>
 
 

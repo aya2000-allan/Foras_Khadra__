@@ -65,6 +65,10 @@ namespace Foras_Khadra.Models
         [Required]
         public string ApplyLink { get; set; }
 
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "EndDate")]
+        public DateTime EndDate { get; set; }
         public string CreatedByUserId { get; set; }
 
         [ForeignKey("CreatedByUserId")]

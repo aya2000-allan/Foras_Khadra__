@@ -161,6 +161,12 @@
             </div>
 
             <div class="field">
+                <label>@Localizer["Deadline"] <span style="color:red">*</span></label>
+                <input asp-for="EndDate" type="date" class="form-control" required />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
+            <div class="field">
                 <label class="form-label">@Localizer["OpportunityCountries"] </label>
                 <div class="countries-checkboxes-grid">
                     @foreach (var country in Model.CountriesSelectList)

@@ -207,4 +207,7 @@
   <data name="SelectOpportunityType" xml:space="preserve">
     <value> Sélectionner le type d’opportunité</value>
   </data>
+  <data name="Deadline" xml:space="preserve">
+    <value>Date limite</value>
+  </data>
 </root>

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Foras_Khadra.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class lastUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -117,7 +117,8 @@ namespace Foras_Khadra.Migrations
                     BioEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BioFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false)
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -256,6 +257,7 @@ namespace Foras_Khadra.Migrations
                     BenefitsEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BenefitsFr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplyLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>

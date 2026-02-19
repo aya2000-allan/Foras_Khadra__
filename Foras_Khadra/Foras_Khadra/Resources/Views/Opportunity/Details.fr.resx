@@ -153,4 +153,7 @@
   <data name="LoginConfirm" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="Deadline" xml:space="preserve">
+    <value>Date limite de candidature</value>
+  </data>
 </root>

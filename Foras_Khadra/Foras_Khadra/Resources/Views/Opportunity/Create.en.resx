@@ -141,6 +141,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Deadline" xml:space="preserve">
+    <value>Deadline</value>
+  </data>
   <data name="DragDropText" xml:space="preserve">
     <value>Drag &amp; drop files or Browse</value>
   </data>

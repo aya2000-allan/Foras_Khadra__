@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Foras_Khadra.Models
 {
@@ -35,6 +36,11 @@ namespace Foras_Khadra.Models
         public string? BenefitsFr { get; set; }
 
         public string? ApplyLink { get; set; }
+
+
+        [DataType(DataType.Date)]
+        [Display(Name = "EndDate")]
+        public DateTime EndDate { get; set; }
 
         public IEnumerable<SelectListItem>? CountriesSelectList { get; set; } = new List<SelectListItem>();
     }
