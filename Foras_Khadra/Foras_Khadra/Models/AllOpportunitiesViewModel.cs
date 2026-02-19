@@ -19,15 +19,17 @@ namespace Foras_Khadra.Models
         {
             get
             {
+                var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
                 var list = new List<SelectListItem>();
                 foreach (var t in Enum.GetValues(typeof(OpportunityType)))
                 {
                     var type = (OpportunityType)t;
                     list.Add(new SelectListItem
                     {
-                        Text = type.GetDisplayName(),
+                        Text = type.GetDisplayName(lang), // <-- تمرير اللغة هنا
                         Value = type.ToString(),
-                        Selected = SelectedTypes.Contains(type) // <-- تعديلات هنا
+                        Selected = SelectedTypes.Contains(type)
                     });
                 }
                 return list;
