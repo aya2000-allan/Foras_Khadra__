@@ -159,15 +159,13 @@
 .role{
   margin-left: 10px;
 }
-/* خلي الفوتر عمودي: الرول فوق والاسم تحته */
 .team-card-footer{
   flex-direction: column;
-  align-items: flex-start;   /* لليسار أو لليمين حسب الاتجاه */
+  align-items: flex-start;  
   justify-content: center;
   gap: 6px;
 }
 
-/* النص داخل الفوتر */
 .footer-text{
   display: flex;
   flex-direction: column;
@@ -197,6 +195,110 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+/* صندوق الوصف */
+.bio{
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease;
+  background-position: center;
+  background-size: cover;
+  border-radius: 12px;
+}
+
+/* لما ينفتح */
+.bio.open{
+  max-height: 260px;        
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* طبقة النص داخل الوصف */
+.bio-overlay{
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 14px;
+  color: #fff;
+  border-radius: 12px;
+  height: 100%;               
+  overflow-y: auto;          
+  box-sizing: border-box;
+  line-height: 1.7;
+}
+
+.bio-overlay::-webkit-scrollbar{
+  width: 6px;
+}
+.bio-overlay::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.4);
+  border-radius: 6px;
+}
+.bio-overlay::-webkit-scrollbar-track{
+  background: transparent;
+}
+.team-card-footer .role{
+  display: block !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #F99D27 !important;  
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+  opacity: 1 !important;
+  white-space: normal;         
+}
+
+.team-card-footer{
+  min-height: 70px;            
+}
+.team-swiper .swiper-slide{
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+}
+
+.team-card{
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* مهم: امنع الـ bio يطلع برا */
+.bio{
+  position: static !important;  
+  width: 100% !important;
+  margin-top: 10px;
+}
+/* صندوق الوصف */
+.bio{
+  height: 0;                 /* مغلق */
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+  background-position: center;
+  background-size: cover;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+.bio.open{
+  height: 260px;             
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bio-overlay{
+  height: 100%;              
+  overflow-y: auto;         /
+  background-color: rgba(0,0,0,0.82);
+  padding: 14px;
+  color: #fff;
+  border-radius: 12px;
+  box-sizing: border-box;
+  line-height: 1.7;
+}
+
 
 
 </style>
@@ -259,6 +361,7 @@
     </h4>
   </div>
 </div>
+
 
 
               <div id="bio-@member.Id" class="bio" style="background-image:url(@member.ImagePath)">
