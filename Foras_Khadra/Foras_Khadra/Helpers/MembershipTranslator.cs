@@ -17,6 +17,9 @@ namespace Foras_Khadra.Helpers
                         MembershipType.Member => gender == GenderType.Female ? "عضوة" : "عضو",
                         MembershipType.Founder => gender == GenderType.Female ? "مؤسسة" : "مؤسس",
                         MembershipType.Coordinator => gender == GenderType.Female ? "منسقة" : "منسق",
+                        MembershipType.Officer => gender == GenderType.Female ? "مسؤولة" : "مسؤول",
+                        MembershipType.Deputy_Director => gender == GenderType.Female ? "نائبة المدير" : "نائب المدير",
+                        MembershipType.Avisor => gender == GenderType.Female ? "مستشارة" : "مستشار",
                         _ => ""
                     };
                 case "en": // إنجليزي
@@ -26,6 +29,9 @@ namespace Foras_Khadra.Helpers
                         MembershipType.Member => "Member",
                         MembershipType.Founder => "Founder",
                         MembershipType.Coordinator => "Coordinator",
+                        MembershipType.Officer => "Officer",
+                        MembershipType.Deputy_Director => "Deputy Director",
+                        MembershipType.Avisor => "Advisor",
                         _ => ""
                     };
                 case "fr": // فرنسي
@@ -35,6 +41,9 @@ namespace Foras_Khadra.Helpers
                         MembershipType.Member => "Membre",
                         MembershipType.Founder => gender == GenderType.Female ? "Fondatrice" : "Fondateur",
                         MembershipType.Coordinator => gender == GenderType.Female ? "Coordinatrice" : "Coordinateur",
+                        MembershipType.Officer => gender == GenderType.Female ? "Officière" : "Officier",
+                        MembershipType.Deputy_Director => gender == GenderType.Female ? "Directrice adjointe" : "Directeur adjoint",
+                        MembershipType.Avisor => gender == GenderType.Female ? "Conseillère" : "Conseiller",
                         _ => ""
                     };
                 default:

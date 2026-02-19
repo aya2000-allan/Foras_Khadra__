@@ -58,7 +58,10 @@ namespace Foras_Khadra.Models
         Member,
         Founder,
         Manager,
-        Coordinator
+        Coordinator,
+        Officer,
+        Deputy_Director,
+        Avisor,
 
     }
 
@@ -72,6 +75,8 @@ namespace Foras_Khadra.Models
         Opportunities,
         PublicRelations,
         LocalTeams,
+        Operations,
+
 
     }
 }
