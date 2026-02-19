@@ -18,6 +18,7 @@
 
     var isExpired = Model.EndDate.Date < DateTime.Now.Date;
 
+    var applyButtonClass = "apply-button " + (isExpired ? "expired-button" : "active-button");
 
 }
 
@@ -166,18 +167,19 @@
 
 
         </div>
-        @if (!string.IsNullOrEmpty(Model.ApplyLink) && !isExpired)
+        @if (User.IsInRole("Admin") || User.IsInRole("User") || User.IsInRole("Organization"))
         {
-            if (User.IsInRole("Admin") || User.IsInRole("User") || User.IsInRole("Organization"))
-            {
-                <a href="@Model.ApplyLink" target="_blank" class="apply-button">@Localizer["ApplyNow"]</a>
-            }
-            else if (!User.Identity.IsAuthenticated)
-            {
-                <a href="javascript:void(0);" class="apply-button" id="guestApply">@Localizer["ApplyNow"]</a>
-            }
+            <a href="@(isExpired ? "javascript:void(0);" : Model.ApplyLink)"
+               target="@(isExpired ? "_self" : "_blank")"
+               class="@applyButtonClass"
+               @(isExpired ? "title='الفرصة منتهية'" : "")>
+                @Localizer["ApplyNow"]
+            </a>
         }
-
+        else if (!User.Identity.IsAuthenticated)
+        {
+            <a href="javascript:void(0);" class="@applyButtonClass" id="guestApply">@Localizer["ApplyNow"]</a>
+        }
        
     </div>
 
@@ -425,6 +427,26 @@
             font-size: 14px;
         }
 
+        .apply-button {
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+       
+       
+
+        /* الزر الفاهي عند انتهاء الفرصة */
+        .expired-button {
+            background-color: #F99D27; /* فاهي */
+            color: white;
+            cursor: not-allowed; /* مؤشر عدم التفاعل */
+            opacity: 0.9;
+        }
         .deadline-active {
             background-color: #25652C; /* أخضر */
         }
