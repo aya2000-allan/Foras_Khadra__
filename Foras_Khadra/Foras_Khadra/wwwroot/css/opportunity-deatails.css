@@ -34,8 +34,8 @@
 }
 
 .card-image-wrapper {
-  flex: 1;
-  max-width: 436px;
+  flex: 2;
+  max-width: 580px;
   border-radius: 24px;
 }
 
