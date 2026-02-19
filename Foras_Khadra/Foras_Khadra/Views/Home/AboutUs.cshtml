@@ -245,13 +245,12 @@ document.addEventListener("DOMContentLoaded", function(){
         prevEl: el.querySelector(".swiper-button-prev")
       },
 
-      breakpoints: {
-        480:  { slidesPerView: 1 },
-        640:  { slidesPerView: 2 },
-        900:  { slidesPerView: 3 },
-        1200: { slidesPerView: 4 } // 4 سلايدات + شوي
-        // إذا بدك 4 بالزبط: 1200: { slidesPerView: 4 }
-      }
+          breakpoints: {
+      480:  { slidesPerView: 1 },
+      640:  { slidesPerView: 2 },
+      900:  { slidesPerView: 3 },
+      1200: { slidesPerView: 3 } 
+    }
     });
   });
 });
