@@ -10,8 +10,7 @@ namespace Foras_Khadra.Models
         public List<Opportunity> Opportunities { get; set; } = new();
 
         public string SelectedCountry { get; set; }
-        public OpportunityType? SelectedType { get; set; }
-
+        public List<OpportunityType> SelectedTypes { get; set; } = new();
         // ⚡ إضافة هذه الخاصية للقائمة المنسدلة
         public List<string> Countries { get; set; } = new List<string>();
 
@@ -28,7 +27,7 @@ namespace Foras_Khadra.Models
                     {
                         Text = type.GetDisplayName(),
                         Value = type.ToString(),
-                        Selected = SelectedType.HasValue && SelectedType.Value == type
+                        Selected = SelectedTypes.Contains(type) // <-- تعديلات هنا
                     });
                 }
                 return list;

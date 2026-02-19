@@ -76,7 +76,7 @@
                     {
                         <label class="checkbox-item">
                             <input type="checkbox" name="type" value="@item.Value" @(item.Selected ? "checked" : "")>
-                            @(Enum.Parse<OpportunityType>(item.Value).GetDisplayName(lang))
+                            @item.Text
                         </label>
                     }
 

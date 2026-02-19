@@ -126,7 +126,7 @@ namespace Foras_Khadra.Controllers
             {
                 Opportunities = opportunities,
                 SelectedCountry = country,
-                SelectedType = type
+                SelectedTypes = new List<OpportunityType> { type } 
             };
 
             ViewBag.TypeName = typeName;
@@ -169,18 +169,25 @@ namespace Foras_Khadra.Controllers
         }
 
         // ================= صفحة كل الفرص العامة =================
-        public IActionResult AllOpportunities(string country, string type)
+        public IActionResult AllOpportunities(string country, string[] type)
         {
             var query = _context.Opportunities
                                 .Include(o => o.AvailableCountries)
                                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(type) &&
-                Enum.TryParse<OpportunityType>(type, out var parsedType))
+            // فلترة حسب النوع
+            if (type != null && type.Any())
             {
-                query = query.Where(o => o.Type == parsedType);
+                // تحويل النصوص إلى Enum
+                var selectedTypes = type
+                    .Where(t => Enum.TryParse<OpportunityType>(t, out _))
+                    .Select(t => Enum.Parse<OpportunityType>(t))
+                    .ToList();
+
+                query = query.Where(o => selectedTypes.Contains(o.Type));
             }
 
+            // فلترة حسب الدولة
             if (!string.IsNullOrEmpty(country))
             {
                 query = query.Where(o =>
@@ -201,9 +208,7 @@ namespace Foras_Khadra.Controllers
             {
                 Opportunities = allOpportunities,
                 SelectedCountry = country,
-                SelectedType = string.IsNullOrEmpty(type)
-                                ? null
-                                : Enum.Parse<OpportunityType>(type),
+                SelectedTypes = type?.Select(t => Enum.Parse<OpportunityType>(t)).ToList() ?? new List<OpportunityType>(),
                 Countries = countries
             };
 
