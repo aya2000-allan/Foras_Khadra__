@@ -128,7 +128,50 @@
         transform: scaleX(-1);
     }
 
-    
+    /* ===== القوائم بنقطة الورقة (Details + Eligibility + Benefits + Description) ===== */
+
+/* نلغي النقاط الافتراضية */
+.section-content ul,
+.section-content ol,
+.info-value ul,
+.info-value ol {
+  list-style: none;
+  padding-inline-start: 0;
+  margin: 0 0 1rem 0;
+}
+
+/* كل عنصر بالقائمة */
+.section-content li,
+.info-value li {
+  position: relative;
+  padding-inline-start: 36px;   /* مسافة للنص بعد الأيقونة */
+  margin-bottom: 10px;
+  line-height: 1.7;
+}
+
+/* أيقونة الورقة */
+.section-content li::before,
+.info-value li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;       /* يشتغل صح مع RTL/LTR */
+  top: 0.35em;
+  width: 22px;
+  height: 22px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 54 54'>\
+<circle cx='27' cy='27' r='27' fill='%23F99D27'/>\
+<path d='M21.9102 25.2275C22.0085 25.1232 22.1263 25.0392 22.2569 24.9804C22.3876 24.9216 22.5286 24.8891 22.6718 24.8848C22.815 24.8805 22.9577 24.9045 23.0916 24.9553C23.2256 25.0062 23.3482 25.0829 23.4525 25.1811C28.4727 29.9102 33.51 32.7875 39.4377 34.2541C40.2375 32.0723 40.3084 29.6709 39.6177 27.3282C38.7014 24.2198 36.5673 21.5116 33.448 19.4968C30.6634 17.6982 27.8802 17.2298 25.1877 16.777C21.7909 16.2057 18.5823 15.6657 15.5202 12.4236C15.1793 12.065 14.715 11.9211 14.2711 12.0377C13.7639 12.1741 13.4236 12.575 13.2607 13.2377C12.8789 14.7889 13.1243 19.1361 14.1982 23.7254C15.9225 31.0986 18.6743 34.8295 20.6796 36.6616C23.2705 39.0268 26.6536 40.3366 30.0157 40.3366C30.6494 40.3376 31.2823 40.2911 31.9091 40.1975C34.753 39.7666 37.1202 38.3382 38.4546 36.26C32.353 34.6727 27.1405 31.6543 21.9546 26.7718C21.8501 26.6734 21.766 26.5554 21.7072 26.4245C21.6484 26.2935 21.616 26.1523 21.6119 26.0088C21.6078 25.8654 21.632 25.7225 21.6832 25.5884C21.7344 25.4544 21.8116 25.3317 21.9102 25.2275Z' fill='white'/>\
+</svg>");
+}
+
+/* ===== في LTR (إنجليزي / فرنسي): اقلب الورقة ===== */
+.opp-container[dir="ltr"] .section-content li::before,
+.opp-container[dir="ltr"] .info-value li::before {
+  transform: scaleX(-1);
+}
 </style>
 
 
