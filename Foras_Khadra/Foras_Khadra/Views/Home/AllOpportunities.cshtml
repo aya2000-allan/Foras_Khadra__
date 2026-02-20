@@ -159,9 +159,12 @@
                         }
                         @{
                             var plainDescription = System.Text.RegularExpressions.Regex.Replace(description, "<.*?>", "");
-                        }
-                        <p class="opp-description">@plainDescription</p>
 
+                            // اقتطاع أول 10 كلمات
+                            var words = plainDescription.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                            var shortDescription = words.Length > 15 ? string.Join(' ', words.Take(10)) + "..." : plainDescription;
+                        }
+                        <p class="opp-description">@shortDescription</p>
 
 
                         <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">@Localizer["view_details"] </a>
