@@ -315,8 +315,9 @@
 <!-- ===== TEAMS ===== -->
 <section class="teams-section">
 
-@foreach (var group in Model.GroupBy(m => m.Department))
-{
+@foreach (var group in Model
+    .GroupBy(m => m.Department)
+    .OrderBy(g => g.Min(m => m.CreatedAt))){
   <div class="team-block">
     <div class="team-grid">
 
