@@ -27,7 +27,7 @@
             @if (!string.IsNullOrEmpty(ViewBag.ExistingImage as string))
             {
                 <div class="current-file-card">
-                    <img src="@ViewBag.ExistingImage" style=" width: 52px; height: 52px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb;" />
+                    <img id="currentImage" src="@ViewBag.ExistingImage" style="width: 52px; height: 52px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb;" />
 
                     <div style="flex: 1;display: flex;flex-direction: column;gap: 4px;">
                         <div class="file-name">
@@ -211,7 +211,20 @@
             document.getElementById('BioFr').value = quillFr.root.innerHTML;
         });
     </script>
+    <script>
+        const imageInput = document.querySelector('input[name="ImageFile"]');
+        const currentImage = document.getElementById('currentImage');
 
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImage.src = e.target.result; // هنا الصورة القديمة تتغير بالجديدة
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
 }
 <style>
     .file-name {
