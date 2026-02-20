@@ -374,119 +374,7 @@ html[dir="ltr"] #heroBg1 {
 </div>
 
 
-<section class="latest-articles py-5" dir="@dir" style="background:#F6FBF7;">
-    <div class="container">
 
-        <!-- العنوان + زر عرض الكل -->
-        <div class="d-flex justify-content-between align-items-center mb-4 articles-section-header">
-
-    <!-- الأيقونة + العنوان (ينعكس مع اللغة) -->
-    <div class="d-flex align-items-center gap-2 section-icon-title">
-        <span class="section-icon" aria-hidden="true">
-            <!-- SVG -->
-           <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg"> <circle cx="27" cy="27" r="27" fill="#F99D27"/> <path d="M21.9104 25.2275C22.0086 25.1232 22.1264 25.0392 22.257 24.9804C22.3877 24.9216 22.5287 24.8891 22.6719 24.8848C22.8151 24.8805 22.9578 24.9045 23.0917 24.9553C23.2257 25.0062 23.3483 25.0829 23.4526 25.1811C28.4729 29.9102 33.5101 32.7875 39.4379 34.2541C40.2376 32.0723 40.3085 29.6709 39.6179 27.3282C38.7015 24.2198 36.5674 21.5116 33.4481 19.4968C30.6635 17.6982 27.8804 17.2298 25.1879 16.777C21.791 16.2057 18.5824 15.6657 15.5204 12.4236C15.1794 12.065 14.7151 11.9211 14.2713 12.0377C13.764 12.1741 13.4238 12.575 13.2608 13.2377C12.879 14.7889 13.1244 19.1361 14.1983 23.7254C15.9226 31.0986 18.6744 34.8295 20.6797 36.6616C23.2706 39.0268 26.6538 40.3366 30.0158 40.3366C30.6495 40.3376 31.2824 40.2911 31.9092 40.1975C34.7531 39.7666 37.1204 38.3382 38.4547 36.26C32.3531 34.6727 27.1406 31.6543 21.9547 26.7718C21.8502 26.6734 21.7661 26.5554 21.7073 26.4245C21.6485 26.2935 21.6162 26.1523 21.612 26.0088C21.6079 25.8654 21.6322 25.7225 21.6833 25.5884C21.7345 25.4544 21.8117 25.3317 21.9104 25.2275ZM42.7795 34.9223C41.632 34.7457 40.5206 34.5241 39.4385 34.2561C39.2161 34.8635 38.9393 35.4495 38.6115 36.007C38.5617 36.0923 38.5092 36.1768 38.4554 36.26C39.7714 36.6007 41.1041 36.8738 42.4481 37.0782C42.5911 37.1033 42.7377 37.0996 42.8793 37.0674C43.0208 37.0351 43.1546 36.9749 43.2726 36.8903C43.3906 36.8057 43.4905 36.6984 43.5665 36.5747C43.6425 36.451 43.693 36.3133 43.7151 36.1698C43.7372 36.0263 43.7305 35.8798 43.6952 35.7389C43.66 35.5981 43.597 35.4657 43.5099 35.3495C43.4228 35.2333 43.3134 35.1357 43.1881 35.0623C43.0628 34.9889 42.9241 34.9413 42.7801 34.9223H42.7795Z" fill="white"/> </svg>
-        </span>
-
-                <h2 class="section-title m-0" style="color:#25652C; font-weight: bold;">@Localizer["LatestArticles"]</h2>
-    </div>
-
-    <!-- يسار: عرض الكل -->
-  <a href="~/Home/Articles"
-   class="view-all-btn"
-   style="color:#25652C; font-weight:bold; font-size:18px; text-decoration:none; display:flex; align-items:center; gap:6px;">
-
-    <iconify-icon icon="mdi:clock-outline"
-                  style="color:#25652C; font-size:18px;">
-    </iconify-icon>
-
-                @Localizer["ViewAll"]
-</a>
-
-
-</div>
-
-
-        <!-- السلايدر (الكروت فقط) -->
-
-        <div class="swiper articlesSwiper mb-4" dir="@dir">
-            <div class="swiper-wrapper">
-
-                @foreach (var article in Model.LatestArticles)
-                {
-                 
-   
-        var title = culture == "ar" ? article.TitleAr
-                  : culture == "en" ? article.TitleEn
-                  : article.TitleFr;
-
-        var content = culture == "ar" ? article.ContentAr
-                    : culture == "en" ? article.ContentEn
-                    : article.ContentFr;
-
-        var author = culture == "ar"
-                    ? "فرص خضراء"
-                    : "Foras Khadra";
-
-    
-
-                    <div class="swiper-slide">
-                        <div class="article-card">
-
-                            <div class="article-img">
-                                <img src="@(!string.IsNullOrEmpty(article.ImagePath)
-                                                                 ? article.ImagePath
-                                                                 : "/images/default-article.jpg")"
-                                                                                                                                      alt="@title" />
-                                                                                        </div>
-
-                         <div class="article-body">
-
-                                <div class="article-meta">
-                                    <span class="meta-author">
-                                        @author
-                                        <iconify-icon icon="mdi:check-decagram" style="color:#25652C; font-size:16px; margin-left:4px;"></iconify-icon>
-                                    </span>
-                                    <span class="meta-date">@article.PublishDate.ToString("dd MMM yyyy")</span>
-                                </div>
-
-
-    <h5 class="article-title">
-                                    @title
-    </h5>
-
-    <p class="article-desc">
-                                    @(content.Length > 120
-                                                                    ? content.Substring(0, 120) + "..."
-                                                                    : content)
-    </p>
-
-                                <a href="javascript:void(0);"
-                                   class="read-more btn-read-more"
-                                   data-article-id="@article.Id">
-                                    @Localizer["ReadMore"]
-                                    <iconify-icon icon="mdi:arrow-left"></iconify-icon>
-                                </a>
-
-
-</div>
-
-
-                        </div>
-                    </div>
-                                }
-
-            </div>
-        </div>
-        <!-- الأسهم تحت الكروت -->
-        <div class="d-flex justify-content-center gap-3">
-                        <div class="swiper-button-next custom-arrow"></div>
-
-            <div class="swiper-button-prev custom-arrow"></div>
-            @* <div class="swiper-button-next custom-arrow"></div> *@
-        </div>
-
-    </div>
-</section>
 
 <section class="latest-articles py-5" dir="@dir" style="background:#F6FBF7;">
     <div class="container">
@@ -568,6 +456,121 @@ html[dir="ltr"] #heroBg1 {
         <div class="d-flex justify-content-center gap-3 opportunities-nav">
             <div class="swiper-button-next custom-arrow"></div>
             <div class="swiper-button-prev custom-arrow"></div>
+        </div>
+
+    </div>
+</section>
+
+
+<section class="latest-articles py-5" dir="@dir" style="background:#F6FBF7;">
+    <div class="container">
+
+        <!-- العنوان + زر عرض الكل -->
+        <div class="d-flex justify-content-between align-items-center mb-4 articles-section-header">
+
+            <!-- الأيقونة + العنوان (ينعكس مع اللغة) -->
+            <div class="d-flex align-items-center gap-2 section-icon-title">
+                <span class="section-icon" aria-hidden="true">
+                    <!-- SVG -->
+                    <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg"> <circle cx="27" cy="27" r="27" fill="#F99D27" /> <path d="M21.9104 25.2275C22.0086 25.1232 22.1264 25.0392 22.257 24.9804C22.3877 24.9216 22.5287 24.8891 22.6719 24.8848C22.8151 24.8805 22.9578 24.9045 23.0917 24.9553C23.2257 25.0062 23.3483 25.0829 23.4526 25.1811C28.4729 29.9102 33.5101 32.7875 39.4379 34.2541C40.2376 32.0723 40.3085 29.6709 39.6179 27.3282C38.7015 24.2198 36.5674 21.5116 33.4481 19.4968C30.6635 17.6982 27.8804 17.2298 25.1879 16.777C21.791 16.2057 18.5824 15.6657 15.5204 12.4236C15.1794 12.065 14.7151 11.9211 14.2713 12.0377C13.764 12.1741 13.4238 12.575 13.2608 13.2377C12.879 14.7889 13.1244 19.1361 14.1983 23.7254C15.9226 31.0986 18.6744 34.8295 20.6797 36.6616C23.2706 39.0268 26.6538 40.3366 30.0158 40.3366C30.6495 40.3376 31.2824 40.2911 31.9092 40.1975C34.7531 39.7666 37.1204 38.3382 38.4547 36.26C32.3531 34.6727 27.1406 31.6543 21.9547 26.7718C21.8502 26.6734 21.7661 26.5554 21.7073 26.4245C21.6485 26.2935 21.6162 26.1523 21.612 26.0088C21.6079 25.8654 21.6322 25.7225 21.6833 25.5884C21.7345 25.4544 21.8117 25.3317 21.9104 25.2275ZM42.7795 34.9223C41.632 34.7457 40.5206 34.5241 39.4385 34.2561C39.2161 34.8635 38.9393 35.4495 38.6115 36.007C38.5617 36.0923 38.5092 36.1768 38.4554 36.26C39.7714 36.6007 41.1041 36.8738 42.4481 37.0782C42.5911 37.1033 42.7377 37.0996 42.8793 37.0674C43.0208 37.0351 43.1546 36.9749 43.2726 36.8903C43.3906 36.8057 43.4905 36.6984 43.5665 36.5747C43.6425 36.451 43.693 36.3133 43.7151 36.1698C43.7372 36.0263 43.7305 35.8798 43.6952 35.7389C43.66 35.5981 43.597 35.4657 43.5099 35.3495C43.4228 35.2333 43.3134 35.1357 43.1881 35.0623C43.0628 34.9889 42.9241 34.9413 42.7801 34.9223H42.7795Z" fill="white" /> </svg>
+                </span>
+
+                <h2 class="section-title m-0" style="color:#25652C; font-weight: bold;">@Localizer["LatestArticles"]</h2>
+            </div>
+
+            <!-- يسار: عرض الكل -->
+            <a href="~/Home/Articles"
+               class="view-all-btn"
+               style="color:#25652C; font-weight:bold; font-size:18px; text-decoration:none; display:flex; align-items:center; gap:6px;">
+
+                <iconify-icon icon="mdi:clock-outline"
+                              style="color:#25652C; font-size:18px;">
+                </iconify-icon>
+
+                @Localizer["ViewAll"]
+            </a>
+
+
+        </div>
+
+
+        <!-- السلايدر (الكروت فقط) -->
+
+        <div class="swiper articlesSwiper mb-4" dir="@dir">
+            <div class="swiper-wrapper">
+
+                @foreach (var article in Model.LatestArticles)
+                {
+
+
+                    var title = culture == "ar" ? article.TitleAr
+                    : culture == "en" ? article.TitleEn
+                    : article.TitleFr;
+
+                    var content = culture == "ar" ? article.ContentAr
+                    : culture == "en" ? article.ContentEn
+                    : article.ContentFr;
+
+                    var author = culture == "ar"
+                    ? "فرص خضراء"
+                    : "Foras Khadra";
+
+
+
+                    <div class="swiper-slide">
+                        <div class="article-card">
+
+                            <div class="article-img">
+                                <img src="@(!string.IsNullOrEmpty(article.ImagePath)
+                                                                                                      ? article.ImagePath
+                                                                                                      : "/images/default-article.jpg")"
+                                                                                                                                      alt="@title" />
+                                                                                                                             </div>
+
+                            <div class="article-body">
+
+                                <div class="article-meta">
+                                    <span class="meta-author">
+                                        @author
+                                        <iconify-icon icon="mdi:check-decagram" style="color:#25652C; font-size:16px; margin-left:4px;"></iconify-icon>
+                                    </span>
+                                    <span class="meta-date">@article.PublishDate.ToString("dd MMM yyyy")</span>
+                                </div>
+
+
+                                <h5 class="article-title">
+                                    @title
+                                </h5>
+
+                                <p class="article-desc">
+                                    @(content.Length > 120
+                                                                    ? content.Substring(0, 120) + "..."
+                                                                    : content)
+                            </p>
+
+                                <a href="javascript:void(0);"
+                                   class="read-more btn-read-more"
+                                   data-article-id="@article.Id">
+                                    @Localizer["ReadMore"]
+                                    <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                                </a>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                                }
+
+            </div>
+        </div>
+        <!-- الأسهم تحت الكروت -->
+        <div class="d-flex justify-content-center gap-3">
+            <div class="swiper-button-next custom-arrow"></div>
+
+            <div class="swiper-button-prev custom-arrow"></div>
+            @* <div class="swiper-button-next custom-arrow"></div> *@
         </div>
 
     </div>

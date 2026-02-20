@@ -341,11 +341,12 @@
 
                         @foreach (var member in group
                                             .OrderBy(m =>
-                                            m.Membership == MembershipType.Manager ? 1 :
-                                            m.Membership == MembershipType.Deputy_Director ? 2 :
-                                            m.Membership == MembershipType.Avisor ? 3 :
-                                            m.Membership == MembershipType.Officer ? 4 :
-                                            m.Membership == MembershipType.Member ? 5 : 99)
+                                            m.Membership == MembershipType.Founder ? 1 :
+                                            m.Membership == MembershipType.Manager ? 2 :
+                                            m.Membership == MembershipType.Deputy_Director ? 3 :
+                                            m.Membership == MembershipType.Avisor ? 4 :
+                                            m.Membership == MembershipType.Officer ? 5 :
+                                            m.Membership == MembershipType.Member ? 6 : 99)
                                             .ThenBy(m => m.CreatedAt))
                         {
           <div class="swiper-slide">
