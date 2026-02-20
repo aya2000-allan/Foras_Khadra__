@@ -18,10 +18,49 @@ namespace Foras_Khadra.Controllers
         }
 
         // عرض كل الأعضاء
-        public IActionResult Index()
+        public IActionResult Index(string search, string department, int page = 1)
         {
-            var members = _context.TeamMember.ToList();
-            return View(members);
+            int pageSize = 10;
+
+            var members = _context.TeamMember.AsQueryable();
+
+            // فلترة حسب الاسم
+            if (!string.IsNullOrEmpty(search))
+            {
+                members = members.Where(m => m.NameAr.Contains(search)
+                                           || m.NameEn.Contains(search)
+                                           || m.NameFr.Contains(search));
+            }
+
+            // فلترة حسب القسم (Enum)
+            if (!string.IsNullOrEmpty(department))
+            {
+                if (Enum.TryParse<Department>(department, out var deptEnum))
+                {
+                    members = members.Where(m => m.Department == deptEnum);
+                }
+            }
+
+            // ترتيب ومجموع الصفحات
+            members = members.OrderBy(m => m.Department)
+                             .ThenByDescending(m => m.Membership);
+
+            int totalMembers = members.Count();
+            int totalPages = (int)Math.Ceiling(totalMembers / (double)pageSize);
+
+            var pagedMembers = members.Skip((page - 1) * pageSize)
+                                      .Take(pageSize)
+                                      .ToList();
+
+            // ارسال Enum للقسم للـ View
+            ViewBag.Departments = Enum.GetValues(typeof(Department)).Cast<Department>().ToList();
+            ViewBag.SelectedDepartment = department;
+
+            ViewBag.Page = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.Search = search;
+
+            return View(pagedMembers);
         }
 
         // صفحة إنشاء عضو جديد
