@@ -23,27 +23,40 @@
             <h2 class="main-title mb-0">أعضاء الفريق</h2>
         </div>
 
-        <div class="col-md-6 d-flex justify-content-md-end align-items-center gap-3 d-flex-mobile">
-            <!-- Search (Server-side) -->
-            <form method="get" class="search-wrapper d-flex align-items-center flex-grow-1 flex-md-grow-0">
-                <i class="fa-solid fa-magnifying-glass text-muted ms-2"></i>
-                <input type="text" name="search" value="@search"
-                       class="form-control border-0 shadow-none bg-transparent"
-                       placeholder="البحث..." style="min-width: 150px;">
-                <button type="submit" class="btn p-0 me-2" style="border:0;background:transparent;">
-                    <i class="fa-solid fa-sliders text-muted cursor-pointer" title="بحث"></i>
-                </button>
-            </form>
+<div class="col-md-6 d-flex justify-content-md-end align-items-center gap-3 d-flex-mobile">
+    <form method="get" class="d-flex align-items-center gap-2 flex-wrap flex-md-nowrap w-100">
 
-            <a asp-action="Create" class="btn btn-add" style="background:#f99d27;color:#fff;">
-                <i class="fa-solid fa-plus ms-1"></i> إضافة عضو
-            </a>
+    <div class="input-group" style="min-width:300px;">
+        <!-- Dropdown القسم -->
+        <select name="department" class="form-select" style="border-top-right-radius:.375rem;border-bottom-right-radius:.375rem;">
+            <option value="">كل الأقسام</option>
+            @foreach (var dept in (List<Foras_Khadra.Models.Department>)ViewBag.Departments)
+            {
+                @: <option value="@dept" @(ViewBag.SelectedDepartment == dept.ToString() ? "selected" : "")>@dept</option>
+            }
+        </select>
 
-            <a asp-controller="Admin" asp-action="Dashboard" class="header-btn secondary">
-                <i class="fa-solid fa-gauge"></i>
-                العودة للوحة التحكم
-            </a>
-        </div>
+        <!-- البحث -->
+        <input type="text" name="search" value="@search"
+               class="form-control"
+               placeholder="ابحث عن عضو...">
+
+        <!-- زر البحث -->
+        <button type="submit" class="btn btn-warning" style="color:#fff; background:#f99d27">
+            <i class="fa-solid fa-magnifying-glass"></i> بحث
+        </button>
+    </div>
+</form>
+
+    <a asp-action="Create" class="btn btn-add" style="background:#f99d27;color:#fff;">
+        <i class="fa-solid fa-plus ms-1"></i> إضافة عضو
+    </a>
+
+    <a asp-controller="Admin" asp-action="Dashboard" class="header-btn secondary">
+        <i class="fa-solid fa-gauge"></i>
+        العودة للوحة التحكم
+    </a>
+</div>
     </div>
 
     <div class="table-container mb-4">
