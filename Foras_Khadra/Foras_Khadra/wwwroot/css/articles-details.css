@@ -37,6 +37,7 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
+  font-size: 20px;
 }
 
 .news-back-btn {
@@ -479,4 +480,158 @@ html[dir="ltr"] .sideblock-icon svg{
 /* بالعربي (RTL) خليها طبيعية */
 html[dir="rtl"] .sideblock-icon svg{
   transform: scaleX(1);
+}
+:root{
+  --orange: #F99D27;
+  --green:  #25652C;
+  --ink:    #0b1b0e;   /* نص غامق */
+  --muted:  #516a57;   /* نص ثانوي */
+  --card:   #ffffff;
+  --bg:     #F2FBF3;
+  --line:   rgba(37,101,44,.18);
+}
+
+/* منطقة المقال */
+.news-article-page{
+  background: var(--bg);
+}
+
+/* كرت المقال */
+.news-card{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.05);
+}
+
+/* العنوان بالأعلى */
+.news-top-title{
+  color: var(--green);
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+/* تاريخ/ميتا */
+.news-date{
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* ===== محتوى المقال ===== */
+.news-content{
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.95;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* فقرات */
+.news-content p{
+  margin: 0 0 14px;
+}
+
+/* روابط داخل المحتوى */
+.news-content a{
+  color: var(--green);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.news-content a:hover{
+  color: var(--orange);
+}
+
+/* عناوين داخل المحتوى */
+.news-content h1,
+.news-content h2,
+.news-content h3,
+.news-content h4{
+  color: var(--green);
+  font-weight: 900;
+  line-height: 1.25;
+  margin: 18px 0 10px;
+}
+.news-content h2{ font-size: 24px; }
+.news-content h3{ font-size: 20px; }
+.news-content h4{ font-size: 18px; }
+
+/* اقتباس */
+.news-content blockquote{
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: rgba(37,101,44,.06);
+  border-inline-start: 5px solid var(--orange);
+  border-radius: 14px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* صور داخل المحتوى */
+.news-content img{
+  max-width: 100%;
+  height: auto;
+  border-radius: 14px;
+  margin: 10px 0;
+}
+
+/* فاصل */
+.news-content hr{
+  border: none;
+  height: 1px;
+  background: var(--line);
+  margin: 18px 0;
+}
+/* قوائم داخل محتوى المقال */
+.news-content ul,
+.news-content ol{
+  margin: 10px 0 16px;
+  padding-inline-start: 0; /* إحنا رح نتحكم بالمسافة */
+}
+
+.news-content li{
+  list-style: none;               /* نلغي النقاط الافتراضية */
+  position: relative;
+  padding-inline-start: 46px;     /* مساحة للأيقونة */
+  margin: 10px 0;
+}
+
+/* أيقونة الورقة كنقطة */
+.news-content ul > li::before,
+.news-content ol > li::before{
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 6px;
+  width: 28px;
+  height: 28px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+
+  /* SVG كـ Data URI (نفس اللي بعثته) */
+  background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2754%27%20height%3D%2754%27%20viewBox%3D%270%200%2054%2054%27%20fill%3D%27none%27%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%3E%3Ccircle%20cx%3D%2727%27%20cy%3D%2727%27%20r%3D%2727%27%20fill%3D%27%23F99D27%27/%3E%3Cpath%20d%3D%27M21.9102%2025.2275C22.0085%2025.1232%2022.1263%2025.0392%2022.2569%2024.9804C22.3876%2024.9216%2022.5286%2024.8891%2022.6718%2024.8848C22.815%2024.8805%2022.9577%2024.9045%2023.0916%2024.9553C23.2256%2025.0062%2023.3482%2025.0829%2023.4525%2025.1811C28.4727%2029.9102%2033.51%2032.7875%2039.4377%2034.2541C40.2375%2032.0723%2040.3084%2029.6709%2039.6177%2027.3282C38.7014%2024.2198%2036.5673%2021.5116%2033.448%2019.4968C30.6634%2017.6982%2027.8802%2017.2298%2025.1877%2016.777C21.7909%2016.2057%2018.5823%2015.6657%2015.5202%2012.4236C15.1793%2012.065%2014.715%2011.9211%2014.2711%2012.0377C13.7639%2012.1741%2013.4236%2012.575%2013.2607%2013.2377C12.8789%2014.7889%2013.1243%2019.1361%2014.1982%2023.7254C15.9225%2031.0986%2018.6743%2034.8295%2020.6796%2036.6616C23.2705%2039.0268%2026.6536%2040.3366%2030.0157%2040.3366C30.6494%2040.3376%2031.2823%2040.2911%2031.9091%2040.1975C34.753%2039.7666%2037.1202%2038.3382%2038.4546%2036.26C32.353%2034.6727%2027.1405%2031.6543%2021.9546%2026.7718C21.8501%2026.6734%2021.766%2026.5554%2021.7072%2026.4245C21.6484%2026.2935%2021.616%2026.1523%2021.6119%2026.0088C21.6078%2025.8654%2021.632%2025.7225%2021.6832%2025.5884C21.7344%2025.4544%2021.8116%2025.3317%2021.9102%2025.2275ZM42.7793%2034.9223C41.6318%2034.7457%2040.5205%2034.5241%2039.4384%2034.2561C39.216%2034.8635%2038.9392%2035.4495%2038.6114%2036.007C38.5616%2036.0923%2038.5091%2036.1768%2038.4552%2036.26C39.7713%2036.6007%2041.104%2036.8738%2042.448%2037.0782C42.591%2037.1033%2042.7376%2037.0996%2042.8791%2037.0674C43.0207%2037.0351%2043.1544%2036.9749%2043.2724%2036.8903C43.3904%2036.8057%2043.4904%2036.6984%2043.5664%2036.5747C43.6424%2036.451%2043.6929%2036.3133%2043.715%2036.1698C43.7371%2036.0263%2043.7303%2035.8798%2043.6951%2035.7389C43.6598%2035.5981%2043.5968%2035.4657%2043.5098%2035.3495C43.4227%2035.2333%2043.3133%2035.1357%2043.188%2035.0623C43.0627%2034.9889%2042.924%2034.9413%2042.78%2034.9223H42.7793Z%27%20fill%3D%27white%27/%3E%3C/svg%3E");
+}
+/* الوضع الطبيعي (عربي / RTL): الورقة كما هي */
+[dir="rtl"] .news-content ul > li::before,
+[dir="rtl"] .news-content ol > li::before{
+  transform: scaleX(1);
+}
+
+/* إنجليزي / LTR: اقلب الورقة */
+[dir="ltr"] .news-content ul > li::before,
+[dir="ltr"] .news-content ol > li::before{
+  transform: scaleX(-1);
+}
+/* مسافة داخلية لنص المقال */
+.news-main-content{
+  padding: 0 12px;   /* يمين ويسار */
+}
+
+.news-content{
+  padding: 8px 12px; /* فوق/تحت + يمين/يسار */
+}
+/* إخفاء أول عنوان داخل محتوى المقال (العنوان المكرر) */
+.news-content h1:first-child{
+  display: none;
 }
