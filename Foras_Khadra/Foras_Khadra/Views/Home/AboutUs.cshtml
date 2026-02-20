@@ -338,8 +338,15 @@
       <div class="swiper team-swiper" data-dir="@dir">
         <div class="swiper-wrapper">
 
-        @foreach (var member in group.OrderBy(m => m.CreatedAt))
-        {
+                        @foreach (var member in group
+                                            .OrderBy(m =>
+                                            m.Membership == MembershipType.Manager ? 1 :
+                                            m.Membership == MembershipType.Deputy_Director ? 2 :
+                                            m.Membership == MembershipType.Avisor ? 3 :
+                                            m.Membership == MembershipType.Officer ? 4 :
+                                            m.Membership == MembershipType.Member ? 5 : 99)
+                                            .ThenBy(m => m.CreatedAt))
+                        {
           <div class="swiper-slide">
             <div class="team-card">
 
