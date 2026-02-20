@@ -131,6 +131,22 @@
                         <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitleAr"]" required />
                         <span asp-validation-for="TitleAr" class="text-danger"></span>
                     </div>
+
+                    <div class="field">
+                        <h3 class="discription">@Localizer["OpportunityDescription"] </h3>
+                        <div id="editorDescriptionAr" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionAr" id="descriptionAr" required />
+                        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <h3 class="discription">@Localizer["OpportunityDetails"] </h3>
+                        <!-- Arabic -->
+                        <div id="editorAr" style="height: 250px;"></div>
+                        <input type="hidden" asp-for="DetailsAr" id="detailAr" required />
+                        <span asp-validation-for="DetailsAr" class="text-danger"></span>
+                    </div>
+
                     <div class="field">
                         <h3 class="discription">@Localizer["EligibilityCriteria"]</h3>
                         <div id="editorEligibilityAr" style="height: 150px;"></div>
@@ -143,19 +159,8 @@
                         <input type="hidden" asp-for="BenefitsAr" id="benefitsAr" required />
                         <span asp-validation-for="BenefitsAr" class="text-danger"></span>
                     </div>
-                    <div class="field">
-                        <h3 class="discription">@Localizer["OpportunityDescription"] </h3>
-                        <div id="editorDescriptionAr" style="height: 180px;"></div>
-                        <input type="hidden" asp-for="DescriptionAr" id="descriptionAr" required />
-                        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
-                    </div>
-                    <div class="field">
-                        <h3 class="discription">@Localizer["OpportunityDetails"] </h3>
-                        <!-- Arabic -->
-                        <div id="editorAr" style="height: 250px;"></div>
-                        <input type="hidden" asp-for="DetailsAr" id="detailAr" required />
-                        <span asp-validation-for="DetailsAr" class="text-danger"></span>
-                    </div>
+                   
+                   
                 </div>
 
                 <!-- English Tab -->
@@ -165,20 +170,7 @@
                         <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitleAr"]" required />
                         <span asp-validation-for="TitleEn" class="text-danger"></span>
                     </div>
-                    <div class="field">
-                        <h3 class="discription">@Localizer["EligibilityCriteria"]</h3>
-                        <div id="editorEligibilityEn" style="height: 150px;"></div>
-                        <input type="hidden" asp-for="EligibilityCriteriaEn" id="eligibilityEn" required />
-                        <span asp-validation-for="EligibilityCriteriaEn" class="text-danger"></span>
-                    </div>
-                    <div class="field">
-                        <h3 class="discription">
-                            @Localizer["Benefits"]
-                        </h3>
-                        <div id="editorBenefitsEn" style="height: 150px;"></div>
-                        <input type="hidden" asp-for="BenefitsEn" id="benefitsEn" required />
-                        <span asp-validation-for="BenefitsEn" class="text-danger"></span>
-                    </div>
+
                     <div class="field">
 
                         <h3 class="discription">
@@ -197,6 +189,22 @@
                         <input type="hidden" asp-for="DetailsEn" id="detailEn" required />
                         <span asp-validation-for="DetailsEn" class="text-danger"></span>
                     </div>
+
+                    <div class="field">
+                        <h3 class="discription">@Localizer["EligibilityCriteria"]</h3>
+                        <div id="editorEligibilityEn" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="EligibilityCriteriaEn" id="eligibilityEn" required />
+                        <span asp-validation-for="EligibilityCriteriaEn" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <h3 class="discription">
+                            @Localizer["Benefits"]
+                        </h3>
+                        <div id="editorBenefitsEn" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="BenefitsEn" id="benefitsEn" required />
+                        <span asp-validation-for="BenefitsEn" class="text-danger"></span>
+                    </div>
+                    
                 </div>
 
                 <!-- French Tab -->
@@ -205,6 +213,19 @@
                         <label for="TitleFr">@Localizer["OpportunityTitle"] </label>
                         <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitleAr"]" required />
                         <span asp-validation-for="TitleFr" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <h3 class="discription">@Localizer["OpportunityDescription"]</h3>
+                        <div id="editorDescriptionFr" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionFr" id="descriptionFr" required />
+                        <span asp-validation-for="DescriptionFr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <h3 class="discription">@Localizer["OpportunityDetails"]</h3>
+                        <div id="editorFr" style="height: 250px;"></div>
+                        <input type="hidden" asp-for="DetailsFr" id="detailFr" required />
+                        <span asp-validation-for="DetailsFr" class="text-danger"></span>
                     </div>
                     <div class="field">
                         <h3 class="discription">@Localizer["EligibilityCriteria"]</h3>
@@ -218,18 +239,7 @@
                         <input type="hidden" asp-for="BenefitsFr" id="benefitsFr" required />
                         <span asp-validation-for="BenefitsFr" class="text-danger"></span>
                     </div>
-                    <div class="field">
-                        <h3 class="discription">@Localizer["OpportunityDescription"]</h3>
-                        <div id="editorDescriptionFr" style="height: 180px;"></div>
-                        <input type="hidden" asp-for="DescriptionFr" id="descriptionFr" required />
-                        <span asp-validation-for="DescriptionFr" class="text-danger"></span>
-                    </div>
-                    <div class="field">
-                        <h3 class="discription">@Localizer["OpportunityDetails"]</h3>
-                        <div id="editorFr" style="height: 250px;"></div>
-                        <input type="hidden" asp-for="DetailsFr" id="detailFr" required />
-                        <span asp-validation-for="DetailsFr" class="text-danger"></span>
-                    </div>
+                    
                 </div>
             </div>
 
