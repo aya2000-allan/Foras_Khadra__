@@ -197,6 +197,149 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+/* صندوق الوصف */
+.bio{
+  max-height: 0;              /* مغلق افتراضيًا */
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease;
+  background-position: center;
+  background-size: cover;
+  border-radius: 12px;
+}
+
+/* لما ينفتح */
+.bio.open{
+  max-height: 260px;          /* ✅ هون حددي الارتفاع اللي بدك ياه */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* طبقة النص داخل الوصف */
+.bio-overlay{
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 14px;
+  color: #fff;
+  border-radius: 12px;
+  height: 100%;               /* يمسك الارتفاع كامل */
+  overflow-y: auto;           /* ✅ إذا النص أطول: Scroll */
+  box-sizing: border-box;
+  line-height: 1.7;
+}
+
+/* تحسين شكل السكروول (اختياري) */
+.bio-overlay::-webkit-scrollbar{
+  width: 6px;
+}
+.bio-overlay::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.4);
+  border-radius: 6px;
+}
+.bio-overlay::-webkit-scrollbar-track{
+  background: transparent;
+}
+/* تأكيد ظهور الرول */
+.team-card-footer .role{
+  display: block !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #F99D27 !important;   /* برتقالي واضح */
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+  opacity: 1 !important;
+  white-space: normal;         /* خليها تكسر سطر إذا طويلة */
+}
+
+/* خلي الفوتر يعطي مساحة كافية */
+.team-card-footer{
+  min-height: 70px;            /* زوّد ارتفاع الفوتر */
+}
+/* السلايد: رص العناصر عموديًا داخل نفس السلايد */
+.team-swiper .swiper-slide{
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+}
+
+/* الكرت يأخذ عرض السلايد كامل */
+.team-card{
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* مهم: امنع الـ bio يطلع برا */
+.bio{
+  position: static !important;   /* إذا كان عليه position absolute من ستايل قديم */
+  width: 100% !important;
+  margin-top: 10px;
+}
+/* صندوق الوصف */
+.bio{
+  height: 0;                 /* مغلق */
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+  background-position: center;
+  background-size: cover;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+.bio.open{
+  height: 260px;             
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bio-overlay{
+  height: 100%;              
+  overflow-y: auto;         /
+  background-color: rgba(0,0,0,0.82);
+  padding: 14px;
+  color: #fff;
+  border-radius: 12px;
+  box-sizing: border-box;
+  line-height: 1.7;
+}
+/* ✅ ثبّت ارتفاع فوتر الكارد */
+.team-card-footer{
+  height: 86px;                 /* عدّل الرقم حسب اللي بناسبك */
+  padding: 12px 16px !important;
+  box-sizing: border-box;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 6px;
+  overflow: hidden;             /* يمنع أي زيادة */
+}
+
+/* ✅ ثبّت مساحة الاسم (سطرين max داخل الفوتر) */
+.team-card-footer .member-name{
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;        /* سطرين فقط */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ✅ الرول ثابت كمان */
+.team-card-footer .role{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.1;
+  white-space: nowrap;          /* ما يلف */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 
 </style>
@@ -259,6 +402,7 @@
     </h4>
   </div>
 </div>
+
 
 
               <div id="bio-@member.Id" class="bio" style="background-image:url(@member.ImagePath)">
