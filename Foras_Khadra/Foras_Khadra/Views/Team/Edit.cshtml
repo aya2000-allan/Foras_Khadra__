@@ -47,27 +47,29 @@
                 <p>لا توجد صورة حالية</p>
             }
         </div>
-        <!-- Upload new image -->
-        <div class="upload-box">
-            <h3 class="discription">تغيير الصورة (اختياري)</h3>
+       
 
-            <label class="upload-area">
-                <input type="file" name="ImageFile" accept=".jpg,.jpeg,.png" hidden />
-                <div class="upload-icon">
-                    <img src="~/images/upload-icon.svg" />
-                </div>
-                <p>
-                    Drag & drop files or <a href="#" class="browse">Browse</a>
-                </p>
-                <small>Supported formats: JPEG, PNG</small>
-            </label>
-        </div>
-
-        <form asp-action="Edit" method="post" enctype="multipart/form-data" >
-            <input type="hidden" asp-for="Id" />
+        
 
             <!-- Name Fields -->
-            
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
+
+                <!-- Upload new image -->
+                <div class="upload-box">
+                    <h3 class="discription">تغيير الصورة (اختياري)</h3>
+
+                    <label class="upload-area">
+                        <input type="file" name="ImageFile" accept=".jpg,.jpeg,.png" hidden />
+                        <div class="upload-icon">
+                            <img src="~/images/upload-icon.svg" />
+                        </div>
+                        <p>
+                            Drag & drop files or <a href="#" class="browse">Browse</a>
+                        </p>
+                        <small>Supported formats: JPEG, PNG</small>
+                    </label>
+                </div>
 
             <div class="field">
                 <h3 class="discription">الاسم بالعربية</h3>
