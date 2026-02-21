@@ -316,7 +316,123 @@
     transform: scaleX(-1);
 }
 
+/* =========================
+   Responsive User ID Card
+   ========================= */
 
+.user-id-card{
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* خلي البودي Flex لكن يتحكم بالالتفاف */
+.user-id-body{
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* pattern area */
+.user-id-pattern{
+  width: 240px;
+  flex: 0 0 240px;
+  background: #f6fbf7;
+  overflow: hidden;
+}
+
+/* خلي الـ SVG يغطي المساحة بشكل مرتب */
+.user-id-pattern svg{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* details area */
+.user-id-details{
+  flex: 1;
+  min-width: 0;           /* مهم عشان ما يطلع النص برا */
+}
+
+/* rows */
+.user-id-row{
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.user-id-value{
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* =========================
+   Tablet
+   ========================= */
+@@media (max-width: 992px){
+  .user-id-pattern{
+    width: 200px;
+    flex-basis: 200px;
+  }
+  .user-id-row{
+    grid-template-columns: 140px 1fr;
+  }
+}
+
+/* =========================
+   Mobile
+   ========================= */
+@@media (max-width: 768px){
+  .user-id-body{
+    flex-direction: column;   /* ✅ تحت بعض */
+  }
+
+  .user-id-pattern{
+    width: 100%;
+    flex: none;
+    height: 120px;            /* ✅ ارتفاع ثابت للموبايل */
+  }
+
+  .user-id-details{
+    padding: 14px 14px;
+  }
+
+  /* خلي الـ label فوق value */
+  .user-id-row{
+    grid-template-columns: 1fr;
+    gap: 6px;
+    align-items: start;
+  }
+
+  .user-id-label{
+    font-size: 12px;
+  }
+
+  .user-id-value{
+    font-size: 13px;
+  }
+}
+
+/* أصغر موبايل */
+@@media (max-width: 480px){
+  .user-id-pattern{
+    height: 100px;
+  }
+  .user-id-header{
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+@@media (max-width: 768px){
+  .user-id-body{
+    flex-direction: column;
+  }
+  .user-id-pattern{
+    display: none !important;
+  }
+}
 
 </style>
 

@@ -337,6 +337,39 @@
 [dir="rtl"] .user-id-pattern svg{
     transform: none;
 }
+/* ============================= */
+/* Responsive: hide pattern on mobile + better layout */
+/* ============================= */
+@@media (max-width: 768px){
+
+  /* اخفاء الصورة/الـ SVG بالكامل */
+  .org-id-pattern{
+    display: none !important;
+  }
+
+  /* خلي التفاصيل تاخذ العرض كامل */
+  .org-id-body{
+    flex-direction: column;
+  }
+
+  .org-id-details{
+    padding: 14px 14px;
+  }
+
+  /* صفوف البيانات تصير عمود واحد (label فوق value) */
+  .org-id-row{
+    grid-template-columns: 1fr !important;
+    gap: 6px;
+  }
+
+  .org-id-label{
+    font-size: 12px;
+  }
+
+  .org-id-value{
+    font-size: 13px;
+  }
+}
 
 </style>
 
