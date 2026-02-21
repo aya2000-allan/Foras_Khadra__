@@ -22,13 +22,22 @@
             <div class="upload-box">
                 <h3 class="discription">رفع صورة العضو</h3>
                 <label class="upload-area">
-                    <input asp-for="ImageFile" type="file" accept=".jpg,.jpeg,.png,.mp4,.mov" hidden />
-                    <div class="upload-icon"><img src="~/images/upload-icon.svg" alt="Alternate Text" /></div>
+                    <input asp-for="ImageFile" id="imageInput" type="file" accept=".jpg,.jpeg,.png,.mp4,.mov" hidden />
+                    <div class="upload-icon">
+                        <img src="~/images/upload-icon.svg" alt="Upload Icon" />
+                    </div>
                     <p style="text-decoration: underline; color: goldenrod">
-                        Drag & drop files or Browse 
+                        Drag & drop files or Browse
                     </p>
                     <small>Supported formats: JPEG, PNG, MP4, MOV</small>
                 </label>
+
+                <!-- Preview Image -->
+                <div id="previewContainer" style="margin-top:15px; display:none;">
+                    <img id="imagePreview" style="max-width:200px; border-radius:12px;" />
+                    <p style="color:green; margin-top:8px;">✔ تم رفع الصورة بنجاح</p>
+                </div>
+
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
 
@@ -219,4 +228,24 @@
     });
 </script>
 
+<script>
+    const imageInput = document.getElementById("imageInput");
+    const previewContainer = document.getElementById("previewContainer");
+    const imagePreview = document.getElementById("imagePreview");
+
+    imageInput.addEventListener("change", function () {
+        const file = this.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                imagePreview.setAttribute("src", e.target.result);
+                previewContainer.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 
