@@ -119,7 +119,7 @@
 
                 <!-- Deadline Type -->
                 <select asp-for="DeadlineType" class="form-select" id="deadlineType">
-                    <option value="">@Localizer["SelectDeadlineType"]</option>
+                    <option value="">----</option>
                     @foreach (var item in Enum.GetValues(typeof(DeadlineType)).Cast<DeadlineType>())
                     {
                         <option value="@item">@item.ToString()</option>
