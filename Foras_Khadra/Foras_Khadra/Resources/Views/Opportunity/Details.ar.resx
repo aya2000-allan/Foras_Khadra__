@@ -156,4 +156,10 @@
   <data name="Deadline" xml:space="preserve">
     <value>تاريخ انتهاء التقديم</value>
   </data>
+  <data name="UntilFull" xml:space="preserve">
+    <value>حتى انتهاء المقاعد</value>
+  </data>
+  <data name="NotSpecified" xml:space="preserve">
+    <value>لم يحدد</value>
+  </data>
 </root>

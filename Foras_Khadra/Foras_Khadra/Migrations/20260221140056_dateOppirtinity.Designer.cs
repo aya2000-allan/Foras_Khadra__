@@ -4,6 +4,7 @@ using Foras_Khadra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foras_Khadra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260221140056_dateOppirtinity")]
+    partial class dateOppirtinity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,167 +227,153 @@ namespace Foras_Khadra.Migrations
                         new
                         {
                             Id = 1,
-                            NameAr = "كل دول العالم",
-                            NameEn = "All World",
-                            NameFr = "Tous les pays du monde"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NameAr = "الوطن العربي ",
-                            NameEn = "The Arab World",
-                            NameFr = "Le Monde arabe"
-                        },
-                        new
-                        {
-                            Id = 3,
                             NameAr = "فلسطين",
                             NameEn = "Palestine",
                             NameFr = "Palestine"
                         },
                         new
                         {
-                            Id = 4,
+                            Id = 2,
                             NameAr = "الأردن",
                             NameEn = "Jordan",
                             NameFr = "Jordanie"
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 3,
                             NameAr = "سوريا",
                             NameEn = "Syria",
                             NameFr = "Syrie"
                         },
                         new
                         {
-                            Id = 6,
+                            Id = 4,
                             NameAr = "لبنان",
                             NameEn = "Lebanon",
                             NameFr = "Liban"
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 5,
                             NameAr = "العراق",
                             NameEn = "Iraq",
                             NameFr = "Irak"
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 6,
                             NameAr = "السعودية",
                             NameEn = "Saudi Arabia",
                             NameFr = "Arabie saoudite"
                         },
                         new
                         {
-                            Id = 9,
+                            Id = 7,
                             NameAr = "الكويت",
                             NameEn = "Kuwait",
                             NameFr = "Koweït"
                         },
                         new
                         {
-                            Id = 10,
+                            Id = 8,
                             NameAr = "قطر",
                             NameEn = "Qatar",
                             NameFr = "Qatar"
                         },
                         new
                         {
-                            Id = 11,
+                            Id = 9,
                             NameAr = "البحرين",
                             NameEn = "Bahrain",
                             NameFr = "Bahreïn"
                         },
                         new
                         {
-                            Id = 12,
+                            Id = 10,
                             NameAr = "الإمارات العربية المتحدة",
                             NameEn = "United Arab Emirates",
                             NameFr = "Émirats arabes unis"
                         },
                         new
                         {
-                            Id = 13,
+                            Id = 11,
                             NameAr = "عُمان",
                             NameEn = "Oman",
                             NameFr = "Oman"
                         },
                         new
                         {
-                            Id = 14,
+                            Id = 12,
                             NameAr = "اليمن",
                             NameEn = "Yemen",
                             NameFr = "Yémen"
                         },
                         new
                         {
-                            Id = 15,
+                            Id = 13,
                             NameAr = "مصر",
                             NameEn = "Egypt",
                             NameFr = "Égypte"
                         },
                         new
                         {
-                            Id = 16,
+                            Id = 14,
                             NameAr = "السودان",
                             NameEn = "Sudan",
                             NameFr = "Soudan"
                         },
                         new
                         {
-                            Id = 17,
+                            Id = 15,
                             NameAr = "ليبيا",
                             NameEn = "Libya",
                             NameFr = "Libye"
                         },
                         new
                         {
-                            Id = 18,
+                            Id = 16,
                             NameAr = "تونس",
                             NameEn = "Tunisia",
                             NameFr = "Tunisie"
                         },
                         new
                         {
-                            Id = 19,
+                            Id = 17,
                             NameAr = "الجزائر",
                             NameEn = "Algeria",
                             NameFr = "Algérie"
                         },
                         new
                         {
-                            Id = 20,
+                            Id = 18,
                             NameAr = "المغرب",
                             NameEn = "Morocco",
                             NameFr = "Maroc"
                         },
                         new
                         {
-                            Id = 21,
+                            Id = 19,
                             NameAr = "موريتانيا",
                             NameEn = "Mauritania",
                             NameFr = "Mauritanie"
                         },
                         new
                         {
-                            Id = 22,
+                            Id = 20,
                             NameAr = "جيبوتي",
                             NameEn = "Djibouti",
                             NameFr = "Djibouti"
                         },
                         new
                         {
-                            Id = 23,
+                            Id = 21,
                             NameAr = "الصومال",
                             NameEn = "Somalia",
                             NameFr = "Somalie"
                         },
                         new
                         {
-                            Id = 24,
+                            Id = 22,
                             NameAr = "جزر القمر",
                             NameEn = "Comoros",
                             NameFr = "Comores"

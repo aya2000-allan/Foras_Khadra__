@@ -116,8 +116,22 @@
             <!-- Deadline -->
             <div class="field">
                 <label>@Localizer["Deadline"] <span style="color:red">*</span></label>
-                <input asp-for="EndDate" type="date" class="form-control" required />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
+
+                <!-- Deadline Type -->
+                <select asp-for="DeadlineType" class="form-select" id="deadlineType">
+                    <option value="">@Localizer["SelectDeadlineType"]</option>
+                    @foreach (var item in Enum.GetValues(typeof(DeadlineType)).Cast<DeadlineType>())
+                    {
+                        <option value="@item">@item.ToString()</option>
+                    }
+                </select>
+                <span asp-validation-for="DeadlineType" class="text-danger"></span>
+
+                <!-- End Date -->
+                <div id="endDateWrapper" style="margin-top:10px; display:none;">
+                    <input asp-for="EndDate" type="date" class="form-control" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
             </div>
 
             <!-- Tabs -->
@@ -519,7 +533,17 @@
     
     </script>
 
+        const deadlineTypeSelect = document.getElementById("deadlineType");
+    const endDateWrapper = document.getElementById("endDateWrapper");
 
+    deadlineTypeSelect.addEventListener("change", function () {
+        if (this.value === "SpecificDate") {
+            endDateWrapper.style.display = "block";
+        } else {
+            endDateWrapper.style.display = "none";
+            document.querySelector('input[name="EndDate"]').value = "";
+        }
+    });
 
 }
 

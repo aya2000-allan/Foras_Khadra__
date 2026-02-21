@@ -52,9 +52,10 @@ namespace Foras_Khadra.Models
 
 
         [Required]
+        public DeadlineType DeadlineType { get; set; }
+
         [DataType(DataType.Date)]
-        [Display(Name = "EndDate")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [Required]
         public string ApplyLink { get; set; }

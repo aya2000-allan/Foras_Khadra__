@@ -162,8 +162,24 @@
 
             <div class="field">
                 <label>@Localizer["Deadline"] <span style="color:red">*</span></label>
-                <input asp-for="EndDate" type="date" class="form-control" required />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
+
+                <!-- Deadline Type -->
+                <select asp-for="DeadlineType" class="form-select" id="deadlineType">
+                    <option value="">@Localizer["SelectDeadlineType"]</option>
+                    @foreach (var item in Enum.GetValues(typeof(DeadlineType)).Cast<DeadlineType>())
+                    {
+                        <option value="@item" selected="@(Model.DeadlineType == item)">
+                            @item.ToString()
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="DeadlineType" class="text-danger"></span>
+
+                <!-- End Date -->
+                <div id="endDateWrapper" style="margin-top:10px; display:@(Model.DeadlineType == DeadlineType.SpecificDate ? "block" : "none")">
+                    <input asp-for="EndDate" type="date" class="form-control" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
             </div>
 
             <div class="field">
@@ -587,6 +603,22 @@
                 }
             });
         });
+
+                // ================= Deadline Dynamic Show/Hide =================
+        const deadlineTypeSelect = document.getElementById("deadlineType");
+        const endDateWrapper = document.getElementById("endDateWrapper");
+
+        if (deadlineTypeSelect) {
+            deadlineTypeSelect.addEventListener("change", function () {
+                if (this.value === "SpecificDate") {
+                    endDateWrapper.style.display = "block";
+                } else {
+                    endDateWrapper.style.display = "none";
+                    const endDateInput = document.querySelector('input[name="EndDate"]');
+                    if (endDateInput) endDateInput.value = "";
+                }
+            });
+        }
     </script>
 
 

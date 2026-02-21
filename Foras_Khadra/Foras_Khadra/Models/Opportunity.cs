@@ -66,9 +66,10 @@ namespace Foras_Khadra.Models
         public string ApplyLink { get; set; }
 
         [Required]
+        public DeadlineType DeadlineType { get; set; }
+
         [DataType(DataType.Date)]
-        [Display(Name = "EndDate")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string CreatedByUserId { get; set; }
 
         [ForeignKey("CreatedByUserId")]
@@ -100,6 +101,8 @@ namespace Foras_Khadra.Models
                 }));
             }
         }
+
+        
 
     }
 }

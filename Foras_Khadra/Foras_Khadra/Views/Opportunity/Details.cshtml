@@ -16,8 +16,12 @@
     ViewData["Title"] = pageTitle;
 
 
-    var isExpired = Model.EndDate.Date < DateTime.Now.Date;
+    var isExpired = false;
 
+    if (Model.DeadlineType == DeadlineType.SpecificDate && Model.EndDate.HasValue)
+    {
+        isExpired = Model.EndDate.Value.Date < DateTime.Now.Date;
+    }
     var applyButtonClass = "apply-button " + (isExpired ? "expired-button" : "active-button");
 
 }
@@ -234,8 +238,29 @@
 
                 <span class="info-label">@Localizer["Deadline"]</span>
                 <span class="info-value">
-                    <span class="deadline-label @(isExpired ? "deadline-expired" : "deadline-active")">
-                        @Model.EndDate.ToShortDateString()
+                    @{
+                        string deadlineText = "";
+                        string deadlineClass = "";
+
+                        if (Model.DeadlineType == DeadlineType.SpecificDate && Model.EndDate.HasValue)
+                        {
+                            deadlineText = Model.EndDate.Value.ToShortDateString();
+                            deadlineClass = isExpired ? "deadline-expired" : "deadline-active";
+                        }
+                        else if (Model.DeadlineType == DeadlineType.UntilFull)
+                        {
+                            deadlineText = Localizer["UntilFull"].Value;
+                            deadlineClass = "deadline-active";
+                        }
+                        else
+                        {
+                            deadlineText = Localizer["NotSpecified"].Value;
+                            deadlineClass = "deadline-active";
+                        }
+                    }
+
+                    <span class="deadline-label @deadlineClass">
+                        @deadlineText
                     </span>
                 </span>
 

@@ -38,9 +38,10 @@ namespace Foras_Khadra.Models
         public string? ApplyLink { get; set; }
 
 
+        public DeadlineType DeadlineType { get; set; }
+
         [DataType(DataType.Date)]
-        [Display(Name = "EndDate")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public IEnumerable<SelectListItem>? CountriesSelectList { get; set; } = new List<SelectListItem>();
     }

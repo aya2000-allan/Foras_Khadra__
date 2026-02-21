@@ -156,4 +156,10 @@
   <data name="Deadline" xml:space="preserve">
     <value>Date limite de candidature</value>
   </data>
+  <data name="UntilFull" xml:space="preserve">
+    <value>Places limitées</value>
+  </data>
+  <data name="NotSpecified" xml:space="preserve">
+    <value>Non spécifié</value>
+  </data>
 </root>

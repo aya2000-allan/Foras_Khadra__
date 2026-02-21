@@ -84,6 +84,11 @@ public async Task<IActionResult> Create()
         [Authorize(Roles = "Admin,Organization")]
         public async Task<IActionResult> Create(OpportunityCreateVM model)
         {
+           
+            if (model.DeadlineType == DeadlineType.SpecificDate && model.EndDate == null)
+            {
+                ModelState.AddModelError("EndDate", "End date is required when selecting specific date.");
+            }
             if (!ModelState.IsValid)
             {
                 // إعادة ملء قائمة الدول حسب لغة الموقع
@@ -144,7 +149,12 @@ public async Task<IActionResult> Create()
                 BenefitsFr = model.BenefitsFr,
                 ApplyLink = model.ApplyLink,
                 ImagePath = imagePath,
-                EndDate = model.EndDate,
+                DeadlineType = model.DeadlineType,
+
+                EndDate = model.DeadlineType == DeadlineType.SpecificDate
+        ? model.EndDate
+        : null,
+
                 PublishedBy = org != null ? org.Name : "Admin",
                 Type = model.Type.Value,
                 CreatedByUserId = currentUser.Id,
@@ -216,8 +226,11 @@ public async Task<IActionResult> Create()
             opportunity.BenefitsFr = model.BenefitsFr;
             opportunity.ApplyLink = model.ApplyLink;
             opportunity.Type = model.Type.Value;
-            opportunity.EndDate = model.EndDate;
+            opportunity.DeadlineType = model.DeadlineType;
 
+            opportunity.EndDate = model.DeadlineType == DeadlineType.SpecificDate
+                ? model.EndDate
+                : null;
             // تحديث الصورة فقط إذا تم رفعها
             if (model.Image != null)
             {
@@ -300,7 +313,7 @@ public async Task<IActionResult> Create()
                 DetailsAr = opp.DetailsAr,
                 DetailsEn = opp.DetailsEn,
                 DetailsFr = opp.DetailsFr,
-                EndDate = opp.EndDate,
+                DeadlineType = opp.DeadlineType,
                 AvailableCountryIds = opp.AvailableCountries?.Select(c => c.Id).ToList() ?? new List<int>(),
                 CountriesSelectList = countries.Select(c => new SelectListItem
                 {
