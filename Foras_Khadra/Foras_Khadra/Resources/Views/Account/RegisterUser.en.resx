@@ -133,7 +133,7 @@
     <value>Enter Confirm Your Password</value>
   </data>
   <data name="CountryLabel" xml:space="preserve">
-    <value>Your Country</value>
+    <value>Country of Residence</value>
   </data>
   <data name="CountryPlaceholder" xml:space="preserve">
     <value>Select your country</value>

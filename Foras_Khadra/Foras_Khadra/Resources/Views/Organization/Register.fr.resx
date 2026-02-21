@@ -145,7 +145,7 @@
     <value>Entrez le nom de la personne responsable</value>
   </data>
   <data name="CountryLabel" xml:space="preserve">
-    <value>Pays</value>
+    <value>Pays de résidence</value>
   </data>
   <data name="CountryPlaceholder" xml:space="preserve">
     <value>Sélectionnez un pays</value>

@@ -133,7 +133,7 @@
     <value>أدخل تأكيد كلمة مرورك</value>
   </data>
   <data name="CountryLabel" xml:space="preserve">
-    <value>دولتك</value>
+    <value>دولة اقامتك</value>
   </data>
   <data name="CountryPlaceholder" xml:space="preserve">
     <value>أختر دولتك</value>

@@ -133,7 +133,7 @@
     <value>Entrez la confirmation de votre mot de passe</value>
   </data>
   <data name="CountryLabel" xml:space="preserve">
-    <value>Votre pays</value>
+    <value>Pays de résidence</value>
   </data>
   <data name="CountryPlaceholder" xml:space="preserve">
     <value>Sélectionnez votre pays</value>

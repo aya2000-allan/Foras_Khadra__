@@ -145,7 +145,7 @@
     <value>Enter contact person name</value>
   </data>
   <data name="CountryLabel" xml:space="preserve">
-    <value>Country</value>
+    <value>Country of Residence</value>
   </data>
   <data name="CountryPlaceholder" xml:space="preserve">
     <value>Select a country</value>

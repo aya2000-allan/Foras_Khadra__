@@ -145,7 +145,7 @@
     <value>اسم الشخص المسؤول</value>
   </data>
   <data name="CountryLabel" xml:space="preserve">
-    <value>الدولة</value>
+    <value>دولة الإقامة</value>
   </data>
   <data name="CountryPlaceholder" xml:space="preserve">
     <value>اختر الدولة</value>
