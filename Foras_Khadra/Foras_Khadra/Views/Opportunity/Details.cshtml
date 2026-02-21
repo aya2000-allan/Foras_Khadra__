@@ -497,5 +497,173 @@
         .deadline-expired {
             background-color: #dc3545; /* أحمر */
         }
+        /* =========================
+   Responsive Opportunity Page
+   ========================= */
+
+/* الحاوية */
+.opp-container{
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* ===== Header ===== */
+.opp-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;          /* ✅ يخلي العناصر تنزل سطر */
+  margin-bottom: 14px;
+}
+
+.opp-title{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.opp-title span{
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #25652C;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;     /* سطرين */
+  -webkit-box-orient: vertical;
+}
+
+/* زر التقديم */
+.apply-button{
+  white-space: nowrap;
+}
+
+/* ===== Main Card: info + image ===== */
+.main-card{
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr; /* معلومات أوسع من الصورة */
+  gap: 16px;
+  align-items: stretch;
+  margin-top: 10px;
+}
+
+/* صندوق المعلومات */
+.card-info-content{
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* صورة الفرصة */
+.card-image-wrapper{
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 260px;
+}
+
+.card-image-wrapper img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===== Info Grid (labels/values) ===== */
+.info-grid{
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 10px 14px;
+  align-items: start;
+}
+
+.info-label{
+  font-weight: 800;
+  color: #25652C;
+  opacity: .95;
+}
+
+.info-value{
+  color: #111;
+  line-height: 1.7;
+  min-width: 0;
+}
+
+/* خلي الـ HTML داخل الوصف ما يطلع برا */
+.info-value *{
+  max-width: 100%;
+}
+
+/* ===== Details Card ===== */
+.details-card{
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+/* مسافات للعناوين */
+.section-title{
+  font-weight: 900;
+  font-size: 20px;
+  color: #25652C;
+  margin: 14px 0 8px;
+}
+
+/* =========================
+   Breakpoints
+   ========================= */
+
+/* تابلت */
+@@media (max-width: 992px){
+  .main-card{
+    grid-template-columns: 1fr;   /* ✅ تحت بعض */
+  }
+
+  .card-image-wrapper{
+    min-height: 220px;
+  }
+
+  .info-grid{
+    grid-template-columns: 160px 1fr;
+  }
+}
+
+/* موبايل */
+@@media (max-width: 576px){
+  .opp-container{
+    padding: 12px;
+  }
+
+  .opp-title span{
+    font-size: 18px;
+    -webkit-line-clamp: 3;
+  }
+
+  .apply-button{
+    width: 100%;
+    text-align: center;
+  }
+
+  .info-grid{
+    grid-template-columns: 1fr; /* ✅ label فوق value */
+    gap: 6px;
+  }
+
+  .info-label{
+    margin-top: 8px;
+  }
+
+  .card-info-content,
+  .details-card{
+    padding: 14px;
+  }
+}
     </style>
 }
