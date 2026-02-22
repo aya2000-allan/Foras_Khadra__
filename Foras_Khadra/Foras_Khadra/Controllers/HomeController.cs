@@ -122,6 +122,11 @@ namespace Foras_Khadra.Controllers
 
             var opportunities = query.ToList();
 
+            // ================== إضافة حالة الانتهاء ==================
+            foreach (var opp in opportunities)
+            {
+                opp.IsExpired = opp.EndDate.HasValue && opp.EndDate.Value < DateTime.Now;
+            }
             var model = new AllOpportunitiesViewModel
             {
                 Opportunities = opportunities,
@@ -199,6 +204,11 @@ namespace Foras_Khadra.Controllers
 
             var allOpportunities = query.ToList();
 
+            // ================== إضافة حالة الانتهاء ==================
+            foreach (var opp in allOpportunities)
+            {
+                opp.IsExpired = opp.EndDate.HasValue && opp.EndDate.Value < DateTime.Now;
+            }
             var countries = _context.Countries
                                     .OrderBy(c => c.NameAr)
                                     .Select(c => c.NameAr)

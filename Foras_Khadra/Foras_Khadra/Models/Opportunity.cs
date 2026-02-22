@@ -81,6 +81,7 @@ namespace Foras_Khadra.Models
         [NotMapped]
         public bool IsPublishedByAdmin { get; set; }
 
+        public bool IsExpired { get; set; }
         public virtual ICollection<ReelsRequest> ReelsRequests { get; set; }
 
         [NotMapped]
