@@ -14,17 +14,19 @@
 
 <style>
     .opp-card {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* يدفع الزر للأسفل */
-        height: 400px; /* ارتفاع ثابت للكارد */
-        padding: 1rem; /* padding للكارد، مش للزر */
-    }
+    display: flex;
+    flex-direction: column;
+    height: 400px; /* أو حطي min-height لو بدك مرونة */
+    padding: 1rem;
+}
 
-    .opp-info-row {
-        margin-top: auto; /* الزر دائما أسفل الكارد */
-    }
+.opp-info-row {
+    margin-top: auto; /* هذا بخلي الزر آخر عنصر */
+}
 
+.status-wrapper {
+    margin-bottom: 15px;
+}
     
 </style>
 <div class="page-wrapper container">
@@ -191,11 +193,12 @@
 
                             string statusClass = isExpired ? "status-expired" : "status-available";
                         }
-                            <span style="font-weight:bold" class="opp-status @statusClass">@statusText</span>
-
+<div class="status-wrapper">
+    <span class="opp-status @statusClass">@statusText</span>
+</div>
                         </div>
 
-                        <br />
+                        
                           
                             <div class="opp-info-row">
                                 <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">@Localizer["view_details"]</a>
