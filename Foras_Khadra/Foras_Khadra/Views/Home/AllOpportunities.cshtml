@@ -165,10 +165,28 @@
                             var shortDescription = words.Length > 15 ? string.Join(' ', words.Take(10)) + "..." : plainDescription;
                         }
                         <p class="opp-description">@shortDescription</p>
+                        <div>
+                        @{
+                            bool isExpired = opp.DeadlineType == DeadlineType.SpecificDate && opp.EndDate.HasValue && opp.EndDate.Value.Date < DateTime.Now.Date;
 
+                            string statusText = opp.DeadlineType == DeadlineType.SpecificDate
+                            ? (isExpired
+                            ? (lang == "en" ? "Expired" : lang == "fr" ? "Expirée" : "منتهية")
+                            : (lang == "en" ? "Available" : lang == "fr" ? "Disponible" : "متاحة"))
+                            : (lang == "en" ? "Available" : lang == "fr" ? "Disponible" : "متاحة");
 
-                        <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">@Localizer["view_details"] </a>
+                            string statusClass = isExpired ? "status-expired" : "status-available";
+                        }
+                            <span style="font-weight:bold" class="opp-status @statusClass">@statusText</span>
+
+                        </div>
+                        <div class="opp-info-row">
+                          <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">@Localizer["view_details"]</a>
+                        </div>
+
                     </div>
+
+                  
                 </div>
             }
         }

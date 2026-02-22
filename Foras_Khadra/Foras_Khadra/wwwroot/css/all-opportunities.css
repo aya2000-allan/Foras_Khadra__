@@ -19,6 +19,43 @@
   margin-bottom: 30px;
 }
 
+.opp-info-row {
+    display: flex;
+    justify-content: space-between; /* يبقي المسافة ثابتة بين اللّيبل والزر */
+    align-items: center;
+    margin-top: 1rem; /* مسافة من الوصف */
+}
+
+.opp-status {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.25rem;
+    white-space: nowrap; /* يمنع التفاف النص */
+}
+
+.status-available {
+    color: #155724;
+    background-color: #d4edda;
+}
+
+.status-expired {
+    color: #721c24;
+    background-color: #f8d7da;
+}
+
+.btn-details {
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.25rem;
+    background-color: #2a9d8f;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+
 .header-right {
   display: flex;
   align-items: center;
