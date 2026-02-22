@@ -12,7 +12,21 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <link rel="stylesheet" href="~/css/all-opportunities.css" />
 
+<style>
+    .opp-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* يدفع الزر للأسفل */
+        height: 400px; /* ارتفاع ثابت للكارد */
+        padding: 1rem; /* padding للكارد، مش للزر */
+    }
 
+    .opp-info-row {
+        margin-top: auto; /* الزر دائما أسفل الكارد */
+    }
+
+    
+</style>
 <div class="page-wrapper container">
     <header class="custom-header">
         <div class="header-right">
@@ -171,18 +185,22 @@
 
                             string statusText = opp.DeadlineType == DeadlineType.SpecificDate
                             ? (isExpired
-                            ? (lang == "en" ? "Expired" : lang == "fr" ? "Expirée" : "منتهية")
-                            : (lang == "en" ? "Available" : lang == "fr" ? "Disponible" : "متاحة"))
-                            : (lang == "en" ? "Available" : lang == "fr" ? "Disponible" : "متاحة");
+                                ? (lang == "en" ? "Application Closed" : lang == "fr" ? "Candidature Terminée" : "انتهت فترة التقديم")
+                            : (lang == "en" ? "Available" : lang == "fr" ? "Disponible" : "متاح التقديم"))
+                            : (lang == "en" ? "Available" : lang == "fr" ? "Disponible" : "متاح التقديم");
 
                             string statusClass = isExpired ? "status-expired" : "status-available";
                         }
                             <span style="font-weight:bold" class="opp-status @statusClass">@statusText</span>
 
                         </div>
-                        <div class="opp-info-row">
-                          <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">@Localizer["view_details"]</a>
-                        </div>
+
+                        <br />
+                          
+                            <div class="opp-info-row">
+                                <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">@Localizer["view_details"]</a>
+                            </div>
+                       
 
                     </div>
 
