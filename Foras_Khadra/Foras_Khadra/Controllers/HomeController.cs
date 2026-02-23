@@ -202,8 +202,9 @@ namespace Foras_Khadra.Controllers
                         c.NameFr == country));
             }
 
-            var allOpportunities = query.ToList();
-
+            var allOpportunities = query
+                .OrderByDescending(o => o.PublishDate)   // من الأحدث للأقدم
+                .ToList();
             // ================== إضافة حالة الانتهاء ==================
             foreach (var opp in allOpportunities)
             {
