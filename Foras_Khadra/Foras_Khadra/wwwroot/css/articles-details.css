@@ -359,6 +359,26 @@ html[dir="ltr"] .news-back-btn {
   .news-hero img {
     height: 240px;
   }
+
+  .news-top-meta,
+  .news-top-bar {
+    align-items: flex-start;
+  }
+  .news-top-meta {
+    flex-direction: column;
+  }
+
+  .news-top-title {
+    font-size: 24px;
+  }
+
+  .news-top-author {
+    font-size: 20px;
+  }
+
+  .container-fluid {
+    padding: 0 !important;
+  }
 }
 
 /* ===== Read Also New Design ===== */
@@ -470,55 +490,54 @@ html[dir="ltr"] .news-back-btn {
   top: -1px;
 }
 
-
 /* قلب أيقونة sideblock في EN/FR فقط */
-html[dir="ltr"] .sideblock-icon svg{
+html[dir="ltr"] .sideblock-icon svg {
   transform: scaleX(-1);
   transform-origin: center;
 }
 
 /* بالعربي (RTL) خليها طبيعية */
-html[dir="rtl"] .sideblock-icon svg{
+html[dir="rtl"] .sideblock-icon svg {
   transform: scaleX(1);
 }
-:root{
-  --orange: #F99D27;
-  --green:  #25652C;
-  --ink:    #0b1b0e;   /* نص غامق */
-  --muted:  #516a57;   /* نص ثانوي */
-  --card:   #ffffff;
-  --bg:     #F2FBF3;
-  --line:   rgba(37,101,44,.18);
+:root {
+  --orange: #f99d27;
+  --green: #25652c;
+  --ink: #0b1b0e; /* نص غامق */
+  --muted: #516a57; /* نص ثانوي */
+  --card: #ffffff;
+  --bg: #f2fbf3;
+  --line: rgba(37, 101, 44, 0.18);
 }
 
 /* منطقة المقال */
-.news-article-page{
+.news-article-page {
   background: var(--bg);
 }
 
 /* كرت المقال */
-.news-card{
+.news-card {
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 /* العنوان بالأعلى */
-.news-top-title{
+.news-top-title {
   color: var(--green);
   font-weight: 900;
   letter-spacing: 0;
 }
 
 /* تاريخ/ميتا */
-.news-date{
+.news-date {
   color: var(--muted);
   font-weight: 700;
 }
 
 /* ===== محتوى المقال ===== */
-.news-content{
+.news-content {
   color: var(--ink);
   font-size: 17px;
   line-height: 1.95;
@@ -527,18 +546,18 @@ html[dir="rtl"] .sideblock-icon svg{
 }
 
 /* فقرات */
-.news-content p{
+.news-content p {
   margin: 0 0 14px;
 }
 
 /* روابط داخل المحتوى */
-.news-content a{
+.news-content a {
   color: var(--green);
   font-weight: 800;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.news-content a:hover{
+.news-content a:hover {
   color: var(--orange);
 }
 
@@ -546,21 +565,27 @@ html[dir="rtl"] .sideblock-icon svg{
 .news-content h1,
 .news-content h2,
 .news-content h3,
-.news-content h4{
+.news-content h4 {
   color: var(--green);
   font-weight: 900;
   line-height: 1.25;
   margin: 18px 0 10px;
 }
-.news-content h2{ font-size: 24px; }
-.news-content h3{ font-size: 20px; }
-.news-content h4{ font-size: 18px; }
+.news-content h2 {
+  font-size: 24px;
+}
+.news-content h3 {
+  font-size: 20px;
+}
+.news-content h4 {
+  font-size: 18px;
+}
 
 /* اقتباس */
-.news-content blockquote{
+.news-content blockquote {
   margin: 16px 0;
   padding: 14px 16px;
-  background: rgba(37,101,44,.06);
+  background: rgba(37, 101, 44, 0.06);
   border-inline-start: 5px solid var(--orange);
   border-radius: 14px;
   color: var(--ink);
@@ -568,7 +593,7 @@ html[dir="rtl"] .sideblock-icon svg{
 }
 
 /* صور داخل المحتوى */
-.news-content img{
+.news-content img {
   max-width: 100%;
   height: auto;
   border-radius: 14px;
@@ -576,7 +601,7 @@ html[dir="rtl"] .sideblock-icon svg{
 }
 
 /* فاصل */
-.news-content hr{
+.news-content hr {
   border: none;
   height: 1px;
   background: var(--line);
@@ -584,21 +609,21 @@ html[dir="rtl"] .sideblock-icon svg{
 }
 /* قوائم داخل محتوى المقال */
 .news-content ul,
-.news-content ol{
+.news-content ol {
   margin: 10px 0 16px;
   padding-inline-start: 0; /* إحنا رح نتحكم بالمسافة */
 }
 
-.news-content li{
-  list-style: none;               /* نلغي النقاط الافتراضية */
+.news-content li {
+  list-style: none; /* نلغي النقاط الافتراضية */
   position: relative;
-  padding-inline-start: 46px;     /* مساحة للأيقونة */
+  padding-inline-start: 46px; /* مساحة للأيقونة */
   margin: 10px 0;
 }
 
 /* أيقونة الورقة كنقطة */
 .news-content ul > li::before,
-.news-content ol > li::before{
+.news-content ol > li::before {
   content: "";
   position: absolute;
   inset-inline-start: 0;
@@ -614,24 +639,24 @@ html[dir="rtl"] .sideblock-icon svg{
 }
 /* الوضع الطبيعي (عربي / RTL): الورقة كما هي */
 [dir="rtl"] .news-content ul > li::before,
-[dir="rtl"] .news-content ol > li::before{
+[dir="rtl"] .news-content ol > li::before {
   transform: scaleX(1);
 }
 
 /* إنجليزي / LTR: اقلب الورقة */
 [dir="ltr"] .news-content ul > li::before,
-[dir="ltr"] .news-content ol > li::before{
+[dir="ltr"] .news-content ol > li::before {
   transform: scaleX(-1);
 }
 /* مسافة داخلية لنص المقال */
-.news-main-content{
-  padding: 0 12px;   /* يمين ويسار */
+.news-main-content {
+  padding: 0 12px; /* يمين ويسار */
 }
 
-.news-content{
+.news-content {
   padding: 8px 12px; /* فوق/تحت + يمين/يسار */
 }
 /* إخفاء أول عنوان داخل محتوى المقال (العنوان المكرر) */
-.news-content h1:first-child{
+.news-content h1:first-child {
   display: none;
 }
