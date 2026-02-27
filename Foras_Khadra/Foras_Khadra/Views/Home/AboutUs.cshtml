@@ -347,7 +347,14 @@
 
 @foreach (var group in Model
     .GroupBy(m => m.Department)
-    .OrderBy(g => g.Min(m => m.CreatedAt))){
+    .OrderBy(g =>
+        g.Key == Department.BoardOfDirectors ? 1 :
+        g.Key == Department.HonoraryMembers ? 2 :
+        g.Key == Department.HR ? 3 :
+        g.Key == Department.Technology ? 4 :
+        99)
+    .ThenBy(g => g.Min(m => m.CreatedAt)))
+{
   <div class="team-block">
     <div class="team-grid">
 
