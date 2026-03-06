@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutUsDesc" xml:space="preserve">
-    <value>We are a grouWe are a group of young people from the Arab world who believe in the importance of international conferences, and we decided to launch our project to support young people in our region in finding opportunities and participating at the international level.p of young people from the Arab world...</value>
+    <value>We are a group of young people from the Arab world who met at international conferences and decided to start our project to support youth in our region in finding opportunities and participating on the international stage...</value>
   </data>
   <data name="AboutUsTitle" xml:space="preserve">
     <value>Who are we?</value>
