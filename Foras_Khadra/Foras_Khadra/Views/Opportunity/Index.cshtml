@@ -7,8 +7,9 @@
     
     // Flatten model for easier pagination/list rendering while keeping the "Internship" label logic
     var allFilteredOpportunities = Model.Values.SelectMany(x => x)
-        .Where(o => string.IsNullOrEmpty(selectedOrg) || o.PublishedBy == selectedOrg)
-        .ToList();
+    .Where(o => string.IsNullOrEmpty(selectedOrg) || o.PublishedBy == selectedOrg)
+    .OrderByDescending(o => o.PublishDate) // أو CreatedDate حسب اسم الحقل عندك
+    .ToList();
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
