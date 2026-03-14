@@ -174,11 +174,19 @@ namespace Foras_Khadra.Controllers
         }
 
         // ================= صفحة كل الفرص العامة =================
-        public IActionResult AllOpportunities(string country, string[] type)
+        public IActionResult AllOpportunities(string country, string[] type, string search)
         {
             var query = _context.Opportunities
                                 .Include(o => o.AvailableCountries)
                                 .AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(o =>
+                    EF.Functions.Like(o.TitleAr, $"%{search}%") ||
+                    EF.Functions.Like(o.TitleEn, $"%{search}%") ||
+                    EF.Functions.Like(o.TitleFr, $"%{search}%"));
+            }
 
             // فلترة حسب النوع
             if (type != null && type.Any())

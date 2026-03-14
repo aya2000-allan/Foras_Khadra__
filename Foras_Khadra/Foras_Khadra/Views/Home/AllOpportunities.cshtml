@@ -41,6 +41,19 @@
             </div>
 
             <form method="get">
+                <div class="mb-3">
+                    <input type="text"
+                           name="search"
+                           class="form-control border-1 shadow-sm"
+                           placeholder="@(lang switch
+                           {
+                               "en" => "Opportunity Name",
+                               "fr" => "Une Opportunité",
+                               _ => "اسم الفرصة"
+                           })"
+                           value="@Context.Request.Query["search"]"
+                           style="font-size:0.9rem;">
+                </div>
                 <div class="filter-option-item active" id="typeOptionTrigger">
                     <span>
                         @(lang switch
