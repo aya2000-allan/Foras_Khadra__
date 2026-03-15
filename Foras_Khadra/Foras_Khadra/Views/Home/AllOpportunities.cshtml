@@ -4,6 +4,7 @@
 @using System.Globalization;
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+
 @{
     ViewData["Title"] = Localizer["PageTitle"];
     var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
@@ -12,6 +13,457 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 <link rel="stylesheet" href="~/css/all-opportunities.css" />
 
+<style>
+    .custom-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        position: relative;
+        margin-bottom: 32px;
+        padding: 20px 0;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .header-logo {
+        width: 54px;
+        height: 54px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #f5faf5, #edf7ee);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(46, 125, 50, 0.08);
+    }
+
+    .header-logo img {
+        width: 28px;
+        height: 28px;
+        object-fit: contain;
+    }
+
+    .header-title {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1e293b;
+        letter-spacing: -0.5px;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .filter-btn {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #2e7d32, #3fa34d);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 12px 30px rgba(46, 125, 50, 0.18);
+        transition: all 0.25s ease;
+        border: none;
+    }
+
+    .filter-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 34px rgba(46, 125, 50, 0.24);
+    }
+
+    .filter-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .filter-window {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        min-width: 340px;
+        max-width: 380px;
+        background: #fff;
+        border-radius: 24px;
+        border: 1px solid #eef2f7;
+        box-shadow: 0 22px 60px rgba(15, 23, 42, 0.14);
+        padding: 18px;
+        z-index: 1000;
+        display: none;
+        animation: fadeInUp 0.2s ease;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .filter-window-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .sort-by-label {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #1e293b;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .reset-link {
+        text-decoration: none;
+        color: #2e7d32;
+        font-size: 0.9rem;
+        font-weight: 700;
+        transition: 0.2s ease;
+    }
+
+    .reset-link:hover {
+        color: #256628;
+    }
+
+    .filter-window .form-control {
+        border-radius: 14px;
+        padding: 12px 14px;
+        min-height: 46px;
+        border: 1px solid #dbe4ee;
+        box-shadow: none !important;
+        transition: 0.2s ease;
+    }
+
+    .filter-window .form-control:focus {
+        border-color: #3fa34d;
+        box-shadow: 0 0 0 4px rgba(63, 163, 77, 0.12) !important;
+    }
+
+    .filter-option-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: #f8fafc;
+        border: 1px solid #e8eef5;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-weight: 700;
+        color: #334155;
+    }
+
+    .filter-option-item:hover {
+        background: #f1f8f2;
+        border-color: #b7d9bc;
+        color: #2e7d32;
+    }
+
+    .filter-option-item.active {
+        background: linear-gradient(135deg, #eef8ef, #f6fbf7);
+        border-color: #9ccca4;
+        color: #2e7d32;
+        box-shadow: 0 8px 20px rgba(46, 125, 50, 0.08);
+    }
+
+    .filter-option-item i {
+        font-size: 0.9rem;
+    }
+
+    .sub-filter-menu {
+        display: none;
+        background: #f8fafc;
+        border: 1px solid #e8eef5;
+        border-radius: 18px;
+        padding: 14px;
+        margin-top: 12px;
+    }
+
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.2s ease;
+        color: #334155;
+        font-weight: 600;
+    }
+
+    .checkbox-item:hover {
+        background: #eef8ef;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #2e7d32;
+        cursor: pointer;
+    }
+
+    .sub-menu-footer {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        margin-top: 14px;
+    }
+
+    .btn-cancel-sub,
+    .btn-search-sub {
+        flex: 1;
+        border: none;
+        border-radius: 14px;
+        padding: 11px 14px;
+        font-weight: 700;
+        transition: 0.2s ease;
+    }
+
+    .btn-cancel-sub {
+        background: #eef2f7;
+        color: #475569;
+    }
+
+    .btn-cancel-sub:hover {
+        background: #e2e8f0;
+    }
+
+    .btn-search-sub {
+        background: linear-gradient(135deg, #2e7d32, #3fa34d);
+        color: #fff;
+        box-shadow: 0 10px 24px rgba(46, 125, 50, 0.16);
+    }
+
+    .btn-search-sub:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(46, 125, 50, 0.22);
+    }
+
+    .opp-card {
+        background: #fff;
+        border-radius: 22px;
+        overflow: hidden;
+        border: 1px solid #eef2f7;
+        transition: all 0.25s ease;
+        height: 100%;
+    }
+
+    .opp-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08);
+    }
+
+    .opp-image {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .opp-category-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 16px 18px 0;
+    }
+
+    .type-tag,
+    .category-tag {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .type-tag {
+        background: #edf7ee;
+        color: #2e7d32;
+    }
+
+    .category-tag {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+    .opp-title {
+        padding: 14px 18px 0;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #1e293b;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .opp-description {
+        padding: 10px 18px 0;
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.8;
+        min-height: 72px;
+        margin-bottom: 0;
+    }
+
+    .status-wrapper {
+        padding: 16px 18px 0;
+    }
+
+    .opp-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 800;
+    }
+
+    .status-available {
+        background: #edf7ee;
+        color: #2e7d32;
+    }
+
+    .status-expired {
+        background: #fff1f2;
+        color: #dc2626;
+    }
+
+    .opp-info-row {
+        padding: 18px;
+    }
+
+    .btn-details {
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        background: linear-gradient(135deg, #2e7d32, #3fa34d);
+        color: #fff;
+        padding: 12px 16px;
+        border-radius: 14px;
+        font-weight: 800;
+        transition: 0.25s ease;
+        box-shadow: 0 10px 24px rgba(46, 125, 50, 0.16);
+    }
+
+    .btn-details:hover {
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 14px 28px rgba(46, 125, 50, 0.22);
+    }
+
+    .pagination-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        flex-wrap: wrap;
+    }
+
+    .next-page-prompt a {
+        text-decoration: none;
+        font-weight: 700;
+        color: #2e7d32;
+    }
+
+    .pagination-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .pagination-arrow,
+    .page-link-num {
+        width: 42px;
+        height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        text-decoration: none;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        color: #334155;
+        font-weight: 700;
+        transition: 0.2s ease;
+    }
+
+    .pagination-arrow:hover,
+    .page-link-num:hover,
+    .page-link-num.active {
+        background: #2e7d32;
+        color: #fff;
+        border-color: #2e7d32;
+    }
+
+    .disabled-link {
+        pointer-events: none;
+        opacity: 0.45;
+    }
+
+    @@media (max-width: 991px) {
+        .filter-window {
+            left: 0;
+            right: 0;
+            min-width: unset;
+            max-width: 100%;
+            width: 100%;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .custom-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .header-right,
+        .header-left {
+            justify-content: space-between;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+        }
+
+        .filter-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+        }
+
+        .opp-image {
+            height: 200px;
+        }
+
+        .filter-window {
+            padding: 14px;
+            border-radius: 20px;
+        }
+    }
+</style>
 
 <div class="page-wrapper container">
     <header class="custom-header">
@@ -21,13 +473,20 @@
             </div>
             <h1 class="header-title">@Localizer["all_opportunities"]</h1>
         </div>
+
         <div class="header-left">
-            @* Temporarly unimplemented *@
-           @*  <div class="search-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </div> *@
             <div class="filter-btn" id="filterToggleBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
             </div>
         </div>
 
@@ -54,6 +513,7 @@
                            value="@Context.Request.Query["search"]"
                            style="font-size:0.9rem;">
                 </div>
+
                 <div class="filter-option-item active" id="typeOptionTrigger">
                     <span>
                         @(lang switch
@@ -65,22 +525,26 @@
                     </span>
                     <i class="bi bi-caret-left-fill"></i>
                 </div>
-                
+
                 <div class="filter-option-item" id="countryOptionTrigger">
-                    <span> @Localizer["country"]</span>
+                    <span>@Localizer["country"]</span>
                     <i class="bi bi-caret-left-fill"></i>
                 </div>
 
                 <div class="sub-filter-menu shadow" id="countrySubMenu">
                     <div class="p-2">
                         <label class="form-label mb-2" style="font-size: 0.9rem; color: #666;">@Localizer["enter_country_name"]</label>
-                        <input type="text" name="country" class="form-control border-1 shadow-sm"
-                               placeholder=" @Localizer["PS"]" value="@Model.SelectedCountry" id="countryInput"
+                        <input type="text"
+                               name="country"
+                               class="form-control border-1 shadow-sm"
+                               placeholder="@Localizer["PS"]"
+                               value="@Model.SelectedCountry"
+                               id="countryInput"
                                style="font-size: 0.9rem; direction: rtl;">
                     </div>
                     <div class="sub-menu-footer mt-3">
                         <button type="button" class="btn-cancel-sub" id="cancelCountrySub">@Localizer["cancel"]</button>
-                        <button type="submit" class="btn-search-sub"> @Localizer["search"]</button>
+                        <button type="submit" class="btn-search-sub">@Localizer["search"]</button>
                     </div>
                 </div>
 
@@ -93,7 +557,6 @@
                         </label>
                     }
 
-
                     <div class="sub-menu-footer">
                         <button type="button" class="btn-cancel-sub" id="cancelSub">@Localizer["cancel"]</button>
                         <button type="submit" class="btn-search-sub">@Localizer["search"]</button>
@@ -103,7 +566,7 @@
         </div>
     </header>
 
-    <div class="row g-4" >
+    <div class="row g-4">
         @if (!Model.Opportunities.Any())
         {
             <div class="col-12 text-center py-5">
@@ -114,10 +577,11 @@
                         "fr" => "Aucune opportunité ne correspond à votre recherche pour le moment !",
                         _ => "لا توجد فرص حالياً تطابق بحثك!"
                     })
-            </p>
-        </div>
+                </p>
+            </div>
         }
-        else{
+        else
+        {
             @foreach (var opp in Model.Opportunities)
             {
                 <div class="col-lg-4 col-md-6">
@@ -132,6 +596,7 @@
                             };
                             <img src="@opp.ImagePath" class="opp-image" alt="@title">
                         }
+
                         <div class="opp-category-row">
                             <span class="type-tag">@opp.Type.GetDisplayName(lang)</span>
                             @if (!string.IsNullOrWhiteSpace(opp.AvailableCountriesNames))
@@ -150,8 +615,8 @@
 
                                 <span class="category-tag">@text</span>
                             }
-                            
                         </div>
+
                         @{
                             string title1 = lang switch
                             {
@@ -170,52 +635,48 @@
                                 _ => opp.DescriptionAr
                             };
                         }
+
                         @{
                             var plainDescription = System.Text.RegularExpressions.Regex.Replace(description, "<.*?>", "");
-
-                            // اقتطاع أول 10 كلمات
                             var words = plainDescription.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                             var shortDescription = words.Length > 15 ? string.Join(' ', words.Take(10)) + "..." : plainDescription;
                         }
+
                         <p class="opp-description">@shortDescription</p>
+
                         <div>
-                        @{
-                            bool isExpired = opp.DeadlineType == DeadlineType.SpecificDate && opp.EndDate.HasValue && opp.EndDate.Value.Date < DateTime.Now.Date;
+                            @{
+                                bool isExpired = opp.DeadlineType == DeadlineType.SpecificDate && opp.EndDate.HasValue && opp.EndDate.Value.Date < DateTime.Now.Date;
 
-                            string statusText = opp.DeadlineType == DeadlineType.SpecificDate
-                            ? (isExpired
-                                ? (lang == "en" ? "Application Closed" : lang == "fr" ? "Candidature Terminée" : "انتهت فترة التقديم")
-                            : (lang == "en" ? "Available" : lang == "fr" ? "Disponible" : "متاح التقديم"))
-                            : (lang == "en" ? "Available" : lang == "fr" ? "Disponible" : "متاح التقديم");
+                                string statusText = opp.DeadlineType == DeadlineType.SpecificDate
+                                ? (isExpired
+                                    ? (lang == "en" ? "Application Closed" : lang == "fr" ? "Candidature Terminée" : "انتهت فترة التقديم")
+                                    : (lang == "en" ? "Available" : lang == "fr" ? "Disponible" : "متاح التقديم"))
+                                : (lang == "en" ? "Available" : lang == "fr" ? "Disponible" : "متاح التقديم");
 
-                            string statusClass = isExpired ? "status-expired" : "status-available";
-                        }
-<div class="status-wrapper">
-    <span class="opp-status @statusClass">@statusText</span>
-</div>
+                                string statusClass = isExpired ? "status-expired" : "status-available";
+                            }
+
+                            <div class="status-wrapper">
+                                <span class="opp-status @statusClass">@statusText</span>
+                            </div>
                         </div>
 
-                        
-                          
-                            <div class="opp-info-row">
-                                <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">@Localizer["view_details"]</a>
-                            </div>
-                       
-
+                        <div class="opp-info-row">
+                            <a href="@Url.Action("Details", "Opportunity", new { id = opp.Id })" class="btn-details">@Localizer["view_details"]</a>
+                        </div>
                     </div>
-
-                  
                 </div>
             }
         }
     </div>
+
     <div class="pagination-container mt-5 mb-5">
         <div class="next-page-prompt">
             <a href="#" id="nextPrompt">@Localizer["next_page"]</a>
         </div>
 
         <div class="pagination-controls" id="paginationControls">
-            @* Arrows and numbers will be managed by JS *@
         </div>
     </div>
 </div>
@@ -224,44 +685,37 @@
     const filterBtn = document.getElementById('filterToggleBtn');
     const filterWindow = document.getElementById('filterWindow');
 
-    // Triggers
     const typeTrigger = document.getElementById('typeOptionTrigger');
     const countryTrigger = document.getElementById('countryOptionTrigger');
 
-    // Sub-menus
     const typeSubMenu = document.getElementById('typeSubMenu');
     const countrySubMenu = document.getElementById('countrySubMenu');
 
-    // Cancel buttons
     const cancelSub = document.getElementById('cancelSub');
     const cancelCountrySub = document.getElementById('cancelCountrySub');
 
-    // Helper to clear active states
     function clearActiveStates() {
         typeTrigger.classList.remove('active');
         countryTrigger.classList.remove('active');
     }
 
-    // Toggle Main Menu
     filterBtn.addEventListener('click', (e) => {
         const isOpening = filterWindow.style.display !== 'block';
         filterWindow.style.display = isOpening ? 'block' : 'none';
 
-        // When closing the main window, close all submenus too
         if (!isOpening) {
             typeSubMenu.style.display = 'none';
             countrySubMenu.style.display = 'none';
             clearActiveStates();
         }
+
         e.stopPropagation();
     });
 
-    // Toggle Type Sub-Menu
     typeTrigger.addEventListener('click', (e) => {
         e.stopPropagation();
         const isOpening = typeSubMenu.style.display !== 'block';
 
-        // Close Country menu
         countrySubMenu.style.display = 'none';
         clearActiveStates();
 
@@ -273,12 +727,10 @@
         }
     });
 
-    // Toggle Country Sub-Menu
     countryTrigger.addEventListener('click', (e) => {
         e.stopPropagation();
         const isOpening = countrySubMenu.style.display !== 'block';
 
-        // Close Type menu
         typeSubMenu.style.display = 'none';
         clearActiveStates();
 
@@ -290,7 +742,6 @@
         }
     });
 
-    // Cancel buttons logic
     cancelSub.addEventListener('click', (e) => {
         e.stopPropagation();
         typeSubMenu.style.display = 'none';
@@ -303,9 +754,7 @@
         countryTrigger.classList.remove('active');
     });
 
-    // Close everything when clicking outside
     document.addEventListener('click', (e) => {
-        // Check if the click was outside the main window AND sub-menus
         if (!filterWindow.contains(e.target) && e.target !== filterBtn) {
             filterWindow.style.display = 'none';
             typeSubMenu.style.display = 'none';
@@ -314,10 +763,9 @@
         }
     });
 
-
-          document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
         const cardsPerPage = 12;
-        const cardContainers = document.querySelectorAll('.row.g-4 > .col-lg-4'); // Selects the card wrappers
+        const cardContainers = document.querySelectorAll('.row.g-4 > .col-lg-4');
         const totalCards = cardContainers.length;
         const totalPages = Math.ceil(totalCards / cardsPerPage);
         const controlsContainer = document.getElementById('paginationControls');
@@ -330,44 +778,34 @@
             const start = (page - 1) * cardsPerPage;
             const end = start + cardsPerPage;
 
-            // Hide all cards, then show only the ones for the current page
             cardContainers.forEach((card, index) => {
                 card.style.display = (index >= start && index < end) ? 'block' : 'none';
             });
 
             renderControls();
 
-            // Hide "Next Page" text if on the last page
             nextPrompt.parentElement.style.visibility = (currentPage === totalPages) ? 'hidden' : 'visible';
 
-            // Scroll to top of grid smoothly
             document.querySelector('.row.g-4').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function renderControls() {
             let html = '';
-         
-                    
-            // Left Arrow (Previous) - UI shows Left arrow for "Previous" in RTL
+
             html += `<a href="#" class="pagination-arrow prev-arrow ${currentPage === 1 ? 'disabled-link' : ''}" data-page="${currentPage - 1}">
                         <i class="bi bi-chevron-right"></i>
                     </a>`;
 
-            // Page Numbers (Rendered in reverse 10...1 to match your RTL design)
-            for (let i =1 ; i <= totalPages; i++) {
-                
+            for (let i = 1; i <= totalPages; i++) {
                 html += `<a href="#" class="page-link-num ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</a>`;
             }
 
-            // Right Arrow (Next)
             html += `<a href="#" class="pagination-arrow next-arrow ${currentPage === totalPages ? 'disabled-link' : ''}" data-page="${currentPage + 1}">
-                                            <i class="bi bi-chevron-left"></i>
-                                        </a>`;
-           
+                        <i class="bi bi-chevron-left"></i>
+                     </a>`;
 
             controlsContainer.innerHTML = html;
 
-            // Add Click Events
             controlsContainer.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -379,17 +817,14 @@
             });
         }
 
-        // "Next Page" prompt link
         nextPrompt.addEventListener('click', (e) => {
             e.preventDefault();
             if (currentPage < totalPages) showPage(currentPage + 1);
         });
 
-        // Initialize first page
         if (totalCards > 0) {
             showPage(1);
         } else {
-            // Handle empty state if no cards found
             document.querySelector('.pagination-container').style.display = 'none';
         }
     });
