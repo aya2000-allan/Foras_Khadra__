@@ -30,6 +30,7 @@ namespace Foras_Khadra.Controllers
             {
                 TotalOrganizations = await _context.Organizations.CountAsync(),
                 TotalUsers = await _context.TeamMember.CountAsync(),
+                TotalRegisteredUsers = await _context.Users.CountAsync(u => u.Role == UserRole.User),
                 TotalOpportunities = await _context.Opportunities.CountAsync(),
                 TotalArticles = await _context.Articles.CountAsync(),
                 TotalReelsRequests = totalReelsRequests,

@@ -13,6 +13,8 @@
 
         public int RejectReelsRequests { get; set; }
 
+        public int TotalRegisteredUsers { get; set; }
+
 
     }
 }
