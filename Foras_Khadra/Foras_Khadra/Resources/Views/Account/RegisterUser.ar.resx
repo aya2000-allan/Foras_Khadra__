@@ -252,4 +252,7 @@
   <data name="volunteer_opportunities" xml:space="preserve">
     <value>فرص التطوع</value>
   </data>
+  <data name="WeakPasswordAlert" xml:space="preserve">
+    <value>كلمة المرور ضعيفة! يجب أن تحتوي على 8 أحرف على الأقل، حرف كبير، حرف صغير، رقم، ورمز...</value>
+  </data>
 </root>

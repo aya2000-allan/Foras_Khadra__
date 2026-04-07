@@ -252,4 +252,7 @@
   <data name="volunteer_opportunities" xml:space="preserve">
     <value>Volunteer Opportunities</value>
   </data>
+  <data name="WeakPasswordAlert" xml:space="preserve">
+    <value>Weak password! It must contain at least 8 characters, uppercase, lowercase, number, and symbol...</value>
+  </data>
 </root>

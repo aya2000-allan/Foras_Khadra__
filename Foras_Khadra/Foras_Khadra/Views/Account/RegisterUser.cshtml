@@ -233,11 +233,12 @@
     </script>
     <partial name="_ValidationScriptsPartial" />
     <script>
-        const i18n = {
+                const i18n = {
             fillAll: @Html.Raw(Json.Serialize(Localizer["FillAllFieldsAlert"].Value)),
             passwordMismatch: @Html.Raw(Json.Serialize(Localizer["PasswordMismatchAlert"].Value)),
             selectCountry: @Html.Raw(Json.Serialize(Localizer["SelectCountryNationalityAlert"].Value)),
             selectInterest: @Html.Raw(Json.Serialize(Localizer["SelectInterestAlert"].Value)),
+            weakPassword: @Html.Raw(Json.Serialize(Localizer["WeakPasswordAlert"].Value)) // ✅ أضف هاي
         };
     </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -314,7 +315,7 @@
     }
 
     function validateStep(step){
-        if(step === 2){
+                if(step === 2){
             const fn = document.getElementById('FirstName')?.value?.trim();
             const ln = document.getElementById('LastName')?.value?.trim();
             const em = document.getElementById('Email')?.value?.trim();
@@ -325,6 +326,15 @@
                 showSwal(i18n.fillAll);
                 return false;
             }
+
+            // ✅ تحقق قوة الباسورد
+            const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+            if(!strongPassword.test(pw)){
+        showSwal(i18n.weakPassword);
+        return false;
+            }
+
             if(pw !== cpw){
                 showSwal(i18n.passwordMismatch);
                 return false;

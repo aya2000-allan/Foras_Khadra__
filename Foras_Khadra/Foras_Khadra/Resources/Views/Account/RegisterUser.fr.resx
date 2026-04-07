@@ -252,4 +252,7 @@
   <data name="volunteer_opportunities" xml:space="preserve">
     <value>Opportunités de bénévolat</value>
   </data>
+  <data name="WeakPasswordAlert" xml:space="preserve">
+    <value>Mot de passe faible ! Il doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un symbole...</value>
+  </data>
 </root>
