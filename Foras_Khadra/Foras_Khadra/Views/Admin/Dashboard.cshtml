@@ -75,6 +75,16 @@
             z-index: 10;
         }
 
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .bottom-cards {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
         .brand-box {
             display: flex;
             align-items: center;
@@ -277,7 +287,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-columns: repeat(5, 1fr);
             gap: 16px;
         }
 
@@ -542,6 +552,18 @@
                         </div>
                     </div>
 
+                    <div class="stats-card orange-soft">
+                        <div class="icon-wrap orange">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div>
+                            <div class="stats-number">@Model.TotalRegisteredUsers </div>
+                            <div class="stats-label">@(isArabic ? "المستخدمين المسجلين" : "Registered Users")</div>
+                        </div>
+                    </div>
+
+                    
+
                     <div class="stats-card green-soft"
                          onclick="location.href='@Url.Action("Index", "Opportunity")'">
                         <div class="icon-wrap green">
@@ -564,7 +586,7 @@
                         </div>
                     </div>
 
-                    <div class="stats-card green-soft"
+                    <div class="stats-card green-soft full-width"
                          onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin")'">
                         <div class="icon-wrap green">
                             <i class="bi bi-camera-reels"></i>
@@ -575,37 +597,41 @@
                         </div>
                     </div>
 
-                    <div class="stats-card orange-soft"
-                         onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "pending" })'">
-                        <div class="icon-wrap orange">
-                            <i class="bi bi-hourglass-split"></i>
-                        </div>
-                        <div>
-                            <div class="stats-number">@Model.PendingReelsRequests</div>
-                            <div class="stats-label">@(isArabic ? "جاري العمل عليها" : "In Progress")</div>
-                        </div>
-                    </div>
+                    <div class="bottom-cards">
 
-                    <div class="stats-card green-soft"
-                         onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "completed" })'">
-                        <div class="icon-wrap green">
-                            <i class="bi bi-check2-circle"></i>
+                        <div class="stats-card orange-soft"
+                             onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "pending" })'">
+                            <div class="icon-wrap orange">
+                                <i class="bi bi-hourglass-split"></i>
+                            </div>
+                            <div>
+                                <div class="stats-number">@Model.PendingReelsRequests</div>
+                                <div class="stats-label">@(isArabic ? "جاري العمل عليها" : "In Progress")</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="stats-number">@Model.CompletedReelsRequests</div>
-                            <div class="stats-label">@(isArabic ? "تم الانتهاء" : "Completed")</div>
-                        </div>
-                    </div>
 
-                    <div class="stats-card red-soft"
-                         onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "rejected" })'">
-                        <div class="icon-wrap red">
-                            <i class="bi bi-x-circle"></i>
+                        <div class="stats-card green-soft"
+                             onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "completed" })'">
+                            <div class="icon-wrap green">
+                                <i class="bi bi-check2-circle"></i>
+                            </div>
+                            <div>
+                                <div class="stats-number">@Model.CompletedReelsRequests</div>
+                                <div class="stats-label">@(isArabic ? "تم الانتهاء" : "Completed")</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="stats-number">@Model.RejectReelsRequests</div>
-                            <div class="stats-label">@(isArabic ? "مرفوضة" : "Rejected")</div>
+
+                        <div class="stats-card red-soft"
+                             onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "rejected" })'">
+                            <div class="icon-wrap red">
+                                <i class="bi bi-x-circle"></i>
+                            </div>
+                            <div>
+                                <div class="stats-number">@Model.RejectReelsRequests</div>
+                                <div class="stats-label">@(isArabic ? "مرفوضة" : "Rejected")</div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </section>
