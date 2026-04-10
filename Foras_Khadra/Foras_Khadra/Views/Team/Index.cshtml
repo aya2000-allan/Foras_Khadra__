@@ -7,6 +7,7 @@
     int page = ViewBag.Page ?? 1;
     int totalPages = ViewBag.TotalPages ?? 1;
     string search = ViewBag.Search as string;
+    string selectedDepartment = ViewBag.SelectedDepartment as string;
 }
 
 
@@ -17,46 +18,54 @@
 
 <div class="container py-5" dir="rtl">
 
-    <!-- Header -->
+    <!-- الرأس -->
     <div class="row align-items-center mb-4 g-3">
         <div class="col-md-6 text-center text-md-start">
             <h2 class="main-title mb-0">أعضاء الفريق</h2>
         </div>
 
-<div class="col-md-6 d-flex justify-content-md-end align-items-center gap-3 d-flex-mobile">
-    <form method="get" class="d-flex align-items-center gap-2 flex-wrap flex-md-nowrap w-100">
+        <div class="col-md-6 d-flex justify-content-md-end align-items-center gap-3 d-flex-mobile">
+            <form method="get" class="d-flex align-items-center gap-2 flex-grow-1 flex-md-grow-0 w-100">
+                <input type="hidden" name="department" id="departmentFilterInput" value="@selectedDepartment" />
+                <div class="search-wrapper search-wrapper-team d-flex align-items-center flex-grow-1">
+                    <i class="fa-solid fa-magnifying-glass text-muted ms-2"></i>
+                    <input type="text"
+                           name="search"
+                           value="@search"
+                           class="form-control border-0 shadow-none bg-transparent"
+                           placeholder="البحث..." />
+                    <div class="filter-dropdown">
+                        <button type="button" class="filter-summary" id="teamFilterToggle" title="فلترة حسب القسم">
+                            <i class="fa-solid fa-sliders text-muted cursor-pointer"></i>
+                        </button>
+                        <div class="filter-menu" id="teamFilterMenu">
+                            <button type="button"
+                                    data-filter-value=""
+                                    class="filter-menu-item @(string.IsNullOrEmpty(selectedDepartment) ? "active" : "")">
+                                كل الأقسام
+                            </button>
+                        @foreach (var dept in (List<Foras_Khadra.Models.Department>)ViewBag.Departments)
+                        {
+                            <button type="button"
+                                    data-filter-value="@dept"
+                                    class="filter-menu-item @(selectedDepartment == dept.ToString() ? "active" : "")">
+                                @dept
+                            </button>
+                        }
+                        </div>
+                    </div>
+                </div>
+            </form>
 
-    <div class="input-group" style="min-width:300px;">
-        <!-- Dropdown القسم -->
-        <select name="department" class="form-select" style="border-top-right-radius:.375rem;border-bottom-right-radius:.375rem;">
-            <option value="">كل الأقسام</option>
-            @foreach (var dept in (List<Foras_Khadra.Models.Department>)ViewBag.Departments)
-            {
-                @: <option value="@dept" @(ViewBag.SelectedDepartment == dept.ToString() ? "selected" : "")>@dept</option>
-            }
-        </select>
+            <a asp-action="Create" class="btn btn-add btn-one-line" style="background:#f99d27; color:#fff;">
+                <i class="fa-solid fa-plus ms-1"></i> إضافة عضو
+            </a>
 
-        <!-- البحث -->
-        <input type="text" name="search" value="@search"
-               class="form-control"
-               placeholder="ابحث عن عضو...">
-
-        <!-- زر البحث -->
-        <button type="submit" class="btn btn-warning" style="color:#fff; background:#f99d27">
-            <i class="fa-solid fa-magnifying-glass"></i> بحث
-        </button>
-    </div>
-</form>
-
-    <a asp-action="Create" class="btn btn-add" style="background:#f99d27;color:#fff;">
-        <i class="fa-solid fa-plus ms-1"></i> إضافة عضو
-    </a>
-
-    <a asp-controller="Admin" asp-action="Dashboard" class="header-btn secondary">
-        <i class="fa-solid fa-gauge"></i>
-        العودة للوحة التحكم
-    </a>
-</div>
+            <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard btn-one-line">
+                <i class="fa-solid fa-gauge"></i>
+                العودة للوحة التحكم
+            </a>
+        </div>
     </div>
 
     <div class="table-container mb-4">
@@ -67,14 +76,14 @@
                         <th style="width:80px;"></th>
                         <th class="text-center">الاسم</th>
                         <th class="text-center">نوع العضوية</th>
-                        
+                        <th class="text-center">الإجراءات</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var group in Model.GroupBy(m => m.Department))
                     {
                         <tr>
-                            <td colspan="4" class="fw-bold text-dark" style="background:#f0f0f0;">
+                                <td colspan="4" class="fw-bold text-dark" style="background:#f0f0f0;">
                                 <h3 class="mb-0">@group.Key</h3>
                             </td>
                         </tr>
@@ -121,58 +130,57 @@
         </div>
     </div>
 
+    <div class="articles-pagination d-flex align-items-center justify-content-between mt-4" dir="rtl">
+        <p class="pagination-label m-0">انتقل إلى الصفحة التالية</p>
 
+        <nav aria-label="Page navigation">
+            <ul class="pagination m-0" style="direction:ltr;">
 
-</div>
+                <!-- السابق -->
+                <li class="page-item @(page == 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(page - 1)"
+                       asp-route-search="@search"
+                       asp-route-department="@selectedDepartment"
+                       aria-label="Prev">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </li>
 
-<div class="articles-pagination d-flex align-items-center justify-content-between mt-4" dir="rtl">
-    <p class="pagination-label m-0">انتقل إلى الصفحة التالية</p>
-
-    <nav aria-label="Page navigation">
-        <ul class="pagination m-0" style="direction:ltr;">
-
-            <!-- السابق -->
-            <li class="page-item @(page == 1 ? "disabled" : "")">
-                <a class="page-link"
-                   asp-action="Index"
-                   asp-route-page="@(page - 1)"
-                   asp-route-search="@search"
-                   aria-label="Prev">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </a>
-            </li>
-
-            @for (int i = 1; i <= totalPages; i++)
-            {
-                if (i == 1 || i == totalPages || (i >= page - 1 && i <= page + 1))
+                @for (int i = 1; i <= totalPages; i++)
                 {
-                    <li class="page-item @(i == page ? "active" : "")">
-                        <a class="page-link"
-                           asp-action="Index"
-                           asp-route-page="@i"
-                           asp-route-search="@search">@i</a>
-                    </li>
+                    if (i == 1 || i == totalPages || (i >= page - 1 && i <= page + 1))
+                    {
+                        <li class="page-item @(i == page ? "active" : "")">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-page="@i"
+                               asp-route-search="@search"
+                               asp-route-department="@selectedDepartment">@i</a>
+                        </li>
+                    }
+                    else if (i == page - 2 || i == page + 2)
+                    {
+                        <li class="page-item disabled"><span class="page-link">..</span></li>
+                    }
                 }
-                else if (i == page - 2 || i == page + 2)
-                {
-                    <li class="page-item disabled"><span class="page-link">..</span></li>
-                }
-            }
 
-            <!-- التالي -->
-            <li class="page-item @(page == totalPages ? "disabled" : "")">
-                <a class="page-link"
-                   asp-action="Index"
-                   asp-route-page="@(page + 1)"
-                   asp-route-search="@search"
-                   aria-label="Next">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </a>
-            </li>
+                <!-- التالي -->
+                <li class="page-item @(page == totalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(page + 1)"
+                       asp-route-search="@search"
+                       asp-route-department="@selectedDepartment"
+                       aria-label="Next">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                </li>
 
-        </ul>
-    </nav>
-</div>
+            </ul>
+        </nav>
+    </div>
 </div>
 
 
@@ -210,6 +218,32 @@
                         }
                     });
                 }
+
+                (function () {
+                    const filterToggle = document.getElementById('teamFilterToggle');
+                    const filterMenu = document.getElementById('teamFilterMenu');
+                    const filterInput = document.getElementById('departmentFilterInput');
+
+                    if (!filterToggle || !filterMenu || !filterInput) return;
+
+                    filterToggle.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        filterMenu.classList.toggle('is-open');
+                    });
+
+                    document.addEventListener('click', function (e) {
+                        if (!filterMenu.contains(e.target) && !filterToggle.contains(e.target)) {
+                            filterMenu.classList.remove('is-open');
+                        }
+                    });
+
+                    filterMenu.querySelectorAll('.filter-menu-item').forEach(function (item) {
+                        item.addEventListener('click', function () {
+                            filterInput.value = item.dataset.filterValue || '';
+                            item.closest('form').submit();
+                        });
+                    });
+                })();
     </script>
 
     <style>
@@ -257,6 +291,95 @@
             background: #fff;
             color: #f99d27;
             border: 2px solid #f99d27;
+        }
+
+        .btn-back-dashboard {
+            background: transparent;
+            color: #f99d27;
+            border: 2px solid #f99d27;
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .btn-back-dashboard i {
+            color: inherit;
+        }
+
+        .btn-back-dashboard:hover {
+            background: #f99d27;
+            color: #fff;
+            border-color: #f99d27;
+        }
+
+        .btn-one-line {
+            white-space: nowrap;
+        }
+
+        .search-wrapper-team {
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .filter-dropdown {
+            position: relative;
+            margin: 0;
+        }
+
+        .filter-summary {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 0;
+            background: transparent;
+        }
+
+        .filter-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            min-width: 180px;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            padding: 6px;
+            display: none;
+            z-index: 50;
+        }
+
+        .filter-menu.is-open {
+            display: block;
+        }
+
+        .filter-menu-item {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            text-align: right;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: #333;
+            font-size: 14px;
+            transition: background 0.2s ease;
+        }
+
+        .filter-menu-item:hover {
+            background: #f3f7f4;
+        }
+
+        .filter-menu-item.active {
+            background: #f99d27;
+            color: #fff;
         }
 
     </style>
