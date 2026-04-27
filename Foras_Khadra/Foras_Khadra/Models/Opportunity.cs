@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,8 +23,7 @@ namespace Foras_Khadra.Models
 
         public string PublishedBy { get; set; }
 
-        [Required]
-        public OpportunityType Type { get; set; }
+        public OpportunityType? Type { get; set; }
 
         [Required]
         public string DescriptionAr { get; set; }
@@ -65,8 +64,7 @@ namespace Foras_Khadra.Models
         [Required]
         public string ApplyLink { get; set; }
 
-        [Required]
-        public DeadlineType DeadlineType { get; set; }
+        public DeadlineType? DeadlineType { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? EndDate { get; set; }
@@ -81,6 +79,7 @@ namespace Foras_Khadra.Models
         [NotMapped]
         public bool IsPublishedByAdmin { get; set; }
 
+        [NotMapped]
         public bool IsExpired { get; set; }
         public virtual ICollection<ReelsRequest> ReelsRequests { get; set; }
 

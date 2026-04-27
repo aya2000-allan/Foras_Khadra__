@@ -1,4 +1,4 @@
-﻿body {
+body {
   margin: 0 !important;
   font-family: "Cairo", sans-serif !important;
   background-color: #f4f9f5 !important;
@@ -55,18 +55,22 @@ html[dir="ltr"] .logo {
 .nav-content {
   display: flex;
   align-items: center;
-  gap: 30px;
-  width: 100%;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
 }
 
 /* ====== قائمة الروابط ====== */
 .menu-items {
   display: flex;
-  flex-wrap: wrap;
-  gap: 56px;
+  flex-wrap: nowrap;
+  gap: 10px;
   align-items: center;
   position: relative;
-  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
   height: auto;
   padding: 10px 0;
 }
@@ -88,8 +92,59 @@ html[dir="ltr"] .logo {
 .auth-section {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
+  flex-wrap: nowrap;
+}
+
+/* سطح المكتب: توسيط عناصر النافبار (يتوافق مع _Layout) */
+@media (min-width: 1401px) {
+  .top-banner {
+    justify-content: center;
+    position: relative;
+    padding-inline: 100px;
+    box-sizing: border-box;
+  }
+
+  .top-banner .logo {
+    position: absolute;
+    inset-inline-start: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 72px;
+    height: 72px;
+    z-index: 2;
+  }
+
+  .nav-content {
+    justify-content: center;
+    flex: 0 1 auto;
+  }
+
+  .menu-items {
+    flex: 0 1 auto;
+    justify-content: center;
+  }
+
+  .top-banner > .auth-section {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 3;
+  }
+
+  /* Arabic (RTL): icons physical left | English (LTR): icons physical right */
+  html[dir="rtl"] .top-banner > .auth-section {
+    left: 18px !important;
+    right: auto !important;
+  }
+
+  html[dir="ltr"] .top-banner > .auth-section {
+    right: 18px !important;
+    left: auto !important;
+  }
 }
 
 .login-btn {
@@ -220,6 +275,25 @@ html[dir="ltr"] .logo {
     margin: 0;
     border-radius: 0 0 40px 40px;
     max-width: 100%;
+    justify-content: space-between;
+    padding-inline: 20px;
+    position: relative;
+  }
+
+  .top-banner .logo {
+    position: static !important;
+    transform: none !important;
+    inset-inline-start: auto !important;
+    width: 80px;
+    height: 80px;
+    margin-left: 5.27%;
+    margin-right: 0;
+    z-index: auto;
+  }
+
+  html[dir="ltr"] .top-banner .logo {
+    margin-left: 0;
+    margin-right: 5.27%;
   }
 
   .expand {
@@ -292,11 +366,20 @@ html[dir="ltr"] .logo {
   .dropdown-mobile a {
     border: none;
   }
-  /* أزرار تسجيل الدخول وتغيير اللغة */
-  .auth-section {
-    gap: 12px;
-    width: 100%;
-    flex-direction: column;
+  /* الحساب + اللغة: صف مضغوط بجانب الهامبرغر (ليس داخل القائمة المخفية) */
+  .top-banner > .auth-section {
+    gap: 6px;
+    width: auto !important;
+    max-width: none;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    justify-content: flex-start;
+    align-items: center;
   }
 
   .login-btn,
@@ -321,7 +404,8 @@ html[dir="ltr"] .logo {
 .custom-dropdown {
   position: relative;
   display: inline-block;
-  direction: rtl;
+  direction: inherit;
+  flex-shrink: 0;
 }
 
 .dropdown-button {
