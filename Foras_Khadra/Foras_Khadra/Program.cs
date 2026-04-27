@@ -76,85 +76,61 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 var app = builder.Build();
 
 // ===== إنشاء الأدوار وحساب الأدمن وربط المنظمات =====
-using (var scope = app.Services.CreateScope())
+try
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApplicationDbContext>();
-    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
-    // ---- إنشاء الأدوار لو مش موجودة ----
-    string[] roles = { "Admin", "User", "Organization" };
-    foreach (var role in roles)
+    using (var scope = app.Services.CreateScope())
     {
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new IdentityRole(role));
-    }
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-    // ---- إنشاء حساب الأدمن الثابت ----
-    string adminEmail = "admin@org.com";
-    string adminPassword = "Admin@123";
+        string[] roles = { "Admin", "User", "Organization" };
 
-    var adminUser = await userManager.FindByEmailAsync(adminEmail);
-    if (adminUser == null)
-    {
-        adminUser = new ApplicationUser
+        foreach (var role in roles)
         {
-            UserName = adminEmail,
-            Email = adminEmail,
-            EmailConfirmed = true,
-            FullName = "System Admin",
-            CreatedAt = DateTime.Now
-        };
-
-        var result = await userManager.CreateAsync(adminUser, adminPassword);
-        if (result.Succeeded)
-            await userManager.AddToRoleAsync(adminUser, "Admin");
-    }
-
-    // ---- ربط كل المنظمات بحساباتهم بدون التأثير على Admin أو User ----
-    var orgRoleId = context.Roles.FirstOrDefault(r => r.Name == "Organization")?.Id;
-
-    if (orgRoleId != null)
-    {
-        // كل UserIds للمنظمات
-        var orgUserIds = context.UserRoles
-            .Where(ur => ur.RoleId == orgRoleId)
-            .Select(ur => ur.UserId)
-            .ToList();
-
-        var orgUsers = context.Users
-            .Where(u => orgUserIds.Contains(u.Id))
-            .ToList();
-
-        // كل Organizations بدون UserId
-        var organizations = context.Organizations
-            .Where(o => o.UserId == null)
-            .ToList();
-
-        foreach (var org in organizations)
-        {
-            var user = orgUsers.FirstOrDefault(u => u.Email.ToLower() == org.ContactEmail.ToLower());
-            if (user != null)
-                org.UserId = user.Id;
+            if (!await roleManager.RoleExistsAsync(role))
+                await roleManager.CreateAsync(new IdentityRole(role));
         }
 
-        try
+        string adminEmail = "admin@org.com";
+        string adminPassword = "Admin@123";
+
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        if (adminUser == null)
         {
-            context.SaveChanges();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
+            adminUser = new ApplicationUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true,
+                FullName = "System Admin",
+                CreatedAt = DateTime.Now
+            };
+
+            var result = await userManager.CreateAsync(adminUser, adminPassword);
+            if (result.Succeeded)
+                await userManager.AddToRoleAsync(adminUser, "Admin");
         }
     }
+}
+catch (Exception ex)
+{
+    Console.WriteLine("Startup Identity Error: " + ex.Message);
 }
 // ✅ Seed Articles (Test Data)
 // =========================
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    DbInitializer.SeedArticles(context);
+    try
+    {
+        DbInitializer.SeedArticles(context);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Articles Seed Error: " + ex.Message);
+    }
 }
 
 // ✅ معاينة شبكة المنظمات (Development فقط — لا تُضاف في Production)
@@ -162,7 +138,14 @@ if (app.Environment.IsDevelopment())
 {
     using var previewScope = app.Services.CreateScope();
     var previewDb = previewScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    DbInitializer.SeedOrganizationsMapPreview(previewDb);
+    try
+    {
+        DbInitializer.SeedOrganizationsMapPreview(previewDb);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Seed Error: " + ex.Message);
+    }
 }
 // ===== Configure the HTTP request pipeline =====
 if (!app.Environment.IsDevelopment())
