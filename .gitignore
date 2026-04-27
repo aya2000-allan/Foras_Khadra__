@@ -5,3 +5,9 @@
 /.vs/slnx.sqlite
 /.vs/VSWorkspaceState.json
 /.vs
+
+# Secrets — do not commit real connection strings or mail passwords
+appsettings.Production.json
+appsettings.*.local.json
+**/appsettings.Production.json
+**/appsettings.*.local.json
