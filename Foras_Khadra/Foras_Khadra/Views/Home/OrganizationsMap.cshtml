@@ -3,83 +3,81 @@
 @{
     ViewData["Title"] = "خريطة المنظمات";
 }
-
+<link rel="stylesheet" href="~/css/OrgMap.css" />
 <h2 class="mb-4">شبكة المنظمات</h2>
 
-<!-- فلتر -->
-<form method="get" class="mb-4 d-flex gap-2">
 
-    <!-- الدولة -->
-    <select name="country" class="form-control w-25">
-        <option value="">كل الدول</option>
-
-        @foreach (var c in ViewBag.Countries)
-        {
-            <option value="@c" selected="@(ViewBag.SelectedCountry == c ? "selected" : null)">
-                @c
-            </option>
-        }
-    </select>
-
-    <!-- القطاع -->
-    <select name="sector" class="form-control w-25">
-        <option value="">كل القطاعات</option>
-
-        @foreach (var s in ViewBag.Sectors)
-        {
-            <option value="@s" selected="@(ViewBag.SelectedSector == s ? "selected" : null)">
-                @s
-            </option>
-        }
-    </select>
-
-    <button type="submit" class="btn btn-primary">فلتر</button>
-
-</form>
 
 <!-- الكروت -->
-<div class="row">
+<div class="network-page">
 
-    @if (Model != null && Model.Any())
-    {
-        @foreach (var org in Model)
+
+    <!-- فلتر -->
+    <form method="get" class="network-filter">
+
+        <select name="country" class="form-control w-auto">
+            <option value="">كل الدول</option>
+            @foreach (var c in ViewBag.Countries)
+            {
+                <option value="@c" selected="@(ViewBag.SelectedCountry == c ? "selected" : null)">
+                    @c
+                </option>
+            }
+        </select>
+
+        <select name="sector" class="form-control w-auto">
+            <option value="">كل القطاعات</option>
+            @foreach (var s in ViewBag.Sectors)
+            {
+                <option value="@s" selected="@(ViewBag.SelectedSector == s ? "selected" : null)">
+                    @s
+                </option>
+            }
+        </select>
+
+        <button type="submit" class="btn btn-warning text-white px-4">
+            فلتر
+        </button>
+
+    </form>
+
+    <!-- Grid -->
+    <div class="network-grid">
+
+        @if (Model != null && Model.Any())
         {
-            <div class="col-md-4 mb-3">
+            @foreach (var org in Model)
+            {
+                <div class="org-card org-card"
+                     data-org-id="@org.Id">
 
-                <div class="card h-100 shadow-sm org-card"
-                     data-org-id="@org.Id"
-                     style="cursor:pointer;">
+                    <div class="d-flex align-items-center gap-3">
 
-                    <div class="card-body d-flex justify-content-between align-items-center">
-
-                        <div>
-                            <h5 class="mb-1">@org.Name</h5>
-
-                            <p class="mb-0">
-                                القطاع: @(string.IsNullOrWhiteSpace(org.Sector) ? "غير محدد" : org.Sector) <br />
-                                الدولة: @(string.IsNullOrWhiteSpace(org.Country) ? "غير محدد" : org.Country)
-                            </p>
-                        </div>
+                        <img class="org-logo"
+                             src="@(!string.IsNullOrEmpty(org.LogoPath) ? org.LogoPath : "/images/default-logo.png")" />
 
                         <div>
-                            <img src="@(!string.IsNullOrEmpty(org.LogoPath) ? org.LogoPath : "/images/default-logo.png")"
-                                 style="width:60px;height:60px;object-fit:cover;border-radius:50%;" />
+                            <div class="org-name">@org.Name</div>
+
+                            <div class="org-meta">
+                                @org.Sector <br />
+                                @org.Country
+                            </div>
                         </div>
 
                     </div>
-                </div>
 
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info text-center w-100">
+                لا توجد نتائج مطابقة
             </div>
         }
-    }
-    else
-    {
-        <div class="col-12">
-            <div class="alert alert-info text-center">
-                لا توجد نتائج مطابقة للفلتر
-            </div>
-        </div>
-    }
+
+    </div>
 
 </div>
 

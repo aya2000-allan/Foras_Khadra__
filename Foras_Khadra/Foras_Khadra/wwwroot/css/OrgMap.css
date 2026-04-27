@@ -1,0 +1,119 @@
+﻿/* ==============================
+   🌿 ECO NETWORK NODES (NON-CARD UI)
+   Inspired by network / ecosystem graph
+============================== */
+
+.network-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 35px;
+    justify-content: center;
+    padding: 30px;
+    position: relative;
+}
+
+/* optional subtle background grid feel */
+.network-page {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(37,101,44,0.05), transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(249,157,39,0.04), transparent 45%);
+}
+
+/* ==============================
+   NODE (instead of card)
+============================== */
+
+.org-card {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    position: relative;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.35s ease;
+    border: 2px solid rgba(37,101,44,0.15);
+}
+
+/* glowing orbit ring */
+.org-card::before {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 180deg,
+        #25652c,
+        #f99d27,
+        #25652c
+    );
+    opacity: 0.15;
+    filter: blur(8px);
+    transition: 0.4s ease;
+}
+
+/* inner soft core */
+.org-card::after {
+    content: "";
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgba(37,101,44,0.08),
+        transparent 70%);
+}
+
+/* hover = expansion */
+.org-card:hover {
+    transform: scale(1.15);
+    z-index: 10;
+    border-color: rgba(37,101,44,0.4);
+}
+
+.org-card:hover::before {
+    opacity: 0.4;
+    transform: rotate(180deg);
+}
+
+/* ==============================
+   LOGO INSIDE NODE
+============================== */
+
+.org-logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #25652c;
+    margin-bottom: 6px;
+}
+
+/* ==============================
+   TEXT (compact node style)
+============================== */
+
+.org-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1f2a24;
+}
+
+.org-meta {
+    font-size: 11px;
+    color: #66736d;
+}
+
+/* ==============================
+   FLOATING CONNECTION FEEL (fake network lines)
+============================== */
+
+.org-card:hover {
+    box-shadow:
+        0 0 0 6px rgba(37,101,44,0.08),
+        0 20px 40px rgba(0,0,0,0.1);
+}
