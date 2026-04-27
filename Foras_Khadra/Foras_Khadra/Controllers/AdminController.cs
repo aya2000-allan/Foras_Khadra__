@@ -115,6 +115,72 @@ namespace Foras_Khadra.Controllers
             return View(org);
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> UploadLogo(int id, IFormFile logoFile)
+        {
+            var org = await _context.Organizations.FindAsync(id);
+            if (org == null) return NotFound();
+
+            if (logoFile != null && logoFile.Length > 0)
+            {
+                // ✅ التحقق من نوع الملف
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+                var ext = Path.GetExtension(logoFile.FileName).ToLower();
+
+                if (!allowedExtensions.Contains(ext))
+                {
+                    return BadRequest("فقط صور مسموحة");
+                }
+
+                //  حذف القديم (إذا موجود)
+                if (!string.IsNullOrEmpty(org.LogoPath))
+                {
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", org.LogoPath.TrimStart('/'));
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                }
+
+                // حفظ الجديد
+                var fileName = Guid.NewGuid().ToString() + ext;
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await logoFile.CopyToAsync(stream);
+                }
+
+                org.LogoPath = "/uploads/" + fileName;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("OrganizationDetails", new { id });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteLogo(int id)
+        {
+            var org = await _context.Organizations.FindAsync(id);
+            if (org == null) return NotFound();
+
+            if (!string.IsNullOrEmpty(org.LogoPath))
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", org.LogoPath.TrimStart('/'));
+
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }
+
+                org.LogoPath = null;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("OrganizationDetails", new { id });
+        }
     }
 
 

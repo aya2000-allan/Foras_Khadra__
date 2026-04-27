@@ -27,18 +27,22 @@ namespace Foras_Khadra.Controllers
                 .ToList();
 
             var latestOpportunities = _context.Opportunities
-    .OrderByDescending(o => o.PublishDate)
-    .Take(9)
-    .AsNoTracking()
-    .ToList();
+                .OrderByDescending(o => o.PublishDate)
+                .Take(9)
+                .AsNoTracking()
+                .ToList();
 
+            var organizations = _context.Organizations
+                .Where(o => !string.IsNullOrEmpty(o.LogoPath))
+                .Take(12)
+                .ToList();
 
             var model = new HomeViewModel
             {
                 LatestArticles = latestArticles,
-                LatestOpportunities = latestOpportunities
+                LatestOpportunities = latestOpportunities,
+                Organizations = organizations
             };
-
 
             return View(model);
         }
@@ -233,6 +237,70 @@ namespace Foras_Khadra.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> OrganizationsMap(string country, string sector)
+        {
+            // الدول الموجودة فعليًا
+            var countries = await _context.Organizations
+                .Where(o => o.Country != null)
+                .Select(o => o.Country)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToListAsync();
+
+            // القطاعات الموجودة فعليًا
+            var sectorsRaw = await _context.Organizations
+    .Where(o => !string.IsNullOrEmpty(o.Sector))
+    .Select(o => o.Sector.Trim())
+    .ToListAsync();
+
+            string Normalize(string s)
+            {
+                return s
+                    .Trim()
+                    .Replace("ة", "ه")
+                    .ToLower();
+            }
+
+            var sectors = sectorsRaw
+                .GroupBy(s => Normalize(s))
+                .Select(g => g.First())   // نأخذ أول شكل كما هو في الداتا
+                .OrderBy(s => s)
+                .ToList();
+
+            var query = _context.Organizations.AsQueryable();
+
+            if (!string.IsNullOrEmpty(country))
+                query = query.Where(o => o.Country == country);
+
+            if (!string.IsNullOrEmpty(sector))
+                if (!string.IsNullOrEmpty(sector))
+                {
+                    query = query.Where(o =>
+                        o.Sector.Trim() == sector ||
+                        o.Sector.Trim().Replace("ة", "ه") == sector.Replace("ة", "ه"));
+                }
+            var organizations = await query.ToListAsync();
+
+            ViewBag.Countries = countries;
+            ViewBag.Sectors = sectors;
+
+            ViewBag.SelectedCountry = country;
+            ViewBag.SelectedSector = sector;
+
+            return View(organizations);
+        }
+
+        public async Task<IActionResult> DetailsOrganization(int id)
+        {
+            var org = await _context.Organizations.FindAsync(id);
+
+            if (org == null)
+                return NotFound();
+
+            return View(org);
+        }
+
 
     }
 }

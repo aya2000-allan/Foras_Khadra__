@@ -1,0 +1,52 @@
+﻿@model Foras_Khadra.Models.Organization
+
+@{
+    ViewData["Title"] = "تفاصيل المنظمة";
+}
+
+<h2 class="mb-4">@Model.Name</h2>
+
+<div class="card shadow-sm p-3">
+
+    <!-- اللوجو -->
+    <div class="mb-3 text-center">
+        <img src="@(string.IsNullOrEmpty(Model.LogoPath) ? "/images/default-logo.png" : Model.LogoPath)"
+             style="width:120px; height:120px; border-radius:50%; object-fit:cover;" />
+    </div>
+
+    <!-- المعلومات -->
+    <p><b>القطاع:</b> @Model.Sector</p>
+    <p><b>الدولة:</b> @Model.Country</p>
+    <p><b>اسم جهة الاتصال:</b> @Model.ContactName</p>
+    <p><b>البريد الإلكتروني:</b> @Model.ContactEmail</p>
+    <p><b>رقم الهاتف:</b> @Model.PhoneNumber</p>
+
+    @if (!string.IsNullOrEmpty(Model.Website))
+    {
+        <p>
+            <b>الموقع الإلكتروني:</b>
+            <a href="@Model.Website" target="_blank">@Model.Website</a>
+        </p>
+    }
+
+    <!-- أيقونة الموقع -->
+    @if (!string.IsNullOrEmpty(Model.Location))
+    {
+        
+
+        <!-- خريطة -->
+        <iframe width="100%"
+                height="300"
+                frameborder="0"
+                style="border:0"
+                loading="lazy"
+                allowfullscreen
+                src="https://www.google.com/maps?q=@Model.Location&output=embed">
+        </iframe>
+    }
+
+</div>
+
+<a asp-action="OrganizationsMap" class="btn btn-secondary mt-3">
+    رجوع
+</a>

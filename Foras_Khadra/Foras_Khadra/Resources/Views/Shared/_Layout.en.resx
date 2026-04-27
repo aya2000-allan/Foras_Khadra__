@@ -217,4 +217,7 @@
   <data name="AdditionalLinks" xml:space="preserve">
     <value>Additional Links</value>
   </data>
+  <data name="OrganizationsMap" xml:space="preserve">
+    <value>Organizations Network</value>
+  </data>
 </root>

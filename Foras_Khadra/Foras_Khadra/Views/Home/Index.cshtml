@@ -7,7 +7,7 @@
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
 
-    
+    var isAuthenticated = User.Identity.IsAuthenticated.ToString().ToLower();
 
 }
 
@@ -576,6 +576,44 @@ html[dir="ltr"] #heroBg1 {
     </div>
 </section>
 
+<section class="organizations-network py-5" dir="@dir" style="background:#fff;">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 style="color:#25652C; font-weight:bold;">
+                شبكة المنظمات
+            </h2>
+        </div>
+
+        <div class="swiper orgSwiper">
+            <div class="swiper-wrapper">
+
+                @foreach (var org in Model.Organizations)
+                {
+                    <div class="swiper-slide text-center">
+
+                        <a href="javascript:void(0);"
+                           class="org-link"
+                           data-org-id="@org.Id"
+                           style="display:block;text-decoration:none;color:inherit;">
+
+                            <img src="@org.LogoPath"
+                                 style="width:90px;height:90px;object-fit:cover;border-radius:50%;border:2px solid #eee;" />
+
+                            <div style="margin-top:8px; font-size:14px; color:#333;">
+                                @org.Name
+                            </div>
+
+                        </a>
+
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</section>
+
 <script>
     const container = document.getElementById("floatingShapes");
     const totalCount = 8;
@@ -650,6 +688,62 @@ html[dir="ltr"] #heroBg1 {
     }
 </script>
 <script>
+    const isAuthenticated = @isAuthenticated;
+
+    document.querySelectorAll(".org-link").forEach(link => {
+        link.addEventListener("click", function () {
+
+            const orgId = this.dataset.orgId;
+
+            if (!isAuthenticated) {
+
+                Swal.fire({
+                    icon: "warning",
+                    title: "تسجيل الدخول مطلوب",
+                    text: "يجب تسجيل الدخول لعرض تفاصيل المنظمة",
+                    confirmButtonText: "تسجيل الدخول",
+                    confirmButtonColor: "#F99D27"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/Account/Login";
+                    }
+                });
+
+            } else {
+                window.location.href = "/Home/DetailsOrganization/" + orgId;
+            }
+        });
+    });
+</script>
+<script>
+        new Swiper(".orgSwiper", {
+        slidesPerView: 6,
+        spaceBetween: 20,
+        loop: true,
+
+        autoplay: {
+            delay: 2000,
+            disableOnInteraction: false,
+        },
+
+        breakpoints: {
+            0: {
+                slidesPerView: 2
+            },
+            576: {
+                slidesPerView: 3
+            },
+            768: {
+                slidesPerView: 4
+            },
+            1200: {
+                slidesPerView: 6
+            }
+        }
+    });
+        </script>
+
+<script>
     const pageDir = '@dir';
     new Swiper(".articlesSwiper", {
         slidesPerView: 9,
@@ -671,6 +765,7 @@ html[dir="ltr"] #heroBg1 {
         }
     });
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>

@@ -57,7 +57,12 @@ namespace Foras_Khadra.Controllers
                         };
                         return new SelectListItem
                         {
-                            Value = region.TwoLetterISORegionName,
+                            Value = culture switch
+                            {
+                                "ar" => region.NativeName,
+                                "fr" => region.EnglishName,
+                                _ => region.EnglishName
+                            },
                             Text = name,
                             Selected = region.TwoLetterISORegionName == selectedCountry
                         };
@@ -439,5 +444,7 @@ namespace Foras_Khadra.Controllers
 
             return View("ResetPasswordConfirmation");
         }
+
+
     }
 }
