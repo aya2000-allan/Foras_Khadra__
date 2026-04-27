@@ -13,14 +13,70 @@
 
 }
 
-<link rel="stylesheet" href="~/css/opportunity-create.css" />
+@section Styles {
+    <link rel="stylesheet" asp-append-version="true" href="~/css/opportunity-create.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        .header-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-back-dashboard {
+            background: transparent;
+            color: #f99d27;
+            border: 2px solid #f99d27;
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            width: auto;
+            height: auto;
+            font-size: 16px;
+        }
+
+        .btn-back-dashboard i {
+            color: inherit;
+        }
+
+        .btn-back-dashboard:hover {
+            background: #f99d27;
+            color: #fff;
+            border-color: #f99d27;
+        }
+    </style>
+}
 
 <div class="header">
     <h2 class="page-title">@Localizer["AddOpportunityTitle"]</h2>
-    @if (!User.IsInRole("Organization"))
-    {
-        <a asp-controller="Opportunity" asp-action="Index" class="btn-back-dashboard">@Localizer["BackToDashboard"]  </a>
-    }
+    <div class="header-actions">
+        @if (User.IsInRole("Organization"))
+        {
+            <a asp-controller="Opportunity" asp-action="OrgOpportunities" class="btn-back-dashboard">
+                <i class="fa-solid fa-briefcase"></i>
+                عرض الفرص
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Opportunity" asp-action="Index" class="btn-back-dashboard">
+                <i class="fa-solid fa-briefcase"></i>
+                عرض الفرص
+            </a>
+            <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
+                <i class="fa-solid fa-gauge"></i>
+                لوحة التحكم
+            </a>
+        }
+    </div>
 </div>
 
 <div class="page-wrapper" dir="@dir">

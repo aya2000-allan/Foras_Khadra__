@@ -133,22 +133,28 @@ html[dir="ltr"] .side-panel {
   height: 65px;
 }
 
-.btn-primary {
+.form-panel .btn-primary {
   flex: 4;
-  background: #f99d27;
+  background: #f99d27 !important;
   border: none;
-  border-radius: 16px;
-  padding: 12px;
-  color: #fff;
-  font-weight: 600;
-  font-size: 24px;
+  border-radius: 12px;
+  padding: 12px 18px;
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 22px;
   cursor: pointer;
+  transition: all 0.25s ease;
 }
 
-.btn-primary:hover {
-  color: #f99d27;
-  background: #fff;
-  border: 2px solid #f99d27;
+.form-panel .btn-primary:hover {
+  background: #e8931d !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.form-panel .btn-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(249, 157, 39, 0.25);
 }
 
 .btn-outline {

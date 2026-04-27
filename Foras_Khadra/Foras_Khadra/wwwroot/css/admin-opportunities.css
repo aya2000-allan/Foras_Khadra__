@@ -38,27 +38,50 @@
 
 .btn-add-opportunity {
   background-color: #f99d27;
-  padding: 8px 20px;
-  border-radius: 16px;
-  text-decoration: none;
-  font-size: 21px;
-  font-weight: 600;
-  height: 58px;
-  width: 245px;
   color: #fff;
-  text-align: center;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
 }
 .btn-back-dashboard {
-  border: 1px solid #f99d27;
+  background: transparent;
   color: #f99d27;
-  padding: 8px 20px;
-  border-radius: 16px;
+  border: 2px solid #f99d27;
+  border-radius: 10px;
+  padding: 8px 18px;
   text-decoration: none;
-  font-weight: 600;
-  font-size: 21px;
-  height: 58px;
-  width: 245px;
-  text-align: center;
+  font-weight: 700;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.btn-add-opportunity:hover {
+  background-color: #e69b12;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-back-dashboard:hover {
+  background: #f99d27;
+  color: #fff;
+  border-color: #f99d27;
+}
+
+.btn-back-dashboard i,
+.btn-add-opportunity i {
+  color: inherit;
 }
 
 /* List/Table Styling */
