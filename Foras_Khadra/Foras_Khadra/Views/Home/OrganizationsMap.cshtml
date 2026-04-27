@@ -1,16 +1,15 @@
-﻿@model List<Foras_Khadra.Models.Organization>
+﻿
+@model List<Foras_Khadra.Models.Organization>
 
 @{
     ViewData["Title"] = "شبكة المنظمات";
 }
+
 <link rel="stylesheet" href="~/css/OrgMap.css" />
+
 <h2 class="mb-4">شبكة المنظمات</h2>
 
-
-
-<!-- الكروت -->
 <div class="network-page">
-
 
     <!-- فلتر -->
     <form method="get" class="network-filter">
@@ -41,30 +40,30 @@
 
     </form>
 
-    <!-- Grid -->
+    <!-- GRID -->
     <div class="network-grid">
 
         @if (Model != null && Model.Any())
         {
             @foreach (var org in Model)
             {
-                <div class="org-card org-card"
-                     data-org-id="@org.Id">
+                <!-- WRAPPER مهم للتفاصيل -->
+                <div class="org-wrapper">
 
-                    <div class="d-flex align-items-center gap-3">
+                    <!-- NODE -->
+                    <div class="org-card" data-org-id="@org.Id">
 
                         <img class="org-logo"
                              src="@(!string.IsNullOrEmpty(org.LogoPath) ? org.LogoPath : "/images/default-logo.png")" />
 
-                        <div>
-                            <div class="org-name">@org.Name</div>
 
-                            <div class="org-meta">
-                                @org.Sector <br />
-                                @org.Country
-                            </div>
-                        </div>
+                    </div>
 
+                    <!-- DETAILS BOX -->
+                    <div class="org-details">
+                     <div><b>اسم المنظمة:</b>@org.Name</div>
+                     <div><b>القطاع:</b> @org.Sector</div>
+                     <div><b>الدولة:</b> @org.Country</div>
                     </div>
 
                 </div>
@@ -81,13 +80,52 @@
 
 </div>
 
+<!-- PAGINATION -->
+<div class="pagination-container">
+
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    {
+        <a class="page-number @(ViewBag.CurrentPage == i ? "active" : "")"
+           href="@Url.Action("OrganizationsMap", new {
+                page = i,
+                country = ViewBag.SelectedCountry,
+                sector = ViewBag.SelectedSector
+           })">
+            @i
+        </a>
+    }
+
+</div>
+
+<!-- SWEET ALERT -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     const isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
 
+    // 🔥 تفاصيل تظهر تحت كل node
     document.querySelectorAll(".org-card").forEach(card => {
 
-        card.addEventListener("click", function () {
+        card.addEventListener("click", function (e) {
+
+            const wrapper = this.parentElement;
+
+            // toggle details
+            document.querySelectorAll(".org-wrapper")
+                .forEach(w => w.classList.remove("active"));
+
+            wrapper.classList.add("active");
+
+            // stop navigation conflict (optional)
+            e.stopPropagation();
+        });
+
+    });
+
+    // 🔥 فتح تفاصيل المنظمة (صفحة)
+    document.querySelectorAll(".org-card").forEach(card => {
+
+        card.addEventListener("dblclick", function () {
 
             const orgId = this.dataset.orgId;
 

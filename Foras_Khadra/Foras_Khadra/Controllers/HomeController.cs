@@ -238,9 +238,10 @@ namespace Foras_Khadra.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> OrganizationsMap(string country, string sector)
+        public async Task<IActionResult> OrganizationsMap(string country, string sector, int page = 1)
         {
-            // الدول الموجودة فعليًا
+            int pageSize = 20;
+
             var countries = await _context.Organizations
                 .Where(o => o.Country != null)
                 .Select(o => o.Country)
@@ -248,25 +249,12 @@ namespace Foras_Khadra.Controllers
                 .OrderBy(c => c)
                 .ToListAsync();
 
-            // القطاعات الموجودة فعليًا
-            var sectorsRaw = await _context.Organizations
-    .Where(o => !string.IsNullOrEmpty(o.Sector))
-    .Select(o => o.Sector.Trim())
-    .ToListAsync();
-
-            string Normalize(string s)
-            {
-                return s
-                    .Trim()
-                    .Replace("ة", "ه")
-                    .ToLower();
-            }
-
-            var sectors = sectorsRaw
-                .GroupBy(s => Normalize(s))
-                .Select(g => g.First())   // نأخذ أول شكل كما هو في الداتا
+            var sectors = await _context.Organizations
+                .Where(o => !string.IsNullOrEmpty(o.Sector))
+                .Select(o => o.Sector.Trim())
+                .Distinct()
                 .OrderBy(s => s)
-                .ToList();
+                .ToListAsync();
 
             var query = _context.Organizations.AsQueryable();
 
@@ -274,19 +262,25 @@ namespace Foras_Khadra.Controllers
                 query = query.Where(o => o.Country == country);
 
             if (!string.IsNullOrEmpty(sector))
-                if (!string.IsNullOrEmpty(sector))
-                {
-                    query = query.Where(o =>
-                        o.Sector.Trim() == sector ||
-                        o.Sector.Trim().Replace("ة", "ه") == sector.Replace("ة", "ه"));
-                }
-            var organizations = await query.ToListAsync();
+                query = query.Where(o => o.Sector == sector);
+
+            //  عدد الكل (للتقسيم)
+            var totalItems = await query.CountAsync();
+
+            var organizations = await query
+                .OrderBy(o => o.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             ViewBag.Countries = countries;
             ViewBag.Sectors = sectors;
 
             ViewBag.SelectedCountry = country;
             ViewBag.SelectedSector = sector;
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
             return View(organizations);
         }
