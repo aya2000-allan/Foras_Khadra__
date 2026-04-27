@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>Foras_Khadra-WebApp-7c4e9b2a-8f1d-4a3c-9e6b-1d2f3a4b5c6d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
