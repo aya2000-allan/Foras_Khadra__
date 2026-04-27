@@ -1,153 +1,185 @@
-﻿
+
 @model List<Foras_Khadra.Models.Organization>
+@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Text.Json
+@inject IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "شبكة المنظمات";
+    ViewData["Title"] = Localizer["PageTitle"];
+    var loginTitle = JsonSerializer.Serialize(Localizer["LoginRequiredTitle"].Value);
+    var loginText = JsonSerializer.Serialize(Localizer["LoginRequiredText"].Value);
+    var loginBtn = JsonSerializer.Serialize(Localizer["LoginButton"].Value);
 }
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
 <link rel="stylesheet" href="~/css/OrgMap.css" />
 
-<h2 class="mb-4">شبكة المنظمات</h2>
+<div class="page-wrapper container org-map-page">
 
-<div class="network-page">
+    <header class="org-map-header custom-header">
+        <div class="header-right">
+            <div class="header-logo">
+                <img src="/images/about_us_leaf.svg" alt="" width="32" height="32" />
+            </div>
+            <h1 class="header-title">@Localizer["PageTitle"]</h1>
+        </div>
+        <div class="header-left">
+            <div class="filter-btn" id="orgMapFilterBtn" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false" title="@Localizer["filter_heading"]">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="4" y1="21" x2="4" y2="14" />
+                    <line x1="4" y1="10" x2="4" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12" y2="3" />
+                    <line x1="20" y1="21" x2="20" y2="16" />
+                    <line x1="20" y1="12" x2="20" y2="3" />
+                    <line x1="1" y1="14" x2="7" y2="14" />
+                    <line x1="9" y1="8" x2="15" y2="8" />
+                    <line x1="17" y1="16" x2="23" y2="16" />
+                </svg>
+            </div>
+        </div>
 
-    <!-- فلتر -->
-    <form method="get" class="network-filter">
+        <div class="org-map-filter-window filter-window shadow" id="orgMapFilterWindow" role="dialog" aria-label="@Localizer["filter_heading"]">
+            <div class="filter-window-header">
+                <span class="sort-by-label">
+                    @Localizer["filter_heading"]
+                    <i class="bi bi-caret-up-fill filter-heading-caret" aria-hidden="true"></i>
+                </span>
+                <a href="@Url.Action("OrganizationsMap", "Home")" class="reset-link">@Localizer["reset"]</a>
+            </div>
+            <form method="get" class="org-map-filter-form">
+                <div class="mb-3">
+                    <label class="org-map-label d-block" for="mapCountry">@Localizer["country"]</label>
+                    <select name="country" id="mapCountry" class="form-control org-map-select">
+                        <option value="">@Localizer["AllCountries"]</option>
+                        @foreach (var c in ViewBag.Countries)
+                        {
+                            <option value="@c" selected="@(ViewBag.SelectedCountry == c ? "selected" : null)">@c</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="org-map-label d-block" for="mapSector">@Localizer["sector_label"]</label>
+                    <select name="sector" id="mapSector" class="form-control org-map-select">
+                        <option value="">@Localizer["AllSectors"]</option>
+                        @foreach (var s in ViewBag.Sectors)
+                        {
+                            <option value="@s" selected="@(ViewBag.SelectedSector == s ? "selected" : null)">@s</option>
+                        }
+                    </select>
+                </div>
+                <div class="org-map-filter-actions">
+                    <button type="button" class="btn-cancel-sub" id="orgMapFilterClose">@Localizer["cancel"]</button>
+                    <button type="submit" class="btn-search-sub">@Localizer["apply"]</button>
+                </div>
+            </form>
+        </div>
+    </header>
 
-        <select name="country" class="form-control w-auto">
-            <option value="">كل الدول</option>
-            @foreach (var c in ViewBag.Countries)
-            {
-                <option value="@c" selected="@(ViewBag.SelectedCountry == c ? "selected" : null)">
-                    @c
-                </option>
-            }
-        </select>
-
-        <select name="sector" class="form-control w-auto">
-            <option value="">كل القطاعات</option>
-            @foreach (var s in ViewBag.Sectors)
-            {
-                <option value="@s" selected="@(ViewBag.SelectedSector == s ? "selected" : null)">
-                    @s
-                </option>
-            }
-        </select>
-
-        <button type="submit" class="btn btn-warning text-white px-4">
-            فلتر
-        </button>
-
-    </form>
-
-    <!-- GRID -->
     <div class="network-grid">
-
         @if (Model != null && Model.Any())
         {
             @foreach (var org in Model)
             {
-                <!-- WRAPPER مهم للتفاصيل -->
                 <div class="org-wrapper">
-
-                    <!-- NODE -->
-                    <div class="org-card" data-org-id="@org.Id">
-
-                        <img class="org-logo"
-                             src="@(!string.IsNullOrEmpty(org.LogoPhotoPath) ? org.LogoPhotoPath : "/images/default-logo.png")" />
-
-
+                    <div class="org-card"
+                         data-org-id="@org.Id"
+                         tabindex="0"
+                         role="button"
+                         aria-label="@Localizer["LabelOrganizationName"] @org.Name">
+                        <div class="org-card-body">
+                            <img class="org-logo"
+                                 src="@(!string.IsNullOrEmpty(org.LogoPhotoPath) ? org.LogoPhotoPath : "/images/default-logo.png")"
+                                 alt="@org.Name" loading="lazy" />
+                            <div class="org-card-hover" aria-hidden="true">
+                                <div class="org-card-text">
+                                    <div class="org-name">@org.Name</div>
+                                    <div class="org-meta org-disc-sector">@org.Sector</div>
+                                    <div class="org-meta org-disc-country">@org.Country</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- DETAILS BOX -->
-                    <div class="org-details">
-                     <div><b>اسم المنظمة:</b>@org.Name</div>
-                     <div><b>القطاع:</b> @org.Sector</div>
-                     <div><b>الدولة:</b> @org.Country</div>
-                    </div>
-
                 </div>
             }
         }
         else
         {
-            <div class="alert alert-info text-center w-100">
-                لا توجد نتائج مطابقة
-            </div>
+            <div class="alert alert-info text-center w-100 org-map-empty">@Localizer["NoResults"]</div>
         }
-
     </div>
-
 </div>
 
-<!-- PAGINATION -->
-<div class="pagination-container">
-
+<div class="pagination-container org-map-pagination">
     @for (int i = 1; i <= ViewBag.TotalPages; i++)
     {
-        <a class="page-number @(ViewBag.CurrentPage == i ? "active" : "")"
-           href="@Url.Action("OrganizationsMap", new {
-                page = i,
-                country = ViewBag.SelectedCountry,
-                sector = ViewBag.SelectedSector
-           })">
+        <a class="page-number org-map-page-link @(ViewBag.CurrentPage == i ? "active" : "")"
+           href="@Url.Action("OrganizationsMap", new { page = i, country = ViewBag.SelectedCountry, sector = ViewBag.SelectedSector })">
             @i
         </a>
     }
-
 </div>
 
-<!-- SWEET ALERT -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
-    const isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+    (function () {
+        const filterBtn = document.getElementById('orgMapFilterBtn');
+        const filterWindow = document.getElementById('orgMapFilterWindow');
+        const closeBtn = document.getElementById('orgMapFilterClose');
 
-    // 🔥 تفاصيل تظهر تحت كل node
-    document.querySelectorAll(".org-card").forEach(card => {
+        function setOpen(open) {
+            if (!filterWindow || !filterBtn) return;
+            filterWindow.classList.toggle('is-open', open);
+            filterBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
 
-        card.addEventListener("click", function (e) {
-
-            const wrapper = this.parentElement;
-
-            // toggle details
-            document.querySelectorAll(".org-wrapper")
-                .forEach(w => w.classList.remove("active"));
-
-            wrapper.classList.add("active");
-
-            // stop navigation conflict (optional)
-            e.stopPropagation();
+        if (filterBtn && filterWindow) {
+            filterBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                setOpen(!filterWindow.classList.contains('is-open'));
+            });
+            filterBtn.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setOpen(!filterWindow.classList.contains('is-open'));
+                }
+            });
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                setOpen(false);
+            });
+        }
+        document.addEventListener('click', function (e) {
+            if (filterWindow && filterBtn && filterWindow.classList.contains('is-open') &&
+                !filterWindow.contains(e.target) && !filterBtn.contains(e.target)) {
+                setOpen(false);
+            }
         });
+    })();
 
-    });
+    const isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+    const L = { loginTitle: @Html.Raw(loginTitle), loginText: @Html.Raw(loginText), loginBtn: @Html.Raw(loginBtn) };
 
-    // 🔥 فتح تفاصيل المنظمة (صفحة)
-    document.querySelectorAll(".org-card").forEach(card => {
-
+    document.querySelectorAll(".org-card").forEach(function (card) {
         card.addEventListener("dblclick", function () {
-
             const orgId = this.dataset.orgId;
-
             if (!isAuthenticated) {
-
                 Swal.fire({
                     icon: "warning",
-                    title: "تسجيل الدخول مطلوب",
-                    text: "يجب تسجيل الدخول لعرض تفاصيل المنظمة",
-                    confirmButtonText: "تسجيل الدخول",
+                    title: L.loginTitle,
+                    text: L.loginText,
+                    confirmButtonText: L.loginBtn,
                     confirmButtonColor: "#F99D27"
-                }).then((result) => {
+                }).then(function (result) {
                     if (result.isConfirmed) {
                         window.location.href = "/Account/Login";
                     }
                 });
-
             } else {
                 window.location.href = "/Home/DetailsOrganization/" + orgId;
             }
-
         });
-
     });
 </script>
