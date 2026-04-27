@@ -1,96 +1,162 @@
 ﻿using Foras_Khadra.Data;
 using Foras_Khadra.Models;
-using Foras_Khadra.Services; // ← تأكد أنك أضفت هذا الـ using
+using Foras_Khadra.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+Console.WriteLine("CONNECTION STRING:");
+Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 
+// ===== إعداد قاعدة البيانات =====
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
+// ===== إعداد Identity =====
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequiredUniqueChars = 1;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
+// ===== إعداد الكوكيز =====
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Organization/Login";
+    options.AccessDeniedPath = "/Organization/Login";
+});
+
+// ===== إعداد خدمات البريد =====
 builder.Services.AddTransient<IEmailSender, EmailSender>();
-
-// تسجيل إعدادات وإيميل التواصل
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddScoped<IMailService, MailService>();
 
-// 👇 تسجيل خدمة IMailService
-builder.Services.AddScoped<IMailService, MailService>();
+// ===== Session & Cache =====
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
-builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings")); // تأكد من وجود MailSettings بالقيم
-
-builder.Services.AddControllersWithViews();
+builder.Services
+    .AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 builder.Services.AddRazorPages();
+// ===== Localization (اللغات) =====
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+var supportedCultures = new[]
+{
+    new CultureInfo("ar"),
+    new CultureInfo("en"),
+    new CultureInfo("fr")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("ar"); // الافتراضي عربي
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 
 var app = builder.Build();
 
+// ===== إنشاء الأدوار وحساب الأدمن وربط المنظمات =====
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-    if (!await roleManager.RoleExistsAsync("Organization"))
+    // ---- إنشاء الأدوار لو مش موجودة ----
+    string[] roles = { "Admin", "User", "Organization" };
+    foreach (var role in roles)
     {
-        await roleManager.CreateAsync(new IdentityRole("Organization"));
+        if (!await roleManager.RoleExistsAsync(role))
+            await roleManager.CreateAsync(new IdentityRole(role));
     }
 
-    // المستخدم الأول
-    string email = "test@org.com";
-    string password = "Test123!";
+    // ---- إنشاء حساب الأدمن الثابت ----
+    string adminEmail = "admin@org.com";
+    string adminPassword = "Admin@123";
 
-    if (await userManager.FindByEmailAsync(email) == null)
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser == null)
     {
-        var user = new ApplicationUser
+        adminUser = new ApplicationUser
         {
-            UserName = email,
-            Email = email,
-            FullName = "Test Org",
-            Role = UserRole.Organization,
-            Language = "en",
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true,
+            FullName = "System Admin",
             CreatedAt = DateTime.Now
         };
 
-        var result = await userManager.CreateAsync(user, password);
+        var result = await userManager.CreateAsync(adminUser, adminPassword);
         if (result.Succeeded)
-        {
-            await userManager.AddToRoleAsync(user, "Organization");
-        }
+            await userManager.AddToRoleAsync(adminUser, "Admin");
     }
 
-    // المستخدم الثاني
-    string email2 = "tojan050@gmail.com";
-    string password2 = "YourSecurePassword!";
+    // ---- ربط كل المنظمات بحساباتهم بدون التأثير على Admin أو User ----
+    var orgRoleId = context.Roles.FirstOrDefault(r => r.Name == "Organization")?.Id;
 
-    if (await userManager.FindByEmailAsync(email2) == null)
+    if (orgRoleId != null)
     {
-        var user2 = new ApplicationUser
-        {
-            UserName = email2,
-            Email = email2,
-            FullName = "Tojan AboGhola",
-            Role = UserRole.User,
-            Language = "en",
-            CreatedAt = DateTime.Now
-        };
+        // كل UserIds للمنظمات
+        var orgUserIds = context.UserRoles
+            .Where(ur => ur.RoleId == orgRoleId)
+            .Select(ur => ur.UserId)
+            .ToList();
 
-        var result2 = await userManager.CreateAsync(user2, password2);
-        if (result2.Succeeded)
+        var orgUsers = context.Users
+            .Where(u => orgUserIds.Contains(u.Id))
+            .ToList();
+
+        // كل Organizations بدون UserId
+        var organizations = context.Organizations
+            .Where(o => o.UserId == null)
+            .ToList();
+
+        foreach (var org in organizations)
         {
-            await userManager.AddToRoleAsync(user2, "Organization");
+            var user = orgUsers.FirstOrDefault(u => u.Email.ToLower() == org.ContactEmail.ToLower());
+            if (user != null)
+                org.UserId = user.Id;
+        }
+
+        try
+        {
+            context.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 }
-
-// Configure the HTTP request pipeline.
+// ✅ Seed Articles (Test Data)
+// =========================
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    DbInitializer.SeedArticles(context);
+}
+// ===== Configure the HTTP request pipeline =====
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -98,11 +164,17 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStatusCodePagesWithReExecute("/Home/StatusCode", "?code={0}");
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+// ===== Use Localization =====
+var localizationOptions = app.Services
+    .GetRequiredService<IOptions<RequestLocalizationOptions>>()
+    .Value;
+
+app.UseRequestLocalization(localizationOptions);
 
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

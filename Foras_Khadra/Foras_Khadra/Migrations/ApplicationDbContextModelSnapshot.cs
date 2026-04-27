@@ -524,7 +524,7 @@ namespace Foras_Khadra.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LogoPath")
+                    b.Property<string>("LogoPhoto")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")

@@ -6,10 +6,10 @@
 
 <h2>تفاصيل المنظمة: @Model.Name</h2>
 
-@if (User.IsInRole("Admin") && !string.IsNullOrEmpty(Model.LogoPath))
+@if (User.IsInRole("Admin") && !string.IsNullOrEmpty(Model.LogoPhotoPath))
 {
     <div class="mb-3">
-        <img src="@Model.LogoPath" style="width:150px; height:150px; object-fit:cover; border-radius:50%;" />
+        <img src="@Model.LogoPhotoPath" style="width:150px; height:150px; object-fit:cover; border-radius:50%;" />
 
         <form asp-action="DeleteLogo" method="post" class="mt-2">
             <input type="hidden" name="id" value="@Model.Id" />

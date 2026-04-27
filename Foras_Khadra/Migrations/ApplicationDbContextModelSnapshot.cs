@@ -22,6 +22,21 @@ namespace Foras_Khadra.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CountryOpportunity", b =>
+                {
+                    b.Property<int>("AvailableCountriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OpportunitiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AvailableCountriesId", "OpportunitiesId");
+
+                    b.HasIndex("OpportunitiesId");
+
+                    b.ToTable("CountryOpportunity");
+                });
+
             modelBuilder.Entity("Foras_Khadra.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -34,6 +49,15 @@ namespace Foras_Khadra.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactPersonName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -44,11 +68,22 @@ namespace Foras_Khadra.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("InterestsJson")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -58,6 +93,9 @@ namespace Foras_Khadra.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -65,6 +103,12 @@ namespace Foras_Khadra.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("OrganizationName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrganizationWebsite")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -77,6 +121,9 @@ namespace Foras_Khadra.Migrations
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
+
+                    b.Property<string>("Sector")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -113,7 +160,15 @@ namespace Foras_Khadra.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Content")
+                    b.Property<string>("ContentAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContentEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContentFr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -124,13 +179,431 @@ namespace Foras_Khadra.Migrations
                     b.Property<DateTime>("PublishDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("TitleAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleFr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameFr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            NameAr = "كل دول العالم",
+                            NameEn = "All World",
+                            NameFr = "Tous les pays du monde"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            NameAr = "الوطن العربي ",
+                            NameEn = "The Arab World",
+                            NameFr = "Le Monde arabe"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            NameAr = "فلسطين",
+                            NameEn = "Palestine",
+                            NameFr = "Palestine"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            NameAr = "الأردن",
+                            NameEn = "Jordan",
+                            NameFr = "Jordanie"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            NameAr = "سوريا",
+                            NameEn = "Syria",
+                            NameFr = "Syrie"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            NameAr = "لبنان",
+                            NameEn = "Lebanon",
+                            NameFr = "Liban"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            NameAr = "العراق",
+                            NameEn = "Iraq",
+                            NameFr = "Irak"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            NameAr = "السعودية",
+                            NameEn = "Saudi Arabia",
+                            NameFr = "Arabie saoudite"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            NameAr = "الكويت",
+                            NameEn = "Kuwait",
+                            NameFr = "Koweït"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            NameAr = "قطر",
+                            NameEn = "Qatar",
+                            NameFr = "Qatar"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            NameAr = "البحرين",
+                            NameEn = "Bahrain",
+                            NameFr = "Bahreïn"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            NameAr = "الإمارات العربية المتحدة",
+                            NameEn = "United Arab Emirates",
+                            NameFr = "Émirats arabes unis"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            NameAr = "عُمان",
+                            NameEn = "Oman",
+                            NameFr = "Oman"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            NameAr = "اليمن",
+                            NameEn = "Yemen",
+                            NameFr = "Yémen"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            NameAr = "مصر",
+                            NameEn = "Egypt",
+                            NameFr = "Égypte"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            NameAr = "السودان",
+                            NameEn = "Sudan",
+                            NameFr = "Soudan"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            NameAr = "ليبيا",
+                            NameEn = "Libya",
+                            NameFr = "Libye"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            NameAr = "تونس",
+                            NameEn = "Tunisia",
+                            NameFr = "Tunisie"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            NameAr = "الجزائر",
+                            NameEn = "Algeria",
+                            NameFr = "Algérie"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            NameAr = "المغرب",
+                            NameEn = "Morocco",
+                            NameFr = "Maroc"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            NameAr = "موريتانيا",
+                            NameEn = "Mauritania",
+                            NameFr = "Mauritanie"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            NameAr = "جيبوتي",
+                            NameEn = "Djibouti",
+                            NameFr = "Djibouti"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            NameAr = "الصومال",
+                            NameEn = "Somalia",
+                            NameFr = "Somalie"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            NameAr = "جزر القمر",
+                            NameEn = "Comoros",
+                            NameFr = "Comores"
+                        });
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.Opportunity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplyLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BenefitsAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BenefitsEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BenefitsFr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("DeadlineType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DescriptionAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionFr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsFr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EligibilityCriteriaAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EligibilityCriteriaEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EligibilityCriteriaFr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("PublishDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PublishedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleFr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.ToTable("Opportunities");
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.Organization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LogoPhoto")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PasswordResetToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Sector")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("TokenExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Organizations");
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.ReelsRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsInProgress")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRejected")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("OpportunityId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OpportunityId1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OpportunityId");
+
+                    b.HasIndex("OpportunityId1");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("ReelsRequests");
                 });
 
             modelBuilder.Entity("Foras_Khadra.Models.TeamMember", b =>
@@ -141,11 +614,25 @@ namespace Foras_Khadra.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Bio")
+                    b.Property<string>("BioAr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("BioEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BioFr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Department")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Gender")
                         .HasColumnType("int");
 
                     b.Property<string>("ImagePath")
@@ -155,7 +642,15 @@ namespace Foras_Khadra.Migrations
                     b.Property<int>("Membership")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameFr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -297,6 +792,65 @@ namespace Foras_Khadra.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CountryOpportunity", b =>
+                {
+                    b.HasOne("Foras_Khadra.Models.Country", null)
+                        .WithMany()
+                        .HasForeignKey("AvailableCountriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Foras_Khadra.Models.Opportunity", null)
+                        .WithMany()
+                        .HasForeignKey("OpportunitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.Opportunity", b =>
+                {
+                    b.HasOne("Foras_Khadra.Models.ApplicationUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.Organization", b =>
+                {
+                    b.HasOne("Foras_Khadra.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.ReelsRequest", b =>
+                {
+                    b.HasOne("Foras_Khadra.Models.Opportunity", "Opportunity")
+                        .WithMany()
+                        .HasForeignKey("OpportunityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Foras_Khadra.Models.Opportunity", null)
+                        .WithMany("ReelsRequests")
+                        .HasForeignKey("OpportunityId1");
+
+                    b.HasOne("Foras_Khadra.Models.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Opportunity");
+
+                    b.Navigation("Organization");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -346,6 +900,11 @@ namespace Foras_Khadra.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Foras_Khadra.Models.Opportunity", b =>
+                {
+                    b.Navigation("ReelsRequests");
                 });
 #pragma warning restore 612, 618
         }

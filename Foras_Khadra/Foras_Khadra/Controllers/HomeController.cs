@@ -33,7 +33,7 @@ namespace Foras_Khadra.Controllers
                 .ToList();
 
             var organizations = _context.Organizations
-                .Where(o => !string.IsNullOrEmpty(o.LogoPath))
+                .Where(o => !string.IsNullOrEmpty(o.LogoPhotoPath))
                 .Take(12)
                 .ToList();
 

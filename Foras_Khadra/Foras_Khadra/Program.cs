@@ -9,6 +9,8 @@ using Microsoft.Extensions.Options;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+Console.WriteLine("CONNECTION STRING:");
+Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 // ===== إعداد قاعدة البيانات =====
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -137,7 +139,14 @@ using (var scope = app.Services.CreateScope())
                 org.UserId = user.Id;
         }
 
-        context.SaveChanges();
+        try
+        {
+            context.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }
 // ✅ Seed Articles (Test Data)

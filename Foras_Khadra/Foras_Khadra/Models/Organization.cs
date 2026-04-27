@@ -43,10 +43,10 @@ namespace Foras_Khadra.Models
         public DateTime? TokenExpiry { get; set; }
 
         [ForeignKey("UserId")]
-        public string? UserId { get; set; }  // ← خليها nullable مؤقتًا
+        public string? UserId { get; set; }  //   nullable مؤقتا
         public ApplicationUser? User { get; set; }
 
-        public string? LogoPath { get; set; }
+        public string? LogoPhotoPath { get; set; }
 
     }
 }

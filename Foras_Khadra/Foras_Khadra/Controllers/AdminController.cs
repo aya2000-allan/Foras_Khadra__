@@ -134,9 +134,9 @@ namespace Foras_Khadra.Controllers
                 }
 
                 //  حذف القديم (إذا موجود)
-                if (!string.IsNullOrEmpty(org.LogoPath))
+                if (!string.IsNullOrEmpty(org.LogoPhotoPath))
                 {
-                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", org.LogoPath.TrimStart('/'));
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", org.LogoPhotoPath.TrimStart('/'));
                     if (System.IO.File.Exists(oldPath))
                     {
                         System.IO.File.Delete(oldPath);
@@ -152,7 +152,7 @@ namespace Foras_Khadra.Controllers
                     await logoFile.CopyToAsync(stream);
                 }
 
-                org.LogoPath = "/uploads/" + fileName;
+                org.LogoPhotoPath = "/uploads/" + fileName;
                 await _context.SaveChangesAsync();
             }
 
@@ -166,16 +166,16 @@ namespace Foras_Khadra.Controllers
             var org = await _context.Organizations.FindAsync(id);
             if (org == null) return NotFound();
 
-            if (!string.IsNullOrEmpty(org.LogoPath))
+            if (!string.IsNullOrEmpty(org.LogoPhotoPath))
             {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", org.LogoPath.TrimStart('/'));
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", org.LogoPhotoPath.TrimStart('/'));
 
                 if (System.IO.File.Exists(path))
                 {
                     System.IO.File.Delete(path);
                 }
 
-                org.LogoPath = null;
+                org.LogoPhotoPath = null;
                 await _context.SaveChangesAsync();
             }
 
