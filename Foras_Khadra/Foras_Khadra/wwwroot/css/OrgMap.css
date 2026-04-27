@@ -18,13 +18,14 @@
     position: relative;
     background: #ffffff;
     display: flex;
-    align-items: stretch;
+    align-items: center;
     justify-content: center;
     flex-direction: column;
     text-align: center;
     cursor: pointer;
     transition: 0.35s ease;
-    border: 2px solid rgba(37,101,44,0.15);
+    border: 2px solid rgba(37, 101, 44, 0.18);
+    overflow: visible;
 }
 
 /* glowing orbit ring */
@@ -44,16 +45,21 @@
     transition: 0.4s ease;
 }
 
-/* inner soft core */
+/* وهج داخلي خفيف تحت طبقة القرص */
 .org-card::after {
     content: "";
     position: absolute;
+    z-index: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 120px;
     height: 120px;
     border-radius: 50%;
     background: radial-gradient(circle,
-        rgba(37,101,44,0.08),
+        rgba(37, 101, 44, 0.05),
         transparent 70%);
+    pointer-events: none;
 }
 
 /* hover = expansion */
@@ -69,87 +75,103 @@
 }
 
 /* ==============================
-   CONTENT INSIDE DISC (logo + name + sector + country)
+   قرص كامل بالصورة — المعلومات تظهر عند hover / focus
 ============================== */
 
 .org-card-body {
     position: relative;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 4px;
-    padding: 12px 10px 10px;
-    height: 100%;
     width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
     box-sizing: border-box;
 }
 
 .org-logo {
-    width: 56px;
-    height: 56px;
-    flex-shrink: 0;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 50%;
     display: block;
-    border: 1px solid rgba(37, 101, 44, 0.12);
-    background: #f8faf9;
+}
+
+/* طبقة المعلومات */
+.org-card-hover {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 8px;
+    box-sizing: border-box;
+    background: linear-gradient(
+        165deg,
+        rgba(37, 101, 44, 0.92) 0%,
+        rgba(20, 40, 24, 0.88) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.28s ease;
+    pointer-events: none;
+}
+
+.org-card:hover .org-card-hover,
+.org-card:focus-within .org-card-hover {
+    opacity: 1;
 }
 
 .org-card-text {
-    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2px;
-    min-height: 0;
+    gap: 4px;
     width: 100%;
+    max-height: 100%;
     text-align: center;
-}
-
-.org-card::after {
-    background: radial-gradient(circle, rgba(0,0,0,0.1), transparent 60%);
-}
-.org-card {
-    overflow: hidden;
-    border: 2px solid rgba(37,101,44,0.18);
 }
 
 /* ==============================
    TEXT (compact node style)
 ============================== */
 
-.org-name {
-    font-size: 11px;
+.org-card-hover .org-name {
+    font-size: 12px;
     font-weight: 700;
-    color: #1f2a24;
-    line-height: 1.2;
-    max-height: 2.4em;
+    color: #ffffff;
+    line-height: 1.25;
+    max-height: 2.6em;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     word-break: break-word;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
-.org-meta {
-    font-size: 9px;
-    color: #66736d;
+.org-card-hover .org-meta {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.92);
     line-height: 1.2;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
     max-width: 100%;
 }
 
-.org-disc-sector {
+.org-card-hover .org-disc-sector {
     font-weight: 600;
-    color: #25652c;
+    color: #e8ffd0;
 }
 
-.org-disc-country {
+.org-card-hover .org-disc-country {
     font-weight: 500;
+    color: rgba(255, 255, 255, 0.88);
 }
 
 

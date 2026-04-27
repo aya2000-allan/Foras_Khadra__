@@ -132,16 +132,18 @@
                     var sectorText = OrgMapFilterFormatting.SectorLabel(org.Sector, lang);
                     var countryText = OrgMapFilterFormatting.CountryLabel(org.Country, lang, countriesLookup);
                     <div class="org-wrapper">
-                        <div class="org-card" data-org-id="@org.Id" dir="@fieldDir">
+                        <div class="org-card" data-org-id="@org.Id" dir="@fieldDir" tabindex="0">
                             <div class="org-card-body">
                                 <img class="org-logo"
                                      src="@logoSrc"
                                      alt=""
                                      loading="lazy" />
-                                <div class="org-card-text">
-                                    <div class="org-name" title="@org.Name">@org.Name</div>
-                                    <div class="org-meta org-disc-sector" title="@sectorText">@sectorText</div>
-                                    <div class="org-meta org-disc-country" title="@countryText">@countryText</div>
+                                <div class="org-card-hover" aria-hidden="true">
+                                    <div class="org-card-text">
+                                        <div class="org-name" title="@org.Name">@org.Name</div>
+                                        <div class="org-meta org-disc-sector" title="@sectorText">@sectorText</div>
+                                        <div class="org-meta org-disc-country" title="@countryText">@countryText</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
