@@ -1,8 +1,11 @@
-﻿using Foras_Khadra.Models;  // << مهم جدًا
+using Foras_Khadra.Models;  // << مهم جدًا
 namespace Foras_Khadra.Helpers
 {
     public static class OpportunityTypeExtensions
     {
+        public static string GetDisplayName(this OpportunityType? type, string lang) =>
+            type.HasValue ? type.Value.GetDisplayName(lang) : string.Empty;
+
         public static string GetDisplayName(this OpportunityType type, string lang)
         {
             return type switch

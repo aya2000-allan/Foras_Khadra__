@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 @{
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
@@ -200,8 +200,68 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 18px;
-        width: 100%;
+        gap: 10px;
+        flex: 1 1 auto;
+        min-width: 0;
+        flex-wrap: nowrap;
+    }
+
+    /* سطح المكتب: توسيط القائمة + تسجيل الدخول في منتصف الشريط، الشعار مطلق على inset-inline-start */
+    @@media (min-width: 1401px) {
+        .top-banner {
+            justify-content: center;
+            position: relative;
+            padding-inline: 100px;
+            box-sizing: border-box;
+        }
+        .top-banner .logo {
+            position: absolute;
+            inset-inline-start: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            margin: 0 !important;
+            width: 72px;
+            height: 72px;
+            z-index: 2;
+        }
+        .nav-content {
+            justify-content: center;
+            flex: 0 1 auto;
+            gap: 12px;
+        }
+        .menu-items {
+            flex: 0 1 auto;
+            min-width: 0;
+            flex-wrap: nowrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .menu-items > a,
+        .menu-items .nav-btn {
+            padding-inline: 10px;
+            font-size: 13px;
+        }
+        /* Profile + language: physical left in Arabic (RTL page), physical right in English (LTR) */
+        .top-banner > .auth-section {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 3;
+            flex-wrap: nowrap;
+            gap: 6px;
+        }
+        html[dir="rtl"] .top-banner > .auth-section {
+            left: 18px !important;
+            right: auto !important;
+        }
+        html[dir="ltr"] .top-banner > .auth-section {
+            right: 18px !important;
+            left: auto !important;
+        }
+        .auth-section .nav-btn {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
     }
 
     .mobile-menu-btn {
@@ -263,12 +323,12 @@
    @@media (max-width: 1400px) {
     .navbar-header { background: #25652C; }
 
-    /* Wrapper */
+    /* Wrapper — يتبع اتجاه اللغة (عربي RTL / إن وفر LTR) */
     .top-banner{
         flex-wrap: wrap;
         gap: 10px;
         padding: 10px 12px;
-        direction: ltr; /* يخلي زر التوجل يسار في كل اللغات */
+        direction: inherit;
     }
 
     /* Toggle button */
@@ -280,33 +340,43 @@
         color: #fff;
     }
 
+    /* Mobile row: [menu][logo flex][auth] — auth ends physically right in LTR, left in RTL */
+    .top-banner > .auth-section {
+        order: 3;
+        width: auto !important;
+        max-width: none;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 6px !important;
+    }
+
     /* Logo */
     .logo{
         order: 2;
         flex: 1;
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: center;
+        position: static;
+        transform: none;
+        inset-inline-start: auto;
     }
-
-    
 
     .logo img { max-height: 34px; width: auto; }
 
     /* Menu container */
     #navContent{
-        order: 3;
+        order: 4;
         width: 100%;
         display: none !important; /* مغلق افتراضيًا */
         flex-direction: column;
         gap: 14px;
         padding-top: 10px;
-        direction: ltr; /* الافتراضي */
+        direction: inherit;
     }
     #navContent.show{ display: flex !important; }
-
-    /* خليه RTL فقط لما اللغة عربية */
-    html[dir="rtl"] #navContent{ direction: rtl; }
 
     /* Menu items */
     .menu-items{
@@ -326,21 +396,13 @@
         border-radius: 0 !important; /* شكل موحد */
     }
 
-    /* Auth section */
-    .auth-section{
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px !important;
+    /* كتلة الحساب أصبحت ابنة مباشرة لـ top-banner — لا توسيع عمودي هنا */
+    .top-banner > .auth-section .custom-dropdown{
+        width: auto;
+        max-width: none;
     }
-
-    .auth-section .custom-dropdown{
-        width: 100%;
-        max-width: 420px;
-    }
-    .auth-section .custom-dropdown > button{
-        width: 100%;
+    .top-banner > .auth-section .custom-dropdown > button{
+        width: auto;
     }
 
     /* Dropdown list on mobile */
@@ -454,37 +516,7 @@
                 <img src="~/images/logo.png" alt="شعار المنصة" />
             </div>
 
-            <div class="nav-content" id="navContent">
-                <div class="menu-items">
-                    <a asp-controller="Home" asp-action="Index" data-close-menu>@Localizer["Home"]</a>
-                    <a asp-controller="Home" asp-action="Articles" data-close-menu>@Localizer["Articles"]</a>
-                    <a asp-controller="Home" asp-action="News" data-close-menu>@Localizer["News"]</a>
-
-                    <div class="custom-dropdown">
-                        <button class="nav-btn" style="background-color:#25652C;color:#fff" type="button"
-                                onclick="toggleDropdown('opportunitiesDropdown', event)">
-                            @Localizer["Opportunities"]
-                        </button>
-
-                            <div class="dropdown-list" id="opportunitiesDropdown">
-                                <a asp-controller="Home" asp-action="AllOpportunities" data-close-menu>@Localizer["AllOpportunities"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Competitions" data-close-menu>@Localizer["Competitions"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Conferences" data-close-menu>@Localizer["Conferences"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Volunteering" data-close-menu>@Localizer["VolunteeringOpportunities"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Jobs" data-close-menu>@Localizer["Jobs"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Scholarships" data-close-menu>@Localizer["Scholarships"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Fellowships" data-close-menu>@Localizer["Fellowships"]</a>
-                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Internships" data-close-menu>@Localizer["Internships"]</a>
-                            </div>
-
-                    </div>
-                        <a asp-controller="Home" asp-action="OrganizationsMap" data-close-menu>@Localizer["OrganizationsMap"]</a>
-
-                    <a asp-controller="Home" asp-action="AboutUs" data-close-menu>@Localizer["AboutUs"]</a>
-                    <a asp-controller="Contact" asp-action="Index" data-close-menu>@Localizer["ContactUs"]</a>
-                </div>
-
-                <div class="auth-section d-flex gap-2 align-items-center">
+            <div class="auth-section d-flex gap-2 align-items-center">
                     @if (!userIsAuthenticated)
                     {
                         <div class="custom-dropdown">
@@ -580,6 +612,36 @@ else
                         </div>
                     </div>
 
+            </div>
+
+            <div class="nav-content" id="navContent">
+                <div class="menu-items">
+                    <a asp-controller="Home" asp-action="Index" data-close-menu>@Localizer["Home"]</a>
+                    <a asp-controller="Home" asp-action="Articles" data-close-menu>@Localizer["Articles"]</a>
+                    <a asp-controller="Home" asp-action="News" data-close-menu>@Localizer["News"]</a>
+
+                    <div class="custom-dropdown">
+                        <button class="nav-btn" style="background-color:#25652C;color:#fff" type="button"
+                                onclick="toggleDropdown('opportunitiesDropdown', event)">
+                            @Localizer["Opportunities"]
+                        </button>
+
+                            <div class="dropdown-list" id="opportunitiesDropdown">
+                                <a asp-controller="Home" asp-action="AllOpportunities" data-close-menu>@Localizer["AllOpportunities"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Competitions" data-close-menu>@Localizer["Competitions"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Conferences" data-close-menu>@Localizer["Conferences"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Volunteering" data-close-menu>@Localizer["VolunteeringOpportunities"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Jobs" data-close-menu>@Localizer["Jobs"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Scholarships" data-close-menu>@Localizer["Scholarships"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Fellowships" data-close-menu>@Localizer["Fellowships"]</a>
+                                <a asp-controller="Home" asp-action="AllOpportunities" asp-route-type="Internships" data-close-menu>@Localizer["Internships"]</a>
+                            </div>
+
+                    </div>
+                        <a asp-controller="Home" asp-action="OrganizationsMap" data-close-menu>@Localizer["OrganizationsMap"]</a>
+
+                    <a asp-controller="Home" asp-action="AboutUs" data-close-menu>@Localizer["AboutUs"]</a>
+                    <a asp-controller="Contact" asp-action="Index" data-close-menu>@Localizer["ContactUs"]</a>
                 </div>
             </div>
 

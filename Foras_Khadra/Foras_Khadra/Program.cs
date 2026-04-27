@@ -147,6 +147,14 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     DbInitializer.SeedArticles(context);
 }
+
+// ✅ معاينة شبكة المنظمات (Development فقط — لا تُضاف في Production)
+if (app.Environment.IsDevelopment())
+{
+    using var previewScope = app.Services.CreateScope();
+    var previewDb = previewScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    DbInitializer.SeedOrganizationsMapPreview(previewDb);
+}
 // ===== Configure the HTTP request pipeline =====
 if (!app.Environment.IsDevelopment())
 {

@@ -1,4 +1,4 @@
-﻿using Foras_Khadra.Data;
+using Foras_Khadra.Data;
 using Foras_Khadra.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -225,7 +225,7 @@ public async Task<IActionResult> Create()
             opportunity.BenefitsEn = model.BenefitsEn;
             opportunity.BenefitsFr = model.BenefitsFr;
             opportunity.ApplyLink = model.ApplyLink;
-            opportunity.Type = model.Type.Value;
+            opportunity.Type = model.Type ?? opportunity.Type;
             opportunity.DeadlineType = model.DeadlineType;
 
             opportunity.EndDate = model.DeadlineType == DeadlineType.SpecificDate
@@ -313,7 +313,7 @@ public async Task<IActionResult> Create()
                 DetailsAr = opp.DetailsAr,
                 DetailsEn = opp.DetailsEn,
                 DetailsFr = opp.DetailsFr,
-                DeadlineType = opp.DeadlineType,
+                DeadlineType = opp.DeadlineType ?? DeadlineType.NotSpecified,
                 AvailableCountryIds = opp.AvailableCountries?.Select(c => c.Id).ToList() ?? new List<int>(),
                 CountriesSelectList = countries.Select(c => new SelectListItem
                 {

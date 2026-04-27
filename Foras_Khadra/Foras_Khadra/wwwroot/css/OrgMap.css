@@ -1,4 +1,7 @@
-﻿
+﻿.org-map-page {
+    padding-bottom: 2rem;
+}
+
 .network-grid {
     display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -8,13 +11,6 @@
     width: 100%;
 }
 
-.network-page {
-    background:
-        radial-gradient(circle at 20% 20%, rgba(37,101,44,0.05), transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(249,157,39,0.04), transparent 45%);
-}
-
-
 .org-card {
     width: 180px;
     height: 180px;
@@ -22,7 +18,7 @@
     position: relative;
     background: #ffffff;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     flex-direction: column;
     text-align: center;
@@ -73,15 +69,43 @@
 }
 
 /* ==============================
-   LOGO INSIDE NODE
+   CONTENT INSIDE DISC (logo + name + sector + country)
 ============================== */
 
-.org-logo {
-    width: 100%;
+.org-card-body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    padding: 12px 10px 10px;
     height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.org-logo {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
     object-fit: cover;
     border-radius: 50%;
     display: block;
+    border: 1px solid rgba(37, 101, 44, 0.12);
+    background: #f8faf9;
+}
+
+.org-card-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-height: 0;
+    width: 100%;
+    text-align: center;
 }
 
 .org-card::after {
@@ -97,14 +121,35 @@
 ============================== */
 
 .org-name {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 700;
     color: #1f2a24;
+    line-height: 1.2;
+    max-height: 2.4em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
 }
 
 .org-meta {
-    font-size: 11px;
+    font-size: 9px;
     color: #66736d;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.org-disc-sector {
+    font-weight: 600;
+    color: #25652c;
+}
+
+.org-disc-country {
+    font-weight: 500;
 }
 
 
@@ -115,28 +160,6 @@
     position: relative;
 }
 
-/* details box */
-.org-details {
-    margin-top: 10px;
-    padding: 10px 12px;
-    background: #ffffff;
-    border: 1px solid rgba(37,101,44,0.15);
-    border-radius: 12px;
-    font-size: 11px;
-    color: #1f2a24;
-    width: 160px;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: 0.3s ease;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-}
-
-/* show on active */
-.org-wrapper.active .org-details {
-    opacity: 1;
-    transform: translateY(0);
-}
-
 /* ==============================
    FLOATING CONNECTION FEEL (fake network lines)
 ============================== */
@@ -145,4 +168,141 @@
     box-shadow:
         0 0 0 6px rgba(37,101,44,0.08),
         0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* ========== Organizations map — filter (matches all-opportunities) + RTL/LTR ========== */
+.org-map-page .org-map-header {
+    position: relative;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.org-map-page .org-map-header .org-map-filter-window.filter-window {
+    top: calc(100% + 10px);
+    left: 0;
+    right: auto;
+    width: min(380px, calc(100vw - 40px));
+    max-width: 380px;
+    min-width: 280px;
+    border-radius: 24px;
+    border: 1px solid #eef2f7;
+    box-shadow: 0 22px 60px rgba(15, 23, 42, 0.14);
+    padding: 18px;
+    z-index: 1060;
+}
+
+html[dir="ltr"] .org-map-page .org-map-header .org-map-filter-window.filter-window {
+    left: auto;
+    right: 0;
+}
+
+.org-map-page .org-map-header .filter-window-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #eef2f7;
+}
+
+.org-map-page .filter-heading-caret {
+    font-size: 0.7rem;
+    color: #B6C7B9;
+}
+
+html[dir="rtl"] .org-map-page .filter-heading-caret {
+    display: inline-block;
+    transform: scaleX(-1);
+}
+
+.org-map-label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #475569;
+    margin-bottom: 6px;
+}
+
+.org-map-select,
+.org-map-filter-form .form-control {
+    border-radius: 14px !important;
+    min-height: 46px;
+    padding: 12px 14px;
+    border: 1px solid #dbe4ee !important;
+    box-shadow: none !important;
+}
+
+.org-map-filter-form .form-control:focus {
+    border-color: #3fa34d !important;
+    box-shadow: 0 0 0 4px rgba(63, 163, 77, 0.12) !important;
+}
+
+.org-map-filter-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+
+.org-map-filter-actions .btn-cancel-sub,
+.org-map-filter-actions .btn-search-sub {
+    flex: 1;
+    border-radius: 14px;
+    padding: 11px 14px;
+    font-weight: 700;
+}
+
+.org-map-filter-actions .org-map-filter-close-btn {
+    background: #fff;
+    border: 2px solid var(--search-btn-green, #2d6a31);
+    color: var(--search-btn-green, #2d6a31);
+}
+
+.org-map-filter-actions .org-map-filter-close-btn:hover {
+    background: rgba(45, 106, 49, 0.06);
+}
+
+.org-map-empty {
+    border-radius: 16px;
+    border: 1px solid #dbe4ee;
+}
+
+.org-map-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 28px 0 48px;
+    gap: 8px;
+}
+
+.org-map-page-link {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    color: #334155;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.org-map-page-link:hover,
+.org-map-page-link.active {
+    background: #2e7d32;
+    color: #fff;
+    border-color: #2e7d32;
+}
+
+@media (max-width: 991px) {
+    .org-map-page .org-map-header .org-map-filter-window.filter-window {
+        left: 12px !important;
+        right: 12px !important;
+        width: auto !important;
+        max-width: none !important;
+        min-width: unset !important;
+    }
 }

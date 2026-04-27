@@ -1,4 +1,6 @@
-﻿using Foras_Khadra.Data;
+using System.Globalization;
+using Foras_Khadra.Data;
+using Foras_Khadra.Helpers;
 using Foras_Khadra.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -201,7 +203,7 @@ namespace Foras_Khadra.Controllers
                     .Select(t => Enum.Parse<OpportunityType>(t))
                     .ToList();
 
-                query = query.Where(o => selectedTypes.Contains(o.Type));
+                query = query.Where(o => o.Type.HasValue && selectedTypes.Contains(o.Type.Value));
             }
 
             // فلترة حسب الدولة
@@ -275,6 +277,24 @@ namespace Foras_Khadra.Controllers
 
             ViewBag.Countries = countries;
             ViewBag.Sectors = sectors;
+
+            var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            var countryRows = await _context.Countries.AsNoTracking().ToListAsync();
+            ViewBag.CountriesLookup = countryRows;
+            ViewBag.CountryFilterOptions = countries
+                .Select(c => new OrgMapSelectOption
+                {
+                    Value = c,
+                    Label = OrgMapFilterFormatting.CountryLabel(c, lang, countryRows)
+                })
+                .ToList();
+            ViewBag.SectorFilterOptions = sectors
+                .Select(s => new OrgMapSelectOption
+                {
+                    Value = s,
+                    Label = OrgMapFilterFormatting.SectorLabel(s, lang)
+                })
+                .ToList();
 
             ViewBag.SelectedCountry = country;
             ViewBag.SelectedSector = sector;
