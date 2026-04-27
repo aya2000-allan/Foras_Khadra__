@@ -135,6 +135,9 @@
   <data name="sector_label" xml:space="preserve">
     <value>القطاع</value>
   </data>
+  <data name="cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
   <data name="apply" xml:space="preserve">
     <value>تطبيق التصفية</value>
   </data>

@@ -135,6 +135,9 @@
   <data name="sector_label" xml:space="preserve">
     <value>Sector</value>
   </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="apply" xml:space="preserve">
     <value>Apply filter</value>
   </data>
