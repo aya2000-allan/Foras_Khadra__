@@ -47,7 +47,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "رام الله",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/img1.svg",
                 },
                 new()
                 {
@@ -60,7 +59,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "غزة",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/img2.svg",
                 },
                 new()
                 {
@@ -73,7 +71,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "Amman",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/img3.svg",
                 },
                 new()
                 {
@@ -86,7 +83,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "بيروت",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/img4.svg",
                 },
                 new()
                 {
@@ -99,7 +95,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "Cairo",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/img5.svg",
                 },
                 new()
                 {
@@ -112,7 +107,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "الخليل",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/leaf.svg",
                 },
                 new()
                 {
@@ -125,7 +119,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "إربد",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/team_leaf.svg",
                 },
                 new()
                 {
@@ -138,7 +131,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "Nablus",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/about_us_leaf.svg",
                 },
                 new()
                 {
@@ -151,7 +143,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "جنين",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/plane.svg",
                 },
                 new()
                 {
@@ -164,7 +155,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "Tripoli",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/Group.svg",
                 },
                 new()
                 {
@@ -177,7 +167,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "بيت لحم",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/contact_illustration.svg",
                 },
                 new()
                 {
@@ -190,7 +179,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "Zarqa",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/Writer-illustration.svg",
                 },
                 new()
                 {
@@ -203,7 +191,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "طولكرم",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/img1.svg",
                 },
                 new()
                 {
@@ -216,7 +203,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "Alexandria",
                     CreatedAt = now,
-                    LogoPhotoPath= "/images/img2.svg",
                 },
                 new()
                 {
@@ -229,7 +215,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "صيدا",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/img3.svg",
                 },
                 new()
                 {
@@ -242,7 +227,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "Deir al-Balah",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/img4.svg",
                 },
                 new()
                 {
@@ -255,7 +239,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "أريحا",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/img5.svg",
                 },
                 new()
                 {
@@ -268,7 +251,6 @@ namespace Foras_Khadra.Data
                     Password = pwd,
                     Location = "رام الله",
                     CreatedAt = now,
-                    LogoPhotoPath = "/images/leaf.svg",
                 },
             };
 

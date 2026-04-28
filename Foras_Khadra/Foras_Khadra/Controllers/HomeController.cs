@@ -34,16 +34,12 @@ namespace Foras_Khadra.Controllers
                 .AsNoTracking()
                 .ToList();
 
-            var organizations = _context.Organizations
-                .Where(o => !string.IsNullOrEmpty(o.LogoPhotoPath))
-                .Take(12)
-                .ToList();
+            
 
             var model = new HomeViewModel
             {
                 LatestArticles = latestArticles,
                 LatestOpportunities = latestOpportunities,
-                Organizations = organizations
             };
 
             return View(model);
@@ -240,80 +236,7 @@ namespace Foras_Khadra.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> OrganizationsMap(string country, string sector, int page = 1)
-        {
-            int pageSize = 20;
-
-            var countries = await _context.Organizations
-                .Where(o => o.Country != null)
-                .Select(o => o.Country)
-                .Distinct()
-                .OrderBy(c => c)
-                .ToListAsync();
-
-            var sectors = await _context.Organizations
-                .Where(o => !string.IsNullOrEmpty(o.Sector))
-                .Select(o => o.Sector.Trim())
-                .Distinct()
-                .OrderBy(s => s)
-                .ToListAsync();
-
-            var query = _context.Organizations.AsQueryable();
-
-            if (!string.IsNullOrEmpty(country))
-                query = query.Where(o => o.Country == country);
-
-            if (!string.IsNullOrEmpty(sector))
-                query = query.Where(o => o.Sector == sector);
-
-            //  عدد الكل (للتقسيم)
-            var totalItems = await query.CountAsync();
-
-            var organizations = await query
-                .OrderBy(o => o.Name)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            ViewBag.Countries = countries;
-            ViewBag.Sectors = sectors;
-
-            var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            var countryRows = await _context.Countries.AsNoTracking().ToListAsync();
-            ViewBag.CountriesLookup = countryRows;
-            ViewBag.CountryFilterOptions = countries
-                .Select(c => new OrgMapSelectOption
-                {
-                    Value = c,
-                    Label = OrgMapFilterFormatting.CountryLabel(c, lang, countryRows)
-                })
-                .ToList();
-            ViewBag.SectorFilterOptions = sectors
-                .Select(s => new OrgMapSelectOption
-                {
-                    Value = s,
-                    Label = OrgMapFilterFormatting.SectorLabel(s, lang)
-                })
-                .ToList();
-
-            ViewBag.SelectedCountry = country;
-            ViewBag.SelectedSector = sector;
-
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
-
-            return View(organizations);
-        }
-
-        public async Task<IActionResult> DetailsOrganization(int id)
-        {
-            var org = await _context.Organizations.FindAsync(id);
-
-            if (org == null)
-                return NotFound();
-
-            return View(org);
-        }
+        
 
         public IActionResult UnderDevelopment()
         {

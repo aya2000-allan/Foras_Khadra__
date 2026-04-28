@@ -35,8 +35,9 @@ namespace Foras_Khadra.Controllers
             var opportunities = _context.Opportunities.ToList();
 
             var grouped = opportunities
-                .GroupBy(o => o.Type)
-                .ToDictionary(g => g.Key, g => g.ToList());
+.Where(o => o.Type.HasValue)
+.GroupBy(o => o.Type.Value)
+.ToDictionary(g => g.Key, g => g.ToList());
 
             return View(grouped);
         }

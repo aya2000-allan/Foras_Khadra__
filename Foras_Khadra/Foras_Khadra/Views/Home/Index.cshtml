@@ -576,43 +576,6 @@ html[dir="ltr"] #heroBg1 {
     </div>
 </section>
 
-<section class="organizations-network py-5" dir="@dir" style="background:#fff;">
-    <div class="container">
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 style="color:#25652C; font-weight:bold;">
-                شبكة المنظمات
-            </h2>
-        </div>
-
-        <div class="swiper orgSwiper">
-            <div class="swiper-wrapper">
-
-                @foreach (var org in Model.Organizations)
-                {
-                    <div class="swiper-slide text-center">
-
-                        <a href="javascript:void(0);"
-                           class="org-link"
-                           data-org-id="@org.Id"
-                           style="display:block;text-decoration:none;color:inherit;">
-
-                            <img src="@org.LogoPhotoPath"
-                                 style="width:90px;height:90px;object-fit:cover;border-radius:50%;border:2px solid #eee;" />
-
-                            <div style="margin-top:8px; font-size:14px; color:#333;">
-                                @org.Name
-                            </div>
-
-                        </a>
-
-                    </div>
-                }
-            </div>
-        </div>
-
-    </div>
-</section>
 
 <script>
     const container = document.getElementById("floatingShapes");

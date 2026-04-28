@@ -6,17 +6,7 @@
 
 <h2>تفاصيل المنظمة: @Model.Name</h2>
 
-@if (User.IsInRole("Admin") && !string.IsNullOrEmpty(Model.LogoPhotoPath))
-{
-    <div class="mb-3">
-        <img src="@Model.LogoPhotoPath" style="width:150px; height:150px; object-fit:cover; border-radius:50%;" />
 
-        <form asp-action="DeleteLogo" method="post" class="mt-2">
-            <input type="hidden" name="id" value="@Model.Id" />
-            <button type="submit" class="btn btn-danger btn-sm">حذف اللوجو</button>
-        </form>
-    </div>
-}
 
 <table class="table table-bordered mt-3">
     <tr>
@@ -57,18 +47,7 @@
         <td>@Model.CreatedAt.ToString("yyyy-MM-dd")</td>
     </tr>
 </table>
-@if (User.IsInRole("Admin"))
-{
-    <form asp-action="UploadLogo" method="post" enctype="multipart/form-data" class="mt-3">
-        <input type="hidden" name="id" value="@Model.Id" />
 
-        <div class="mb-2">
-            <input type="file" name="logoFile" class="form-control" />
-        </div>
-
-        <button type="submit" class="btn btn-primary">رفع اللوجو</button>
-    </form>
-}
 <a asp-controller="Admin" asp-action="OrganizationsList" class="btn btn-secondary mt-3">
     العودة للقائمة
 </a>
