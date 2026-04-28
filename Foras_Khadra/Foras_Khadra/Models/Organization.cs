@@ -46,5 +46,6 @@ namespace Foras_Khadra.Models
         public string? UserId { get; set; }  //   nullable مؤقتا
         public ApplicationUser? User { get; set; }
 
+        public string? LogoPath { get; set; }
     }
 }

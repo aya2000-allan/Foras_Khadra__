@@ -1,9 +1,58 @@
-
+﻿
 @model List<Foras_Khadra.Models.Organization>
 @using Microsoft.AspNetCore.Mvc.Localization
 @using System.Text.Json
 @inject IViewLocalizer Localizer
 
+@using System.Globalization
+
+@{
+    string GetCountryName(string code)
+    {
+        var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+        return code switch
+        {
+            // Jordan
+            "JO" => lang == "ar" ? "الأردن" : lang == "fr" ? "Jordanie" : "Jordan",
+
+            // Palestine
+            "PS" => lang == "ar" ? "فلسطين" : lang == "fr" ? "Palestine" : "Palestine",
+
+            // Egypt
+            "EG" => lang == "ar" ? "مصر" : lang == "fr" ? "Égypte" : "Egypt",
+
+            // Yemen
+            "YE" => lang == "ar" ? "اليمن" : lang == "fr" ? "Yémen" : "Yemen",
+
+            // India
+            "IN" => lang == "ar" ? "الهند" : lang == "fr" ? "Inde" : "India",
+
+            // Algeria
+            "DZ" => lang == "ar" ? "الجزائر" : lang == "fr" ? "Algérie" : "Algeria",
+
+            // Lebanon
+            "LB" => lang == "ar" ? "لبنان" : lang == "fr" ? "Liban" : "Lebanon",
+
+            // Tunisia
+            "TN" => lang == "ar" ? "تونس" : lang == "fr" ? "Tunisie" : "Tunisia",
+
+            // Oman
+            "OM" => lang == "ar" ? "عُمان" : lang == "fr" ? "Oman" : "Oman",
+
+            // Iraq
+            "IQ" => lang == "ar" ? "العراق" : lang == "fr" ? "Irak" : "Iraq",
+
+            // Morocco
+            "MA" => lang == "ar" ? "المغرب" : lang == "fr" ? "Maroc" : "Morocco",
+
+            // Syria
+            "SY" => lang == "ar" ? "سوريا" : lang == "fr" ? "Syrie" : "Syria",
+
+            _ => code
+        };
+    }
+}
 @{
     ViewData["Title"] = Localizer["PageTitle"];
     var loginTitle = JsonSerializer.Serialize(Localizer["LoginRequiredTitle"].Value);
@@ -54,8 +103,14 @@
                         <option value="">@Localizer["AllCountries"]</option>
                         @foreach (var c in ViewBag.Countries)
                         {
-                            <option value="@c" selected="@(ViewBag.SelectedCountry == c ? "selected" : null)">@c</option>
-                        }
+<option value="">@Localizer["AllCountries"]</option>
+
+@foreach (var country in ViewBag.Countries)
+{
+    <option value="@country" selected="@(ViewBag.SelectedCountry == country ? "selected" : null)">
+        @GetCountryName(country)
+    </option>
+}                      }
                     </select>
                 </div>
                 <div class="mb-3">
@@ -88,13 +143,15 @@
                          role="button"
                          aria-label="@Localizer["LabelOrganizationName"] @org.Name">
                         <div class="org-card-body">
-                            
+                                <img src="@org.LogoPath" class="org-logo" alt="logo" />
+
                             <div class="org-card-hover" aria-hidden="true">
                                 <div class="org-card-text">
                                     <div class="org-name">@org.Name</div>
                                     <div class="org-meta org-disc-sector">@org.Sector</div>
-                                    <div class="org-meta org-disc-country">@org.Country</div>
-                                </div>
+<div class="org-meta org-disc-country">
+    @GetCountryName(org.Country)
+</div>                                </div>
                             </div>
                         </div>
                     </div>
@@ -112,7 +169,7 @@
     @for (int i = 1; i <= ViewBag.TotalPages; i++)
     {
         <a class="page-number org-map-page-link @(ViewBag.CurrentPage == i ? "active" : "")"
-           href="@Url.Action("OrganizationsMap", new { page = i, country = ViewBag.SelectedCountry, sector = ViewBag.SelectedSector })">
+           href="@Url.Action("OrganizationsMap", "Home", new { page = i, country = ViewBag.SelectedCountry, sector = ViewBag.SelectedSector })">
             @i
         </a>
     }
@@ -161,23 +218,24 @@
     const L = { loginTitle: @Html.Raw(loginTitle), loginText: @Html.Raw(loginText), loginBtn: @Html.Raw(loginBtn) };
 
     document.querySelectorAll(".org-card").forEach(function (card) {
-        card.addEventListener("dblclick", function () {
-            const orgId = this.dataset.orgId;
-            if (!isAuthenticated) {
-                Swal.fire({
-                    icon: "warning",
-                    title: L.loginTitle,
-                    text: L.loginText,
-                    confirmButtonText: L.loginBtn,
-                    confirmButtonColor: "#F99D27"
-                }).then(function (result) {
-                    if (result.isConfirmed) {
-                        window.location.href = "/Account/Login";
-                    }
-                });
-            } else {
-                window.location.href = "/Home/DetailsOrganization/" + orgId;
-            }
-        });
+    card.addEventListener("click", function () {
+        const orgId = this.dataset.orgId;
+
+        if (!isAuthenticated) {
+            Swal.fire({
+                icon: "warning",
+                title: L.loginTitle,
+                text: L.loginText,
+                confirmButtonText: L.loginBtn,
+                confirmButtonColor: "#F99D27"
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/Account/Login";
+                }
+            });
+        } else {
+            window.location.href = "/Home/DetailsOrganization/" + orgId;
+        }
     });
+});
 </script>

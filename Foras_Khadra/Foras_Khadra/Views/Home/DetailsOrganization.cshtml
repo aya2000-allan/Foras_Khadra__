@@ -4,6 +4,32 @@
     ViewData["Title"] = "تفاصيل المنظمة";
 }
 
+@using System.Globalization
+
+@{
+    string GetCountryName(string code)
+    {
+        var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+        return code switch
+        {
+            "JO" => lang == "ar" ? "الأردن" : lang == "fr" ? "Jordanie" : "Jordan",
+            "PS" => lang == "ar" ? "فلسطين" : lang == "fr" ? "Palestine" : "Palestine",
+            "EG" => lang == "ar" ? "مصر" : lang == "fr" ? "Égypte" : "Egypt",
+            "YE" => lang == "ar" ? "اليمن" : lang == "fr" ? "Yémen" : "Yemen",
+            "IN" => lang == "ar" ? "الهند" : lang == "fr" ? "Inde" : "India",
+            "DZ" => lang == "ar" ? "الجزائر" : lang == "fr" ? "Algérie" : "Algeria",
+            "LB" => lang == "ar" ? "لبنان" : lang == "fr" ? "Liban" : "Lebanon",
+            "TN" => lang == "ar" ? "تونس" : lang == "fr" ? "Tunisie" : "Tunisia",
+            "OM" => lang == "ar" ? "عُمان" : lang == "fr" ? "Oman" : "Oman",
+            "IQ" => lang == "ar" ? "العراق" : lang == "fr" ? "Irak" : "Iraq",
+            "MA" => lang == "ar" ? "المغرب" : lang == "fr" ? "Maroc" : "Morocco",
+            "SY" => lang == "ar" ? "سوريا" : lang == "fr" ? "Syrie" : "Syria",
+            _ => code
+        };
+    }
+}
+
 <h2 class="mb-4">@Model.Name</h2>
 
 <div class="card shadow-sm p-3">
@@ -12,7 +38,7 @@
 
     <!-- المعلومات -->
     <p><b>القطاع:</b> @Model.Sector</p>
-    <p><b>الدولة:</b> @Model.Country</p>
+    <p><b>الدولة:</b> @GetCountryName(Model.Country)</p>
     <p><b>اسم جهة الاتصال:</b> @Model.ContactName</p>
     <p><b>البريد الإلكتروني:</b> @Model.ContactEmail</p>
     <p><b>رقم الهاتف:</b> @Model.PhoneNumber</p>

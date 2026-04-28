@@ -575,8 +575,69 @@ html[dir="ltr"] #heroBg1 {
 
     </div>
 </section>
+<section class="py-5" style="background:#F6FBF7;">
+    <div class="container">
 
+        <h3 style="color:#25652C;font-weight:bold;margin-bottom:20px;">
+            المنظمات
+        </h3>
 
+        <div class="swiper orgSwiper">
+            <div class="swiper-wrapper">
+
+                @foreach (var org in Model.Organizations)
+                {
+                    <div class="swiper-slide">
+
+                        <div class="org-card text-center"
+                             data-org-id="@org.Id"
+                             style="cursor:pointer;">
+
+                            <img src="@org.LogoPath"
+                                 style="width:80px;height:80px;object-fit:contain;" />
+
+                            <div style="margin-top:10px;font-weight:600;">
+                                @org.Name
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+</section>
+<script>
+        const isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+
+    document.querySelectorAll(".org-card").forEach(card => {
+        card.addEventListener("click", function () {
+
+            const orgId = this.dataset.orgId;
+
+            if (!isAuthenticated) {
+
+                Swal.fire({
+                    icon: "warning",
+                    title: "تسجيل الدخول مطلوب",
+                    text: "يجب تسجيل الدخول لعرض تفاصيل المنظمة",
+                    confirmButtonText: "تسجيل الدخول",
+                    confirmButtonColor: "#F99D27"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/Account/Login";
+                    }
+                });
+
+            } else {
+                window.location.href = "/Home/DetailsOrganization/" + orgId;
+            }
+        });
+    });
+    </script>
 <script>
     const container = document.getElementById("floatingShapes");
     const totalCount = 8;

@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Globalization;
-
+using Microsoft.AspNetCore.Http;
+using System.IO;
 namespace Foras_Khadra.Controllers
 {
     public class AdminController : Controller
@@ -60,7 +61,7 @@ namespace Foras_Khadra.Controllers
                     RequestDate = r.RequestDate,
                     IsCompleted = r.IsCompleted,
                     IsRejected = r.IsRejected,
-                    IsInProgress = r.IsInProgress, 
+                    IsInProgress = r.IsInProgress,
 
                     RejectionReason = r.RejectionReason
                 })
@@ -115,8 +116,56 @@ namespace Foras_Khadra.Controllers
             return View(org);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditOrganization(int id)
+        {
+            var org = await _context.Organizations.FindAsync(id);
+            if (org == null) return NotFound();
+
+            return View(org);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditOrganization(int id, Organization formModel, IFormFile logoFile)
+        {
+            var org = await _context.Organizations.FindAsync(id);
+
+            if (org == null)
+                return NotFound();
+
+            // رفع اللوجو
+            if (logoFile != null && logoFile.Length > 0)
+            {
+                var fileName = Guid.NewGuid() + Path.GetExtension(logoFile.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/logos", fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await logoFile.CopyToAsync(stream);
+                }
+
+                org.LogoPath = "/logos/" + fileName;
+            }
+
+            // تحديث البيانات من formModel (مش model)
+            org.Name = formModel.Name ?? org.Name;
+            org.Sector = formModel.Sector ?? org.Sector;
+            org.Country = formModel.Country ?? org.Country;
+            org.ContactName = formModel.ContactName ?? org.ContactName;
+            org.ContactEmail = formModel.ContactEmail ?? org.ContactEmail;
+            org.PhoneNumber = formModel.PhoneNumber ?? org.PhoneNumber;
+            org.Location = formModel.Location ?? org.Location;
+            org.Website = formModel.Website ?? org.Website;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("OrganizationsList");
+        }
+
+
+
     }
 
 
-        
+
 }

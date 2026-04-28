@@ -34,12 +34,22 @@ namespace Foras_Khadra.Controllers
                 .AsNoTracking()
                 .ToList();
 
-            
+            var organizations = _context.Organizations
+       .Where(o => !string.IsNullOrEmpty(o.LogoPath)) 
+       .Select(o => new Organization
+       {
+           Id = o.Id,
+           Name = o.Name,
+           LogoPath = o.LogoPath
+       })
+       .ToList();
 
             var model = new HomeViewModel
             {
                 LatestArticles = latestArticles,
                 LatestOpportunities = latestOpportunities,
+                Organizations = organizations
+
             };
 
             return View(model);
@@ -236,8 +246,64 @@ namespace Foras_Khadra.Controllers
             return View(model);
         }
 
-        
 
+        public IActionResult OrganizationsMap(string country = null, string sector = null, int page = 1)
+        {
+            int pageSize = 24;
+
+            var query = _context.Organizations.AsQueryable();
+
+            if (!string.IsNullOrEmpty(country))
+                query = query.Where(o => o.Country == country);
+
+            if (!string.IsNullOrEmpty(sector))
+                query = query.Where(o => o.Sector == sector);
+
+            int totalItems = query.Count();
+
+            var organizations = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            ViewBag.CurrentPage = page;
+            ViewBag.SelectedCountry = country;
+            ViewBag.SelectedSector = sector;
+
+            ViewBag.Countries = _context.Organizations
+     .Where(o => !string.IsNullOrWhiteSpace(o.Country))
+     .AsEnumerable() 
+     .Select(o => o.Country
+         .Trim()
+         .Replace(" ", "")
+         .ToUpperInvariant()
+     )
+     .Distinct()
+     .OrderBy(c => c)
+     .ToList();
+
+
+            ViewBag.Sectors = _context.Organizations
+    .Where(o => o.Sector != null && o.Sector != "")
+    .Select(o => o.Sector.Trim())
+    .Distinct()
+    .OrderBy(s => s)
+    .ToList();
+
+            return View(organizations);
+        }
+
+
+        public IActionResult DetailsOrganization(int id)
+        {
+            var org = _context.Organizations.FirstOrDefault(o => o.Id == id);
+
+            if (org == null)
+                return NotFound();
+
+            return View(org);
+        }
         public IActionResult UnderDevelopment()
         {
             return View();

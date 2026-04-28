@@ -26,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\logos\" />
     <Folder Include="wwwroot\images\team\" />
+    <Folder Include="wwwroot\logos\" />
     <Folder Include="wwwroot\uploads\opportunities\" />
   </ItemGroup>
 
