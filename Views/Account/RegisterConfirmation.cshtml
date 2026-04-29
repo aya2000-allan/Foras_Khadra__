@@ -1,0 +1,108 @@
+﻿@using Microsoft.Extensions.Options;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["PageTitle"];
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+}
+
+<div class="auth-page" dir="@dir">
+    <div class="auth-bg-circle"></div>
+
+    <div class="auth-card auth-success">
+
+        <div class="auth-success-icon">
+            <svg width="84" height="84" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="#2E7D32" stroke-width="2"/>
+                <path d="M7 12.5l3 3 7-7"
+                      stroke="#2E7D32"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"/>
+            </svg>
+        </div>
+
+        <h1 class="auth-title"> @Localizer["SuccessTitle"]</h1>
+
+        <p class="auth-subtitle">
+            @Localizer["SuccessSubtitle"]
+        </p>
+
+        <a asp-controller="Account"
+           asp-action="Login"
+           class="btn auth-btn w-100 mt-4">
+            @Localizer["GoToLogin"]
+        </a>
+    </div>
+</div>
+
+<style>
+.auth-page{
+    min-height: calc(100vh - 120px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#F2FBF3;
+    position:relative;
+    overflow:hidden;
+    font-family:"Tajawal","Cairo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+
+@* .auth-bg-circle{
+    position:absolute;
+    width:720px;
+    height:720px;
+    border-radius:50%;
+    background:#E2F6E4;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+} *@
+
+.auth-card{
+    width:100%;
+    max-width:460px;
+    background:#fff;
+    border-radius:18px;
+    padding:38px 28px 32px;
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+    text-align:center;
+    z-index:1;
+}
+
+.auth-success-icon{
+    display:flex;
+    justify-content:center;
+    margin-bottom:18px;
+}
+
+.auth-title{
+    color:#25652C;
+    font-size:32px;
+    font-weight:800;
+    margin:0;
+}
+
+.auth-subtitle{
+    margin-top:14px;
+    font-size:14px;
+    color:#5f6f66;
+    line-height:1.9;
+}
+
+.auth-btn{
+    background:#F99D27;
+    border:none;
+    border-radius:10px;
+    padding:13px;
+    font-weight:800;
+    color:#fff;
+}
+
+.auth-btn:hover{
+    background:#ef981d;
+}
+</style>

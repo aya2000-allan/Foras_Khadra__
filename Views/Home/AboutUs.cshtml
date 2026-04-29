@@ -1,0 +1,480 @@
+@model IEnumerable<Foras_Khadra.Models.TeamMember>
+@using Foras_Khadra.Helpers
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    Layout = "_Layout";
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+    ViewData["Title"] = Localizer["AboutUsTitle"];
+}
+
+<link href="~/css/Home.css" rel="stylesheet" />
+
+<!-- Swiper CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<style>
+  /* ===== Layout: column (group-card) + slider next to it ===== */
+  .teams-section, .team-block { width: 100%; }
+
+  .team-grid{
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .group-card{
+    flex: 0 0 340px;
+    max-width: 380px;
+    background-color: #C6ECC9;
+    border-radius: 24px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 378px;
+  }
+
+  /* ===== Swiper takes remaining width ===== */
+  .team-swiper{
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 56px 38px; /* يمين/يسار للأسهم + تحت للـ pagination */
+    display: flex;
+    align-items: center;     /* توسيط عمودي */
+  }
+
+  .team-swiper .swiper-wrapper{ align-items: center; }
+  .team-swiper .swiper-slide{ height: auto; display:flex; justify-content:center; }
+
+  /* الأسهم بالنص */
+  .team-swiper .swiper-button-next,
+  .team-swiper .swiper-button-prev{
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--green);
+  }
+
+  .team-swiper .swiper-pagination{ bottom: 0px !important; }
+  .team-swiper .swiper-pagination-bullet{ opacity: .35; }
+  .team-swiper .swiper-pagination-bullet-active{ opacity: 1; }
+
+  /* ===== Card look inside slider (clean + balanced) ===== */
+  .team-card{
+    width: 100%;
+    max-width: 340px;      /* خلي الكرت مرتب داخل السلايدر */
+    border-radius: 18px;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  /* الصورة */
+  .team-card .member-img{
+    width: 100%;
+    height: 180px;         /* بدل 312 عشان ما يطلع الكرت طويل */
+    object-fit: cover;
+    display: block;
+  }
+
+  /* الفوتر */
+  .team-card-footer{
+    background: #2f8f4e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 0 0 18px 18px;
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+
+  .footer-title{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  /* صغّر الورقة لأنها كانت بتنفخ الكرت */
+  .footer-leaf{
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 0 !important;
+    flex: 0 0 22px;
+  }
+
+  .footer-title h4{
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.15;
+    @* font-weight: 800; *@
+    min-width: 0;
+    display: -webkit-box;
+    @* -webkit-line-clamp: 2;   /* سطرين */ *@
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .role{
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: .95;
+  }
+
+  /* RTL: خلي المحتوى يمشي مع الاتجاه */
+  [dir="rtl"] .team-card-footer{ direction: rtl; }
+  [dir="ltr"] .team-card-footer{ direction: ltr; }
+
+  @@media (max-width: 900px){
+    .team-grid{ flex-direction: column; }
+    .group-card{ max-width: 100%; flex: none; height: auto; }
+    .team-swiper{ padding: 10px 0 38px; }
+    .team-card{ max-width: 100%; }
+    .team-card .member-img{ height: 200px; }
+    .team-swiper .swiper-pagination{display: none;}
+  }
+  .team-card .member-img{ height: 220px; }
+.team-card{ min-height: 320px; }
+.team-card-footer{
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px 20px;   
+}
+
+.footer-title{
+  flex: 1 1 auto;
+}
+
+.footer-title h4{
+  flex: 1 1 auto;
+}
+
+.role{
+  margin-left: 10px;
+}
+.team-card-footer{
+  flex-direction: column;
+  align-items: flex-start;  
+  justify-content: center;
+  gap: 6px;
+}
+
+.footer-text{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+/* الرول فوق */
+.team-card-footer .role{
+  font-size: 14px;
+  font-weight: 800;
+  opacity: .9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  color: #F99D27;
+}
+
+.team-card-footer .member-name{
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.15;
+  font-weight: 400;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;   
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* صندوق الوصف */
+.bio{
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease;
+  background-position: center;
+  background-size: cover;
+  border-radius: 12px;
+}
+
+/* لما ينفتح */
+.bio.open{
+  max-height: 260px;        
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* طبقة النص داخل الوصف */
+.bio-overlay{
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 14px;
+  color: #fff;
+  border-radius: 12px;
+  height: 100%;               
+  overflow-y: auto;          
+  box-sizing: border-box;
+  line-height: 1.7;
+}
+
+.bio-overlay::-webkit-scrollbar{
+  width: 6px;
+}
+.bio-overlay::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,0.4);
+  border-radius: 6px;
+}
+.bio-overlay::-webkit-scrollbar-track{
+  background: transparent;
+}
+.team-card-footer .role{
+  display: block !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #F99D27 !important;  
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+  opacity: 1 !important;
+  white-space: normal;         
+}
+
+.team-card-footer{
+  min-height: 70px;            
+}
+.team-swiper .swiper-slide{
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+}
+
+.team-card{
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* مهم: امنع الـ bio يطلع برا */
+.bio{
+  position: static !important;  
+  width: 100% !important;
+  margin-top: 10px;
+}
+/* صندوق الوصف */
+.bio{
+  height: 0;                 /* مغلق */
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: height 0.35s ease, opacity 0.25s ease, transform 0.25s ease;
+  background-position: center;
+  background-size: cover;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+.bio.open{
+  height: 260px;             
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bio-overlay{
+  height: 100%;              
+  overflow-y: auto;         /
+  background-color: rgba(0,0,0,0.82);
+  padding: 14px;
+  color: #fff;
+  border-radius: 12px;
+  box-sizing: border-box;
+  line-height: 1.7;
+}
+
+
+
+</style>
+
+
+<!-- ===== HERO ===== -->
+<section class="about-hero">
+  <div class="about-overlay">
+    <h1>@Localizer["AboutUsTitle"]</h1>
+    <p>@Localizer["AboutUsDesc"]</p>
+  </div>
+</section>
+
+
+<!-- ===== VISION & GOALS ===== -->
+<section class="vision-goals" dir="@dir">
+
+    <!-- الرؤية -->
+    <div class="vg-box vision">
+        <div class="vg-title">
+            <img src="~/images/about_us_leaf.svg" />
+            <h3>@Localizer["VisionTitle"]</h3>
+        </div>
+
+        <p>
+            @Localizer["SubVision"]
+        </p>
+    </div>
+
+    <!-- الأهداف -->
+    <div class="vg-box goals">
+        <div class="vg-title">
+            <img src="~/images/about_us_leaf.svg" />
+            <h3>@Localizer["GoalsTitle"]</h3>
+        </div>
+
+        <p>
+            @Localizer["SubGoals"]
+        </p>
+    </div>
+
+</section>
+<!-- ===== TEAMS ===== -->
+<section class="teams-section">
+
+@foreach (var group in Model
+    .GroupBy(m => m.Department)
+    .OrderBy(g =>
+        g.Key == Department.BoardOfDirectors ? 1 :
+        g.Key == Department.HonoraryMembers ? 2 :
+        g.Key == Department.HR ? 3 :
+        g.Key == Department.Technology ? 4 :
+        99)
+    .ThenBy(g => g.Min(m => m.CreatedAt)))
+{
+  <div class="team-block">
+    <div class="team-grid">
+
+      <!-- الكولوم: الهيئة الإدارية / القسم -->
+      <div class="group-card">
+        <h2 class="team-title">@DepartmentTranslator.TranslateName(group.Key, culture)</h2>
+
+        <div class="group-bio">
+          @{
+            var desc = DepartmentTranslator.TranslateDesc(group.Key, culture);
+            var firstSentence = desc.Contains(".") ? desc.Split('.')[0] + "." : desc;
+            var rest = desc.Contains(".") ? desc.Substring(firstSentence.Length) : "";
+          }
+          <p><strong>@firstSentence</strong>@rest</p>
+        </div>
+      </div>
+
+      <!-- السلايدر جنبها -->
+      <div class="swiper team-swiper" data-dir="@dir">
+        <div class="swiper-wrapper">
+
+                        @foreach (var member in group
+                                            .OrderBy(m =>
+                                            m.Membership == MembershipType.Founder ? 1 :
+                                            m.Membership == MembershipType.Manager ? 2 :
+                                            m.Membership == MembershipType.Deputy_Director ? 3 :
+                                            m.Membership == MembershipType.Avisor ? 4 :
+                                            m.Membership == MembershipType.Officer ? 5 :
+                                            m.Membership == MembershipType.Member ? 6 : 99)
+                                            .ThenBy(m => m.CreatedAt))
+                        {
+          <div class="swiper-slide">
+            <div class="team-card">
+
+              @if (!string.IsNullOrEmpty(member.ImagePath))
+              {
+                <img src="@member.ImagePath" alt="@member.NameAr" class="member-img" />
+              }
+
+              <div class="team-card-footer" onclick="toggleBio(@member.Id)">
+  <div class="footer-text">
+    <span class="role">
+      @MembershipTranslator.Translate(member.Membership, member.Gender, culture)
+    </span>
+
+    <h4 class="member-name">
+      @(culture == "ar" ? member.NameAr :
+        culture == "fr" ? member.NameFr :
+        member.NameEn)
+    </h4>
+  </div>
+</div>
+
+
+
+              <div id="bio-@member.Id" class="bio" style="background-image:url(@member.ImagePath)">
+                <div class="bio-overlay">
+                  @Html.Raw(
+                    culture == "ar" ? member.BioAr :
+                    culture == "fr" ? member.BioFr :
+                    member.BioEn
+                  )
+                </div>
+              </div>
+
+            </div>
+          </div>
+        }
+
+        </div>
+
+        <!-- Controls -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+      </div>
+
+    </div>
+  </div>
+}
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+function toggleBio(id){
+  const el = document.getElementById("bio-" + id);
+  if(el) el.classList.toggle("open");
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  document.querySelectorAll(".team-swiper").forEach(function(el){
+    const dir = el.getAttribute("data-dir") || "ltr";
+    el.setAttribute("dir", dir);
+
+    new Swiper(el, {
+      spaceBetween: 16,
+      grabCursor: true,
+      loop: false,
+
+      slidesPerView: 1.1,
+
+      pagination: {
+        el: el.querySelector(".swiper-pagination"),
+        clickable: true
+      },
+      navigation: {
+        nextEl: el.querySelector(".swiper-button-next"),
+        prevEl: el.querySelector(".swiper-button-prev")
+      },
+
+      breakpoints: {
+        480:  { slidesPerView: 1 },
+        640:  { slidesPerView: 2 },
+        900:  { slidesPerView: 3 },
+        1200: { slidesPerView: 4.2 } // 4 سلايدات + شوي
+        // إذا بدك 4 بالزبط: 1200: { slidesPerView: 4 }
+      }
+    });
+  });
+});
+</script>

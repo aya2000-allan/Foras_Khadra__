@@ -1,0 +1,64 @@
+
+    /* الحاوية الرئيسية */
+    .container-404 {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #25652C; /* اللون الأساسي للنصوص */
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* أي نص داخل الحاوية يتأكد أن يأخذ اللون */
+    .container-404, 
+    .container-404 * {
+        color: #25652C !important;
+    }
+
+    /* صورة الخطأ */
+    .container-404 img {
+        max-width: 860px;
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    /* فقرة النص */
+    .container-404 p, 
+    .container-404 .text-container {
+        font-size: 48px;
+        margin-bottom: 20px;
+        line-height: 1.2;
+        margin-top: 20px;
+    }
+
+    /* Media Queries للشاشات الصغيرة */
+    @media (max-width: 992px) { /* شاشات تابلت */
+        .container-404 p {
+            font-size: 36px;
+        }
+        .container-404 img {
+            max-width: 600px;
+        }
+    }
+
+    @media (max-width: 768px) { /* شاشات موبايل كبيرة */
+        .container-404 p {
+            font-size: 28px;
+        }
+        .container-404 img {
+            max-width: 400px;
+        }
+    }
+
+    @media (max-width: 480px) { /* شاشات موبايل صغيرة */
+        .container-404 p {
+            font-size: 22px;
+        }
+        .container-404 img {
+            max-width: 300px;
+        }
+    }

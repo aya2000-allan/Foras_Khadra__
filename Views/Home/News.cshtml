@@ -1,0 +1,26 @@
+﻿@model Foras_Khadra.Models.ErrorViewModel
+@using Microsoft.AspNetCore.Localization;
+@using Microsoft.Extensions.Options;
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["Title"];
+    Layout = "_Layout";
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+}
+<html lang="@culture" dir="@dir">
+
+<head>
+<link rel="stylesheet" href="~/css/_Error.css" />
+</head>
+
+<body>
+<div class="container-404">
+        <img asp-append-version="true" src="~/images/errors/underDevelopment.svg" alt="underDevelopment" />
+
+        <p class="text-container">@Localizer["This page is under development"] </p>
+</div>
+</body>
+</html>

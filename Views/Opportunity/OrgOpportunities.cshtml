@@ -1,0 +1,730 @@
+@model Foras_Khadra.Models.OrgOpportunityPageVM
+@using Foras_Khadra.Helpers
+@using Foras_Khadra.Models
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Foras_Khadra.Helpers
+
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["pageTitle"];
+    Layout = "_Layout";
+    var lang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+}
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+body { background:#f4f8f4; }
+h2 { font-weight:800; color:#2f6b3c; }
+
+.org-table { border-collapse: separate; border-spacing: 0 14px; }
+
+.org-table thead th {
+    border:none;
+    background:transparent;
+    color:#112D14;
+    font-weight:700;
+    font-size:14px;
+}
+
+.org-table tbody tr {
+    background:#fff;
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
+    border-radius:16px;
+}
+
+.org-table tbody td {
+    border:none;
+    padding:18px 12px;
+    vertical-align:middle;
+}
+
+.org-table img { border-radius:12px; }
+
+.badge {
+    padding:6px 14px;
+    font-size:12px;
+    border-radius:20px;
+}
+
+.badge.bg-warning { background:#f9a825 !important; color:#fff; }
+.badge.bg-success { background:#2e7d32 !important; }
+.badge.bg-danger  { background:#d32f2f !important; }
+.badge.bg-info    { background:#0288d1 !important; }
+
+.org-actions .btn {
+    border-radius:50%;
+    width:38px;
+    height:38px;
+    padding:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 4px;
+}
+
+.org-actions .btn-primary { background:#2e7d32; border:none; }
+.org-actions .btn-warning { background:#f9a825; border:none; color:#fff; }
+.org-actions .btn-danger  { background:#d32f2f; border:none; }
+.org-actions .btn-success { background:#2e7d32; border:none; }
+.org-actions .btn-info    { background:#0288d1; border:none; color:#fff; }
+
+.description-cell {
+    max-width:300px;
+    white-space:normal;
+    word-break:break-word;
+    line-height:1.6;
+}
+
+.table-separator {
+    border-top: 1px solid #E5E5E5;
+    margin-bottom: 20px;
+}
+
+.btn-add-opportunity {
+    background: #F99D27; 
+    border: none;
+    color: #fff;
+}
+.btn-add-opportunity:hover {
+    background: #F57C00;
+    color: #fff;
+}
+
+@@media (max-width: 768px) {
+    .org-table thead { display: none; }
+    .org-table tbody tr { display: block; margin-bottom: 15px; }
+    .org-table tbody td { display: flex; justify-content: space-between; padding: 10px; }
+    .description-cell { max-width: 100%; }
+}
+
+/* ===== SweetAlert Styles ===== */
+.swal2-popup.custom-swal {
+  border-radius: 18px !important;
+  padding: 22px 24px 18px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12) !important;
+  font-family: inherit;
+  width: 560px !important;
+  max-width: calc(100% - 24px) !important;
+}
+.swal2-popup.custom-swal.swal-rtl { direction: rtl; }
+.swal2-popup.custom-swal.swal-ltr { direction: ltr; }
+.reels-requested {
+    opacity: 0.45;
+}
+
+.swal2-title.custom-swal-title {
+  color: #1b1b1b !important;
+  font-weight: 800 !important;
+  font-size: 20px !important;
+  margin-top: 6px !important;
+}
+
+.swal2-html-container.custom-swal-text {
+  color: #2e7d32 !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  margin-top: 4px !important;
+}
+
+/* إخفاء الأيقونة فقط للنوافذ التأكيدية - نافذة النجاح تعرض أيقونة ✓ */
+.swal2-popup.custom-swal:not(.swal-success) .swal2-icon { display: none !important; }
+
+.swal2-confirm.custom-swal-confirm {
+  background:#F99D27 !important;
+  color:#fff !important;
+  border: 2px solid #F99D27 !important;
+  border-radius: 12px !important;
+  padding: 10px 34px !important;
+  font-weight: 800 !important;
+  min-width: 140px;
+}
+
+.swal2-cancel.custom-swal-cancel {
+  background: transparent !important;
+  color:#F99D27 !important;
+  border: 2px solid #F99D27 !important;
+  border-radius: 12px !important;
+  padding: 10px 34px !important;
+  font-weight: 800 !important;
+  min-width: 140px;
+  margin-right: 20px !important;
+}
+
+.swal2-popup.custom-swal .swal2-actions {
+  gap: 20px !important;
+}
+/* ===== Rejected Hover Design ===== */
+.reels-rejected{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.rejected-badge{
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.rejected-reason{
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+
+  background: transparent; 
+  background-color: #d32f2f;      
+  color: #fff;                 
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* عند الهوفر يظهر */
+.reels-rejected:hover .rejected-reason{
+  display: block;
+}
+/* ===== Rejected Tooltip (Popup on Hover) ===== */
+.reels-rejected-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.reels-rejected-tooltip .rejected-tooltip-box {
+  position: absolute;
+  bottom: 120%;              /* فوق البادج */
+  right: 50%;
+  transform: translateX(50%);
+  
+  background: #fff;
+  color: #d32f2f;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+
+/* السهم الصغير تحت البوب اب */
+.reels-rejected-tooltip .rejected-tooltip-box::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 50%;
+  transform: translateX(50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+/* يظهر عند الهوفر */
+.reels-rejected-tooltip:hover .rejected-tooltip-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(50%) translateY(-4px);
+}
+
+/* ===== Countries Tooltip Styles ===== */
+.countries-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.countries-more {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.countries-tooltip {
+  position: absolute;
+  bottom: 120%;
+  right: 50%;
+  transform: translateX(50%);
+  
+  background: #fff;
+  color: #112D14;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: normal;
+  max-width: 250px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  text-align: right;
+  line-height: 1.6;
+}
+
+.countries-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 50%;
+  transform: translateX(50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.countries-more:hover .countries-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(50%) translateY(-4px);
+}
+
+/* ===== Edit/Delete Disabled Buttons Hover Tooltip ===== */
+.btn-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.btn-tooltip-wrapper .btn-tooltip-box {
+  position: absolute;
+  bottom: 120%;
+  right: 50%;
+  transform: translateX(50%);
+
+  background: #fff;
+  color: #d32f2f;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  pointer-events: none;
+  text-align: center;
+}
+
+.btn-tooltip-wrapper .btn-tooltip-box::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 50%;
+  transform: translateX(50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.btn-tooltip-wrapper:hover .btn-tooltip-box {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(50%) translateY(-4px);
+}
+</style>
+
+<div class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>@Localizer["heading"]  </h2>
+        <a asp-action="Create" class="btn btn-add-opportunity">@Localizer["btnAddOpportunity"]    </a>
+</div>
+<div class="table-separator"></div>
+
+@if (!Model.Opportunities.Any())
+{
+        <div class="alert alert-info">  @Localizer["noOpportunities"] </div>
+}
+else
+{
+<table class="table align-middle org-table">
+<thead>
+                <tr>
+                    <th></th>
+                    <th>@Localizer["thTitle"]</th>
+                    <th>@Localizer["thDescription"]</th>
+                    <th>@Localizer["thCountry"]</th>
+                    <th>@Localizer["thType"]</th>
+                    <th>@Localizer["thDate"]</th>
+                    <th>@Localizer["thStatus"]</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+@foreach (var opp in Model.Opportunities)
+{
+    var nowUtc = DateTime.UtcNow;
+    var createdUtc = opp.PublishDate.ToUniversalTime();
+    var diffMinutes = (nowUtc - createdUtc).TotalMinutes;
+
+    var canEdit = diffMinutes <= 24 * 60;
+    var canDelete = diffMinutes <= 48 * 60;
+
+    var isCompletedOrInProgress = opp.IsReelsCompleted || opp.IsReelsInProgress;
+    var isRejected = opp.IsReelsRejected;
+    var isPending = opp.HasRequestedReels && !opp.IsReelsCompleted && !opp.IsReelsInProgress && !opp.IsReelsRejected;
+
+    bool editCan = false;
+    bool deleteCan = false;
+    bool reelsDisabled = false;
+
+    if (!opp.HasRequestedReels)
+    {
+        editCan = canEdit;
+        deleteCan = canDelete;
+    }
+                    else if (isRejected)
+                    {
+                        editCan = true;        
+                        deleteCan = false;
+                        reelsDisabled = true;  
+                    }
+    else if (isPending)
+    {
+        editCan = canEdit;
+        deleteCan = canDelete;
+    }
+    else if (isCompletedOrInProgress)
+    {
+        editCan = false;
+        deleteCan = false;
+        reelsDisabled = true;
+    }
+
+    string title = lang switch
+    {
+        "en" => opp.TitleEn,
+        "fr" => opp.TitleFr,
+        _ => opp.TitleAr
+    };
+
+    string description = lang switch
+    {
+        "en" => opp.DescriptionEn,
+        "fr" => opp.DescriptionFr,
+        _ => opp.DescriptionAr
+    };
+
+<tr id="row-@opp.Id" data-opp-title="@title">
+<td style="width:80px;">
+@if (!string.IsNullOrEmpty(opp.ImagePath))
+{
+    <img src="@opp.ImagePath" style="width:70px;height:70px;object-fit:cover;" />
+}
+</td>
+
+<td>@title</td>
+<td class="description-cell">@Html.Raw(description)</td>
+
+<td>
+@if (opp.AvailableCountries != null && opp.AvailableCountries.Any())
+{
+    var countryNames = opp.AvailableCountries.Select(c => lang switch
+    {
+        "en" => c.NameEn,
+        "fr" => c.NameFr,
+        _ => c.NameAr
+    }).ToList();
+    
+    var displayedCountries = countryNames.Take(2).ToList();
+    var remainingCountries = countryNames.Skip(2).ToList();
+    
+    <div class="countries-container">
+        @string.Join(", ", displayedCountries)
+        @if (remainingCountries.Any())
+        {
+            <span class="countries-more">
+                ...
+                <div class="countries-tooltip">
+                    @string.Join(", ", remainingCountries)
+                </div>
+            </span>
+        }
+    </div>
+}
+</td>
+
+<td>@opp.Type.GetDisplayName(lang)</td>
+<td>@opp.PublishDate.ToString("yyyy-MM-dd")</td>
+
+<td class="reels-status">
+@if (opp.HasRequestedReels)
+{
+    if (opp.IsReelsRejected)
+    {
+<div class="reels-rejected-tooltip">
+                                        <span class="badge bg-danger rejected-badge">@Localizer["badgeRejected"]</span>
+
+    @if (!string.IsNullOrWhiteSpace(opp.RejectionReason))
+    {
+        <div class="rejected-tooltip-box">
+            @opp.RejectionReason
+        </div>
+    }
+</div>
+
+
+    }
+    else if (opp.IsReelsCompleted)
+    {
+                                    <span class="badge bg-success">@Localizer["badgeCompleted"] </span>
+    }
+    else if (opp.IsReelsInProgress)
+    {
+                                    <span class="badge bg-info">@Localizer["badgeInProgress"] </span>
+    }
+    else
+    {
+                                    <span class="badge bg-warning">@Localizer["badgePending"] </span>
+    }
+}
+else
+{
+                                <span class="text-muted"> @Localizer["notRequested"] </span>
+}
+</td>
+
+<td class="org-actions">
+<a class="btn btn-primary" href="@Url.Action("Details", "Opportunity", new { id = opp.Id })">
+    <i class="bi bi-eye"></i>
+</a>
+
+@if (editCan)
+{
+<button class="btn btn-warning"
+        onclick="handleEdit(@opp.Id, true)">
+    <i class="bi bi-pencil"></i>
+</button>
+}
+else
+{
+<span class="btn-tooltip-wrapper">
+    <button class="btn btn-warning" disabled>
+        <i class="bi bi-pencil"></i>
+    </button>
+    <div class="btn-tooltip-box">@Localizer["swalOver24h"]</div>
+</span>
+}
+
+                            <button class="btn btn-success @(opp.HasRequestedReels && !opp.IsReelsRejected ? "reels-requested" : "")"
+                                    title="طلب ريل"
+        onclick="toggleReels(@opp.Id, @((opp.HasRequestedReels && !opp.IsReelsRejected).ToString().ToLower()))"
+        @(reelsDisabled ? "disabled" : "")>
+    <i class="bi bi-camera-reels"></i>
+</button>
+
+@if (deleteCan)
+{
+<button class="btn btn-danger"
+        onclick="handleDelete(@opp.Id, true)">
+    <i class="bi bi-trash"></i>
+</button>
+}
+else
+{
+<span class="btn-tooltip-wrapper">
+    <button class="btn btn-danger" disabled>
+        <i class="bi bi-trash"></i>
+    </button>
+    <div class="btn-tooltip-box">@Localizer["swalOver48h"]</div>
+</span>
+}
+</td>
+</tr>
+}
+</tbody>
+</table>
+}
+
+</div>
+
+<input type="hidden" id="RequestVerificationToken"
+value="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestToken" />
+
+<script>
+    const lang = '@lang'; // 'ar', 'en', 'fr'
+    const swalDir = lang === 'ar' ? 'rtl' : 'ltr';
+
+    const SwalConfirmUI = Swal.mixin({
+      customClass: {
+        popup: 'custom-swal swal-' + swalDir,
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-swal-confirm',
+        cancelButton: 'custom-swal-cancel'
+      },
+      buttonsStyling: false,
+      showCloseButton: true,
+      reverseButtons: true,
+      imageUrl: '@Url.Content("~/images/Group.svg")',
+      imageWidth: 90,
+      imageHeight: 90,
+      imageAlt: ''
+    });
+
+    function getOppTitle(id) {
+      const row = document.getElementById('row-' + id);
+      return row?.dataset?.oppTitle || '';
+    }
+
+    /* Swal نجاح مع أيقونة ✅ */
+    function showSuccess(message) {
+      return Swal.fire({
+        icon: 'success',
+        title: message,
+        confirmButtonText: lang==='ar'?'موافق':lang==='fr'?'OK':'OK',
+        customClass: {
+          popup: 'custom-swal swal-success swal-' + swalDir,
+          title: 'custom-swal-title',
+          confirmButton: 'custom-swal-confirm'
+        },
+        buttonsStyling: false
+      });
+    }
+
+    function handleEdit(id, canEdit) {
+        if (!canEdit) {
+            Swal.fire({
+                icon:'warning',
+                title: lang==='ar'?'غير مسموح':lang==='fr'?'Non autorisé':'Not allowed',
+                text: lang==='ar'?'مر أكثر من 24 ساعة.':lang==='fr'?'Plus de 24 heures se sont écoulées.':'More than 24 hours have passed.',
+                customClass: { popup: 'custom-swal swal-' + swalDir }
+            });
+            return;
+        }
+        window.location.href = '/Opportunity/Edit/' + id;
+    }
+
+    function handleDelete(id, canDelete) {
+        if (!canDelete) {
+            Swal.fire({
+                icon:'warning',
+                title: lang==='ar'?'غير مسموح':lang==='fr'?'Non autorisé':'Not allowed',
+                text: lang==='ar'?'مر أكثر من 48 ساعة.':lang==='fr'?'Plus de 48 heures se sont écoulées.':'More than 48 hours have passed.',
+                customClass: { popup: 'custom-swal swal-' + swalDir }
+            });
+            return;
+        }
+
+        const oppTitle = getOppTitle(id);
+
+        SwalConfirmUI.fire({
+            title: lang==='ar'?'هل تريد تأكيد حذف هذه الفرصة؟':lang==='fr'?'Voulez-vous confirmer la suppression de cette opportunité ?':'Do you want to confirm deleting this opportunity?',
+            html: oppTitle ? oppTitle : '',
+            showCancelButton:true,
+            confirmButtonText: lang==='ar'?'تأكيد':lang==='fr'?'Confirmer':'Confirm',
+            cancelButtonText: lang==='ar'?'تراجع':lang==='fr'?'Annuler':'Cancel'
+        }).then((result)=>{
+            if(result.isConfirmed){
+                const token = document.getElementById('RequestVerificationToken').value;
+                fetch('/Opportunity/Delete/' + id, {
+                    method:'POST',
+                    headers:{ 'RequestVerificationToken': token }
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error('error');
+                    return showSuccess(lang==='ar'?'تم حذف الفرصة بنجاح!':lang==='fr'?'Opportunité supprimée avec succès !':'Opportunity deleted successfully!');
+                })
+                .then(() => location.reload())
+                .catch(() => {
+                    Swal.fire({
+                        icon:'error',
+                        title: lang==='ar'?'خطأ':lang==='fr'?'Erreur':'Error',
+                        text: lang==='ar'?'حدث خطأ أثناء تنفيذ العملية':lang==='fr'?'Une erreur est survenue lors de l\'opération':'An error occurred during the operation',
+                        customClass: { popup: 'custom-swal swal-' + swalDir }
+                    });
+                });
+            }
+        });
+    }
+
+    async function toggleReels(id, hasRequest) {
+
+        const oppTitle = getOppTitle(id);
+
+        const result = await SwalConfirmUI.fire({
+            title: hasRequest
+                ? (lang==='ar'?'هل تريد التراجع عن طلب ريل لهذه الفرصة؟':lang==='fr'?'Voulez-vous annuler la demande de reels pour cette opportunité ?':'Do you want to cancel the reels request for this opportunity?')
+                : (lang==='ar'?'هل تريد تأكيد طلب ريل لهذه الفرصة؟':lang==='fr'?'Voulez-vous confirmer la demande de reels pour cette opportunité ?':'Do you want to confirm a reels request for this opportunity?'),
+            html: oppTitle ? oppTitle : '',
+            showCancelButton:true,
+            confirmButtonText: lang==='ar'?'تأكيد':lang==='fr'?'Confirmer':'Confirm',
+            cancelButtonText: lang==='ar'?'تراجع':lang==='fr'?'Annuler':'Cancel'
+        });
+
+        if (!result.isConfirmed) return;
+
+        const token = document.getElementById('RequestVerificationToken').value;
+
+        fetch('/Opportunity/ToggleReelsRequest/' + id, {
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'RequestVerificationToken': token
+            },
+            body: JSON.stringify({ RequestReels: !hasRequest })
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('error');
+            return Swal.fire({
+                icon: 'success', // أيقونة نجاح ✅
+                title: !hasRequest
+                    ? (lang==='ar'?'تم إرسال طلب إنشاء ريل للفرصة بنجاح!':lang==='fr'?'La demande de reels a été envoyée avec succès !':'Reels request sent successfully!')
+                    : (lang==='ar'?'تم التراجع عن طلب الريل بنجاح!':lang==='fr'?'La demande de reels a été annulée avec succès !':'Reels request canceled successfully!'),
+                confirmButtonText: lang==='ar'?'موافق':lang==='fr'?'OK':'OK',
+                customClass: {
+                  popup: 'custom-swal swal-success swal-' + swalDir,
+                  title: 'custom-swal-title',
+                  confirmButton: 'custom-swal-confirm'
+                },
+                buttonsStyling: false
+            });
+        })
+        .then(() => location.reload())
+        .catch(() => {
+            Swal.fire({
+                icon:'error',
+                title: lang==='ar'?'خطأ':lang==='fr'?'Erreur':'Error',
+                text: lang==='ar'?'حدث خطأ أثناء تنفيذ العملية':lang==='fr'?'Une erreur est survenue lors de l\'opération':'An error occurred during the operation',
+                customClass: { popup: 'custom-swal swal-' + swalDir }
+            });
+        });
+    }
+
+       // إرسال طلب الريلز تلقائي بعد تعديل فرصة مرفوضة
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('tr[id^="row-"]').forEach(row => {
+            const id = row.id.split('-')[1];
+            const isRejected = row.dataset.isRejected === 'True';
+            const hasRequestedReels = row.dataset.hasRequestedReels === 'True';
+
+            if (isRejected && !hasRequestedReels) {
+                toggleReels(id, false);
+            }
+        });
+    });
+
+</script>
+

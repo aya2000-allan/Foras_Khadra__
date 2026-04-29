@@ -1,0 +1,349 @@
+﻿@model IEnumerable<Article>
+
+@{
+    ViewData["Title"] = "Articlies";
+    Layout = "_Layout";
+
+    int page = ViewBag.Page ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    string search = ViewBag.Search as string;
+}
+
+@section Styles {
+    <link rel="stylesheet" asp-append-version="true" href="~/css/articles-index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+}
+
+<div class="container py-5" dir="rtl">
+
+    <!-- الرأس -->
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-6 text-center text-md-start">
+            <h2 class="main-title mb-0">المقالات</h2>
+        </div>
+
+        <div class="col-md-6 d-flex justify-content-md-end align-items-center gap-3 d-flex-mobile">
+
+            <!-- بحث (Server-side) -->
+            <form method="get" class="search-wrapper d-flex align-items-center flex-grow-1 flex-md-grow-0">
+                <i class="fa-solid fa-magnifying-glass text-muted ms-2"></i>
+                <input type="text" name="search" value="@search"
+                       class="form-control border-0 shadow-none bg-transparent"
+                       placeholder="البحث..." style="min-width: 150px;">
+                <button type="submit" class="btn p-0 me-2" style="border:0;background:transparent;">
+                    <i class="fa-solid fa-sliders text-muted cursor-pointer" title="بحث"></i>
+                </button>
+            </form>
+
+            <a asp-action="Create" class="btn btn-add" style="background:#f99d27; color:#fff;">
+    <i class="fa-solid fa-plus ms-1"></i> إضافة مقالة
+</a>
+
+
+           <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
+    <i class="fa-solid fa-gauge"></i>
+    العودة للوحة التحكم
+</a>
+
+
+        </div>
+    </div>
+
+    <!-- جدول المقالات -->
+    <div class="table-container">
+        <div class="table-responsive" style="overflow-x: visible;">
+            <table class="table articles-table" id="articlesTable">
+                <thead>
+                    <tr class="text-muted">
+                        <th style="width:80px;"></th>
+                        <th>عنوان المقالة</th>
+                        <th>الكاتب</th>
+                        <th>التاريخ</th>
+                        <th class="text-center">الإجراءات</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@(string.IsNullOrEmpty(item.ImagePath) ? "https://via.placeholder.com/50" : item.ImagePath)"
+                                     class="rounded"
+                                     style="width:50px;height:50px;object-fit:cover;"
+                                     alt="مقالة" />
+                            </td>
+
+                            <td class="fw-bold text-dark">@item.TitleAr</td>
+                            <td class="text-muted">@item.Author</td>
+                            <td class="text-muted">@item.PublishDate.ToString("dd, MMM yyyy")</td>
+
+                            <td>
+                                <div class="d-flex justify-content-center">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="action-icon icon-view" title="عرض">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="action-icon icon-edit" title="تعديل">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+
+                                    <button type="button"
+                                            class="action-icon icon-delete"
+                                            onclick="confirmDelete(@item.Id, '@item.TitleAr')"
+                                            title="حذف">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+
+                                    <form id="deleteForm-@item.Id" asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-none">
+                                        @Html.AntiForgeryToken()
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination شغال -->
+    <div class="articles-pagination d-flex align-items-center justify-content-between mt-4" dir="rtl">
+        <p class="pagination-label m-0">انتقل إلى الصفحة التالية</p>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination m-0" style="direction:ltr;">
+
+                <!-- السابق -->
+                <li class="page-item @(page == 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(page - 1)"
+                       asp-route-search="@search"
+                       aria-label="Prev">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    if (i == 1 || i == totalPages || (i >= page - 1 && i <= page + 1))
+                    {
+                        <li class="page-item @(i == page ? "active" : "")">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-page="@i"
+                               asp-route-search="@search">@i</a>
+                        </li>
+                    }
+                    else if (i == page - 2 || i == page + 2)
+                    {
+                        <li class="page-item disabled"><span class="page-link">..</span></li>
+                    }
+                }
+
+                <!-- التالي -->
+                <li class="page-item @(page == totalPages ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(page + 1)"
+                       asp-route-search="@search"
+                       aria-label="Next">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmDelete(id, title) {
+            Swal.fire({
+                html: `
+                    <div style="text-align:center;">
+<img src="/images/delete.svg" style=";margin-bottom:14px;" />
+                        <h5 style="margin:0 0 10px 0;font-weight:700;color:#000000;font-weight:bold;">
+هل أنت متأكد من حذف المقالة التالية ؟                        </h5>
+                    </div>
+                `,
+                input: 'text',
+                inputValue: title,
+                inputAttributes: { readonly: true },
+                showCancelButton: true,
+                confirmButtonText: 'حذف',
+                cancelButtonText: 'تراجع',
+                reverseButtons: true,
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'swal-rtl-popup',
+                    input: 'swal-rtl-input',
+                    confirmButton: 'swal-btn swal-btn-danger',
+                    cancelButton: 'swal-btn swal-btn-cancel'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm-' + id).submit();
+                }
+            });
+        }
+    </script>
+
+    <style>
+       /* RTL */
+.swal-rtl-popup { 
+    direction: rtl; 
+    border-radius: 12px; 
+}
+.swal-rtl-input {
+    text-align: center !important;   
+    border: none !important;         
+    box-shadow: none !important;     
+    background: transparent !important;
+    font-weight: 600;
+    color: #25652C;
+    font-size: 16px;
+    margin-top: 8px;
+    pointer-events: none;        
+}
+
+/* ترتيب الأزرار */
+.swal2-actions {
+    display: flex !important;
+    gap: 12px;                 /* 👈 المسافة بين الزرين */
+}
+
+/* Buttons style */
+.swal-btn {
+    min-width: 120px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    border: none;
+}
+
+/* زر الحذف (يمين) */
+.swal-btn-danger {
+    background: #ff383c;
+    color: #fff;
+}
+
+/* زر التراجع (يسار) */
+.swal-btn-cancel {
+    background: #fff;
+    color: #f99d27;
+    border: 2px solid #f99d27;
+}
+
+
+
+
+
+      .btn-back-dashboard {
+            background: transparent;
+            color: #f99d27;
+            border: 2px solid #f99d27;
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+        .btn-back-dashboard i { color: inherit; }
+
+        .btn-back-dashboard:hover {
+            background: #f99d27;
+            color: #fff;
+            border-color: #f99d27;
+        }
+        /* التصميم العام للـ popup */
+.swal-rtl-popup {
+    direction: rtl;
+    border-radius: 20px;
+    padding: 24px 28px;
+    width: 420px;
+    max-width: 90vw;
+    font-family: 'Cairo', sans-serif; /* خط جميل للـ Arabic */
+    text-align: center;
+    background: #F6FBF7;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+/* الصورة العلوية */
+.swal-img {
+    width: 90px;
+    margin-bottom: 16px;
+}
+
+/* عنوان البوب اب */
+.swal-title-text {
+    font-weight: 700;
+    font-size: 20px;
+    color: #1F1F1F;
+    margin-bottom: 12px;
+}
+
+/* حقل اسم المقالة */
+.swal-input {
+    border: none;
+    background: #fff3e0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #25652C;
+    text-align: center;
+    pointer-events: none; /* لمنع التعديل */
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* ترتيب الأزرار */
+.swal2-actions {
+    display: flex !important;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* الأزرار العامة */
+.swal-btn {
+    min-width: 130px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* زر الحذف */
+.swal-btn-danger {
+    background: #ff383c;
+    color: #fff;
+}
+
+.swal-btn-danger:hover {
+    background: #e02f31;
+}
+
+/* زر التراجع */
+.swal-btn-cancel {
+    background: #fff;
+    color: #f99d27;
+    border: 2px solid #f99d27;
+}
+
+.swal-btn-cancel:hover {
+    background: #f99d27;
+    color: #fff;
+}
+
+    </style>
+}
