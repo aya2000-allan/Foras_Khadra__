@@ -141,4 +141,22 @@
   <data name="ViewAll" xml:space="preserve">
     <value>عرض الكل</value>
   </data>
+  <data name="HomeOrganizationsTitle" xml:space="preserve">
+    <value>أحدث المنظمات</value>
+  </data>
+  <data name="ViewOrganization" xml:space="preserve">
+    <value>عرض المنظمة</value>
+  </data>
+  <data name="OrganizationCardHint" xml:space="preserve">
+    <value>انقر على البطاقة لاستكشاف ملف المنظمة.</value>
+  </data>
+  <data name="LoginRequiredTitle" xml:space="preserve">
+    <value>تسجيل الدخول مطلوب</value>
+  </data>
+  <data name="LoginRequiredText" xml:space="preserve">
+    <value>يجب تسجيل الدخول لعرض تفاصيل المنظمة</value>
+  </data>
+  <data name="LoginButton" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
 </root>
