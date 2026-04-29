@@ -1,4 +1,4 @@
-﻿
+
 @model List<Foras_Khadra.Models.Organization>
 @using Microsoft.AspNetCore.Mvc.Localization
 @using System.Text.Json
@@ -58,6 +58,12 @@
     var loginTitle = JsonSerializer.Serialize(Localizer["LoginRequiredTitle"].Value);
     var loginText = JsonSerializer.Serialize(Localizer["LoginRequiredText"].Value);
     var loginBtn = JsonSerializer.Serialize(Localizer["LoginButton"].Value);
+    var noResultsTitle = JsonSerializer.Serialize(Localizer["NoResults"].Value);
+    var noResultsHint = JsonSerializer.Serialize(Localizer["NoResultsHint"].Value);
+    var closeLbl = JsonSerializer.Serialize(Localizer["close"].Value);
+    var resetLbl = JsonSerializer.Serialize(Localizer["reset"].Value);
+    var resetMapUrl = JsonSerializer.Serialize(Url.Action("OrganizationsMap", "Home"));
+    var showNoResultsPopup = Model == null || !Model.Any();
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
@@ -68,7 +74,7 @@
     <header class="org-map-header custom-header">
         <div class="header-right">
             <div class="header-logo">
-                <img src="/images/about_us_leaf.svg" alt="" width="32" height="32" />
+                <img src="/images/about_us_leaf.svg" alt="" />
             </div>
             <h1 class="header-title">@Localizer["PageTitle"]</h1>
         </div>
@@ -101,16 +107,12 @@
                     <label class="org-map-label d-block" for="mapCountry">@Localizer["country"]</label>
                     <select name="country" id="mapCountry" class="form-control org-map-select">
                         <option value="">@Localizer["AllCountries"]</option>
-                        @foreach (var c in ViewBag.Countries)
+                        @foreach (var country in ViewBag.Countries)
                         {
-<option value="">@Localizer["AllCountries"]</option>
-
-@foreach (var country in ViewBag.Countries)
-{
-    <option value="@country" selected="@(ViewBag.SelectedCountry == country ? "selected" : null)">
-        @GetCountryName(country)
-    </option>
-}                      }
+                            <option value="@country" selected="@(ViewBag.SelectedCountry == country ? "selected" : null)">
+                                @GetCountryName(country)
+                            </option>
+                        }
                     </select>
                 </div>
                 <div class="mb-3">
@@ -160,7 +162,7 @@
         }
         else
         {
-            <div class="alert alert-info text-center w-100 org-map-empty">@Localizer["NoResults"]</div>
+            <div class="org-map-empty-grid" id="orgMapEmptyGrid" role="status" aria-live="polite"></div>
         }
     </div>
 </div>
@@ -238,4 +240,49 @@
         }
     });
 });
+
+    (function showNoResultsModal() {
+        if (!@showNoResultsPopup.ToString().ToLower()) return;
+        var empty = {
+            title: @Html.Raw(noResultsTitle),
+            hint: @Html.Raw(noResultsHint),
+            close: @Html.Raw(closeLbl),
+            reset: @Html.Raw(resetLbl),
+            resetUrl: @Html.Raw(resetMapUrl)
+        };
+        var isRtl = (document.documentElement.getAttribute("dir") || "ltr") === "rtl";
+        Swal.fire({
+            customClass: {
+                popup: "org-map-no-results-swal",
+                title: "org-map-no-results-title",
+                confirmButton: "btn-search-sub",
+                cancelButton: "btn-cancel-sub"
+            },
+            buttonsStyling: false,
+            icon: false,
+            title: empty.title,
+            html:
+                '<div class="org-map-no-results-visual">' +
+                '<span class="org-map-no-results-icon-ring">' +
+                '<svg class="org-map-no-results-svg" viewBox="0 0 24 24" width="42" height="42" aria-hidden="true" focusable="false">' +
+                '<circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/>' +
+                '<path d="M16 16l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+                '<path d="M6 6l9 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+                '</svg></span></div>' +
+                '<p class="org-map-no-results-hint">' + empty.hint + '</p>',
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: empty.reset,
+            cancelButtonText: empty.close,
+            reverseButtons: isRtl,
+            didOpen: function () {
+                var p = Swal.getPopup();
+                if (p) p.setAttribute("dir", isRtl ? "rtl" : "ltr");
+            }
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                window.location.href = empty.resetUrl;
+            }
+        });
+    })();
 </script>

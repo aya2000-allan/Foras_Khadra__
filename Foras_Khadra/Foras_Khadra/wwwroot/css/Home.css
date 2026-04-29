@@ -72,17 +72,6 @@ background: var(--orange);
     padding: 0;
 }
 
-.leaf {
-    
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    background: var(--orange);
-    width: 99px;
-    height: 99px;
-}
-
 /* Floating Shapes Container */
 .floating-shapes {
     position: absolute;

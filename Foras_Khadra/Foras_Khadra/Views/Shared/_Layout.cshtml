@@ -67,6 +67,11 @@
     if (isAdmin && currentController == "Articles") hideNavAndFooter = true;
     if (isAdmin && currentController == "Team") hideNavAndFooter = true;
 
+    if (currentController == "Home" && currentAction == "DetailsOrganization")
+    {
+        hideNavAndFooter = true;
+    }
+
 }
 
 <style>

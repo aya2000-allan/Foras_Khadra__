@@ -38,6 +38,13 @@
     flex-shrink: 0;
 }
 
+.org-map-page .header-logo img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    display: block;
+}
+
 html[dir="ltr"] .org-map-page .header-logo img {
     transform: scaleX(-1);
 }
@@ -371,7 +378,7 @@ html[dir="rtl"] .org-map-page .filter-heading-caret {
 
 .org-map-filter-actions {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     justify-content: space-between;
     margin-top: 16px;
 }
@@ -379,16 +386,29 @@ html[dir="rtl"] .org-map-page .filter-heading-caret {
 .org-map-filter-actions .btn-cancel-sub,
 .org-map-filter-actions .btn-search-sub {
     flex: 1;
-    border: none;
-    border-radius: 14px;
+    margin: 0;
+    border: none !important;
+    border-radius: 999px;
     padding: 11px 14px;
     font-weight: 700;
     transition: 0.2s ease;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    outline: none !important;
+    box-sizing: border-box;
+}
+
+.org-map-filter-actions .btn-cancel-sub:focus,
+.org-map-filter-actions .btn-cancel-sub:focus-visible,
+.org-map-filter-actions .btn-search-sub:focus,
+.org-map-filter-actions .btn-search-sub:focus-visible {
+    outline: none !important;
 }
 
 .org-map-filter-actions .btn-cancel-sub {
     background: #eef2f7;
     color: #475569;
+    box-shadow: none;
 }
 
 .org-map-filter-actions .btn-cancel-sub:hover {
@@ -404,6 +424,11 @@ html[dir="rtl"] .org-map-page .filter-heading-caret {
 .org-map-filter-actions .btn-search-sub:hover {
     transform: translateY(-1px);
     box-shadow: 0 14px 28px rgba(46, 125, 50, 0.22);
+}
+
+.org-map-filter-actions .btn-search-sub:focus,
+.org-map-filter-actions .btn-search-sub:focus-visible {
+    box-shadow: 0 10px 24px rgba(46, 125, 50, 0.16) !important;
 }
 
 .org-map-empty {
@@ -471,4 +496,136 @@ html[dir="rtl"] .org-map-page .filter-heading-caret {
         padding: 14px;
         border-radius: 20px;
     }
+}
+
+/* Empty search — SweetAlert2 popup */
+.org-map-empty-grid {
+    min-height: 120px;
+    width: 100%;
+}
+
+.swal2-popup.org-map-no-results-swal {
+    border-radius: 22px !important;
+    padding: 28px 26px 24px !important;
+    max-width: 440px !important;
+    width: calc(100vw - 32px) !important;
+    background: linear-gradient(180deg, #fff5f5 0%, #ffffff 45%) !important;
+    border: 1px solid rgba(185, 28, 28, 0.22) !important;
+    box-shadow: 0 24px 56px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(255, 255, 255, 0.8) inset !important;
+}
+
+.swal2-popup.org-map-no-results-swal .swal2-title.org-map-no-results-title {
+    color: #b91c1c !important;
+    font-weight: 800 !important;
+    font-size: 1.35rem !important;
+    line-height: 1.35 !important;
+    padding: 0 4px 0 !important;
+    margin: 0 auto 4px !important;
+    max-width: 100% !important;
+    text-align: center !important;
+}
+
+.swal2-popup.org-map-no-results-swal .org-map-no-results-visual {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.swal2-popup.org-map-no-results-swal .org-map-no-results-icon-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #ef4444 0%, #dc2626 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 28px rgba(220, 38, 38, 0.38);
+    color: #ffffff;
+}
+
+.swal2-popup.org-map-no-results-swal .org-map-no-results-icon-ring .org-map-no-results-svg {
+    display: block;
+    flex-shrink: 0;
+}
+
+.swal2-popup.org-map-no-results-swal .org-map-no-results-hint {
+    margin: 0 4px 6px;
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.6;
+    font-weight: 500;
+    text-align: center;
+}
+
+.swal2-popup.org-map-no-results-swal .swal2-actions {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+    width: 100% !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.swal2-popup.org-map-no-results-swal .swal2-actions .swal2-styled {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: calc(50% - 4px) !important;
+    margin: 0 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    outline: none !important;
+    border: none !important;
+}
+
+.swal2-popup.org-map-no-results-swal .swal2-actions .swal2-styled:focus,
+.swal2-popup.org-map-no-results-swal .swal2-actions .swal2-styled:focus-visible {
+    outline: none !important;
+}
+
+/* بدون بوردر — نفس ألوان الكبسات مع ظل فقط */
+.swal2-popup.org-map-no-results-swal .swal2-confirm.btn-search-sub {
+    border: none !important;
+    border-radius: 14px !important;
+    padding: 11px 14px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    transition: 0.2s ease !important;
+    background: linear-gradient(135deg, #2e7d32, #3fa34d) !important;
+    color: #fff !important;
+    box-shadow: 0 10px 24px rgba(46, 125, 50, 0.16) !important;
+}
+
+.swal2-popup.org-map-no-results-swal .swal2-confirm.btn-search-sub:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 14px 28px rgba(46, 125, 50, 0.22) !important;
+}
+
+.swal2-popup.org-map-no-results-swal .swal2-confirm.btn-search-sub:focus,
+.swal2-popup.org-map-no-results-swal .swal2-confirm.btn-search-sub:focus-visible {
+    box-shadow: 0 10px 24px rgba(46, 125, 50, 0.16) !important;
+}
+
+.swal2-popup.org-map-no-results-swal .swal2-cancel.btn-cancel-sub {
+    border: none !important;
+    border-radius: 14px !important;
+    padding: 11px 14px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    transition: 0.2s ease !important;
+    background: #eef2f7 !important;
+    color: #475569 !important;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06) !important;
+}
+
+.swal2-popup.org-map-no-results-swal .swal2-cancel.btn-cancel-sub:hover {
+    background: #e2e8f0 !important;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08) !important;
+}
+
+.swal2-popup.org-map-no-results-swal .swal2-cancel.btn-cancel-sub:focus,
+.swal2-popup.org-map-no-results-swal .swal2-cancel.btn-cancel-sub:focus-visible {
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06) !important;
 }

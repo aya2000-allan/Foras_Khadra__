@@ -150,6 +150,9 @@
   <data name="NoResults" xml:space="preserve">
     <value>لا توجد نتائج مطابقة</value>
   </data>
+  <data name="NoResultsHint" xml:space="preserve">
+    <value>لا توجد منظمات تطابق التصفية الحالية. جرّب تغيير الدولة أو القطاع، أو أعد الضبط لعرض القائمة كاملة.</value>
+  </data>
   <data name="LoginRequiredTitle" xml:space="preserve">
     <value>تسجيل الدخول مطلوب</value>
   </data>

@@ -150,6 +150,9 @@
   <data name="NoResults" xml:space="preserve">
     <value>Aucun résultat correspondant</value>
   </data>
+  <data name="NoResultsHint" xml:space="preserve">
+    <value>Aucune organisation ne correspond à vos filtres. Modifiez le pays ou le secteur, ou réinitialisez pour voir la liste complète.</value>
+  </data>
   <data name="LoginRequiredTitle" xml:space="preserve">
     <value>Connexion requise</value>
   </data>
