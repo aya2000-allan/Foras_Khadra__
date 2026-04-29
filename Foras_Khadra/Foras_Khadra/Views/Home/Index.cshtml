@@ -1,13 +1,12 @@
 @using Microsoft.Extensions.Options;
 @using System.Globalization;
+@using System.Text.Json;
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = Localizer["TitlePage"];
     var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
-
-    var isAuthenticated = User.Identity.IsAuthenticated.ToString().ToLower();
 
 }
 
@@ -206,6 +205,49 @@
 .view-all-btn:hover {
     text-decoration: underline;
     opacity: .8;
+}
+
+/* ==== Organizations block — same card/header pattern as Latest Articles ==== */
+.latest-articles.org-section .article-img.org-logo-wrap{
+  height: 160px;
+  padding: 18px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+.latest-articles.org-section .article-img.org-logo-wrap img{
+  width: 100%;
+  max-width: 140px;
+  height: 100%;
+  max-height: 120px;
+  object-fit: contain;
+}
+.latest-articles.org-section .article-title{
+  color: #f99d27;
+}
+.latest-articles.org-section .article-desc{
+  color: #5a5a5a;
+  -webkit-line-clamp: 2;
+}
+.latest-articles.org-section .org-card{
+  cursor: pointer;
+  height: auto;
+  align-self: flex-start;
+}
+.latest-articles.org-section .org-view-hint{
+  cursor: pointer;
+}
+.latest-articles.org-section .orgs-nav{
+  margin-top: 4px;
+}
+/* بدون تمديد ارتفاع الكرت: يختفي الفراغ تحت "عرض المنظمة" */
+.latest-articles.org-section .article-body{
+  padding: 14px 16px 12px;
+  flex-grow: 0;
+}
+.latest-articles.org-section .read-more{
+  margin-top: 0;
 }
 
     .swal-title-rtl {
@@ -575,68 +617,115 @@ html[dir="ltr"] #heroBg1 {
 
     </div>
 </section>
-<section class="py-5" style="background:#F6FBF7;">
+<section class="latest-articles org-section py-5" dir="@dir" style="background:#F6FBF7;">
     <div class="container">
 
-        <h3 style="color:#25652C;font-weight:bold;margin-bottom:20px;">
-            المنظمات
-        </h3>
+        <div class="d-flex justify-content-between align-items-center mb-4 articles-section-header">
 
-        <div class="swiper orgSwiper">
+            <div class="d-flex align-items-center gap-2 section-icon-title">
+                <span class="section-icon" aria-hidden="true">
+                    <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg"> <circle cx="27" cy="27" r="27" fill="#F99D27" /> <path d="M21.9104 25.2275C22.0086 25.1232 22.1264 25.0392 22.257 24.9804C22.3877 24.9216 22.5287 24.8891 22.6719 24.8848C22.8151 24.8805 22.9578 24.9045 23.0917 24.9553C23.2257 25.0062 23.3483 25.0829 23.4526 25.1811C28.4729 29.9102 33.5101 32.7875 39.4379 34.2541C40.2376 32.0723 40.3085 29.6709 39.6179 27.3282C38.7015 24.2198 36.5674 21.5116 33.4481 19.4968C30.6635 17.6982 27.8804 17.2298 25.1879 16.777C21.791 16.2057 18.5824 15.6657 15.5204 12.4236C15.1794 12.065 14.7151 11.9211 14.2713 12.0377C13.764 12.1741 13.4238 12.575 13.2608 13.2377C12.879 14.7889 13.1244 19.1361 14.1983 23.7254C15.9226 31.0986 18.6744 34.8295 20.6797 36.6616C23.2706 39.0268 26.6538 40.3366 30.0158 40.3366C30.6495 40.3376 31.2824 40.2911 31.9092 40.1975C34.7531 39.7666 37.1204 38.3382 38.4547 36.26C32.3531 34.6727 27.1406 31.6543 21.9547 26.7718C21.8502 26.6734 21.7661 26.5554 21.7073 26.4245C21.6485 26.2935 21.6162 26.1523 21.612 26.0088C21.6079 25.8654 21.6322 25.7225 21.6833 25.5884C21.7345 25.4544 21.8117 25.3317 21.9104 25.2275ZM42.7795 34.9223C41.632 34.7457 40.5206 34.5241 39.4385 34.2561C39.2161 34.8635 38.9393 35.4495 38.6115 36.007C38.5617 36.0923 38.5092 36.1768 38.4554 36.26C39.7714 36.6007 41.1041 36.8738 42.4481 37.0782C42.5911 37.1033 42.7377 37.0996 42.8793 37.0674C43.0208 37.0351 43.1546 36.9749 43.2726 36.8903C43.3906 36.8057 43.4905 36.6984 43.5665 36.5747C43.6425 36.451 43.693 36.3133 43.7151 36.1698C43.7372 36.0263 43.7305 35.8798 43.6952 35.7389C43.66 35.5981 43.597 35.4657 43.5099 35.3495C43.4228 35.2333 43.3134 35.1357 43.1881 35.0623C43.0628 34.9889 42.9241 34.9413 42.7801 34.9223H42.7795Z" fill="white" /> </svg>
+                </span>
+
+                <h2 class="section-title m-0" style="color:#25652C; font-weight: bold;">@Localizer["HomeOrganizationsTitle"]</h2>
+            </div>
+
+            <a href="~/Home/OrganizationsMap"
+               class="view-all-btn"
+               style="color:#25652C; font-weight:bold; font-size:18px; text-decoration:none; display:flex; align-items:center; gap:6px;">
+                <iconify-icon icon="mdi:clock-outline"
+                              style="color:#25652C; font-size:18px;">
+                </iconify-icon>
+                @Localizer["ViewAll"]
+            </a>
+
+        </div>
+
+        <div class="swiper orgsSwiper mb-4" dir="@dir">
             <div class="swiper-wrapper">
 
                 @foreach (var org in Model.Organizations)
                 {
+                    var logoSrc = !string.IsNullOrWhiteSpace(org.LogoPath) ? org.LogoPath : "/images/default-article.jpg";
+
                     <div class="swiper-slide">
+                        <div class="article-card org-card" data-org-id="@org.Id">
 
-                        <div class="org-card text-center"
-                             data-org-id="@org.Id"
-                             style="cursor:pointer;">
+                            <div class="article-img org-logo-wrap">
+                                <img src="@logoSrc" alt="@org.Name" />
+                            </div>
 
-                            <img src="@org.LogoPath"
-                                 style="width:80px;height:80px;object-fit:contain;" />
+                            <div class="article-body">
 
-                            <div style="margin-top:10px;font-weight:600;">
-                                @org.Name
+                                <div class="article-meta">
+                                    <span class="meta-author">@org.Sector</span>
+                                    <span class="meta-date">@org.Country</span>
+                                </div>
+
+                                <h5 class="article-title">
+                                    @org.Name
+                                </h5>
+
+                                <p class="article-desc mb-0">
+                                    @Localizer["OrganizationCardHint"]
+                                </p>
+
+                                <span class="read-more org-view-hint">
+                                    @Localizer["ViewOrganization"]
+                                    <iconify-icon icon="mdi:arrow-left"></iconify-icon>
+                                </span>
+
                             </div>
 
                         </div>
-
                     </div>
                 }
 
             </div>
         </div>
 
+        <div class="d-flex justify-content-center gap-3 orgs-nav">
+            <div class="swiper-button-next custom-arrow"></div>
+            <div class="swiper-button-prev custom-arrow"></div>
+        </div>
+
     </div>
 </section>
+@{
+    var idxOrgLoginTitle = JsonSerializer.Serialize(Localizer["LoginRequiredTitle"].Value);
+    var idxOrgLoginText = JsonSerializer.Serialize(Localizer["LoginRequiredText"].Value);
+    var idxOrgLoginBtn = JsonSerializer.Serialize(Localizer["LoginButton"].Value);
+}
 <script>
+    (function () {
         const isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+        const orgLoginTitle = @Html.Raw(idxOrgLoginTitle);
+        const orgLoginText = @Html.Raw(idxOrgLoginText);
+        const orgLoginBtn = @Html.Raw(idxOrgLoginBtn);
 
-    document.querySelectorAll(".org-card").forEach(card => {
-        card.addEventListener("click", function () {
+        document.querySelectorAll(".org-card").forEach(card => {
+            card.addEventListener("click", function (e) {
+                const orgId = this.dataset.orgId;
+                if (!orgId) return;
 
-            const orgId = this.dataset.orgId;
-
-            if (!isAuthenticated) {
-
-                Swal.fire({
-                    icon: "warning",
-                    title: "تسجيل الدخول مطلوب",
-                    text: "يجب تسجيل الدخول لعرض تفاصيل المنظمة",
-                    confirmButtonText: "تسجيل الدخول",
-                    confirmButtonColor: "#F99D27"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "/Account/Login";
-                    }
-                });
-
-            } else {
-                window.location.href = "/Home/DetailsOrganization/" + orgId;
-            }
+                if (!isAuthenticated) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: orgLoginTitle,
+                        text: orgLoginText,
+                        confirmButtonText: orgLoginBtn,
+                        confirmButtonColor: "#F99D27"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "/Account/Login";
+                        }
+                    });
+                } else {
+                    window.location.href = "/Home/DetailsOrganization/" + orgId;
+                }
+            });
         });
-    });
+    })();
     </script>
 <script>
     const container = document.getElementById("floatingShapes");
@@ -712,60 +801,27 @@ html[dir="ltr"] #heroBg1 {
     }
 </script>
 <script>
-    const isAuthenticated = @isAuthenticated;
-
-    document.querySelectorAll(".org-link").forEach(link => {
-        link.addEventListener("click", function () {
-
-            const orgId = this.dataset.orgId;
-
-            if (!isAuthenticated) {
-
-                Swal.fire({
-                    icon: "warning",
-                    title: "تسجيل الدخول مطلوب",
-                    text: "يجب تسجيل الدخول لعرض تفاصيل المنظمة",
-                    confirmButtonText: "تسجيل الدخول",
-                    confirmButtonColor: "#F99D27"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = "/Account/Login";
-                    }
-                });
-
-            } else {
-                window.location.href = "/Home/DetailsOrganization/" + orgId;
-            }
-        });
-    });
-</script>
-<script>
-        new Swiper(".orgSwiper", {
-        slidesPerView: 6,
-        spaceBetween: 20,
+    const pageDirOrgs = '@dir';
+    new Swiper(".orgsSwiper", {
+        slidesPerView: 3,
+        spaceBetween: 16,
         loop: true,
-
+        rtl: pageDirOrgs === 'rtl',
         autoplay: {
-            delay: 2000,
+            delay: 3500,
             disableOnInteraction: false,
         },
-
+        navigation: {
+            nextEl: ".orgs-nav .swiper-button-next",
+            prevEl: ".orgs-nav .swiper-button-prev",
+        },
         breakpoints: {
-            0: {
-                slidesPerView: 2
-            },
-            576: {
-                slidesPerView: 3
-            },
-            768: {
-                slidesPerView: 4
-            },
-            1200: {
-                slidesPerView: 6
-            }
+            0: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1200: { slidesPerView: 3 }
         }
     });
-        </script>
+</script>
 
 <script>
     const pageDir = '@dir';

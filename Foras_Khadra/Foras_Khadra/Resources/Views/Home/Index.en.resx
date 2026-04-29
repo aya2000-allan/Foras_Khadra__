@@ -141,4 +141,22 @@
   <data name="ViewAll" xml:space="preserve">
     <value>View All</value>
   </data>
+  <data name="HomeOrganizationsTitle" xml:space="preserve">
+    <value>Latest Organizations</value>
+  </data>
+  <data name="ViewOrganization" xml:space="preserve">
+    <value>View organization</value>
+  </data>
+  <data name="OrganizationCardHint" xml:space="preserve">
+    <value>Click the card to explore the organization's profile.</value>
+  </data>
+  <data name="LoginRequiredTitle" xml:space="preserve">
+    <value>Login required</value>
+  </data>
+  <data name="LoginRequiredText" xml:space="preserve">
+    <value>You must log in to view organization details</value>
+  </data>
+  <data name="LoginButton" xml:space="preserve">
+    <value>Log in</value>
+  </data>
 </root>
