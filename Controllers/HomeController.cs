@@ -355,9 +355,6 @@ namespace Foras_Khadra.Controllers
 
             return View(org);
         }
-        public IActionResult UnderDevelopment()
-        {
-            return View();
-        }
+        
     }
 }
