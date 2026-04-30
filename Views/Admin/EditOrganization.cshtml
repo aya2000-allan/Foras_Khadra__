@@ -1,0 +1,10 @@
+﻿<form asp-action="EditOrganization" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <input type="text" name="Name" value="@Model.Name" />
+
+    <input type="file" name="logoFile" />
+
+    <button type="submit">Save</button>
+
+</form>

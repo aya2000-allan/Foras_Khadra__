@@ -1,0 +1,625 @@
+@model Foras_Khadra.Models.OpportunityEditVM
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Foras_Khadra.Helpers
+
+
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["Title"];
+    Layout = "_Layout";
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+}
+<style>
+    /* Direction based on current culture */
+    .page-wrapper[dir="ltr"] {
+        direction: ltr;
+        text-align: left;
+    }
+
+    .page-wrapper[dir="rtl"] {
+        direction: rtl;
+        text-align: right;
+    }
+
+    /* Inputs + Labels */
+    .page-wrapper[dir="ltr"] .field input,
+    .page-wrapper[dir="ltr"] .field select,
+    .page-wrapper[dir="ltr"] .field textarea,
+    .page-wrapper[dir="ltr"] .field label {
+        direction: ltr !important;
+        text-align: left !important;
+    }
+
+    .page-wrapper[dir="rtl"] .field input,
+    .page-wrapper[dir="rtl"] .field select,
+    .page-wrapper[dir="rtl"] .field textarea,
+    .page-wrapper[dir="rtl"] .field label {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+
+    /* Quill Editor */
+    .page-wrapper[dir="ltr"] .ql-editor {
+        direction: ltr !important;
+        text-align: left !important;
+    }
+
+    .page-wrapper[dir="rtl"] .ql-editor {
+        direction: rtl !important;
+        text-align: right !important;
+    }
+</style>
+
+
+<link rel="stylesheet" href="~/css/opportunity-create.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet" />
+<style>
+/* اتجاه اليسار لتبويب الإنجليزي والفرنسي - يتفوق على كل القواعد */
+#tabEn .field input, #tabEn .field select, #tabEn .field textarea,
+#tabEn .field label, #tabEn .field .discription, #tabEn .field h3,
+#tabFr .field input, #tabFr .field select, #tabFr .field textarea,
+#tabFr .field label, #tabFr .field .discription, #tabFr .field h3 {
+  direction: ltr !important; text-align: left !important;
+}
+#tabEn .ql-editor, #tabFr .ql-editor { direction: ltr !important; text-align: left !important; }
+</style>
+<div class="header">
+    <h2 class="page-title"> @Localizer["EditOpportunityTitle"] </h2>
+    @if (!User.IsInRole("Organization"))
+    {
+        <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
+            @Localizer["BackToDashboard"]
+        </a>
+    }
+
+   
+</div>
+
+<div class="page-wrapper" dir="@dir" lang="@culture">
+    <div class="form-panel">
+        <form id="editForm" method="post" enctype="multipart/form-data" asp-action="Edit">
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" id="languageTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="arabic-tab" data-bs-toggle="tab" href="#tabAr" role="tab">@Localizer["ArabicTab"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="english-tab" data-bs-toggle="tab" href="#tabEn" role="tab">@Localizer["EnglishTab"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="french-tab" data-bs-toggle="tab" href="#tabFr" role="tab">@Localizer["FrenchTab"]</a>
+                </li>
+            </ul>
+            
+            <div asp-validation-summary="All" class="validation-summary"></div>
+
+            <!-- Image upload with preview -->
+            <div class="upload-box">
+                <h3 class="discription">@Localizer["EditOpportunityImage"]</h3>
+                
+                <!-- Current Image Preview (from database) -->
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <div class="current-image-preview" id="currentImagePreview" style="display:flex; align-items:center; gap:12px; margin-bottom:12px; background-color:#EEF1F7; justify-content:space-between; border-radius:26px; padding:12px;">
+                        <img src="@Model.ImagePath" alt="@Localizer["OpportunityImageAlt"] " style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
+                        <button type="button" id="deleteImageBtn" title="@Localizer["DeleteImage"] " style="height:40px; width:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.5rem; border:1px solid #ff383c; color:#ff383c; background:none; cursor:pointer;">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </div>
+                }
+                
+                <!-- New Image Preview (for newly uploaded images) -->
+                <div id="newImagePreviewContainer" class="current-image-preview" style="display:none; align-items:center; gap:12px; margin-bottom:12px; background-color:#EEF1F7; justify-content:space-between; border-radius:26px; padding:12px;">
+                    <img id="newPreviewImg" src="#" alt="@Localizer["NewOpportunityImage"]  " style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
+                    <button type="button" id="removeNewImageBtn" title="@Localizer["RemoveImage"] " style="height:40px; width:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.5rem; border:1px solid #ff383c; color:#ff383c; background:none; cursor:pointer;">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                </div>
+                
+                <label class="upload-area" id="uploadArea">
+                    <input asp-for="Image" id="ImageInput" type="file" hidden accept="image/jpeg, image/png" />
+                    <div class="upload-icon"><img src="~/images/upload-icon.svg" alt=""></div>
+                    <p class="dragText">@Localizer["DragDropText"]</p>
+                    <small>JPEG, PNG</small>
+                </label>
+                <input type="hidden" name="RemoveImage" id="RemoveImage" value="false" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <!-- PublishedBy -->
+            <div class="field">
+                <label for="PublishedBy">@Localizer["PublishedBy"] </label>
+                <input asp-for="PublishedBy" readonly value="@Model.PublishedBy" placeholder="نشر بواسطة" class="published-by-box" style="background: #bbcfbe7d;"  />
+                <span asp-validation-for="PublishedBy" class="text-danger"></span>
+            </div>
+
+            <!-- Type -->
+            <label for="Type">@Localizer["OpportunityType"] </label>
+
+            <div class="field dropdown">
+
+                @{
+                    var opportunityTypes = Enum.GetValues(typeof(OpportunityType))
+                    .Cast<OpportunityType>()
+                    .Select(t => new SelectListItem
+                    {
+                        Value = t.ToString(),
+                        Text = t.GetDisplayName(culture),
+                        Selected = Model.Type == t
+                    }).ToList();
+                }
+                <select asp-for="Type" asp-items="opportunityTypes" required>
+                    <option value="">@Localizer["SelectOpportunityType"]</option>
+                </select>
+
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="field">
+                <label>@Localizer["Deadline"] <span style="color:red">*</span></label>
+
+                <!-- Deadline Type -->
+                <select asp-for="DeadlineType" class="form-select" id="deadlineType">
+                    <option value="">----</option>
+                    @foreach (var item in Enum.GetValues(typeof(DeadlineType)).Cast<DeadlineType>())
+                    {
+                        <option value="@item" selected="@(Model.DeadlineType == item)">
+                            @item.ToString()
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="DeadlineType" class="text-danger"></span>
+
+                <!-- End Date -->
+                <div id="endDateWrapper" style="margin-top:10px; display:@(Model.DeadlineType == DeadlineType.SpecificDate ? "block" : "none")">
+                    <input asp-for="EndDate" type="date" class="form-control" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="form-label">@Localizer["OpportunityCountries"] </label>
+                <div class="countries-checkboxes-grid">
+                    @foreach (var country in Model.CountriesSelectList)
+                    {
+                        <div class="country-checkbox-item">
+                            <input class="country-checkbox-input"
+                                   type="checkbox"
+                                   name="AvailableCountryIds"
+                                   value="@country.Value"
+                                   id="country_@country.Value"
+                                   @(Model.AvailableCountryIds.Contains(int.Parse(country.Value)) ? "checked" : "") />
+                            <label class="country-checkbox-label" for="country_@country.Value">
+                                @country.Text  <!-- هنا اسم الدولة حسب اللغة -->
+                            </label>
+                        </div>
+                    }
+
+                </div>
+                <span asp-validation-for="AvailableCountryIds" class="text-danger"></span>
+            </div>
+            
+            <div class="tab-content mt-3">
+                <!-- Arabic -->
+                <div class="tab-pane fade show active" id="tabAr" role="tabpanel" dir="rtl">
+                    <div class="field">
+                        <label for="TitleAr">@Localizer["OpportunityTitle"]</label>
+                        <input asp-for="TitleAr"  required />
+                        <span asp-validation-for="TitleAr" class="text-danger"></span>
+                    </div>
+                    
+                     <div class="field">
+                        <label for="editorDescriptionAr">@Localizer["OpportunityDescription"]</label>
+                        <div id="editorDescriptionAr" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionAr" id="descriptionAr" required />
+                        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                    </div>
+
+                    
+
+                    <div class="field">
+                        <label for="editorAr">@Localizer["OpportunityDetails"]</label>
+                        <div id="editorAr" style="height: 200px;"></div>
+                        <input type="hidden" asp-for="DetailsAr" id="detailsAr" />
+                        <span asp-validation-for="DetailsAr" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="editorEligibilityAr">@Localizer["EligibilityCriteria"]</label>
+                        <div id="editorEligibilityAr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="EligibilityCriteriaAr" id="eligibilityAr" required />
+                        <span asp-validation-for="EligibilityCriteriaAr" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="editorBenefitsAr">@Localizer["Benefits"]</label>
+                        <div id="editorBenefitsAr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="BenefitsAr" id="benefitsAr" required />
+                        <span asp-validation-for="BenefitsAr" class="text-danger"></span>
+                    </div>
+
+                   
+                </div>
+
+                <!-- English -->
+                <div class="tab-pane fade" id="tabEn" role="tabpanel" dir="ltr">
+                    <div class="field">
+                        <label for="TitleEn">@Localizer["OpportunityTitle"]</label>
+                        <input asp-for="TitleEn" required />
+                        <span asp-validation-for="TitleEn" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="field">
+                        <label for="editorDescriptionEn">@Localizer["OpportunityDescription"]</label>
+                        <div id="editorDescriptionEn" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionEn" id="descriptionEn" required />
+                        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+                    </div>
+
+                    
+
+                    <div class="field">
+                        <label for="editorEn">@Localizer["OpportunityDetails"]</label>
+                        <div id="editorEn" style="height: 200px;"></div>
+                        <input type="hidden" asp-for="DetailsEn" id="detailsEn" />
+                        <span asp-validation-for="DetailsEn" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="editorEligibilityEn">@Localizer["EligibilityCriteria"]</label>
+                        <div id="editorEligibilityEn" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="EligibilityCriteriaEn" id="eligibilityEn" required />
+                        <span asp-validation-for="EligibilityCriteriaEn" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="editorBenefitsEn">@Localizer["Benefits"]</label>
+                        <div id="editorBenefitsEn" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="BenefitsEn" id="benefitsEn" required />
+                        <span asp-validation-for="BenefitsEn" class="text-danger"></span>
+                    </div>
+
+                    
+                </div>
+
+                <!-- French -->
+                <div class="tab-pane fade" id="tabFr" role="tabpanel" dir="ltr">
+                    <div class="field">
+                        <label for="TitleFr">@Localizer["OpportunityTitle"]</label>
+                        <input asp-for="TitleFr" required />
+                        <span asp-validation-for="TitleFr" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="field">
+                        <label for="editorDescriptionFr">@Localizer["OpportunityDescription"]</label>
+                        <div id="editorDescriptionFr" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionFr" id="descriptionFr" required />
+                        <span asp-validation-for="DescriptionFr" class="text-danger"></span>
+                    </div>
+
+
+
+                    <div class="field">
+                        <label for="editorFr">@Localizer["OpportunityDetails"]</label>
+                        <div id="editorFr" style="height: 200px;"></div>
+                        <input type="hidden" asp-for="DetailsFr" id="detailsFr" />
+                        <span asp-validation-for="DetailsFr" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="editorEligibilityFr">@Localizer["EligibilityCriteria"]</label>
+                        <div id="editorEligibilityFr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="EligibilityCriteriaFr" id="eligibilityFr" required />
+                        <span asp-validation-for="EligibilityCriteriaFr" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="editorBenefitsFr">@Localizer["Benefits"]</label>
+                        <div id="editorBenefitsFr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="BenefitsFr" id="benefitsFr" required />
+                        <span asp-validation-for="BenefitsFr" class="text-danger"></span>
+                    </div>
+
+                    
+                </div>
+            </div>
+
+            <!-- Apply Link -->
+            <div class="field mt-3">
+                <label for="ApplyLink">@Localizer["ApplyLinkLabel"] </label>
+                <input asp-for="ApplyLink" placeholder="@Localizer["ApplyLinkPlaceholder"] " required />
+                <span asp-validation-for="ApplyLink" class="text-danger"></span>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions mt-3">
+                <button type="submit" class="btn-primary">@Localizer["SaveAndAdd"] </button>
+                @if (User.IsInRole("Organization"))
+                {
+                    <a asp-action="OrgOpportunities" class="btn-outline">@Localizer["Cancel"]</a>
+                }
+                else
+                {
+                    <a asp-action="Index" class="btn-outline">@Localizer["Cancel"]</a>
+                }
+            </div>
+
+        </form>
+    </div>
+    
+    <div class="side-panel">
+        <div class="side-bg"></div>
+        <div class="side-illustration">
+            <img src="~/images/contact_illustration.svg" alt="">
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // ================= Localization Strings =================
+                // =================== Initialize All Quill Editors ===================
+        // Arabic Editors
+        var quillEligibilityAr = new Quill('#editorEligibilityAr', { theme: 'snow' });
+        var quillBenefitsAr    = new Quill('#editorBenefitsAr', { theme: 'snow' });
+        var quillDescriptionAr = new Quill('#editorDescriptionAr', { theme: 'snow' });
+        var quillAr            = new Quill('#editorAr', { theme: 'snow' });
+
+        // English Editors
+        var quillEligibilityEn = new Quill('#editorEligibilityEn', { theme: 'snow' });
+        var quillBenefitsEn    = new Quill('#editorBenefitsEn', { theme: 'snow' });
+        var quillDescriptionEn = new Quill('#editorDescriptionEn', { theme: 'snow' });
+        var quillEn            = new Quill('#editorEn', { theme: 'snow' });
+
+        // French Editors
+        var quillEligibilityFr = new Quill('#editorEligibilityFr', { theme: 'snow' });
+        var quillBenefitsFr    = new Quill('#editorBenefitsFr', { theme: 'snow' });
+        var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow' });
+        var quillFr            = new Quill('#editorFr', { theme: 'snow' });
+
+        // =================== تطبيق اتجاه النص حسب التبويب ===================
+        @* function applyTabDirection(tabId) {
+            var pane = document.getElementById(tabId);
+            if (!pane) return;
+            var isLtr = tabId === 'tabEn' || tabId === 'tabFr';
+            var dir = isLtr ? 'ltr' : 'rtl';
+            var align = isLtr ? 'left' : 'right';
+            pane.setAttribute('dir', dir);
+            pane.querySelectorAll('.field input, .field select, .field textarea, .field label, .field .discription, .field h3').forEach(function(el) {
+                el.style.setProperty('direction', dir, 'important');
+                el.style.setProperty('text-align', align, 'important');
+            });
+            pane.querySelectorAll('.ql-editor').forEach(function(el) {
+                el.style.setProperty('direction', dir, 'important');
+                el.style.setProperty('text-align', align, 'important');
+            });
+        }
+        function initTabDirection() {
+            document.querySelectorAll('#languageTabs a[data-bs-toggle="tab"]').forEach(function(tab) {
+                tab.addEventListener('shown.bs.tab', function(e) {
+                    var link = e.currentTarget || e.target.closest('a');
+                    if (link) {
+                        var href = link.getAttribute('href') || '';
+                        var targetId = href.replace('#', '');
+                        if (targetId) applyTabDirection(targetId);
+                    }
+                });
+            });
+            var activeLink = document.querySelector('#languageTabs .nav-link.active');
+            if (activeLink) {
+                var href = activeLink.getAttribute('href') || '';
+                var targetId = href.replace('#', '');
+                if (targetId) applyTabDirection(targetId);
+            }
+            ['tabEn', 'tabFr'].forEach(function(id) {
+                var p = document.getElementById(id);
+                if (p) applyTabDirection(id);
+            });
+        }
+        initTabDirection(); *@
+
+        // =================== Load Existing Data from Model into Editors and Hidden Inputs ===================
+        // Arabic
+        quillEligibilityAr.root.innerHTML = '@Html.Raw(Model.EligibilityCriteriaAr ?? "")';
+        quillBenefitsAr.root.innerHTML    = '@Html.Raw(Model.BenefitsAr ?? "")';
+        quillDescriptionAr.root.innerHTML = '@Html.Raw(Model.DescriptionAr ?? "")';
+        quillAr.root.innerHTML            = '@Html.Raw(Model.DetailsAr ?? "")';
+        document.getElementById('eligibilityAr').value = quillEligibilityAr.root.innerHTML;
+        document.getElementById('benefitsAr').value    = quillBenefitsAr.root.innerHTML;
+        document.getElementById('descriptionAr').value = quillDescriptionAr.root.innerHTML;
+        document.getElementById('detailsAr').value     = quillAr.root.innerHTML;
+
+        // English
+        quillEligibilityEn.root.innerHTML = '@Html.Raw(Model.EligibilityCriteriaEn ?? "")';
+        quillBenefitsEn.root.innerHTML    = '@Html.Raw(Model.BenefitsEn ?? "")';
+        quillDescriptionEn.root.innerHTML = '@Html.Raw(Model.DescriptionEn ?? "")';
+        quillEn.root.innerHTML            = '@Html.Raw(Model.DetailsEn ?? "")';
+        document.getElementById('eligibilityEn').value = quillEligibilityEn.root.innerHTML;
+        document.getElementById('benefitsEn').value    = quillBenefitsEn.root.innerHTML;
+        document.getElementById('descriptionEn').value = quillDescriptionEn.root.innerHTML;
+        document.getElementById('detailsEn').value     = quillEn.root.innerHTML;
+
+        // French
+        quillEligibilityFr.root.innerHTML = '@Html.Raw(Model.EligibilityCriteriaFr ?? "")';
+        quillBenefitsFr.root.innerHTML    = '@Html.Raw(Model.BenefitsFr ?? "")';
+        quillDescriptionFr.root.innerHTML = '@Html.Raw(Model.DescriptionFr ?? "")';
+        quillFr.root.innerHTML            = '@Html.Raw(Model.DetailsFr ?? "")';
+        document.getElementById('eligibilityFr').value = quillEligibilityFr.root.innerHTML;
+        document.getElementById('benefitsFr').value    = quillBenefitsFr.root.innerHTML;
+        document.getElementById('descriptionFr').value = quillDescriptionFr.root.innerHTML;
+        document.getElementById('detailsFr').value     = quillFr.root.innerHTML;
+
+
+        // =================== Image Preview Functionality ===================
+        const imageInput = document.getElementById('ImageInput');
+        const currentImagePreview = document.getElementById('currentImagePreview');
+        const newImagePreviewContainer = document.getElementById('newImagePreviewContainer');
+        const newPreviewImg = document.getElementById('newPreviewImg');
+        const uploadArea = document.getElementById('uploadArea');
+        const removeNewImageBtn = document.getElementById('removeNewImageBtn');
+        const deleteImageBtn = document.getElementById('deleteImageBtn');
+        const removeImageHidden = document.getElementById('RemoveImage');
+
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    if (currentImagePreview) currentImagePreview.style.display = 'none';
+                    newPreviewImg.src = e.target.result;
+                    newImagePreviewContainer.style.display = 'flex';
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        if (removeNewImageBtn) {
+            removeNewImageBtn.addEventListener('click', function() {
+                imageInput.value = '';
+                newImagePreviewContainer.style.display = 'none';
+                if (currentImagePreview) currentImagePreview.style.display = 'flex';
+                uploadArea.style.display = 'block';
+                removeImageHidden.value = 'false';
+            });
+        }
+
+        if (deleteImageBtn) {
+            deleteImageBtn.addEventListener('click', function() {
+                if (currentImagePreview) currentImagePreview.style.display = 'none';
+                uploadArea.style.display = 'block';
+                removeImageHidden.value = 'true';
+            });
+        }
+
+        // =================== Copy All Quill Content to Hidden Inputs ===================
+        function copyAllQuillToHidden() {
+            // Arabic
+            document.getElementById('eligibilityAr').value = quillEligibilityAr.root.innerHTML.trim();
+            document.getElementById('descriptionAr').value = quillDescriptionAr.root.innerHTML.trim();
+            document.getElementById('benefitsAr').value = quillBenefitsAr.root.innerHTML.trim();
+            document.getElementById('detailsAr').value = quillAr.root.innerHTML.trim();
+            // English
+            document.getElementById('eligibilityEn').value = quillEligibilityEn.root.innerHTML.trim();
+            document.getElementById('descriptionEn').value = quillDescriptionEn.root.innerHTML.trim();
+            document.getElementById('benefitsEn').value = quillBenefitsEn.root.innerHTML.trim();
+            document.getElementById('detailsEn').value = quillEn.root.innerHTML.trim();
+            // French
+            document.getElementById('eligibilityFr').value = quillEligibilityFr.root.innerHTML.trim();
+            document.getElementById('descriptionFr').value = quillDescriptionFr.root.innerHTML.trim();
+            document.getElementById('benefitsFr').value = quillBenefitsFr.root.innerHTML.trim();
+            document.getElementById('detailsFr').value = quillFr.root.innerHTML.trim();
+        }
+
+        // =================== Form Submit Validation ===================
+        const form = document.getElementById('editForm');
+        form.addEventListener('submit', function(e){
+            copyAllQuillToHidden();
+            var activeTabPane = document.querySelector('.tab-pane.active');
+            var requiredFields = activeTabPane.querySelectorAll('[required]');
+            var allFilled = true;
+            requiredFields.forEach(function(field){
+                if(field.type !== 'checkbox' && field.type !== 'radio'){
+                    if(!field.value.trim()) allFilled = false;
+                }
+            });
+            if(activeTabPane.id === 'tabAr') {
+                if(quillEligibilityAr.getText().trim() === '') allFilled = false;
+                if(quillDescriptionAr.getText().trim() === '') allFilled = false;
+                if(quillBenefitsAr.getText().trim() === '') allFilled = false;
+                if(quillAr.getText().trim() === '') allFilled = false;
+            }
+            if(activeTabPane.id === 'tabEn') {
+                if(quillEligibilityEn.getText().trim() === '') allFilled = false;
+                if(quillDescriptionEn.getText().trim() === '') allFilled = false;
+                if(quillBenefitsEn.getText().trim() === '') allFilled = false;
+                if(quillEn.getText().trim() === '') allFilled = false;
+            }
+            if(activeTabPane.id === 'tabFr') {
+                if(quillEligibilityFr.getText().trim() === '') allFilled = false;
+                if(quillDescriptionFr.getText().trim() === '') allFilled = false;
+                if(quillBenefitsFr.getText().trim() === '') allFilled = false;
+                if(quillFr.getText().trim() === '') allFilled = false;
+            }
+            if(!allFilled){
+                e.preventDefault();
+                Swal.fire({
+                    title: 'تنبيه',
+                    html: 'الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب!',
+                    icon: 'warning',
+                    confirmButtonText: 'حسناً',
+                });
+            }
+        });
+
+        // =================== Prevent Tab Change if Required Fields Empty ===================
+        var tabLinks = document.querySelectorAll('#languageTabs a');
+        tabLinks.forEach(function(link){
+            link.addEventListener('show.bs.tab', function(e){
+                copyAllQuillToHidden();
+                var activeTabPane = document.querySelector('.tab-pane.active');
+                var requiredFields = activeTabPane.querySelectorAll('[required]');
+                var allFilled = true;
+                requiredFields.forEach(function(field){
+                    if(field.type !== 'checkbox' && field.type !== 'radio'){
+                        if(!field.value.trim()) allFilled = false;
+                    }
+                });
+                if(activeTabPane.id === 'tabAr') {
+                    if(quillEligibilityAr.getText().trim() === '') allFilled = false;
+                    if(quillDescriptionAr.getText().trim() === '') allFilled = false;
+                    if(quillBenefitsAr.getText().trim() === '') allFilled = false;
+                    if(quillAr.getText().trim() === '') allFilled = false;
+                }
+                if(activeTabPane.id === 'tabEn') {
+                    if(quillEligibilityEn.getText().trim() === '') allFilled = false;
+                    if(quillDescriptionEn.getText().trim() === '') allFilled = false;
+                    if(quillBenefitsEn.getText().trim() === '') allFilled = false;
+                    if(quillEn.getText().trim() === '') allFilled = false;
+                }
+                if(activeTabPane.id === 'tabFr') {
+                    if(quillEligibilityFr.getText().trim() === '') allFilled = false;
+                    if(quillDescriptionFr.getText().trim() === '') allFilled = false;
+                    if(quillBenefitsFr.getText().trim() === '') allFilled = false;
+                    if(quillFr.getText().trim() === '') allFilled = false;
+                }
+                if(!allFilled){
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'تنبيه',
+                        html: 'الرجاء تعبئة جميع الحقول المطلوبة في هذا التاب قبل الانتقال!',
+                        icon: 'warning',
+                        confirmButtonText: 'حسناً',
+                    });
+                }
+            });
+        });
+
+                // ================= Deadline Dynamic Show/Hide =================
+        const deadlineTypeSelect = document.getElementById("deadlineType");
+        const endDateWrapper = document.getElementById("endDateWrapper");
+
+        if (deadlineTypeSelect) {
+            deadlineTypeSelect.addEventListener("change", function () {
+                if (this.value === "SpecificDate") {
+                    endDateWrapper.style.display = "block";
+                } else {
+                    endDateWrapper.style.display = "none";
+                    const endDateInput = document.querySelector('input[name="EndDate"]');
+                    if (endDateInput) endDateInput.value = "";
+                }
+            });
+        }
+    </script>
+
+
+}

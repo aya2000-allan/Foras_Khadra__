@@ -1,0 +1,772 @@
+@model Foras_Khadra.Models.OpportunityCreateVM
+@using Foras_Khadra.Models
+@using System.Globalization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Foras_Khadra.Helpers
+
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["Title"];
+    Layout = "_Layout";
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+
+}
+
+@section Styles {
+    <link rel="stylesheet" asp-append-version="true" href="~/css/opportunity-create.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        .header-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-back-dashboard {
+            background: transparent;
+            color: #f99d27;
+            border: 2px solid #f99d27;
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            width: auto;
+            height: auto;
+            font-size: 16px;
+        }
+
+        .btn-back-dashboard i {
+            color: inherit;
+        }
+
+        .btn-back-dashboard:hover {
+            background: #f99d27;
+            color: #fff;
+            border-color: #f99d27;
+        }
+    </style>
+}
+
+<div class="header">
+    <h2 class="page-title">@Localizer["AddOpportunityTitle"]</h2>
+    <div class="header-actions">
+        @if (User.IsInRole("Organization"))
+        {
+            <a asp-controller="Opportunity" asp-action="OrgOpportunities" class="btn-back-dashboard">
+                <i class="fa-solid fa-briefcase"></i>
+                عرض الفرص
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Opportunity" asp-action="Index" class="btn-back-dashboard">
+                <i class="fa-solid fa-briefcase"></i>
+                عرض الفرص
+            </a>
+            <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
+                <i class="fa-solid fa-gauge"></i>
+                لوحة التحكم
+            </a>
+        }
+    </div>
+</div>
+
+<div class="page-wrapper" dir="@dir">
+    <div class="form-panel">
+        <form id="createForm" asp-action="Create" method="post" enctype="multipart/form-data">
+            <ul class="nav nav-tabs" id="languageTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="arabic-tab" data-bs-toggle="tab" href="#arabic" role="tab">
+                        @Localizer["ArabicTab"] <span style="color:red">*</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="english-tab" data-bs-toggle="tab" href="#english" role="tab">
+                        @Localizer["EnglishTab"] <span style="color:red">*</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="french-tab" data-bs-toggle="tab" href="#french" role="tab">
+                        @Localizer["FrenchTab"] <span style="color:red">*</span>
+                    </a>
+                </li>
+            </ul>
+            <!-- Image -->
+            <!-- Image upload -->
+            <div class="upload-box">
+                <h3 class="discription">@Localizer["UploadOpportunityImage"] <span style="color:red">*</span></h3>
+
+                <div id="imagePreviewContainer" class="current-image-preview" style="display:none; align-items:center; gap:12px; margin-bottom:12px; background-color:#EEF1F7; justify-content:space-between; border-radius:26px; padding:12px;">
+                    <img id="previewImg" src="#" alt="@Localizer["OpportunityImageAlt"]" style="width:90px; height:auto; border-radius:16px; box-shadow:0 1px 4px rgba(0,0,0,0.08);" />
+                    <div id="previewInfo" style="display:flex; align-items:center; gap:6px; font-weight:600;">
+                        <span id="previewName"></span>
+                        <span style="color:green; font-size:20px;">✅</span>
+                    </div>
+                </div>
+
+                <label class="upload-area" id="uploadArea">
+                    <input asp-for="Image" id="imageInput" type="file" hidden accept="image/jpeg, image/png" />
+                    <div class="upload-icon"><img src="~/images/upload-icon.svg" alt=""></div>
+                    <p class="dragText">@Localizer["DragDropText"] </p>
+                    <small>JPEG, PNG</small>
+                </label>
+                <input type="hidden" name="RemoveImage" id="RemoveImage" value="false" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <!-- Published By -->
+            <div class="field">
+                <label> @Localizer["PublishedBy"] </label>
+                <input type="text"
+                       asp-for="PublishedBy"
+                       readonly
+                       class="published-by-box"
+                       style="background: #bbcfbe7d;" />
+                <span asp-validation-for="PublishedBy" class="text-danger"></span>
+            </div>
+
+            <!-- Opportunity Type -->
+            <label for="Type">@Localizer["OpportunityType"] <span style="color:red">*</span></label>
+
+            <div class="field dropdown">
+                <select asp-for="Type" class="form-select">
+                    <option value="">@Localizer["SelectOpportunityType"]</option>
+
+                    @foreach (var item in Enum.GetValues(typeof(OpportunityType)).Cast<OpportunityType>())
+                    {
+                        <option value="@item">@item.GetDisplayName(culture)</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Available Countries -->
+            <div class="field">
+                <label>@Localizer["OpportunityCountries"] <span style="color:red">*</span></label>
+                <div class="countries-checkboxes-grid">
+                    @foreach (var country in Model.CountriesSelectList)
+                    {
+                        <div class="country-checkbox-item">
+                            <input class="country-checkbox-input"
+                                   type="checkbox"
+                                   name="AvailableCountryIds"
+                                   value="@country.Value"
+                                   id="country_@country.Value"
+                                   @(Model.AvailableCountryIds.Contains(int.Parse(country.Value)) ? "checked" : "") />
+                            <label class="country-checkbox-label" for="country_@country.Value">
+                                @country.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+                <span asp-validation-for="AvailableCountryIds" class="text-danger"></span>
+            </div>
+
+            <!-- Deadline -->
+            <div class="field">
+                <label>@Localizer["Deadline"] <span style="color:red">*</span></label>
+
+                <!-- Deadline Type -->
+                <select asp-for="DeadlineType" class="form-select" id="deadlineType">
+                    <option value="">----</option>
+                    @foreach (var item in Enum.GetValues(typeof(DeadlineType)).Cast<DeadlineType>())
+                    {
+                        <option value="@item">@item.ToString()</option>
+                    }
+                </select>
+                <span asp-validation-for="DeadlineType" class="text-danger"></span>
+
+                <!-- End Date -->
+                <div id="endDateWrapper" style="margin-top:10px; display:none;">
+                    <input asp-for="EndDate" type="date" class="form-control" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+
+
+            <div class="tab-content mt-3">
+                <!-- Arabic Tab -->
+                <div class="tab-pane fade show active" id="arabic" role="tabpanel" dir="rtl">
+                    <div class="field">
+                        <label for="TitleAr">@Localizer["OpportunityTitle"] </label>
+                        <input asp-for="TitleAr" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <span asp-validation-for="TitleAr" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <h3 class="discription">@Localizer["OpportunityDescription"] </h3>
+                        <div id="editorDescriptionAr" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionAr" id="descriptionAr" required />
+                        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <h3 class="discription">@Localizer["OpportunityDetails"] </h3>
+                        <!-- Arabic -->
+                        <div id="editorAr" style="height: 250px;"></div>
+                        <input type="hidden" asp-for="DetailsAr" id="detailAr" required />
+                        <span asp-validation-for="DetailsAr" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <h3 class="discription">@Localizer["EligibilityCriteria"]</h3>
+                        <div id="editorEligibilityAr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="EligibilityCriteriaAr" id="eligibilityAr" required />
+                        <span asp-validation-for="EligibilityCriteriaAr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <h3 class="discription">@Localizer["Benefits"]</h3>
+                        <div id="editorBenefitsAr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="BenefitsAr" id="benefitsAr" required />
+                        <span asp-validation-for="BenefitsAr" class="text-danger"></span>
+                    </div>
+                   
+                   
+                </div>
+
+                <!-- English Tab -->
+                <div class="tab-pane fade" id="english" role="tabpanel" dir="ltr">
+                    <div class="field">
+                        <label for="TitleEn">@Localizer["OpportunityTitle"] </label>
+                        <input asp-for="TitleEn" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <span asp-validation-for="TitleEn" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+
+                        <h3 class="discription">
+                            @Localizer["OpportunityDescription"]
+                        </h3>
+                        <div id="editorDescriptionEn" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionEn" id="descriptionEn" required />
+                        <span asp-validation-for="DescriptionEn" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+
+                        <h3 class="discription">
+                            @Localizer["OpportunityDetails"]
+                        </h3>
+                        <div id="editorEn" style="height: 250px;"></div>
+                        <input type="hidden" asp-for="DetailsEn" id="detailEn" required />
+                        <span asp-validation-for="DetailsEn" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <h3 class="discription">@Localizer["EligibilityCriteria"]</h3>
+                        <div id="editorEligibilityEn" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="EligibilityCriteriaEn" id="eligibilityEn" required />
+                        <span asp-validation-for="EligibilityCriteriaEn" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <h3 class="discription">
+                            @Localizer["Benefits"]
+                        </h3>
+                        <div id="editorBenefitsEn" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="BenefitsEn" id="benefitsEn" required />
+                        <span asp-validation-for="BenefitsEn" class="text-danger"></span>
+                    </div>
+                    
+                </div>
+
+                <!-- French Tab -->
+                <div class="tab-pane fade" id="french" role="tabpanel" dir="ltr">
+                    <div class="field">
+                        <label for="TitleFr">@Localizer["OpportunityTitle"] </label>
+                        <input asp-for="TitleFr" placeholder="@Localizer["OpportunityTitleAr"]" required />
+                        <span asp-validation-for="TitleFr" class="text-danger"></span>
+                    </div>
+
+                    <div class="field">
+                        <h3 class="discription">@Localizer["OpportunityDescription"]</h3>
+                        <div id="editorDescriptionFr" style="height: 180px;"></div>
+                        <input type="hidden" asp-for="DescriptionFr" id="descriptionFr" required />
+                        <span asp-validation-for="DescriptionFr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <h3 class="discription">@Localizer["OpportunityDetails"]</h3>
+                        <div id="editorFr" style="height: 250px;"></div>
+                        <input type="hidden" asp-for="DetailsFr" id="detailFr" required />
+                        <span asp-validation-for="DetailsFr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <h3 class="discription">@Localizer["EligibilityCriteria"]</h3>
+                        <div id="editorEligibilityFr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="EligibilityCriteriaFr" id="eligibilityFr" required />
+                        <span asp-validation-for="EligibilityCriteriaFr" class="text-danger"></span>
+                    </div>
+                    <div class="field">
+                        <h3 class="discription">@Localizer["Benefits"]</h3>
+                        <div id="editorBenefitsFr" style="height: 150px;"></div>
+                        <input type="hidden" asp-for="BenefitsFr" id="benefitsFr" required />
+                        <span asp-validation-for="BenefitsFr" class="text-danger"></span>
+                    </div>
+                    
+                </div>
+            </div>
+
+
+
+
+            <!-- Apply Link -->
+            <div class="field">
+                <label>@Localizer["ApplyLinkLabel"] <span style="color:red">*</span></label>
+
+                <input asp-for="ApplyLink" placeholder="@Localizer["ApplyLinkPlaceholder"]" required />
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+                <button type="submit" class="btn-primary">@Localizer["SaveAndAdd"]</button>
+                @if (User.IsInRole("Organization"))
+                {
+                    <a asp-action="OrgOpportunities" class="btn-outline">@Localizer["Cancel"]</a>
+                }
+                else
+                {
+                    <a asp-action="Index" class="btn-outline">@Localizer["Cancel"]</a>
+                }
+            </div>
+
+        </form>
+    </div>
+
+    <div class="side-panel">
+        <div class="side-bg"></div>
+        <div class="side-illustration">
+            <img src="~/images/contact_illustration.svg" alt="">
+        </div>
+    </div>
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+               // ================= Localization Strings =================
+        var writeEligibility = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["WriteEligibility"].Value));
+        var writeBenefits = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["WriteBenefits"].Value));
+        var writeDescription = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["WriteDescription"].Value));
+        var writeDetails = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["WriteDetails"].Value));
+
+        var alertTitle = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["AlertTitle"].Value));
+        var fillRequiredMsg = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["FillRequiredFields"].Value));
+        var fillBeforeSwitchMsg = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["FillBeforeSwitch"].Value));
+        var okText = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Localizer["OkButton"].Value));
+
+        // =================== Initialize All Quill Editors ===================
+        var quillEligibilityAr = new Quill('#editorEligibilityAr', { theme: 'snow', placeholder: writeEligibility });
+        var quillBenefitsAr = new Quill('#editorBenefitsAr', { theme: 'snow', placeholder: writeBenefits });
+        var quillDescriptionAr = new Quill('#editorDescriptionAr', { theme: 'snow', placeholder: writeDescription });
+        var quillAr = new Quill('#editorAr', { theme: 'snow', placeholder: writeDetails });
+
+        var quillEligibilityEn = new Quill('#editorEligibilityEn', { theme: 'snow', placeholder: writeEligibility });
+        var quillBenefitsEn = new Quill('#editorBenefitsEn', { theme: 'snow', placeholder: writeBenefits });
+        var quillDescriptionEn = new Quill('#editorDescriptionEn', { theme: 'snow', placeholder: writeDescription });
+        var quillEn = new Quill('#editorEn', { theme: 'snow', placeholder: writeDetails });
+
+        var quillEligibilityFr = new Quill('#editorEligibilityFr', { theme: 'snow', placeholder: writeEligibility });
+        var quillBenefitsFr = new Quill('#editorBenefitsFr', { theme: 'snow', placeholder: writeBenefits });
+        var quillDescriptionFr = new Quill('#editorDescriptionFr', { theme: 'snow', placeholder: writeDescription });
+        var quillFr = new Quill('#editorFr', { theme: 'snow', placeholder: writeDetails });
+
+        // =================== Variables ===================
+        const form = document.getElementById('createForm');
+        const saveButton = document.querySelector('.btn-primary');
+        const tabLinks = document.querySelectorAll('#languageTabs a');
+        const tabsOrder = ['arabic','english','french'];
+        const completedTabs = { arabic: false, english: false, french: false };
+
+        // =================== Helper Functions ===================
+        function copyAllQuillToHidden() {
+            document.getElementById('eligibilityAr').value = quillEligibilityAr.root.innerHTML.trim();
+            document.getElementById('benefitsAr').value = quillBenefitsAr.root.innerHTML.trim();
+            document.getElementById('descriptionAr').value = quillDescriptionAr.root.innerHTML.trim();
+            document.getElementById('detailAr').value = quillAr.root.innerHTML.trim();
+
+            document.getElementById('eligibilityEn').value = quillEligibilityEn.root.innerHTML.trim();
+            document.getElementById('benefitsEn').value = quillBenefitsEn.root.innerHTML.trim();
+            document.getElementById('descriptionEn').value = quillDescriptionEn.root.innerHTML.trim();
+            document.getElementById('detailEn').value = quillEn.root.innerHTML.trim();
+
+            document.getElementById('eligibilityFr').value = quillEligibilityFr.root.innerHTML.trim();
+            document.getElementById('benefitsFr').value = quillBenefitsFr.root.innerHTML.trim();
+            document.getElementById('descriptionFr').value = quillDescriptionFr.root.innerHTML.trim();
+            document.getElementById('detailFr').value = quillFr.root.innerHTML.trim();
+        }
+
+        function isTabCompleted(tabPane) {
+            let allFilled = true;
+            tabPane.querySelectorAll('[required]').forEach(field => {
+                if(field.type !== 'checkbox' && field.type !== 'radio') {
+                    if(!field.value.trim()) allFilled = false;
+                }
+            });
+
+            if(tabPane.id === 'arabic') allFilled = allFilled &&
+                quillEligibilityAr.getText().trim() &&
+                quillBenefitsAr.getText().trim() &&
+                quillDescriptionAr.getText().trim() &&
+                quillAr.getText().trim();
+            if(tabPane.id === 'english') allFilled = allFilled &&
+                quillEligibilityEn.getText().trim() &&
+                quillBenefitsEn.getText().trim() &&
+                quillDescriptionEn.getText().trim() &&
+                quillEn.getText().trim();
+            if(tabPane.id === 'french') allFilled = allFilled &&
+                quillEligibilityFr.getText().trim() &&
+                quillBenefitsFr.getText().trim() &&
+                quillDescriptionFr.getText().trim() &&
+                quillFr.getText().trim();
+
+            return !!allFilled;
+        }
+
+        function areNonTabFieldsFilled() {
+            const imageInput = document.getElementById('imageInput');
+            const hasImage = imageInput && imageInput.files.length > 0;
+
+            const typeSelect = document.querySelector('select[name="Type"]');
+            const hasType = typeSelect && typeSelect.value.trim() !== "";
+
+            const applyLink = document.querySelector('input[name="ApplyLink"]');
+            const hasLink = applyLink && applyLink.value.trim() !== "";
+
+            const countryCheckboxes = document.querySelectorAll('input[name="AvailableCountryIds"]:checked');
+            const hasCountries = countryCheckboxes && countryCheckboxes.length > 0;
+
+            return hasImage && hasType && hasLink && hasCountries;
+        }
+
+        function updateTabCompletion(tabId) {
+            const tabPane = document.getElementById(tabId);
+            completedTabs[tabId] = isTabCompleted(tabPane);
+            updateSaveButtonState();
+        }
+
+        function updateSaveButtonState() {
+            const allTabsFilled = tabsOrder.every(tabId => completedTabs[tabId]);
+            const nonTabFieldsFilled = areNonTabFieldsFilled();
+            saveButton.disabled = !(allTabsFilled && nonTabFieldsFilled);
+        }
+
+        // =================== Event Listeners ===================
+        // Quill editors
+        const quillEditors = [
+            quillEligibilityAr, quillBenefitsAr, quillDescriptionAr, quillAr,
+            quillEligibilityEn, quillBenefitsEn, quillDescriptionEn, quillEn,
+            quillEligibilityFr, quillBenefitsFr, quillDescriptionFr, quillFr
+        ];
+
+        quillEditors.forEach(q => q.on('text-change', () => {
+            tabsOrder.forEach(tabId => updateTabCompletion(tabId));
+        }));
+
+        // Regular fields inside tabs
+        tabsOrder.forEach(tabId => {
+            const tabPane = document.getElementById(tabId);
+            tabPane.addEventListener('input', () => updateTabCompletion(tabId));
+        });
+
+        // Tabs switching
+        tabLinks.forEach(link => {
+            link.addEventListener('show.bs.tab', e => {
+                copyAllQuillToHidden();
+                const currentTabPane = document.querySelector('.tab-pane.active');
+                updateTabCompletion(currentTabPane.id);
+
+                const targetTabId = e.target.getAttribute('href').substring(1);
+                const currentIndex = tabsOrder.indexOf(currentTabPane.id);
+                const targetIndex = tabsOrder.indexOf(targetTabId);
+
+                if(targetIndex > currentIndex && !completedTabs[currentTabPane.id]) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: alertTitle,
+                        html: fillBeforeSwitchMsg,
+                        icon: 'warning',
+                        confirmButtonText: okText,
+                        buttonsStyling: false,
+                        customClass: {
+                            popup: 'custom-swal',
+                            title: 'custom-swal-title',
+                            htmlContainer: 'custom-swal-text',
+                            confirmButton: 'custom-swal-confirm'
+                        }
+                    });
+                }
+            });
+        });
+
+        // Non-tab fields
+        const nonTabFields = ['imageInput','ApplyLink'];
+        nonTabFields.forEach(id => {
+            const el = document.getElementById(id);
+            if(el){
+                el.addEventListener('input', updateSaveButtonState);
+                el.addEventListener('change', updateSaveButtonState);
+            }
+        });
+
+        // Countries checkboxes
+        document.querySelectorAll('input[name="AvailableCountryIds"]').forEach(chk => {
+            chk.addEventListener('change', updateSaveButtonState);
+        });
+
+        // Form submit
+        form.addEventListener('submit', function(e){
+            copyAllQuillToHidden();
+            tabsOrder.forEach(tabId => updateTabCompletion(tabId));
+
+            let allTabsFilled = tabsOrder.every(tabId => completedTabs[tabId]);
+            let nonTabFieldsFilled = areNonTabFieldsFilled();
+
+            if(!(allTabsFilled && nonTabFieldsFilled)){
+                e.preventDefault();
+                Swal.fire({
+                    title: alertTitle,
+                    html: fillRequiredMsg,
+                    icon: 'warning',
+                    confirmButtonText: okText,
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'custom-swal',
+                        title: 'custom-swal-title',
+                        htmlContainer: 'custom-swal-text',
+                        confirmButton: 'custom-swal-confirm'
+                    }
+                });
+            }
+        });
+
+        // Initial check
+        tabsOrder.forEach(tabId => updateTabCompletion(tabId));
+        updateSaveButtonState();
+
+                const imageInput = document.getElementById('imageInput');
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const previewImg = document.getElementById('previewImg');
+        const previewName = document.getElementById('previewName');
+
+        imageInput.addEventListener('change', function(){
+            const file = this.files[0];
+            if(file){
+                const reader = new FileReader();
+                reader.onload = function(e){
+                    previewImg.src = e.target.result;
+                    previewContainer.style.display = 'flex';
+                    previewName.textContent = file.name;
+                }
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        });
+
+
+                // الحصول على عنصر التاريخ
+        const endDateInput = document.querySelector('input[name="EndDate"]');
+
+        // تعيين التاريخ الحالي تلقائياً بصيغة YYYY-MM-DD
+        const today = new Date();
+        const yyyy = today.getFullYear(); // السنة كاملة
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // الشهر مع تصفير الرقم
+        const dd = String(today.getDate()).padStart(2, '0'); // اليوم مع تصفير الرقم
+
+        endDateInput.value = `${yyyy}-${mm}-${dd}`; // صيغة مقبولة من input[type=date]
+    
+    </script>
+    <script>
+        const deadlineTypeSelect = document.getElementById("deadlineType");
+    const endDateWrapper = document.getElementById("endDateWrapper");
+
+    deadlineTypeSelect.addEventListener("change", function () {
+        if (this.value === "SpecificDate") {
+            endDateWrapper.style.display = "block";
+        } else {
+            endDateWrapper.style.display = "none";
+            document.querySelector('input[name="EndDate"]').value = "";
+        }
+    });
+    </script>
+}
+
+<style>
+    .custom-swal-title {
+        color: #333;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .custom-swal-text {
+        color: #666;
+        font-size: 20px;
+    }
+
+    .custom-swal-confirm {
+        background-color: #F99D27;
+        color: white;
+        border: none;
+        padding: 14px 45px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0 8px;
+        width: 200px;
+        height: 65px;
+        border-radius: 16px;
+    }
+
+        .custom-swal-confirm:hover {
+            background-color: #e88d1a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3);
+        }
+
+    .page-wrapper[dir="rtl"] .discription {
+        text-align: right;
+    }
+
+    .page-wrapper[dir="ltr"] .discription {
+        text-align: left;
+    }
+    .custom-swal-cancel {
+        background-color: white;
+        color: #F99D27;
+        border: 2px solid #F99D27;
+        padding: 14px 45px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin: 0 8px;
+        width: 200px;
+        height: 65px;
+        border-radius: 16px;
+    }
+
+        .custom-swal-cancel:hover {
+            background-color: #FFF5E6;
+            transform: translateY(-2px);
+        }
+    /* زر الحفظ */
+    .btn-primary {
+        background-color: #F99D27; /* اللون عند التفعيل */
+        color: white;
+        border: none;
+        padding: 14px 45px;
+        font-size: 18px;
+        font-weight: 600;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        /* حالة الزر معطل */
+        .btn-primary:disabled {
+            background-color: #ccc; /* رمادي فاتح */
+            color: #fff;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+    .custom-swal-close {
+        color: #999;
+        font-size: 28px;
+        position: relative;
+        left: auto !important;
+        right: -93% !important;
+    }
+
+        .custom-swal-close:hover {
+            color: #F99D27;
+        }
+    /* ===== Swal Design  ===== */
+    .swal2-popup.custom-swal {
+        border-radius: 18px !important;
+        padding: 26px 28px 22px !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,.12) !important;
+        font-family: inherit;
+        width: 560px !important;
+        max-width: calc(100% - 24px) !important;
+    }
+
+    .swal2-title.custom-swal-title {
+        color: #333 !important;
+        font-size: 28px !important;
+        font-weight: 800 !important;
+        margin-bottom: 6px !important;
+    }
+
+    .swal2-html-container.custom-swal-text {
+        color: #666 !important;
+        font-size: 18px !important;
+        line-height: 1.7 !important;
+    }
+
+    .swal2-confirm.custom-swal-confirm {
+        background-color: #F99D27 !important;
+        color: white !important;
+        border: none !important;
+        padding: 14px 45px !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        width: 200px !important;
+        height: 65px !important;
+        border-radius: 16px !important;
+    }
+
+
+        .swal2-confirm.custom-swal-confirm:hover {
+            background-color: #e88d1a !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(249, 157, 39, 0.3) !important;
+        }
+/* لما الصفحة LTR (English/French) */
+.page-wrapper[dir="ltr"] #languageTabs {
+  direction: ltr;
+}
+
+.page-wrapper[dir="ltr"] #languageTabs .nav-link {
+  text-align: center;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+}
+
+    #languageTabs {
+        display: flex;
+        justify-content: center; /* هذا الحل */
+    }
+
+    .page-wrapper[dir="ltr"] #languageTabs,
+    .page-wrapper[dir="rtl"] #languageTabs {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.page-wrapper[dir="rtl"] #languageTabs .nav-link {
+  text-align: right;
+  display: flex;
+  justify-content: flex-start; /* أو flex-end إذا بدكهم يلتصقوا يمين */
+  align-items: center;
+  gap: 6px;
+}
+
+</style>
