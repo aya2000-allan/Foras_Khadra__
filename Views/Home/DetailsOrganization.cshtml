@@ -87,10 +87,20 @@
 <link rel="stylesheet" href="~/css/org-details.css" />
 
 <div class="org-details-page" dir="@dir">
+    <div class="org-details-back-row">
+        <a asp-controller="Home" asp-action="OrganizationsMap" class="org-details-back">
+            <iconify-icon class="org-details-back-icon" icon="mdi:arrow-left" aria-hidden="true"></iconify-icon>
+            <span class="org-details-back-label" dir="@dir">@Localizer["BackToMap"]</span>
+        </a>
+    </div>
+
     <div class="org-details-card">
         <header class="org-details-hero">
             <div class="org-details-hero-banner" dir="ltr">
-                <p class="org-details-slogan" dir="@dir">@Localizer["HeroSlogan"]</p>
+                <p class="org-details-slogan" dir="@dir">
+                    <span class="org-details-slogan-line">@Localizer["HeroSloganLine1"]</span>
+                    <span class="org-details-slogan-line">@Localizer["HeroSloganLine2"]</span>
+                </p>
             </div>
         </header>
 
@@ -203,9 +213,4 @@
             </div>
         </div>
     </div>
-
-    <a asp-controller="Home" asp-action="OrganizationsMap" class="org-details-back">
-        <iconify-icon icon="mdi:arrow-left" aria-hidden="true"></iconify-icon>
-        @Localizer["BackToMap"]
-    </a>
 </div>

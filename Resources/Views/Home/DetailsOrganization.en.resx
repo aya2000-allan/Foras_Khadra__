@@ -61,8 +61,11 @@
   <data name="PageTitle" xml:space="preserve">
     <value>Organization details</value>
   </data>
-  <data name="HeroSlogan" xml:space="preserve">
-    <value>Together we make an impact and build a better future</value>
+  <data name="HeroSloganLine1" xml:space="preserve">
+    <value>Together we make an impact</value>
+  </data>
+  <data name="HeroSloganLine2" xml:space="preserve">
+    <value>and build a better future</value>
   </data>
   <data name="Subtitle" xml:space="preserve">
     <value>Non-profit humanitarian organization</value>
