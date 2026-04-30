@@ -295,7 +295,6 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    direction: ltr;
     margin-bottom: 18px;
 }
 
@@ -328,6 +327,14 @@
     flex-shrink: 0;
     font-size: 1.2rem;
     color: inherit;
+}
+
+html[dir="rtl"] .org-details-back {
+    flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .org-details-back-icon {
+    transform: scaleX(-1);
 }
 
 .org-details-back-label {
