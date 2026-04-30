@@ -172,25 +172,9 @@
                             </div>
                         </div>
 
-                        <div class="org-detail-row">
-                            <div class="org-detail-row-icon">
-                                <iconify-icon icon="mdi:email-outline" aria-hidden="true"></iconify-icon>
-                            </div>
-                            <div class="org-detail-row-text">
-                                <span class="org-detail-row-label">@Localizer["LabelEmail"]</span>
-                                <a class="org-detail-row-value" href="mailto:@Model.ContactEmail">@Model.ContactEmail</a>
-                            </div>
-                        </div>
+                       
 
-                        <div class="org-detail-row">
-                            <div class="org-detail-row-icon">
-                                <iconify-icon icon="mdi:phone-outline" aria-hidden="true"></iconify-icon>
-                            </div>
-                            <div class="org-detail-row-text">
-                                <span class="org-detail-row-label">@Localizer["LabelPhone"]</span>
-                                <a class="org-detail-row-value" href="tel:@(Model.PhoneNumber?.Replace(" ", "").Replace("-", "") ?? "")">@Model.PhoneNumber</a>
-                            </div>
-                        </div>
+                       
 
                         @if (!string.IsNullOrWhiteSpace(Model.Website))
                         {
