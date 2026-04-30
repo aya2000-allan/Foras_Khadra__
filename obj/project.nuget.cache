@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "eZIBLXIsjFk=",
+  "dgSpecHash": "aaYTmBt0wJo=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Foras_Khadra.csproj",
+  "projectFilePath": "C:\\Users\\Lenovo\\source\\repos\\FK_\\Foras_Khadra.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Lenovo\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
@@ -127,9 +127,9 @@
       "code": "NU1902",
       "level": "Warning",
       "message": "Package 'MailKit' 4.13.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr",
-      "projectPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Foras_Khadra.csproj",
+      "projectPath": "C:\\Users\\Lenovo\\source\\repos\\FK_\\Foras_Khadra.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Foras_Khadra.csproj",
+      "filePath": "C:\\Users\\Lenovo\\source\\repos\\FK_\\Foras_Khadra.csproj",
       "libraryId": "MailKit",
       "targetGraphs": [
         "net8.0"
@@ -139,9 +139,9 @@
       "code": "NU1902",
       "level": "Warning",
       "message": "Package 'MimeKit' 4.13.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-g7hc-96xr-gvvx",
-      "projectPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Foras_Khadra.csproj",
+      "projectPath": "C:\\Users\\Lenovo\\source\\repos\\FK_\\Foras_Khadra.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Foras_Khadra.csproj",
+      "filePath": "C:\\Users\\Lenovo\\source\\repos\\FK_\\Foras_Khadra.csproj",
       "libraryId": "MimeKit",
       "targetGraphs": [
         "net8.0"

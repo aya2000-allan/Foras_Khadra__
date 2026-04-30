@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Foras_Khadra.csproj": {}
+    "C:\\Users\\Lenovo\\source\\repos\\FK_\\Foras_Khadra.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Foras_Khadra.csproj": {
+    "C:\\Users\\Lenovo\\source\\repos\\FK_\\Foras_Khadra.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Foras_Khadra.csproj",
+        "projectUniqueName": "C:\\Users\\Lenovo\\source\\repos\\FK_\\Foras_Khadra.csproj",
         "projectName": "Foras_Khadra",
-        "projectPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\Foras_Khadra.csproj",
+        "projectPath": "C:\\Users\\Lenovo\\source\\repos\\FK_\\Foras_Khadra.csproj",
         "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Foras_Khadra\\Foras_Khadra\\obj\\",
+        "outputPath": "C:\\Users\\Lenovo\\source\\repos\\FK_\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
