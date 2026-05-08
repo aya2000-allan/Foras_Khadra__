@@ -37,7 +37,8 @@ namespace Foras_Khadra.Controllers
                 TotalReelsRequests = totalReelsRequests,
                 PendingReelsRequests = pendingReelsRequests,
                 CompletedReelsRequests = completedReelsRequests,
-                RejectReelsRequests = rejectedReelsRequests
+                RejectReelsRequests = rejectedReelsRequests,
+                TotalManualOrganizations = await _context.ManualOrganizations.CountAsync()
             };
 
             return View(model);
@@ -161,6 +162,123 @@ namespace Foras_Khadra.Controllers
 
             return RedirectToAction("OrganizationsList");
         }
+
+
+        //--------------------------//
+
+        public async Task<IActionResult> ManualOrganizationsList()
+        {
+            var organizations = await _context.ManualOrganizations
+                .OrderByDescending(x => x.CreatedAt)
+                .ToListAsync();
+
+            return View(organizations);
+        }
+
+        [HttpGet]
+        public IActionResult AddManualOrganization()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddManualOrganization(ManualOrganization model, IFormFile logoFile)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            if (logoFile != null && logoFile.Length > 0)
+            {
+                var fileName = Guid.NewGuid() + Path.GetExtension(logoFile.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/logos", fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await logoFile.CopyToAsync(stream);
+                }
+
+                model.LogoPath = "/logos/" + fileName;
+            }
+
+            _context.ManualOrganizations.Add(model);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManualOrganizationsList");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditManualOrganization(int id)
+        {
+            var org = await _context.ManualOrganizations.FindAsync(id);
+
+            if (org == null)
+                return NotFound();
+
+            return View(org);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditManualOrganization(ManualOrganization model, IFormFile logoFile)
+        {
+            var org = await _context.ManualOrganizations.FindAsync(model.Id);
+
+            if (org == null)
+                return NotFound();
+
+            if (logoFile != null && logoFile.Length > 0)
+            {
+                var fileName = Guid.NewGuid() + Path.GetExtension(logoFile.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/logos", fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await logoFile.CopyToAsync(stream);
+                }
+
+                org.LogoPath = "/logos/" + fileName;
+            }
+
+            org.OrganizationName = model.OrganizationName;
+            org.ContactPersonName = model.ContactPersonName;
+            org.Details = model.Details;
+            org.PhoneNumber = model.PhoneNumber;
+            org.Email = model.Email;
+            org.Website = model.Website;
+            org.Location = model.Location;
+            org.Country = model.Country;
+            org.IsActive = model.IsActive;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManualOrganizationsList");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteManualOrganization(int id)
+        {
+            var org = await _context.ManualOrganizations.FindAsync(id);
+
+            if (org == null)
+                return NotFound();
+
+            _context.ManualOrganizations.Remove(org);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(ManualOrganizationsList));
+        }
+
+
+        public async Task<IActionResult> ManualOrganizationDetails(int id)
+        {
+            var org = await _context.ManualOrganizations.FindAsync(id);
+
+            if (org == null)
+                return NotFound();
+
+            return View(org);
+        }
+
 
 
 

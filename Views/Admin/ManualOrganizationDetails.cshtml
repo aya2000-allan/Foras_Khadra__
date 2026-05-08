@@ -1,0 +1,48 @@
+﻿@model Foras_Khadra.Models.ManualOrganization
+
+@{
+    ViewData["Title"] = "Organization Details";
+}
+
+<div class="container mt-4">
+
+    <a asp-action="ManualOrganizationsList"
+       class="btn btn-secondary mb-3">
+        Back
+    </a>
+
+    <div class="card p-4">
+
+        <div class="text-center mb-4">
+            @if (!string.IsNullOrEmpty(Model.LogoPath))
+            {
+                <img src="@Model.LogoPath"
+                     width="120"
+                     height="120"
+                     style="object-fit:cover;border-radius:50%;" />
+            }
+        </div>
+
+        <h3>@Model.OrganizationName</h3>
+
+        <hr />
+
+        <p><strong>Contact Person:</strong> @Model.ContactPersonName</p>
+
+        <p><strong>Email:</strong> @Model.Email</p>
+
+        <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+
+        <p><strong>Country:</strong> @Model.Country</p>
+
+        <p><strong>Location:</strong> @Model.Location</p>
+
+        <p><strong>Website:</strong> @Model.Website</p>
+
+        <p><strong>Details:</strong> @Model.Details</p>
+
+       
+
+
+    </div>
+</div>

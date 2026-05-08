@@ -47,5 +47,6 @@ namespace Foras_Khadra.Models
         public ApplicationUser? User { get; set; }
 
         public string? LogoPath { get; set; }
+        public bool IsManual { get; set; } = true;
     }
 }

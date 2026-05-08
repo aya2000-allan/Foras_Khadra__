@@ -251,8 +251,38 @@ namespace Foras_Khadra.Controllers
         {
             int pageSize = 24;
 
-            var query = _context.Organizations
+            var registeredOrganizations = _context.Organizations
+    .Where(o => !string.IsNullOrEmpty(o.LogoPath))
+    .Select(o => new Organization
+    {
+        Id = o.Id,
+        Name = o.Name,
+        Country = o.Country,
+        Sector = o.Sector,
+        LogoPath = o.LogoPath,
+        Location = o.Location,
+        Website = o.Website,
+        ContactName = o.ContactName,
+        IsManual = false
+    });
+
+            var manualOrganizations = _context.ManualOrganizations
                 .Where(o => !string.IsNullOrEmpty(o.LogoPath))
+                .Select(o => new Organization
+                {
+                    Id = o.Id,
+                    Name = o.OrganizationName,
+                    Country = o.Country,
+                    Sector = "Manual Organization",
+                    LogoPath = o.LogoPath,
+                    Location = o.Location,
+                    Website = o.Website,
+                    ContactName = o.ContactPersonName,
+                    IsManual = true
+                });
+
+            var query = registeredOrganizations
+                .Concat(manualOrganizations)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(country))
@@ -355,6 +385,17 @@ namespace Foras_Khadra.Controllers
 
             return View(org);
         }
-        
+
+        public IActionResult ManualOrganizationDetails(int id)
+        {
+            var org = _context.ManualOrganizations
+                .FirstOrDefault(o => o.Id == id);
+
+            if (org == null)
+                return NotFound();
+
+            return View(org);
+        }
+
     }
 }

@@ -140,6 +140,7 @@
                 <div class="org-wrapper">
                     <div class="org-card"
                          data-org-id="@org.Id"
+                         data-manual="@org.IsManual.ToString().ToLower()"
                          tabindex="0"
                          role="button"
                          aria-label="@Localizer["LabelOrganizationName"] @org.Name">
@@ -219,27 +220,34 @@
         const isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
         const L = { loginTitle: @Html.Raw(loginTitle), loginText: @Html.Raw(loginText), loginBtn: @Html.Raw(loginBtn) };
 
-        document.querySelectorAll(".org-card").forEach(function (card) {
-        card.addEventListener("click", function () {
-            const orgId = this.dataset.orgId;
+       document.querySelectorAll(".org-card").forEach(function (card) {
+    card.addEventListener("click", function () {
 
-            if (!isAuthenticated) {
-                Swal.fire({
-                    icon: "warning",
-                    title: L.loginTitle,
-                    text: L.loginText,
-                    confirmButtonText: L.loginBtn,
-                    confirmButtonColor: "#F99D27"
-                }).then(function (result) {
-                    if (result.isConfirmed) {
-                        window.location.href = "/Account/Login";
-                    }
-                });
-            } else {
-                window.location.href = "/Home/DetailsOrganization/" + orgId;
-            }
-        });
+        const orgId = this.dataset.orgId;
+        const isManual = this.dataset.manual === "true";
+
+        if (!isAuthenticated) {
+            Swal.fire({
+                icon: "warning",
+                title: L.loginTitle,
+                text: L.loginText,
+                confirmButtonText: L.loginBtn,
+                confirmButtonColor: "#F99D27"
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/Account/Login";
+                }
+            });
+            return;
+        }
+
+        if (isManual) {
+            window.location.href = "/Home/ManualOrganizationDetails/" + orgId;
+        } else {
+            window.location.href = "/Home/DetailsOrganization/" + orgId;
+        }
     });
+});
 
         (function showNoResultsModal() {
             if (!@showNoResultsPopup.ToString().ToLower()) return;

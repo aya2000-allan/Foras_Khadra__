@@ -1,0 +1,76 @@
+﻿@model Foras_Khadra.Models.ManualOrganization
+
+@{
+    ViewData["Title"] = "Edit Organization";
+}
+
+<h2>Edit Manual Organization</h2>
+
+<form method="post" enctype="multipart/form-data">
+
+    <div class="form-group">
+        <label>Change Logo</label>
+        <input type="file" name="logoFile" class="form-control" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.LogoPath))
+    {
+        <div class="mb-3">
+            <label>Current Logo:</label><br />
+            <img src="@Model.LogoPath" width="80" height="80" style="object-fit:cover;border-radius:8px;" />
+        </div>
+    }
+    <input type="hidden" asp-for="Id" />
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label>Name</label>
+        <input asp-for="OrganizationName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Contact Person</label>
+        <input asp-for="ContactPersonName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Details</label>
+        <textarea asp-for="Details" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Phone</label>
+        <input asp-for="PhoneNumber" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Website</label>
+        <input asp-for="Website" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Location</label>
+        <input asp-for="Location" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Country</label>
+        <input asp-for="Country" class="form-control" />
+    </div>
+
+    <div class="form-group form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label class="form-check-label">Active</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">
+        Update
+    </button>
+
+</form>

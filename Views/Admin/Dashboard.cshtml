@@ -555,10 +555,7 @@
             </section>
 
             <section class="stats-wrapper">
-                <div class="stats-header">
-                    <h3 class="stats-title">@(isArabic ? "آخر تحديث" : "Last Update")</h3>
-                    <p class="stats-subtitle">@(isArabic ? "الإحصائيات" : "Statistics")</p>
-                </div>
+                
 
                 <div class="stats-grid">
                     <div class="stats-card green-soft"
@@ -580,6 +577,21 @@
                         <div>
                             <div class="stats-number">@Model.TotalUsers</div>
                             <div class="stats-label">@(isArabic ? "الأعضاء" : "Members")</div>
+                        </div>
+                    </div>
+
+                    <div class="stats-card green-soft"
+                         onclick="location.href='@Url.Action("ManualOrganizationsList", "Admin")'">
+
+                        <div class="icon-wrap green">
+                            <i class="bi bi-building-gear"></i>
+                        </div>
+
+                        <div>
+                            <div class="stats-number">@Model.TotalManualOrganizations</div>
+                            <div class="stats-label">
+                                @(isArabic ? "المنظمات اليدوية" : "Manual Organizations")
+                            </div>
                         </div>
                     </div>
 

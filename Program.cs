@@ -158,7 +158,10 @@ else
     app.UseHsts();
 }
 
-app.UseStatusCodePagesWithReExecute("/Home/StatusCode", "?code={0}");
+// ❗ خليها بعد exception handling مباشرة
+app.UseStatusCodePages();
+
+app.UseDeveloperExceptionPage(); 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 // ===== Use Localization =====

@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Foras_Khadra.Models;
+using Foras_Khadra.ViewModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Foras_Khadra.Models;
+using System;
 
 namespace Foras_Khadra.Data
 {
@@ -13,6 +14,7 @@ namespace Foras_Khadra.Data
         }
         public DbSet<Country> Countries { get; set; }
 
+        public DbSet<ManualOrganization> ManualOrganizations { get; set; }
         public DbSet<TeamMember> TeamMember { get; set; }
         public DbSet<Article> Articles { get; set; }
         public DbSet<Opportunity> Opportunities { get; set; }
