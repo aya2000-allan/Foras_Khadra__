@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Back" xml:space="preserve">
+    <value>Retour au tableau de bord</value>
+  </data>
+  <data name="CoverSloganLine1" xml:space="preserve">
+    <value>Foras Khadra</value>
+  </data>
+  <data name="CoverSloganLine2" xml:space="preserve">
+    <value>Votre porte vers un avenir durable</value>
+  </data>
+  <data name="ProfileContactDetails" xml:space="preserve">
+    <value>Détails de contact</value>
+  </data>
+  <data name="ContactPerson" xml:space="preserve">
+    <value>Personne de contact</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Téléphone</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Pays</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Emplacement</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Site Web</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+</root>
