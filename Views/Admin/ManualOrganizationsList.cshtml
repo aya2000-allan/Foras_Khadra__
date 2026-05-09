@@ -86,12 +86,15 @@
 
                                     <form method="post"
                                           action="/Admin/DeleteManualOrganization"
-                                          class="d-inline">
+                                          class="d-inline"
+                                          id="deleteForm-@item.Id">
                                         <input type="hidden" name="id" value="@item.Id" />
-                                        <button type="submit"
+                                        <button type="button"
                                                 class="action-icon icon-delete"
                                                 title="@Localizer["Delete"]"
-                                                onclick="return confirm('@Localizer["DeleteConfirm"]')">
+                                                data-id="@item.Id"
+                                                data-name="@item.OrganizationName"
+                                                onclick="confirmDelete(this)">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </form>
@@ -104,3 +107,104 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(button) {
+            const id = button.getAttribute('data-id');
+            const name = button.getAttribute('data-name') || '';
+            Swal.fire({
+                html: `
+                    <div style="text-align:center;">
+                        <img src="/images/delete.svg" style="margin-bottom:14px;" />
+                        <h5 style="margin:0 0 10px 0;font-weight:700;color:#000;">
+                            @Localizer["DeletePopupTitle"]
+                        </h5>
+                    </div>
+                `,
+                input: 'text',
+                inputValue: name,
+                inputAttributes: { readonly: true },
+                showCancelButton: true,
+                confirmButtonText: '@Localizer["DeleteButton"]',
+                cancelButtonText: '@Localizer["CancelButton"]',
+                reverseButtons: true,
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'swal-rtl-popup',
+                    input: 'swal-rtl-input',
+                    confirmButton: 'swal-btn swal-btn-danger',
+                    cancelButton: 'swal-btn swal-btn-cancel'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('deleteForm-' + id);
+                    if (form) form.submit();
+                }
+            });
+        }
+    </script>
+    <style>
+        .swal-rtl-popup {
+            direction: rtl;
+            border-radius: 20px;
+            padding: 24px 28px;
+            width: 420px;
+            max-width: 90vw;
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+            background: #F6FBF7;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .swal-rtl-input {
+            text-align: center !important;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            font-weight: 600;
+            color: #25652C;
+            font-size: 16px;
+            margin-top: 8px;
+            pointer-events: none;
+        }
+
+        .swal2-actions {
+            display: flex !important;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .swal-btn {
+            min-width: 130px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .swal-btn-danger {
+            background: #ff383c;
+            color: #fff;
+        }
+
+        .swal-btn-danger:hover {
+            background: #e02f31;
+        }
+
+        .swal-btn-cancel {
+            background: #fff;
+            color: #f99d27;
+            border: 2px solid #f99d27;
+        }
+
+        .swal-btn-cancel:hover {
+            background: #f99d27;
+            color: #fff;
+        }
+    </style>
+}

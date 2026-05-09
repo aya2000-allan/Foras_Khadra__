@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Modifier l'organisation manuelle</value>
+  </data>
+  <data name="OrganizationsList" xml:space="preserve">
+    <value>Liste des organisations</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Tableau de bord</value>
+  </data>
+  <data name="IllustrationAlt" xml:space="preserve">
+    <value>Illustration</value>
+  </data>
+  <data name="ChangeLogo" xml:space="preserve">
+    <value>Changer le logo</value>
+  </data>
+  <data name="UploadHint" xml:space="preserve">
+    <value>PNG, JPG, SVG (optionnel)</value>
+  </data>
+  <data name="CurrentLogo" xml:space="preserve">
+    <value>Logo actuel</value>
+  </data>
+  <data name="Uploaded" xml:space="preserve">
+    <value>Téléchargé</value>
+  </data>
+  <data name="CurrentLogoAlt" xml:space="preserve">
+    <value>Logo actuel</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="ContactPerson" xml:space="preserve">
+    <value>Personne de contact</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Téléphone</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Site web</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Emplacement</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Pays</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Actif</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Mettre a jour</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+</root>
