@@ -28,10 +28,25 @@
             --text: #213126;
             --muted: #8a928d;
             --accent-green: #2f6b3c;
-            --accent-green-soft: #dfe7df;
+            --accent-green-soft: #e8f5e9;
             --accent-orange: #f99d27;
-            --accent-orange-soft: #eee6d9;
+            --accent-orange-soft: #fff3e0;
+            --accent-blue: #0277bd;
+            --accent-blue-soft: #e1f5fe;
+            --accent-purple: #9c27b0;
+            --accent-purple-soft: #f3e5f5;
+            --accent-teal: #009688;
+            --accent-teal-soft: #e0f2f1;
+            --accent-pink: #e91e63;
+            --accent-pink-soft: #fce4ec;
+            --accent-yellow: #ffa000;
+            --accent-yellow-soft: #fff8e1;
+            --accent-cyan: #00bcd4;
+            --accent-cyan-soft: #e0f7fa;
+            --accent-indigo: #3f51b5;
+            --accent-indigo-soft: #e8eaf6;
             --danger: #d9534f;
+            --accent-red-soft: #ffebee;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
             --radius-xl: 24px;
             --radius-lg: 18px;
@@ -79,12 +94,6 @@
             grid-column: 1 / -1;
         }
 
-        .bottom-cards {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
         .brand-box {
             display: flex;
             align-items: center;
@@ -304,7 +313,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 16px;
         }
 
@@ -336,7 +345,35 @@
         }
 
         .stats-card.red-soft {
-            background: #f4dede;
+            background: var(--accent-red-soft);
+        }
+
+        .stats-card.blue-soft {
+            background: var(--accent-blue-soft);
+        }
+
+        .stats-card.purple-soft {
+            background: var(--accent-purple-soft);
+        }
+
+        .stats-card.teal-soft {
+            background: var(--accent-teal-soft);
+        }
+
+        .stats-card.pink-soft {
+            background: var(--accent-pink-soft);
+        }
+
+        .stats-card.yellow-soft {
+            background: var(--accent-yellow-soft);
+        }
+
+        .stats-card.cyan-soft {
+            background: var(--accent-cyan-soft);
+        }
+
+        .stats-card.indigo-soft {
+            background: var(--accent-indigo-soft);
         }
 
         .stats-card .icon-wrap {
@@ -351,6 +388,11 @@
             color: #fff;
             font-size: 22px;
         }
+        
+        .stats-card .icon-wrap i {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
 
         .stats-card .icon-wrap.green {
             background: var(--accent-green);
@@ -360,8 +402,40 @@
             background: var(--accent-orange);
         }
 
+        .stats-card .icon-wrap.blue {
+            background: var(--accent-blue);
+        }
+
+        .stats-card .icon-wrap.purple {
+            background: var(--accent-purple);
+        }
+
+        .stats-card .icon-wrap.teal {
+            background: var(--accent-teal);
+        }
+
+        .stats-card .icon-wrap.pink {
+            background: var(--accent-pink);
+        }
+
+        .stats-card .icon-wrap.yellow {
+            background: var(--accent-yellow);
+        }
+
+        .stats-card .icon-wrap.cyan {
+            background: var(--accent-cyan);
+        }
+
+        .stats-card .icon-wrap.indigo {
+            background: var(--accent-indigo);
+        }
+
         .stats-card .icon-wrap.red {
             background: var(--danger);
+        }
+
+        .stats-card:hover .icon-wrap i {
+            transform: scale(1.3) rotate(-10deg);
         }
 
         .stats-number {
@@ -386,12 +460,6 @@
 
         .section-gap {
             height: 18px;
-        }
-
-        @@media (max-width: 1200px) {
-            .stats-grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-            }
         }
 
         @@media (max-width: 991px) {
@@ -558,9 +626,9 @@
                 
 
                 <div class="stats-grid">
-                    <div class="stats-card green-soft"
+                    <div class="stats-card indigo-soft"
                          onclick="location.href='@Url.Action("OrganizationsList", "Admin")'">
-                        <div class="icon-wrap green">
+                        <div class="icon-wrap indigo">
                             <i class="bi bi-building"></i>
                         </div>
                         <div>
@@ -568,22 +636,10 @@
                             <div class="stats-label">@(isArabic ? "المنظمات" : "Organizations")</div>
                         </div>
                     </div>
-
-                    <div class="stats-card orange-soft"
-                         onclick="location.href='@Url.Action("Index", "Team")'">
-                        <div class="icon-wrap orange">
-                            <i class="bi bi-person"></i>
-                        </div>
-                        <div>
-                            <div class="stats-number">@Model.TotalUsers</div>
-                            <div class="stats-label">@(isArabic ? "الأعضاء" : "Members")</div>
-                        </div>
-                    </div>
-
-                    <div class="stats-card green-soft"
+                       <div class="stats-card teal-soft"
                          onclick="location.href='@Url.Action("ManualOrganizationsList", "Admin")'">
 
-                        <div class="icon-wrap green">
+                        <div class="icon-wrap teal">
                             <i class="bi bi-building-gear"></i>
                         </div>
 
@@ -595,21 +651,77 @@
                         </div>
                     </div>
 
-                    <div class="stats-card orange-soft">
-                        <div class="icon-wrap orange">
+                    @* <div class="stats-card yellow-soft"
+                         onclick="location.href='@Url.Action("Index", "Opportunity")'">
+                        <div class="icon-wrap yellow">
+                            <i class="bi bi-megaphone"></i>
+                        </div>
+                        <div>
+                            <div class="stats-number">@Model.TotalOpportunities</div>
+                            <div class="stats-label">@(isArabic ? "الفرص" : "Opportunities")</div>
+                        </div>
+                    </div> *@
+
+                    
+
+                    @* <div class="stats-card teal-soft"
+                         onclick="location.href='@Url.Action("ManualOrganizationsList", "Admin")'">
+
+                        <div class="icon-wrap teal">
+                            <i class="bi bi-building-gear"></i>
+                        </div>
+
+                        <div>
+                            <div class="stats-number">@Model.TotalManualOrganizations</div>
+                            <div class="stats-label">
+                                @(isArabic ? "المنظمات اليدوية" : "Manual Organizations")
+                            </div>
+                        </div>
+                    </div> *@
+
+                    @* <div class="stats-card purple-soft">
+                        <div class="icon-wrap purple">
                             <i class="bi bi-person"></i>
                         </div>
                         <div>
-                            <div class="stats-number">@Model.TotalRegisteredUsers </div>
+                            <div class="stats-number">@Model.TotalRegisteredUsers</div>
+                            <div class="stats-label">@(isArabic ? "المستخدمين المسجلين" : "Registered Users")</div>
+                        </div>
+                    </div> *@
+
+                    <div class="stats-card blue-soft"
+                         onclick="location.href='@Url.Action("Index", "Team")'">
+                        <div class="icon-wrap blue">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div>
+                            <div class="stats-number">@Model.TotalUsers</div>
+                            <div class="stats-label">@(isArabic ? "الأعضاء" : "Members")</div>
+                        </div>
+                    </div>
+                      <div class="stats-card purple-soft">
+                        <div class="icon-wrap purple">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div>
+                            <div class="stats-number">@Model.TotalRegisteredUsers</div>
                             <div class="stats-label">@(isArabic ? "المستخدمين المسجلين" : "Registered Users")</div>
                         </div>
                     </div>
 
-                    
-
-                    <div class="stats-card green-soft"
+                    <div class="stats-card pink-soft"
+                         onclick="location.href='@Url.Action("Index", "Articles")'">
+                        <div class="icon-wrap pink">
+                            <i class="bi bi-chat-dots"></i>
+                        </div>
+                        <div>
+                            <div class="stats-number">@Model.TotalArticles</div>
+                            <div class="stats-label">@(isArabic ? "المقالات" : "Articles")</div>
+                        </div>
+                    </div>
+                    <div class="stats-card yellow-soft"
                          onclick="location.href='@Url.Action("Index", "Opportunity")'">
-                        <div class="icon-wrap green">
+                        <div class="icon-wrap yellow">
                             <i class="bi bi-megaphone"></i>
                         </div>
                         <div>
@@ -618,20 +730,30 @@
                         </div>
                     </div>
 
-                    <div class="stats-card orange-soft"
-                         onclick="location.href='@Url.Action("Index", "Articles")'">
-                        <div class="icon-wrap orange">
-                            <i class="bi bi-chat-dots"></i>
+                    @* <div class="stats-card cyan-soft"
+                         onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin")'">
+                        <div class="icon-wrap cyan">
+                            <i class="bi bi-camera-reels"></i>
                         </div>
                         <div>
-                            <div class="stats-number">@Model.TotalArticles</div>
-                            <div class="stats-label">@(isArabic ? "المقالات" : "Articles")</div>
+                            <div class="stats-number">@Model.TotalReelsRequests</div>
+                            <div class="stats-label">@(isArabic ? "الطلبات المستلمة" : "Received Requests")</div>
+                        </div>
+                    </div> *@
+
+                    <div class="stats-card orange-soft"
+                         onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "pending" })'">
+                        <div class="icon-wrap orange">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                        <div>
+                            <div class="stats-number">@Model.PendingReelsRequests</div>
+                            <div class="stats-label">@(isArabic ? "جاري العمل عليها" : "In Progress")</div>
                         </div>
                     </div>
-
-                    <div class="stats-card green-soft full-width"
+                     <div class="stats-card cyan-soft"
                          onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin")'">
-                        <div class="icon-wrap green">
+                        <div class="icon-wrap cyan">
                             <i class="bi bi-camera-reels"></i>
                         </div>
                         <div>
@@ -640,41 +762,26 @@
                         </div>
                     </div>
 
-                    <div class="bottom-cards">
-
-                        <div class="stats-card orange-soft"
-                             onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "pending" })'">
-                            <div class="icon-wrap orange">
-                                <i class="bi bi-hourglass-split"></i>
-                            </div>
-                            <div>
-                                <div class="stats-number">@Model.PendingReelsRequests</div>
-                                <div class="stats-label">@(isArabic ? "جاري العمل عليها" : "In Progress")</div>
-                            </div>
+                    <div class="stats-card green-soft"
+                         onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "completed" })'">
+                        <div class="icon-wrap green">
+                            <i class="bi bi-check2-circle"></i>
                         </div>
-
-                        <div class="stats-card green-soft"
-                             onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "completed" })'">
-                            <div class="icon-wrap green">
-                                <i class="bi bi-check2-circle"></i>
-                            </div>
-                            <div>
-                                <div class="stats-number">@Model.CompletedReelsRequests</div>
-                                <div class="stats-label">@(isArabic ? "تم الانتهاء" : "Completed")</div>
-                            </div>
+                        <div>
+                            <div class="stats-number">@Model.CompletedReelsRequests</div>
+                            <div class="stats-label">@(isArabic ? "تم الانتهاء" : "Completed")</div>
                         </div>
+                    </div>
 
-                        <div class="stats-card red-soft"
-                             onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "rejected" })'">
-                            <div class="icon-wrap red">
-                                <i class="bi bi-x-circle"></i>
-                            </div>
-                            <div>
-                                <div class="stats-number">@Model.RejectReelsRequests</div>
-                                <div class="stats-label">@(isArabic ? "مرفوضة" : "Rejected")</div>
-                            </div>
+                    <div class="stats-card red-soft"
+                         onclick="location.href='@Url.Action("ReelsRequestsDashboard", "Admin", new { status = "rejected" })'">
+                        <div class="icon-wrap red">
+                            <i class="bi bi-x-circle"></i>
                         </div>
-
+                        <div>
+                            <div class="stats-number">@Model.RejectReelsRequests</div>
+                            <div class="stats-label">@(isArabic ? "مرفوضة" : "Rejected")</div>
+                        </div>
                     </div>
                 </div>
             </section>
