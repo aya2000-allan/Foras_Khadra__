@@ -2,6 +2,7 @@
 @using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewData["Title"] = Localizer["PageTitle"];
@@ -72,7 +73,7 @@
     }
 }
 
-<link rel="stylesheet" href="~/css/org-details.css" />
+<link rel="stylesheet" href="/css/org-details.css" />
 
 <div class="org-details-page" dir="@dir">
     <div class="org-details-back-row">
