@@ -1,76 +1,120 @@
 ﻿@model Foras_Khadra.Models.ManualOrganization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Edit Organization";
+    ViewData["Title"] = Localizer["PageTitle"];
+    ViewData["HideNavAndFooter"] = true;
+    var culture = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var formDirClass = culture == "ar" ? "form-rtl" : "form-ltr";
 }
 
-<h2>Edit Manual Organization</h2>
+@section Styles {
+    <link rel="stylesheet" asp-append-version="true" href="~/css/edit-manual-organization.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+}
 
-<form method="post" enctype="multipart/form-data">
+<div class="main-container">
+    <div class="create-wrapper">
+        <div class="create-page-header header-inline">
+            <h1 class="page-title">@Localizer["PageTitle"]</h1>
 
-    <div class="form-group">
-        <label>Change Logo</label>
-        <input type="file" name="logoFile" class="form-control" />
-    </div>
+            <div class="header-actions">
+                <a asp-action="ManualOrganizationsList" class="btn-filled">
+                    <i class="fa-solid fa-building"></i>
+                    @Localizer["OrganizationsList"]
+                </a>
 
-    @if (!string.IsNullOrEmpty(Model.LogoPath))
-    {
-        <div class="mb-3">
-            <label>Current Logo:</label><br />
-            <img src="@Model.LogoPath" width="80" height="80" style="object-fit:cover;border-radius:8px;" />
+                <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
+                    <i class="fa-solid fa-gauge"></i>
+                    @Localizer["Dashboard"]
+                </a>
+            </div>
         </div>
-    }
-    <input type="hidden" asp-for="Id" />
 
-    <input type="hidden" asp-for="Id" />
+        <div class="create-org-card">
+            <div class="side-illustration">
+                <img class="left-illustration" src="~/images/Writer-illustration.svg" alt="@Localizer["IllustrationAlt"]" />
+            </div>
 
-    <div class="form-group">
-        <label>Name</label>
-        <input asp-for="OrganizationName" class="form-control" />
+            <div class="form-section @formDirClass">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+
+                    <label class="form-label">@Localizer["ChangeLogo"]</label>
+                    <div class="upload-area">
+                        <input type="file" name="logoFile" class="custom-input" accept="image/*" />
+                        <div class="upload-hint">@Localizer["UploadHint"]</div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.LogoPath))
+                    {
+                        <label class="form-label">@Localizer["CurrentLogo"]</label>
+                        <div class="current-file-card">
+                            <div class="file-middle">
+                                <div class="file-name">@System.IO.Path.GetFileName(Model.LogoPath)</div>
+                                <div class="file-status">
+                                    <span class="file-size">@Localizer["Uploaded"]</span>
+                                    <span class="file-check"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="file-right">
+                                <img src="@Model.LogoPath" alt="@Localizer["CurrentLogoAlt"]" />
+                            </div>
+                        </div>
+                    }
+
+                    <div>
+                        <label class="form-label">@Localizer["Name"]</label>
+                        <input asp-for="OrganizationName" class="custom-input" />
+                    </div>
+
+                    <div>
+                        <label class="form-label">@Localizer["ContactPerson"]</label>
+                        <input asp-for="ContactPersonName" class="custom-input" />
+                    </div>
+
+                    <div>
+                        <label class="form-label">@Localizer["Details"]</label>
+                        <textarea asp-for="Details" class="custom-input custom-textarea"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="form-label">@Localizer["Phone"]</label>
+                        <input asp-for="PhoneNumber" class="custom-input" />
+                    </div>
+
+                    <div>
+                        <label class="form-label">@Localizer["Email"]</label>
+                        <input asp-for="Email" class="custom-input" />
+                    </div>
+
+                    <div>
+                        <label class="form-label">@Localizer["Website"]</label>
+                        <input asp-for="Website" class="custom-input" />
+                    </div>
+
+                    <div>
+                        <label class="form-label">@Localizer["Location"]</label>
+                        <input asp-for="Location" class="custom-input" />
+                    </div>
+
+                    <div>
+                        <label class="form-label">@Localizer["Country"]</label>
+                        <input asp-for="Country" class="custom-input" />
+                    </div>
+
+                    <div class="toggle-row">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label class="toggle-label">@Localizer["Active"]</label>
+                    </div>
+
+                    <div class="actions-group @(culture == "ar" ? "actions-rtl" : "")">
+                        <button type="submit" class="btn-publish">@Localizer["Update"]</button>
+                        <a asp-action="ManualOrganizationsList" class="btn-cancel">@Localizer["Cancel"]</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label>Contact Person</label>
-        <input asp-for="ContactPersonName" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label>Details</label>
-        <textarea asp-for="Details" class="form-control"></textarea>
-    </div>
-
-    <div class="form-group">
-        <label>Phone</label>
-        <input asp-for="PhoneNumber" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label>Website</label>
-        <input asp-for="Website" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label>Location</label>
-        <input asp-for="Location" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label>Country</label>
-        <input asp-for="Country" class="form-control" />
-    </div>
-
-    <div class="form-group form-check">
-        <input asp-for="IsActive" class="form-check-input" />
-        <label class="form-check-label">Active</label>
-    </div>
-
-    <button type="submit" class="btn btn-primary mt-3">
-        Update
-    </button>
-
-</form>
+</div>

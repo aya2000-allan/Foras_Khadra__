@@ -63,4 +63,13 @@
   <data name="DeleteConfirm" xml:space="preserve">
     <value>هل تريد حذف هذه المنظمة؟</value>
   </data>
+  <data name="DeletePopupTitle" xml:space="preserve">
+    <value>هل أنت متأكد من حذف المنظمة التالية؟</value>
+  </data>
+  <data name="DeleteButton" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="CancelButton" xml:space="preserve">
+    <value>تراجع</value>
+  </data>
 </root>
