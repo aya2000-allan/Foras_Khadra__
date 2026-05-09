@@ -1,72 +1,106 @@
 ﻿@model List<Foras_Khadra.Models.ManualOrganization>
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Manual Organizations";
+    ViewData["Title"] = Localizer["PageTitle"];
+    ViewData["HideNavAndFooter"] = true;
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+    var titleAlignClass = culture == "ar" ? "text-end" : "text-start";
 }
 
-<h2>Manual Organizations</h2>
+@section Styles {
+    <link rel="stylesheet" asp-append-version="true" href="~/css/manual-organizations-list.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+}
 
-<a class="btn btn-primary mb-3" href="/Admin/AddManualOrganization">
-    + Add Organization
-</a>
+<div class="container py-5 manual-org-page" dir="@dir">
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-6 @titleAlignClass">
+            <h2 class="main-title mb-0">@Localizer["PageTitle"]</h2>
+        </div>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Logo</th>
+        <div class="col-md-6 d-flex justify-content-md-end align-items-center gap-3 d-flex-mobile">
+            <a class="btn btn-add" asp-controller="Admin" asp-action="AddManualOrganization">
+                <i class="fa-solid fa-plus ms-1"></i> @Localizer["AddOrganization"]
+            </a>
 
-            
-            <th>Name</th>
-            <th>Contact</th>
-            <th>Phone</th>
-            <th>Email</th>
-            <th>Country</th>
-            <th>Active</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+            <a asp-controller="Admin" asp-action="Dashboard" class="btn-back-dashboard">
+                <i class="fa-solid fa-gauge"></i>
+                @Localizer["BackToDashboard"]
+            </a>
+        </div>
+    </div>
 
-    <tbody>
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="table manual-org-table">
+                <thead>
+                    <tr>
+                        <th style="width:80px;"></th>
+                        <th>@Localizer["Name"]</th>
+                        <th>@Localizer["Contact"]</th>
+                        <th>@Localizer["Phone"]</th>
+                        <th>@Localizer["Email"]</th>
+                        <th>@Localizer["Country"]</th>
+                        <th>@Localizer["Status"]</th>
+                        <th class="text-center">@Localizer["Actions"]</th>
+                    </tr>
+                </thead>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.LogoPath))
+                <tbody>
+                    @foreach (var item in Model)
                     {
-                        <img src="@item.LogoPath" width="50" height="50" />
+                        <tr>
+                            <td>
+                                <img src="@(string.IsNullOrEmpty(item.LogoPath) ? Url.Content("~/images/about_us_leaf.svg") : item.LogoPath)"
+                                     class="rounded"
+                                     style="width:50px;height:50px;object-fit:cover;"
+                                     alt="@Localizer["OrganizationLogoAlt"]" />
+                            </td>
+                            <td class="fw-bold text-dark">@item.OrganizationName</td>
+                            <td class="text-muted">@item.ContactPersonName</td>
+                            <td class="text-muted">@item.PhoneNumber</td>
+                            <td class="text-muted">@item.Email</td>
+                            <td class="text-muted">@item.Country</td>
+                            <td>
+                                <span class="status-badge @(item.IsActive == true ? "status-active" : "status-inactive")">
+                                    @(item.IsActive == true ? Localizer["Active"] : Localizer["Inactive"])
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-center">
+                                    <a class="action-icon icon-edit"
+                                       href="/Admin/EditManualOrganization/@item.Id"
+                                       title="@Localizer["Edit"]">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+
+                                    <a class="action-icon icon-view"
+                                       href="/Admin/ManualOrganizationDetails/@item.Id"
+                                       title="@Localizer["Details"]">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+
+                                    <form method="post"
+                                          action="/Admin/DeleteManualOrganization"
+                                          class="d-inline">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit"
+                                                class="action-icon icon-delete"
+                                                title="@Localizer["Delete"]"
+                                                onclick="return confirm('@Localizer["DeleteConfirm"]')">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
                     }
-                </td>
-                <td>@item.OrganizationName</td>
-                <td>@item.ContactPersonName</td>
-                <td>@item.PhoneNumber</td>
-                <td>@item.Email</td>
-                <td>@item.Country</td>
-                <td>
-                    @(item.IsActive == true ? "Active" : "Inactive")
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-warning"
-                       href="/Admin/EditManualOrganization/@item.Id">
-                        Edit
-                    </a>
-
-                    <a class="btn btn-sm btn-info"
-                       href="/Admin/ManualOrganizationDetails/@item.Id">
-                        Details
-                    </a>
-
-                    <form method="post"
-                          action="/Admin/DeleteManualOrganization"
-                          style="display:inline;">
-                        <input type="hidden" name="id" value="@item.Id" />
-                        <button class="btn btn-sm btn-danger"
-                                onclick="return confirm('Delete this organization?')">
-                            Delete
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

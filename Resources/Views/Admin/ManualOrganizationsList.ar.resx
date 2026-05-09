@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PageTitle" xml:space="preserve">
+    <value>المنظمات اليدوية</value>
+  </data>
+  <data name="AddOrganization" xml:space="preserve">
+    <value>إضافة منظمة</value>
+  </data>
+  <data name="BackToDashboard" xml:space="preserve">
+    <value>العودة إلى لوحة التحكم</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>جهة التواصل</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>الهاتف</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>الدولة</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>الإجراءات</value>
+  </data>
+  <data name="OrganizationLogoAlt" xml:space="preserve">
+    <value>شعار المنظمة</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>نشط</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>غير نشط</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>تعديل</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>التفاصيل</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="DeleteConfirm" xml:space="preserve">
+    <value>هل تريد حذف هذه المنظمة؟</value>
+  </data>
+</root>
