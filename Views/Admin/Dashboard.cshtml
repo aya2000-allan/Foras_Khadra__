@@ -27,26 +27,55 @@
             --sidebar-border: #d8ddd6;
             --text: #213126;
             --muted: #8a928d;
-            --accent-green: #2f6b3c;
-            --accent-green-soft: #e8f5e9;
-            --accent-orange: #f99d27;
-            --accent-orange-soft: #fff3e0;
-            --accent-blue: #0277bd;
-            --accent-blue-soft: #e1f5fe;
-            --accent-purple: #9c27b0;
-            --accent-purple-soft: #f3e5f5;
-            --accent-teal: #009688;
-            --accent-teal-soft: #e0f2f1;
-            --accent-pink: #e91e63;
-            --accent-pink-soft: #fce4ec;
-            --accent-yellow: #ffa000;
-            --accent-yellow-soft: #fff8e1;
-            --accent-cyan: #00bcd4;
-            --accent-cyan-soft: #e0f7fa;
-            --accent-indigo: #3f51b5;
-            --accent-indigo-soft: #e8eaf6;
-            --danger: #d9534f;
-            --accent-red-soft: #ffebee;
+
+            /* Orange / Brown Palette */
+            --orange-50: #fff8eb;
+            --orange-100: #fdebc8;
+            --orange-200: #fcd38b;
+            --orange-300: #fab74f;
+            --orange-400: #f99d27;
+            --orange-500: #f3780d;
+            --orange-600: #d75608;
+            --orange-700: #b2380b;
+            --orange-800: #912b0f;
+            --orange-900: #772510;
+            --orange-950: #441004;
+
+            /* Green Palette */
+            --green-50: #f2fbf3;
+            --green-100: #e2f6e4;
+            --green-200: #c6ecc9;
+            --green-300: #99dc9f;
+            --green-400: #64c46e;
+            --green-500: #3fa84a;
+            --green-600: #2f8a39;
+            --green-700: #25652c;
+            --green-800: #24572a;
+            --green-900: #1f4824;
+            --green-950: #0c2710;
+
+            /* Functional Variables mapped to Palette for Cards */
+            --accent-green: var(--green-500);
+            --accent-green-soft: var(--green-50);    /* Completed */
+            --accent-orange: var(--orange-500);
+            --accent-orange-soft: var(--orange-100); /* In Progress */
+            --accent-blue: var(--green-400);
+            --accent-blue-soft: var(--green-100);   /* Members */
+            --accent-purple: var(--orange-400);
+            --accent-purple-soft: var(--orange-100); /* Registered Users */
+            --accent-teal: var(--green-600);
+            --accent-teal-soft: var(--green-100);    /* Manual Orgs */
+            --accent-pink: var(--orange-300);
+            --accent-pink-soft: var(--orange-50);    /* Articles */
+            --accent-yellow: var(--orange-400);
+            --accent-yellow-soft: var(--orange-200); /* Opportunities */
+            --accent-cyan: var(--green-500);
+            --accent-cyan-soft: var(--green-100);    /* Received Requests */
+            --accent-indigo: var(--green-600);
+            --accent-indigo-soft: var(--green-200);  /* Organizations */
+            --danger: var(--orange-600);
+            --accent-red-soft: var(--orange-100);    /* Rejected */
+
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
             --radius-xl: 24px;
             --radius-lg: 18px;
@@ -78,7 +107,7 @@
 
         .sidebar {
             width: 280px;
-            background: #F6F6F6;
+            background: var(--sidebar);
             border-inline-end: 1px solid var(--sidebar-border);
             box-shadow: 0 0 24px rgba(0, 0, 0, 0.03);
             padding: 18px 16px 24px;
