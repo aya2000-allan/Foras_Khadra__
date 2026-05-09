@@ -269,6 +269,20 @@ body {
 .form-section.form-rtl .toggle-row {
     justify-content: flex-end;
 }
+.header-actions {
+    display: flex;
+    gap: 12px;
+    margin-left: auto;
+    justify-content: flex-end;
+}
+
+/* بالعربي خلي الأزرار يسار */
+html[dir="rtl"] .header-actions,
+body[dir="rtl"] .header-actions {
+    margin-left: 0;
+    margin-right: auto;
+    justify-content: flex-start;
+}
 
 @media (max-width: 992px) {
     .side-illustration {
