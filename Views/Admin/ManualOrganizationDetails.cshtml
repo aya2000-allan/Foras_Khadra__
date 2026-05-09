@@ -1,48 +1,214 @@
 ﻿@model Foras_Khadra.Models.ManualOrganization
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Organization Details";
+    ViewData["Title"] = Localizer["PageTitle"];
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+    var logoSrc = string.IsNullOrWhiteSpace(Model.LogoPath)
+        ? Url.Content("~/images/about_us_leaf.svg")
+        : Model.LogoPath;
+
+    string GetCountryName(string code)
+    {
+        var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        return code switch
+        {
+            "JO" => lang == "ar" ? "الأردن" : lang == "fr" ? "Jordanie" : "Jordan",
+            "PS" => lang == "ar" ? "فلسطين" : lang == "fr" ? "Palestine" : "Palestine",
+            "EG" => lang == "ar" ? "مصر" : lang == "fr" ? "Égypte" : "Egypt",
+            "YE" => lang == "ar" ? "اليمن" : lang == "fr" ? "Yémen" : "Yemen",
+            "MA" => lang == "ar" ? "المغرب" : lang == "fr" ? "Maroc" : "Morocco",
+            "LB" => lang == "ar" ? "لبنان" : lang == "fr" ? "Liban" : "Lebanon",
+            "TN" => lang == "ar" ? "تونس" : lang == "fr" ? "Tunisie" : "Tunisia",
+            _ => code
+        };
+    }
+
+    var countryCode = Model.Country?.Trim() ?? "";
+    var countryDisplay = GetCountryName(countryCode);
+
+    string mapSrc;
+    if (!string.IsNullOrWhiteSpace(Model.Location))
+    {
+        var loc = Model.Location.Trim();
+        if (System.Text.RegularExpressions.Regex.IsMatch(loc, @"^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$", System.Text.RegularExpressions.RegexOptions.CultureInvariant))
+        {
+            var parts = loc.Split(',', StringSplitOptions.TrimEntries);
+            mapSrc = $"https://www.google.com/maps?ll={parts[0]},{parts[1]}&z=12&output=embed";
+        }
+        else
+        {
+            mapSrc = "https://www.google.com/maps?q=" + Uri.EscapeDataString(loc) + "&output=embed";
+        }
+    }
+    else
+    {
+        var cc = countryCode switch
+        {
+            "JO" => (ok: true, lat: 31.0, lng: 36.0, z: 7),
+            "PS" => (ok: true, lat: 31.9522, lng: 35.2332, z: 9),
+            "EG" => (ok: true, lat: 26.820553, lng: 30.802498, z: 6),
+            "YE" => (ok: true, lat: 15.552727, lng: 48.516388, z: 6),
+            "LB" => (ok: true, lat: 33.8547, lng: 35.8623, z: 9),
+            "TN" => (ok: true, lat: 33.8869, lng: 9.5375, z: 7),
+            "MA" => (ok: true, lat: 31.791702, lng: -7.09262, z: 6),
+            _ => (ok: false, lat: 0d, lng: 0d, z: 6)
+        };
+
+        if (cc.ok)
+        {
+            mapSrc = "https://www.google.com/maps?ll="
+                + cc.lat.ToString(CultureInfo.InvariantCulture) + ","
+                + cc.lng.ToString(CultureInfo.InvariantCulture)
+                + "&z=" + cc.z.ToString(CultureInfo.InvariantCulture) + "&output=embed";
+        }
+        else
+        {
+            mapSrc = "https://www.google.com/maps?q=" + Uri.EscapeDataString(countryDisplay) + "&output=embed";
+        }
+    }
 }
 
-<div class="container mt-4">
+<link rel="stylesheet" href="~/css/org-details.css" />
 
-    <a asp-action="ManualOrganizationsList"
-       class="btn btn-secondary mb-3">
-        Back
-    </a>
+<div class="org-details-page" dir="@dir">
+    <div class="org-details-back-row">
+        <a asp-controller="Admin" asp-action="ManualOrganizationsList" class="org-details-back">
+            <iconify-icon class="org-details-back-icon" icon="mdi:arrow-left" aria-hidden="true"></iconify-icon>
+            <span class="org-details-back-label" dir="@dir">@Localizer["BackToDashboard"]</span>
+        </a>
+    </div>
 
-    <div class="card p-4">
+    <div class="org-details-card">
+        <header class="org-details-hero">
+            <div class="org-details-hero-banner" dir="ltr">
+                <p class="org-details-slogan" dir="@dir">
+                    <span class="org-details-slogan-line">@Localizer["SloganLine1"]</span>
+                    <span class="org-details-slogan-line">@Localizer["SloganLine2"]</span>
+                </p>
+            </div>
+        </header>
 
-        <div class="text-center mb-4">
-            @if (!string.IsNullOrEmpty(Model.LogoPath))
-            {
-                <img src="@Model.LogoPath"
-                     width="120"
-                     height="120"
-                     style="object-fit:cover;border-radius:50%;" />
-            }
+        <div class="org-details-content">
+            <div class="org-details-split" dir="ltr">
+                <aside class="org-details-map-col" dir="@dir">
+                    <div class="org-details-map-card">
+                        <div class="org-details-map-frame">
+                            <iframe title="@countryDisplay"
+                                    loading="lazy"
+                                    allowfullscreen
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    src="@mapSrc"></iframe>
+                        </div>
+                        <div class="org-details-map-footer">
+                            <iconify-icon icon="mdi:map-marker" aria-hidden="true"></iconify-icon>
+                            <span>@countryDisplay</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="org-details-profile-col" dir="@dir">
+                    <div class="org-details-profile-inner">
+                        <div class="org-details-hero-logo">
+                            <img src="@logoSrc" alt="" />
+                        </div>
+                        <div class="org-details-hero-heading">
+                            <div class="org-details-title-row">
+                                <h1 class="org-details-title">
+                                    @Model.OrganizationName
+                                </h1>
+                            </div>
+                            <p class="org-details-subtitle">@Localizer["ProfileSubtitle"]</p>
+                        </div>
+
+                        <div class="org-details-rows">
+                            <div class="org-detail-row">
+                                <div class="org-detail-row-icon">
+                                    <iconify-icon icon="mdi:briefcase-outline" aria-hidden="true"></iconify-icon>
+                                </div>
+                                <div class="org-detail-row-text">
+                                    <span class="org-detail-row-label">@Localizer["ContactPerson"]</span>
+                                    <span class="org-detail-row-value">@Model.ContactPersonName</span>
+                                </div>
+                            </div>
+
+                            <div class="org-detail-row">
+                                <div class="org-detail-row-icon">
+                                    <iconify-icon icon="mdi:email-outline" aria-hidden="true"></iconify-icon>
+                                </div>
+                                <div class="org-detail-row-text">
+                                    <span class="org-detail-row-label">@Localizer["Email"]</span>
+                                    <span class="org-detail-row-value">@Model.Email</span>
+                                </div>
+                            </div>
+
+                            <div class="org-detail-row">
+                                <div class="org-detail-row-icon">
+                                    <iconify-icon icon="mdi:phone-outline" aria-hidden="true"></iconify-icon>
+                                </div>
+                                <div class="org-detail-row-text">
+                                    <span class="org-detail-row-label">@Localizer["Phone"]</span>
+                                    <span class="org-detail-row-value">@Model.PhoneNumber</span>
+                                </div>
+                            </div>
+
+                            <div class="org-detail-row">
+                                <div class="org-detail-row-icon">
+                                    <iconify-icon icon="mdi:earth" aria-hidden="true"></iconify-icon>
+                                </div>
+                                <div class="org-detail-row-text">
+                                    <span class="org-detail-row-label">@Localizer["Country"]</span>
+                                    <span class="org-detail-row-value">@countryDisplay</span>
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Location))
+                            {
+                                <div class="org-detail-row">
+                                    <div class="org-detail-row-icon">
+                                        <iconify-icon icon="mdi:location-enter" aria-hidden="true"></iconify-icon>
+                                    </div>
+                                    <div class="org-detail-row-text">
+                                        <span class="org-detail-row-label">@Localizer["Location"]</span>
+                                        <span class="org-detail-row-value">@Model.Location</span>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Website))
+                            {
+                                var web = Model.Website.Trim();
+                                var webHref = web.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? web : "https://" + web;
+                                <div class="org-detail-row">
+                                    <div class="org-detail-row-icon">
+                                        <iconify-icon icon="mdi:web" aria-hidden="true"></iconify-icon>
+                                    </div>
+                                    <div class="org-detail-row-text">
+                                        <span class="org-detail-row-label">@Localizer["Website"]</span>
+                                        <a class="org-detail-row-value" href="@webHref" target="_blank" rel="noopener noreferrer">@web</a>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Details))
+                            {
+                                <div class="org-detail-row">
+                                    <div class="org-detail-row-icon">
+                                        <iconify-icon icon="mdi:information-outline" aria-hidden="true"></iconify-icon>
+                                    </div>
+                                    <div class="org-detail-row-text">
+                                        <span class="org-detail-row-label">@Localizer["Details"]</span>
+                                        <span class="org-detail-row-value">@Model.Details</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <h3>@Model.OrganizationName</h3>
-
-        <hr />
-
-        <p><strong>Contact Person:</strong> @Model.ContactPersonName</p>
-
-        <p><strong>Email:</strong> @Model.Email</p>
-
-        <p><strong>Phone:</strong> @Model.PhoneNumber</p>
-
-        <p><strong>Country:</strong> @Model.Country</p>
-
-        <p><strong>Location:</strong> @Model.Location</p>
-
-        <p><strong>Website:</strong> @Model.Website</p>
-
-        <p><strong>Details:</strong> @Model.Details</p>
-
-       
-
-
     </div>
 </div>

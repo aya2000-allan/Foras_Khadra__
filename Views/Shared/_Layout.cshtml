@@ -30,8 +30,9 @@
 @{
     var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
     var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var hideFromViewData = (ViewData["HideNavAndFooter"] as bool?) == true;
 
-    bool hideNavAndFooter = false;
+    bool hideNavAndFooter = hideFromViewData;
 
     var userIsAuthenticated = User.Identity.IsAuthenticated;
     var isAdmin = false;
@@ -48,11 +49,11 @@
         }
     }
 
-    if (currentController == "Admin" && currentAction == "ReelsRequestsDashboard")
+    if (!hideNavAndFooter && currentController == "Admin" && currentAction == "ReelsRequestsDashboard")
     {
         hideNavAndFooter = true;
     }
-    else
+    else if (!hideNavAndFooter)
     {
         if (isAdmin)
         {
@@ -64,8 +65,8 @@
         }
     }
 
-    if (isAdmin && currentController == "Articles") hideNavAndFooter = true;
-    if (isAdmin && currentController == "Team") hideNavAndFooter = true;
+    if (!hideNavAndFooter && isAdmin && currentController == "Articles") hideNavAndFooter = true;
+    if (!hideNavAndFooter && isAdmin && currentController == "Team") hideNavAndFooter = true;
 
     if (currentController == "Home" && currentAction == "DetailsOrganization")
     {

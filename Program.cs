@@ -133,7 +133,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// ✅ معاينة شبكة المنظمات (Development فقط — لا تُضاف في Production)
+// ✅ معاينة شبكة المنظمات وبيانات تجريبية أخرى (Development فقط — لا تُضاف في Production)
 if (app.Environment.IsDevelopment())
 {
     using var previewScope = app.Services.CreateScope();
@@ -141,6 +141,8 @@ if (app.Environment.IsDevelopment())
     try
     {
         DbInitializer.SeedOrganizationsMapPreview(previewDb);
+        DbInitializer.SeedOrganizations(previewDb);
+        DbInitializer.SeedOpportunities(previewDb);
     }
     catch (Exception ex)
     {
