@@ -105,8 +105,7 @@
                     </div>
 
                     <div class="toggle-row">
-                        <input asp-for="IsActive" class="form-check-input" />
-                        <label class="toggle-label">@Localizer["Active"]</label>
+                        <input asp-for="IsActive" class="form-check-input" type="hidden" />
                     </div>
 
                     <div class="actions-group @(culture == "ar" ? "actions-rtl" : "")">

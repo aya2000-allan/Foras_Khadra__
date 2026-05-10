@@ -1,12 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Resources",
+    "\\Models",
     "\\Resources\\Views",
-    "\\Resources\\Views\\Home",
     "\\Views",
+    "\\Views\\Admin",
     "\\Views\\Home"
   ],
-  "SelectedNode": "\\Views\\Home\\DetailsOrganization.cshtml",
+  "SelectedNode": "\\Views\\Home\\ManualOrganizationDetails.cshtml",
   "PreviewInSolutionExplorer": false
 }
