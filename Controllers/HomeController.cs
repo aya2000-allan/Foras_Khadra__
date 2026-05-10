@@ -263,7 +263,8 @@ namespace Foras_Khadra.Controllers
         Location = o.Location,
         Website = o.Website,
         ContactName = o.ContactName,
-        IsManual = false
+        IsManual = false,
+        CreatedAt = o.CreatedAt
     });
 
             var manualOrganizations = _context.ManualOrganizations
@@ -278,7 +279,8 @@ namespace Foras_Khadra.Controllers
                     Location = o.Location,
                     Website = o.Website,
                     ContactName = o.ContactPersonName,
-                    IsManual = true
+                    IsManual = true,
+                    CreatedAt = o.CreatedAt,
                 });
 
             var query = registeredOrganizations
@@ -327,10 +329,10 @@ namespace Foras_Khadra.Controllers
             int totalItems = query.Count();
 
             var organizations = query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
+.OrderByDescending(o => o.CreatedAt)
+.Skip((page - 1) * pageSize)
+     .Take(pageSize)
+     .ToList();
             ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
             ViewBag.CurrentPage = page;
             ViewBag.SelectedCountry = country;
