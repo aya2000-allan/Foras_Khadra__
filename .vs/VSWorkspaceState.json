@@ -1,12 +1,12 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Controllers",
     "\\Models",
-    "\\Resources\\Views",
     "\\Views",
     "\\Views\\Admin",
     "\\Views\\Home"
   ],
-  "SelectedNode": "\\Views\\Home\\ManualOrganizationDetails.cshtml",
+  "SelectedNode": "\\Controllers\\HomeController.cs",
   "PreviewInSolutionExplorer": false
 }

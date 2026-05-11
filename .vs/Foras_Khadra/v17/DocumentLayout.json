@@ -1,16 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|c:\\users\\lenovo\\documents\\github\\foras_khadra__\\views\\admin\\editmanualorganization.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|solutionrelative:views\\admin\\editmanualorganization.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|c:\\users\\lenovo\\documents\\github\\foras_khadra__\\views\\admin\\addmanualorganization.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|solutionrelative:views\\admin\\addmanualorganization.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -18,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -27,32 +18,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "EditManualOrganization.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Admin\\EditManualOrganization.cshtml",
-              "RelativeDocumentMoniker": "Views\\Admin\\EditManualOrganization.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Admin\\EditManualOrganization.cshtml",
-              "RelativeToolTip": "Views\\Admin\\EditManualOrganization.cshtml",
-              "ViewState": "AgIAAGQAAAAAAAAAAAAAAGoAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-10T15:59:14.815Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AddManualOrganization.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Admin\\AddManualOrganization.cshtml",
-              "RelativeDocumentMoniker": "Views\\Admin\\AddManualOrganization.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Admin\\AddManualOrganization.cshtml",
-              "RelativeToolTip": "Views\\Admin\\AddManualOrganization.cshtml",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAhwDcAAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-10T15:55:32.404Z",
-              "EditorCaption": ""
             }
           ]
         }
