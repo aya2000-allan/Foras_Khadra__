@@ -6,7 +6,7 @@ namespace Foras_Khadra.Models
     {
         public int Id { get; set; }
 
-        public string OrganizationName { get; set; }
+        public string? OrganizationName { get; set; }
 
         public string? ContactPersonName { get; set; }
 
@@ -22,6 +22,9 @@ namespace Foras_Khadra.Models
         public string? Location { get; set; }
 
         public string? Country { get; set; }
+
+        [Required(ErrorMessage = "ادخل القطاع")]
+        public string? Sector { get; set; }
 
         public bool IsActive { get; set; } = true;
         public string? LogoPath { get; set; }

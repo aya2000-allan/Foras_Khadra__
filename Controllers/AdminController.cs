@@ -246,7 +246,9 @@ namespace Foras_Khadra.Controllers
             org.Website = model.Website;
             org.Location = model.Location;
             org.Country = model.Country;
+            org.Sector = model.Sector;
             org.IsActive = model.IsActive;
+
 
             await _context.SaveChangesAsync();
 
