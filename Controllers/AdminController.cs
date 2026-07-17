@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 namespace Foras_Khadra.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;

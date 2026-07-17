@@ -588,10 +588,24 @@
             <div class="sidebar-section">
                 <span class="sidebar-label">Opportunities</span>
                 <div class="nav-list">
-                    <a asp-controller="Opportunity" asp-action="OrgOpportunities" class="nav-link-item">
-                        <i class="bi bi-briefcase"></i>
-                        <span>@(isArabic ? "عرض الفرص" : "All opportunities")</span>
-                    </a>
+                    @if (User.IsInRole("Organization"))
+                    {
+                        <a asp-controller="Opportunity" asp-action="OrgOpportunities" class="nav-link-item">
+                            <i class="bi bi-briefcase"></i>
+                            <span>
+                                All opportunities
+                            </span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Opportunity" asp-action="Index" class="nav-link-item">
+                            <i class="bi bi-briefcase"></i>
+                            <span>
+                                All opportunities
+                            </span>
+                        </a>
+                    }
                     <a asp-controller="Opportunity" asp-action="Create" class="nav-link-item">
                         <i class="bi bi-plus-circle"></i>
                         <span>@(isArabic ? "إضافة فرصة" : "Add opportunity")</span>

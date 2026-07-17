@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|c:\\users\\lenovo\\documents\\github\\foras_khadra__\\views\\home\\manualorganizationdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|solutionrelative:views\\home\\manualorganizationdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|c:\\users\\lenovo\\documents\\github\\foras_khadra__\\views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|solutionrelative:views\\admin\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|c:\\users\\lenovo\\documents\\github\\foras_khadra__\\views\\home\\detailsorganization.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|solutionrelative:views\\home\\detailsorganization.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|c:\\users\\lenovo\\documents\\github\\foras_khadra__\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|solutionrelative:controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|c:\\users\\lenovo\\documents\\github\\foras_khadra__\\resources\\views\\home\\manualorganizationdetails.ar.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
-      "RelativeMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|solutionrelative:resources\\views\\home\\manualorganizationdetails.ar.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
+      "AbsoluteMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|c:\\users\\lenovo\\documents\\github\\foras_khadra__\\views\\opportunity\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|solutionrelative:views\\opportunity\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|c:\\users\\lenovo\\documents\\github\\foras_khadra__\\controllers\\opportunitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4C20D858-76DA-82B9-853F-5BB5706879B9}|Foras_Khadra.csproj|solutionrelative:controllers\\opportunitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -35,39 +39,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ManualOrganizationDetails.ar.resx",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Resources\\Views\\Home\\ManualOrganizationDetails.ar.resx",
-              "RelativeDocumentMoniker": "Resources\\Views\\Home\\ManualOrganizationDetails.ar.resx",
-              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Resources\\Views\\Home\\ManualOrganizationDetails.ar.resx",
-              "RelativeToolTip": "Resources\\Views\\Home\\ManualOrganizationDetails.ar.resx",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2026-05-13T15:50:08.707Z",
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Opportunity\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Opportunity\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Opportunity\\Index.cshtml",
+              "RelativeToolTip": "Views\\Opportunity\\Index.cshtml",
+              "ViewState": "AgIAANEAAAAAAAAAAAAowOMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-17T04:48:16.375Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "OpportunityController.cs",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Controllers\\OpportunityController.cs",
+              "RelativeDocumentMoniker": "Controllers\\OpportunityController.cs",
+              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Controllers\\OpportunityController.cs",
+              "RelativeToolTip": "Controllers\\OpportunityController.cs",
+              "ViewState": "AgIAANcBAAAAAAAAAAAgwOcBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-17T04:45:44.882Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "DetailsOrganization.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Home\\DetailsOrganization.cshtml",
-              "RelativeDocumentMoniker": "Views\\Home\\DetailsOrganization.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Home\\DetailsOrganization.cshtml",
-              "RelativeToolTip": "Views\\Home\\DetailsOrganization.cshtml",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAAJIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-13T15:49:26.926Z",
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Controllers\\AdminController.cs",
+              "ViewState": "AgIAAB0BAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-17T04:44:10.056Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ManualOrganizationDetails.cshtml",
-              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Home\\ManualOrganizationDetails.cshtml",
-              "RelativeDocumentMoniker": "Views\\Home\\ManualOrganizationDetails.cshtml",
-              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Home\\ManualOrganizationDetails.cshtml",
-              "RelativeToolTip": "Views\\Home\\ManualOrganizationDetails.cshtml",
-              "ViewState": "AgIAAHMAAAAAAAAAAAAwwIAAAABZAAAAAAAAAA==",
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Admin\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\Lenovo\\Documents\\GitHub\\Foras_Khadra__\\Views\\Admin\\Dashboard.cshtml",
+              "RelativeToolTip": "Views\\Admin\\Dashboard.cshtml",
+              "ViewState": "AgIAAEkCAAAAAAAAAAAowFsCAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-13T15:47:48.583Z",
+              "WhenOpened": "2026-07-17T04:43:26.262Z",
               "EditorCaption": ""
             }
           ]
