@@ -5,14 +5,24 @@
 
 @{
     ViewData["Title"] = Localizer["PageTitle"];
+    ViewData["HideNavAndFooter"] = User.IsInRole("Admin");
     var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
+
+    
 }
 
-@section Styles {
-    <link rel="stylesheet" asp-append-version="true" href="~/css/organizations-list.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" asp-append-version="true" href="~/css/organizations-list.css" />
+@if (User.IsInRole("Admin"))
+{
+    <style>
+        nav,
+        footer {
+            display: none !important;
+        }
+    </style>
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <div class="container py-5 org-list-page" dir="@dir">
     <div class="row align-items-center mb-4 g-3">

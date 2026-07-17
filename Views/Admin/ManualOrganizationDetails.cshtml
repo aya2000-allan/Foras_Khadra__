@@ -6,6 +6,7 @@
 
 @{
     ViewData["Title"] = Localizer["PageTitle"];
+    ViewData["HideNavAndFooter"] = User.IsInRole("Admin");
     var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var dir = culture == "ar" ? "rtl" : "ltr";
     var logoSrc = string.IsNullOrWhiteSpace(Model.LogoPath)
@@ -73,13 +74,22 @@
     }
 }
 
-<link rel="stylesheet" href="/css/org-details.css" />
+<link rel="stylesheet" href="~/css/org-details.css" />
 
+@if (User.IsInRole("Admin"))
+{
+    <style>
+        nav,
+        footer {
+            display: none !important;
+        }
+    </style>
+}
 <div class="org-details-page" dir="@dir">
     <div class="org-details-back-row">
         <a asp-controller="Admin" asp-action="ManualOrganizationsList" class="org-details-back">
             <iconify-icon class="org-details-back-icon" icon="mdi:arrow-left" aria-hidden="true"></iconify-icon>
-            <span class="org-details-back-label" dir="@dir">@Localizer["BackToDashboard"]</span>
+            <span class="org-details-back-label" dir="@dir">@Localizer["BackToManualOrganizationsList"]</span>
         </a>
     </div>
 

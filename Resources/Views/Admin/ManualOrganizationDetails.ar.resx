@@ -120,8 +120,8 @@
   <data name="PageTitle" xml:space="preserve">
     <value>تفاصيل المنظمة</value>
   </data>
-  <data name="BackToDashboard" xml:space="preserve">
-    <value>العودة إلى لوحة التحكم</value>
+  <data name="BackToManualOrganizationsList" xml:space="preserve">
+    <value>العودة إلى قائمة المنظمات المضافة يدويا</value>
   </data>
   <data name="SloganLine1" xml:space="preserve">
     <value>معًا نصنع أثرًا...</value>
