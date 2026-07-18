@@ -30,11 +30,19 @@ namespace Foras_Khadra.Controllers
         }
 
         // ================= INDEX =================
-        public IActionResult Index()
+        public IActionResult Index(bool availableOnly)
         {
-            var opportunities = _context.Opportunities.ToList();
+            var query = _context.Opportunities.AsQueryable();
 
-            var grouped = opportunities
+// اضفنا فلتره للفعاليات المفتوحه وفعاليات لها وقت محدد (غير منتهيه) 
+           if (availableOnly)
+            {
+                query = query.Where(o => o.EndDate == null || o.EndDate >= DateTime.Now);
+            }
+
+            // تجميع الفرص مع استبعاد الفرص المجهوله لتجنب انهيار الواجهه 
+            var opportunities = query.ToList();
+            var grouped = opportunities 
 .Where(o => o.Type.HasValue)
 .GroupBy(o => o.Type.Value)
 .ToDictionary(g => g.Key, g => g.ToList());

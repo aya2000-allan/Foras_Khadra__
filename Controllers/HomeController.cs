@@ -20,41 +20,48 @@ namespace Foras_Khadra.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+  public IActionResult Index(bool filterByAvailable = false)
+{
+    var latestArticles = _context.Articles
+        .OrderByDescending(a => a.PublishDate)
+        .Take(9)
+        .AsNoTracking()
+        .ToList();
+//تحذير استلام الفرص
+//اذا تم تفعيل الفلتره في الواجهه الاماميه نقوم بفلتره الوصف
+
+    var opportunitiesQuery = _context.Opportunities.AsQueryable();
+
+    if (filterByAvailable)
+    {
+        opportunitiesQuery = opportunitiesQuery.Where(o => o.EndDate == null || o.EndDate >= DateTime.Now);
+    }
+
+    var latestOpportunities = opportunitiesQuery
+        .OrderByDescending(o => o.PublishDate)
+        .Take(9)
+        .AsNoTracking()
+        .ToList();
+
+    var organizations = _context.Organizations
+        .Where(o => !string.IsNullOrEmpty(o.LogoPath)) 
+        .Select(o => new Organization
         {
-            var latestArticles = _context.Articles
-                .OrderByDescending(a => a.PublishDate)
-                .Take(9)
-                .AsNoTracking()
-                .ToList();
+            Id = o.Id,
+            Name = o.Name,
+            LogoPath = o.LogoPath
+        })
+        .ToList();
 
-            var latestOpportunities = _context.Opportunities
-                .OrderByDescending(o => o.PublishDate)
-                .Take(9)
-                .AsNoTracking()
-                .ToList();
+    var model = new HomeViewModel
+    {
+        LatestArticles = latestArticles,
+        LatestOpportunities = latestOpportunities,
+        Organizations = organizations
+    };
 
-            var organizations = _context.Organizations
-       .Where(o => !string.IsNullOrEmpty(o.LogoPath)) 
-       .Select(o => new Organization
-       {
-           Id = o.Id,
-           Name = o.Name,
-           LogoPath = o.LogoPath
-       })
-       .ToList();
-
-            var model = new HomeViewModel
-            {
-                LatestArticles = latestArticles,
-                LatestOpportunities = latestOpportunities,
-                Organizations = organizations
-
-            };
-
-            return View(model);
-        }
-
+    return View(model);
+}
         public IActionResult News()
         {
             return View();

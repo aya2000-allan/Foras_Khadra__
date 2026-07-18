@@ -433,7 +433,23 @@ html[dir="ltr"] #heroBg1 {
                 @Localizer["ViewAll"]
             </a>
         </div>
-
+<!-- قسم فلتر الفرص المتاحة -->
+<!--  بناء على قيمة chechked filterByAvailable  تحسين الصفحه الرئيسية تم اضافه مفتاح فلتره تلقائيا عند تغيره المفتاح يرسل نموذج في الرابط 
+<div class="filter-section mb-3 d-flex justify-content-end" style="padding: 0 15px;">
+    <form method="get">
+        <div class="form-check form-switch d-flex align-items-center gap-2">
+            <input class="form-check-input" type="checkbox" name="filterByAvailable" value="true" id="availableFilter" 
+                   onchange="this.form.submit()" 
+                   style="cursor: pointer; width: 40px; height: 20px;"
+                   @(Context.Request.Query["filterByAvailable"] == "true" ? "checked" : "")>
+            <label class="form-check-label" for="availableFilter" style="color: #25652C; font-weight: bold; cursor: pointer; margin-top: 5px;">
+                @Localizer["عرض الفرص المتاحة حالياً فقط"]
+            </label>
+        </div>
+        <input type="hidden" name="filterByAvailable" value="false" />
+    </form>
+</div>
+<!-- نهاية الفلتر -->
         <!-- السلايدر (الكروت فقط) -->
         <div class="swiper opportunitiesSwiper mb-4" dir="@dir">
             <div class="swiper-wrapper">

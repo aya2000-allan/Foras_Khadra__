@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Foras_Khadra.Migrations
 {
     /// <inheritdoc />
-    public partial class FixManualOrgNullable : Migration
+    public partial class CleanSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
