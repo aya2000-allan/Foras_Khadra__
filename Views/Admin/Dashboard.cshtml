@@ -572,6 +572,21 @@
             </div>
 
             <div class="sidebar-section">
+                <span class="sidebar-label">Organizations</span>
+                <div class="nav-list">
+                    <a asp-controller="Admin" asp-action="ManualOrganizationsList" class="nav-link-item">
+                        <i class="bi bi-pencil-square"></i>
+                        <span>@(isArabic ? "منظمات مضافة يدويًا" : "Manually added organizations")</span>
+                    </a>
+                    <a asp-controller="Admin" asp-action="OrganizationsList" class="nav-link-item">
+                        <i class="bi bi-diagram-3"></i>
+                        <span>@(isArabic ? "منظمات مضافة تلقائيًا" : "Automatically added organizations")</span>
+                    </a>
+                </div>
+            </div> 
+            
+
+            <div class="sidebar-section">
                 <span class="sidebar-label">Member</span>
                 <div class="nav-list">
                     <a asp-controller="Team" asp-action="Index" class="nav-link-item">
