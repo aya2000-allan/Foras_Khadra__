@@ -20,48 +20,48 @@ namespace Foras_Khadra.Controllers
             _context = context;
         }
 
-  public IActionResult Index(bool filterByAvailable = false)
-{
-    var latestArticles = _context.Articles
-        .OrderByDescending(a => a.PublishDate)
-        .Take(9)
-        .AsNoTracking()
-        .ToList();
-//تحذير استلام الفرص
-//اذا تم تفعيل الفلتره في الواجهه الاماميه نقوم بفلتره الوصف
-
-    var opportunitiesQuery = _context.Opportunities.AsQueryable();
-
-    if (filterByAvailable)
-    {
-        opportunitiesQuery = opportunitiesQuery.Where(o => o.EndDate == null || o.EndDate >= DateTime.Now);
-    }
-
-    var latestOpportunities = opportunitiesQuery
-        .OrderByDescending(o => o.PublishDate)
-        .Take(9)
-        .AsNoTracking()
-        .ToList();
-
-    var organizations = _context.Organizations
-        .Where(o => !string.IsNullOrEmpty(o.LogoPath)) 
-        .Select(o => new Organization
+        public IActionResult Index(bool filterByAvailable = false)
         {
-            Id = o.Id,
-            Name = o.Name,
-            LogoPath = o.LogoPath
-        })
-        .ToList();
+            var latestArticles = _context.Articles
+                .OrderByDescending(a => a.PublishDate)
+                .Take(9)
+                .AsNoTracking()
+                .ToList();
+            //تحذير استلام الفرص
+            //اذا تم تفعيل الفلتره في الواجهه الاماميه نقوم بفلتره الوصف
 
-    var model = new HomeViewModel
-    {
-        LatestArticles = latestArticles,
-        LatestOpportunities = latestOpportunities,
-        Organizations = organizations
-    };
+            var opportunitiesQuery = _context.Opportunities.AsQueryable();
 
-    return View(model);
-}
+            if (filterByAvailable)
+            {
+                opportunitiesQuery = opportunitiesQuery.Where(o => o.EndDate == null || o.EndDate >= DateTime.Now);
+            }
+
+            var latestOpportunities = opportunitiesQuery
+                .OrderByDescending(o => o.PublishDate)
+                .Take(9)
+                .AsNoTracking()
+                .ToList();
+
+            var organizations = _context.Organizations
+                .Where(o => !string.IsNullOrEmpty(o.LogoPath))
+                .Select(o => new Organization
+                {
+                    Id = o.Id,
+                    Name = o.Name,
+                    LogoPath = o.LogoPath
+                })
+                .ToList();
+
+            var model = new HomeViewModel
+            {
+                LatestArticles = latestArticles,
+                LatestOpportunities = latestOpportunities,
+                Organizations = organizations
+            };
+
+            return View(model);
+        }
         public IActionResult News()
         {
             return View();
@@ -124,76 +124,193 @@ namespace Foras_Khadra.Controllers
         // ================= الفرص حسب النوع مع فلترة الدولة =================
 
         // ================= الفرص حسب النوع مع فلترة الدولة =================
-        private IActionResult GetOpportunitiesByType(OpportunityType type, string country, string typeName)
+
+        private IActionResult GetOpportunitiesByType(
+    OpportunityType type,
+    string country,
+    string typeName,
+    bool availableOnly = false)
         {
             var query = _context.Opportunities
-                                .Include(o => o.AvailableCountries)
-                                .Where(o => o.Type == type);
+                .Include(o => o.AvailableCountries)
+                .Where(o => o.Type == type)
+                .AsQueryable();
 
-            if (!string.IsNullOrEmpty(country))
+            // Filtre par pays
+            if (!string.IsNullOrWhiteSpace(country))
             {
                 query = query.Where(o =>
                     o.AvailableCountries.Any(c =>
-                        c.NameEn == country ||
                         c.NameAr == country ||
+                        c.NameEn == country ||
                         c.NameFr == country));
             }
 
-            var opportunities = query.ToList();
+            // Nouveau filtre : seulement les opportunités disponibles
+            if (availableOnly)
+            {
+                query = query.Where(o =>
+                    !o.EndDate.HasValue ||
+                    o.EndDate >= DateTime.Now);
+            }
 
-            // ================== إضافة حالة الانتهاء ==================
+            var opportunities = query
+                .OrderByDescending(o => o.PublishDate)
+                .ToList();
+
             foreach (var opp in opportunities)
             {
-                opp.IsExpired = opp.EndDate.HasValue && opp.EndDate.Value < DateTime.Now;
+                opp.IsExpired =
+                    opp.EndDate.HasValue &&
+                    opp.EndDate.Value < DateTime.Now;
             }
+
+            var countries = _context.Countries
+                .OrderBy(c => c.NameAr)
+                .Select(c => c.NameAr)
+                .ToList();
+
             var model = new AllOpportunitiesViewModel
             {
                 Opportunities = opportunities,
                 SelectedCountry = country,
-                SelectedTypes = new List<OpportunityType> { type } 
+                SelectedTypes = new List<OpportunityType> { type },
+                Countries = countries
             };
 
             ViewBag.TypeName = typeName;
+
             return View("AllOpportunities", model);
         }
         // مثال لكل نوع:
-        public IActionResult Trainings(string country = null)
+        public IActionResult Trainings(string country = null, bool availableOnly = false)
         {
-            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Internships, country, "فرص التدريب");
+            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Internships, country, "فرص التدريب", availableOnly);
         }
 
-        public IActionResult Jobs(string country = null)
+        public IActionResult Jobs(string country = null, bool availableOnly = false)
         {
-            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Jobs, country, "الوظائف");
+            return GetOpportunitiesByType(
+                Foras_Khadra.Models.OpportunityType.Jobs, country, "الوظائف", availableOnly);
         }
 
-        public IActionResult Competitions(string country = null)
+
+        public IActionResult Competitions(string country = null, bool availableOnly = false)
         {
-            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Competitions, country, "المسابقات");
+            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Competitions, country, "المسابقات", availableOnly);
         }
 
-        public IActionResult Conferences(string country = null)
+
+
+
+        public IActionResult Conferences(string country = null, bool availableOnly = false)
         {
-            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Conferences, country, "المؤتمرات");
+            return GetOpportunitiesByType(
+                Foras_Khadra.Models.OpportunityType.Conferences, country, "المؤتمرات", availableOnly);
         }
 
-        public IActionResult Volunteering(string country = null)
+
+        public IActionResult Volunteering(string country = null, bool availableOnly = false)
         {
-            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Volunteering, country, "فرص التطوع");
+            return GetOpportunitiesByType(
+                Foras_Khadra.Models.OpportunityType.Volunteering, country, "التطوع", availableOnly);
         }
 
-        public IActionResult Fellowships(string country = null)
+
+        public IActionResult Fellowships(string country = null, bool availableOnly = false)
         {
-            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Fellowships, country, "الزمالات");
+            return GetOpportunitiesByType(
+                Foras_Khadra.Models.OpportunityType.Fellowships, country, "الزمالات", availableOnly);
         }
 
-        public IActionResult Scholarships(string country = null)
+
+        public IActionResult Scholarships(string country = null, bool availableOnly = false)
         {
-            return GetOpportunitiesByType(Foras_Khadra.Models.OpportunityType.Scholarships, country, "المنح الدراسية");
+            return GetOpportunitiesByType(
+                Foras_Khadra.Models.OpportunityType.Scholarships, country, "المنح الدراسية", availableOnly);
         }
 
         // ================= صفحة كل الفرص العامة =================
-        public IActionResult AllOpportunities(string country, string[] type, string search)
+        public IActionResult AllOpportunities(
+    string country,
+    string[] type,
+    string search,
+    bool availableOnly = false)
+        {
+            var query = _context.Opportunities
+                .Include(o => o.AvailableCountries)
+                .AsQueryable();
+
+            // ================= Recherche =================
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(o =>
+                    EF.Functions.Like(o.TitleAr, $"%{search}%") ||
+                    EF.Functions.Like(o.TitleEn, $"%{search}%") ||
+                    EF.Functions.Like(o.TitleFr, $"%{search}%"));
+            }
+
+            // ================= Filtre par type =================
+            if (type != null && type.Any())
+            {
+                var selectedTypes = type
+                    .Where(t => Enum.TryParse<OpportunityType>(t, out _))
+                    .Select(t => Enum.Parse<OpportunityType>(t))
+                    .ToList();
+
+                query = query.Where(o =>
+                    o.Type.HasValue &&
+                    selectedTypes.Contains(o.Type.Value));
+            }
+
+            // ================= Filtre par pays =================
+            if (!string.IsNullOrWhiteSpace(country))
+            {
+                query = query.Where(o =>
+                    o.AvailableCountries.Any(c =>
+                        c.NameAr == country ||
+                        c.NameEn == country ||
+                        c.NameFr == country));
+            }
+
+            // ================= NOUVEAU FILTRE =================
+            // Seulement les opportunités encore disponibles
+            if (availableOnly)
+            {
+                query = query.Where(o =>
+                    !o.EndDate.HasValue ||
+                    o.EndDate >= DateTime.Now);
+            }
+
+            var allOpportunities = query
+                .OrderByDescending(o => o.PublishDate)
+                .ToList();
+
+            foreach (var opp in allOpportunities)
+            {
+                opp.IsExpired =
+                    opp.EndDate.HasValue &&
+                    opp.EndDate.Value < DateTime.Now;
+            }
+
+            var countries = _context.Countries
+                .OrderBy(c => c.NameAr)
+                .Select(c => c.NameAr)
+                .ToList();
+
+            var model = new AllOpportunitiesViewModel
+            {
+                Opportunities = allOpportunities,
+                SelectedCountry = country,
+                SelectedTypes = type?.Select(Enum.Parse<OpportunityType>).ToList()
+                                ?? new List<OpportunityType>(),
+                Countries = countries
+            };
+
+            return View(model);
+
+        }
+        /*public IActionResult AllOpportunities(string country, string[] type, string search)
         {
             var query = _context.Opportunities
                                 .Include(o => o.AvailableCountries)
@@ -251,7 +368,7 @@ namespace Foras_Khadra.Controllers
             };
 
             return View(model);
-        }
+        }*/
 
 
         public IActionResult OrganizationsMap(string country = null, string sector = null, int page = 1)
