@@ -40,30 +40,9 @@
     Func<Article, string> ArticleLink = (a) => Url.Action("Details", "Articles", new { id = a.Id }) ?? "#";
 }
 
-<link rel="stylesheet" asp-append-version="true" href="~/css/home-articles.css" />
-
-<style>
-
-    .swal-title-rtl {
-        direction: rtl;
-        text-align: center;
-    }
-
-    .swal-title-ltr {
-        direction: ltr;
-        text-align: center;
-    }
-
-    .swal-text-rtl {
-        direction: rtl;
-        text-align: center;
-    }
-
-    .swal-text-ltr {
-        direction: ltr;
-        text-align: center;
-    }
-</style>
+@section Styles {
+    <link rel="stylesheet" asp-append-version="true" href="~/css/home-articles.css" />
+}
 
 <section class="home-articles">
 

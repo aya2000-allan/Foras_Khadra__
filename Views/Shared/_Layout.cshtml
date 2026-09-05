@@ -746,56 +746,7 @@ else
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
-
-<script>
-    function toggleDropdown(id, event) {
-        if (event) event.stopPropagation();
-
-        const menu = document.getElementById(id);
-        if (!menu) return;
-
-        document.querySelectorAll(".dropdown-list").forEach(x => {
-            if (x !== menu) x.classList.remove("show");
-        });
-
-        menu.classList.toggle("show");
-    }
-
-    document.addEventListener("click", function (e) {
-        if (!e.target.closest(".custom-dropdown")) {
-            document.querySelectorAll(".dropdown-list").forEach(x => x.classList.remove("show"));
-        }
-    });
-
-    function toggleMobileMenu(event) {
-        if (event) event.stopPropagation();
-        const nav = document.getElementById("navContent");
-        if (!nav) return;
-        nav.classList.toggle("show");
-    }
-
-    document.addEventListener("click", function (e) {
-        const link = e.target.closest("[data-close-menu]");
-        if (link) {
-            const nav = document.getElementById("navContent");
-            if (nav && window.innerWidth <= 1400) nav.classList.remove("show");
-        }
-    });
-
-    window.addEventListener("resize", function () {
-        const nav = document.getElementById("navContent");
-        if (!nav) return;
-        if (window.innerWidth > 1400) {
-            nav.classList.remove("show");
-        }
-    });
-
-    // تأكيد: المينو ما تكون مفتوحة تلقائيًا عند التحميل
-    document.addEventListener("DOMContentLoaded", function () {
-        const nav = document.getElementById("navContent");
-        if (nav) nav.classList.remove("show");
-    });
-</script>
+<script asp-append-version="true" src="~/js/site.js"></script>
 
 @RenderSection("Scripts", required: false)
 </body>
