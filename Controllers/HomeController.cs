@@ -35,7 +35,7 @@ namespace Foras_Khadra.Controllers
                 .ToList();
 
             var organizations = _context.Organizations
-       .Where(o => !string.IsNullOrEmpty(o.LogoPath)) 
+       .Where(o => !string.IsNullOrEmpty(o.LogoPath))
        .Select(o => new Organization
        {
            Id = o.Id,
@@ -143,7 +143,7 @@ namespace Foras_Khadra.Controllers
             {
                 Opportunities = opportunities,
                 SelectedCountry = country,
-                SelectedTypes = new List<OpportunityType> { type } 
+                SelectedTypes = new List<OpportunityType> { type }
             };
 
             ViewBag.TypeName = typeName;
@@ -355,9 +355,12 @@ namespace Foras_Khadra.Controllers
 
             return View(org);
         }
-        public IActionResult UnderDevelopment()
+
+        public IActionResult UnderDevelopment(int id)
         {
+            
             return View();
         }
+
     }
 }

@@ -120,6 +120,11 @@ html[dir="ltr"] .org-map-page .header-logo img {
     transition: 0.35s ease;
     border: 2px solid rgba(37, 101, 44, 0.18);
     overflow: visible;
+    box-shadow:
+        0 0 0 1px rgba(37, 101, 44, 0.1),
+        0 5px 16px rgba(37, 101, 44, 0.22),
+        0 8px 26px rgba(249, 157, 39, 0.18),
+        0 14px 36px rgba(15, 23, 42, 0.06);
 }
 
 /* glowing orbit ring */
@@ -134,8 +139,8 @@ html[dir="ltr"] .org-map-page .header-logo img {
         #f99d27,
         #25652c
     );
-    opacity: 0.15;
-    filter: blur(8px);
+    opacity: 0.26;
+    filter: blur(12px);
     transition: 0.4s ease;
 }
 
@@ -163,11 +168,18 @@ html[dir="ltr"] .org-map-page .header-logo img {
     z-index: 10;
     border-color: rgba(37,101,44,0.4);
     outline: none;
+    box-shadow:
+        0 0 0 10px rgba(37, 101, 44, 0.1),
+        0 0 0 1px rgba(249, 157, 39, 0.25),
+        0 10px 26px rgba(37, 101, 44, 0.32),
+        0 14px 34px rgba(249, 157, 39, 0.28),
+        0 26px 56px rgba(15, 23, 42, 0.14);
 }
 
 .org-card:hover::before,
 .org-card:focus-visible::before {
-    opacity: 0.4;
+    opacity: 0.58;
+    filter: blur(16px);
     transform: rotate(180deg);
 }
 
@@ -278,17 +290,6 @@ html[dir="ltr"] .org-map-page .header-logo img {
     flex-direction: column;
     align-items: center;
     position: relative;
-}
-
-/* ==============================
-   FLOATING CONNECTION FEEL (fake network lines)
-============================== */
-
-.org-card:hover,
-.org-card:focus-visible {
-    box-shadow:
-        0 0 0 6px rgba(37,101,44,0.08),
-        0 20px 40px rgba(0,0,0,0.1);
 }
 
 /* ========== Organizations map — filter (matches all-opportunities) + RTL/LTR ========== */

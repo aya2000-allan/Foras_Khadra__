@@ -773,13 +773,14 @@ else
         nav.classList.toggle("show");
     }
 
-    document.addEventListener("click", function (e) {
-        const link = e.target.closest("[data-close-menu]");
-        if (link) {
-            const nav = document.getElementById("navContent");
-            if (nav && window.innerWidth <= 1400) nav.classList.remove("show");
-        }
-    });
+            document.querySelectorAll("[data-close-menu]").forEach(link => {
+            link.addEventListener("click", function () {
+                const nav = document.getElementById("navContent");
+                if (nav && window.innerWidth <= 1400) {
+                    nav.classList.remove("show");
+                }
+            });
+        });
 
     window.addEventListener("resize", function () {
         const nav = document.getElementById("navContent");

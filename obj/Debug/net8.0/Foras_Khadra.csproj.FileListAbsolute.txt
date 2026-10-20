@@ -549,12 +549,10 @@ C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\Foras_Kh.0C84F823.Up2Date
 C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\Foras_Khadra.dll
 C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\refint\Foras_Khadra.dll
 C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\Foras_Khadra.pdb
 C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\Foras_Khadra.genruntimeconfig.cache
 C:\Users\Lenovo\Source\Repos\FK_\obj\Debug\net8.0\ref\Foras_Khadra.dll
-C:\Users\Lenovo\source\repos\FK_\obj\Debug\net8.0\ar\Foras_Khadra.resources.cs
-C:\Users\Lenovo\source\repos\FK_\obj\Debug\net8.0\en\Foras_Khadra.resources.cs
-C:\Users\Lenovo\source\repos\FK_\obj\Debug\net8.0\fr\Foras_Khadra.resources.cs
